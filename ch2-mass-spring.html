@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Mass-Spring-Damper System | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+  }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---- BEHAVIOR CLASSIFICATION ---- */
+  .behavior-panel {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border: 2px solid; font-weight: 600; font-size: 1.05rem;
+  }
+  .behavior-overdamped { border-color: #dc2626; background: #fee2e2; color: #7f1d1d; }
+  .behavior-critical { border-color: #d97706; background: #fef3c7; color: #78350f; }
+  .behavior-underdamped { border-color: #059669; background: #d1fae5; color: #065f46; }
+
+  .behavior-stats { margin-top: 1rem; font-size: 0.95rem; color: var(--text); }
+  .behavior-stats p { margin: 0.5rem 0; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+
+  /* ---- EXAMPLES CARDS ---- */
+  .examples-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem; margin: 1.5rem 0;
+  }
+  .example-card {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 1.5rem; transition: all 0.2s;
+  }
+  .example-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); }
+  .example-card h4 { color: var(--primary); font-size: 1.1rem; margin-bottom: 0.75rem; }
+  .example-card p { font-size: 0.95rem; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch2-overview.html">Ch2 Overview</a>
+    <a href="ch2-homogeneous-const.html">2.1 Homogeneous</a>
+    <a href="ch2-undetermined.html">2.2 Undetermined Coeff</a>
+    <a href="ch2-variation.html">2.3 Variation of Params</a>
+    <a href="ch2-euler.html">2.4 Euler Equations</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#system" class="active">Mass-Spring Demo</a>
+    <a href="#simulator">Simulator</a>
+    <a href="#behavior">Behavior</a>
+    <a href="#examples">Examples</a>
+    <a href="#connection">Connection</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== INTRO =================== -->
+<section id="system">
+  <h1>Interactive Mass-Spring-Damper System</h1>
+  <p class="subtitle">Visualize and explore how damping, mass, and stiffness shape system dynamics</p>
+
+  <h2>The Physical System</h2>
+  <p>
+    The equation of motion for a mass attached to a spring with damping is:
+  </p>
+  <div class="math-display">
+    $$m\,y'' + c\,y' + k\,y = F(t)$$
+  </div>
+  <p>where:</p>
+  <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+    <li><strong>m</strong> = mass (kg), must be > 0</li>
+    <li><strong>c</strong> = damping coefficient (N·s/m), ≥ 0</li>
+    <li><strong>k</strong> = spring constant (N/m), must be > 0</li>
+    <li><strong>F(t)</strong> = external forcing function</li>
+  </ul>
+
+  <div class="definition-box">
+    <div class="box-label">Key Decomposition</div>
+    <p>
+      The total solution splits into two complementary parts:
+    </p>
+    <p style="margin-top:1rem;">
+      <strong>y<sub>c</sub> (Complementary/Natural Response):</strong> How the system vibrates on its own, determined solely by m, c, and k. This is the solution to the homogeneous equation my'' + cy' + ky = 0.
+    </p>
+    <p style="margin-top:0.75rem;">
+      <strong>y<sub>p</sub> (Particular/Forced Response):</strong> How the system responds to the external input F(t). This depends on the forcing function.
+    </p>
+    <p style="margin-top:0.75rem; font-weight: 600; color: var(--primary);">
+      Total Solution: y(t) = y<sub>c</sub>(t) + y<sub>p</sub>(t)
+    </p>
+  </div>
+</section>
+
+<!-- =================== SIMULATOR =================== -->
+<section id="simulator">
+  <h2>Interactive Simulator</h2>
+
+  <div class="controls">
+    <div class="slider-group">
+      <label>Mass m (kg)</label>
+      <input type="range" id="mass" min="0.5" max="10" step="0.1" value="1">
+      <div class="slider-value"><span id="mass-val">1.0</span> kg</div>
+    </div>
+
+    <div class="slider-group">
+      <label>Damping c (N·s/m)</label>
+      <input type="range" id="damping" min="0" max="10" step="0.1" value="1">
+      <div class="slider-value"><span id="damping-val">1.0</span> N·s/m</div>
+    </div>
+
+    <div class="slider-group">
+      <label>Spring k (N/m)</label>
+      <input type="range" id="stiffness" min="0" max="20" step="0.1" value="4">
+      <div class="slider-value"><span id="stiffness-val">4.0</span> N/m</div>
+    </div>
+
+    <div class="control-group">
+      <label for="forcing">Forcing Function</label>
+      <select id="forcing">
+        <option value="none">None (Free Vibration)</option>
+        <option value="constant">Constant Force</option>
+        <option value="sine">Sinusoidal</option>
+        <option value="step">Step Function</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Forcing parameters (initially hidden) -->
+  <div id="forcing-params" style="display:none;">
+    <div class="controls">
+      <div class="slider-group">
+        <label>Force Amplitude F₀</label>
+        <input type="range" id="force-amp" min="0" max="10" step="0.1" value="2">
+        <div class="slider-value"><span id="force-amp-val">2.0</span> N</div>
+      </div>
+
+      <div class="slider-group" id="omega-group" style="display:none;">
+        <label>Angular Frequency ω (rad/s)</label>
+        <input type="range" id="omega" min="0.1" max="5" step="0.1" value="2">
+        <div class="slider-value"><span id="omega-val">2.0</span> rad/s</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Initial Conditions</h3>
+  <div class="controls">
+    <div class="slider-group">
+      <label>Initial Position y(0) (m)</label>
+      <input type="range" id="y0" min="-3" max="3" step="0.1" value="1">
+      <div class="slider-value"><span id="y0-val">1.0</span> m</div>
+    </div>
+
+    <div class="slider-group">
+      <label>Initial Velocity y'(0) (m/s)</label>
+      <input type="range" id="yp0" min="-5" max="5" step="0.1" value="0">
+      <div class="slider-value"><span id="yp0-val">0.0</span> m/s</div>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 1.5rem;">
+    <button class="btn btn-primary" onclick="runSimulation()">Run Simulation</button>
+    <button class="btn btn-accent" onclick="resetSimulation()" style="margin-left:0.5rem;">Reset to Defaults</button>
+  </div>
+
+  <h3>Position vs Time</h3>
+  <div id="plot-main" class="plot-container"></div>
+
+  <h3>Phase Portrait (Velocity vs Position)</h3>
+  <div id="plot-phase" class="plot-container"></div>
+</section>
+
+<!-- =================== BEHAVIOR CLASSIFICATION =================== -->
+<section id="behavior">
+  <h2>System Behavior Classification</h2>
+
+  <p>The system's response is determined by the <strong>discriminant</strong> D = c² − 4mk:</p>
+
+  <div id="behavior-panel" class="behavior-panel behavior-underdamped">
+    <span id="behavior-text">Underdamped System</span>
+    <div class="behavior-stats">
+      <p><strong>Characteristic Equation:</strong> mr² + cr + k = 0</p>
+      <p id="behavior-desc">The system oscillates with decreasing amplitude. Like a guitar string after being plucked.</p>
+      <p><strong>Natural Frequency:</strong> ω<sub>n</sub> = <span id="wn-val">2.0</span> rad/s</p>
+      <p><strong>Damping Ratio:</strong> ζ = <span id="zeta-val">0.25</span></p>
+      <p id="behavior-formula" style="margin-top:0.75rem; font-weight: 600; color: var(--primary);"></p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== REAL-WORLD EXAMPLES =================== -->
+<section id="examples">
+  <h2>Real-World Examples</h2>
+
+  <div class="examples-grid">
+    <div class="example-card">
+      <h4>Car Suspension</h4>
+      <p>Critically damped suspensions provide the smoothest ride—the car returns to level without bouncing. Too much damping makes it feel stiff; too little makes it bouncy.</p>
+    </div>
+
+    <div class="example-card">
+      <h4>Building During Earthquake</h4>
+      <p>Tall buildings act as damped oscillators. Engineers must understand resonance—when the earthquake frequency matches the building's natural frequency, amplification occurs.</p>
+    </div>
+
+    <div class="example-card">
+      <h4>Speaker Cone</h4>
+      <p>A speaker cone is a driven damped oscillator. The forcing is the electrical signal; the response is sound. Proper damping prevents distortion.</p>
+    </div>
+
+    <div class="example-card">
+      <h4>Door Closer</h4>
+      <p>A critically damped door closer closes smoothly without slamming or bouncing. Adjust the damping coefficient to control closure speed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== CONNECTION TO COURSE =================== -->
+<section id="connection">
+  <h2>Connection to Chapter 2 Topics</h2>
+
+  <div class="tip-box">
+    <div class="box-label">How It All Fits Together</div>
+    <p style="margin-top:0.5rem;">
+      <strong>Section 2.1 (Homogeneous DEs):</strong> You learned to find y<sub>c</sub>, the natural response determined by the characteristic equation mr² + cr + k = 0. The three cases (overdamped, critically damped, underdamped) directly correspond to the three cases of the discriminant.
+    </p>
+    <p style="margin-top:1rem;">
+      <strong>Section 2.2 (Undetermined Coefficients):</strong> You learned to find y<sub>p</sub> for common forcing functions like constants and sinusoids. Use the method based on the form of F(t).
+    </p>
+    <p style="margin-top:1rem;">
+      <strong>Here:</strong> You see both working together in real time. The sliders let you explore how changes in m, c, and k affect the natural response, and how different forcing functions shape the forced response. The visualization makes the theory come alive.
+    </p>
+  </div>
+
+  <h3>Key Takeaways</h3>
+  <ul style="margin-left: 1.5rem;">
+    <li><strong>Underdamped (ζ &lt; 1):</strong> Oscillates; useful when overshoot is acceptable (shock absorbers).</li>
+    <li><strong>Critically damped (ζ = 1):</strong> Fastest non-oscillatory return; ideal for precision (door closers, measuring instruments).</li>
+    <li><strong>Overdamped (ζ &gt; 1):</strong> Slow, smooth return; useful when overshoot must be avoided completely.</li>
+    <li><strong>Resonance:</strong> When the forcing frequency ω matches the natural frequency ω<sub>n</sub>, the amplitude grows—dangerous in structures!</li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+  // ========== UTILITIES ==========
+  function updateSliderValue(sliderId, valueId, unit = '') {
+    const slider = document.getElementById(sliderId);
+    const valueSpan = document.getElementById(valueId);
+    valueSpan.textContent = parseFloat(slider.value).toFixed(1);
+  }
+
+  // Setup all sliders
+  ['mass', 'damping', 'stiffness', 'y0', 'yp0', 'force-amp'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() {
+      updateSliderValue(id, id + '-val');
+      updateBehaviorPanel();
+    });
+  });
+
+  document.getElementById('omega').addEventListener('input', function() {
+    updateSliderValue('omega', 'omega-val');
+  });
+
+  // Forcing function dropdown
+  document.getElementById('forcing').addEventListener('change', function() {
+    const forcingParams = document.getElementById('forcing-params');
+    const omegaGroup = document.getElementById('omega-group');
+    if (this.value === 'none') {
+      forcingParams.style.display = 'none';
+    } else {
+      forcingParams.style.display = 'block';
+      if (this.value === 'sine') {
+        omegaGroup.style.display = 'block';
+      } else {
+        omegaGroup.style.display = 'none';
+      }
+    }
+  });
+
+  // ========== BEHAVIOR PANEL UPDATE ==========
+  function updateBehaviorPanel() {
+    const m = parseFloat(document.getElementById('mass').value);
+    const c = parseFloat(document.getElementById('damping').value);
+    const k = parseFloat(document.getElementById('stiffness').value);
+
+    const D = c * c - 4 * m * k;
+    const wn = Math.sqrt(k / m);
+    const zeta = c / (2 * Math.sqrt(m * k));
+
+    document.getElementById('wn-val').textContent = wn.toFixed(2);
+    document.getElementById('zeta-val').textContent = zeta.toFixed(3);
+
+    const panel = document.getElementById('behavior-panel');
+    const text = document.getElementById('behavior-text');
+    const desc = document.getElementById('behavior-desc');
+    const formula = document.getElementById('behavior-formula');
+
+    panel.className = 'behavior-panel';
+
+    if (D > 0.01) {
+      panel.classList.add('behavior-overdamped');
+      text.textContent = 'Overdamped (D > 0, ζ > 1)';
+      desc.textContent = 'The system returns to equilibrium without oscillating. Like a heavy door closer or shock absorber with high damping.';
+      const r1 = (-c + Math.sqrt(D)) / (2 * m);
+      const r2 = (-c - Math.sqrt(D)) / (2 * m);
+      formula.innerHTML = 'Roots: r₁ = ' + r1.toFixed(3) + ', r₂ = ' + r2.toFixed(3);
+    } else if (D < -0.01) {
+      panel.classList.add('behavior-underdamped');
+      text.textContent = 'Underdamped (D < 0, ζ < 1)';
+      desc.textContent = 'The system oscillates with decreasing amplitude. Like a guitar string after being plucked or a car suspension over a bump.';
+      const alpha = -c / (2 * m);
+      const beta = Math.sqrt(4 * m * k - c * c) / (2 * m);
+      formula.innerHTML = 'α = ' + alpha.toFixed(3) + ', β = ' + beta.toFixed(3) + ' rad/s (damped frequency)';
+    } else {
+      panel.classList.add('behavior-critical');
+      text.textContent = 'Critically Damped (D = 0, ζ = 1)';
+      desc.textContent = 'Fastest return to equilibrium without overshooting. Ideal for car suspensions and precision instruments!';
+      const r = -c / (2 * m);
+      formula.innerHTML = 'Double root: r = ' + r.toFixed(3);
+    }
+  }
+
+  // ========== NUMERICAL SOLVER (RK4 for ODE) ==========
+  function solveODE(m, c, k, F0, forcingType, omega, y0, yp0) {
+    const tMax = 20;
+    const dt = 0.01;
+    const n = Math.floor(tMax / dt);
+
+    const t = [];
+    const y = [];
+    const yp = [];
+    const yc_vals = [];
+    const yp_vals = [];
+
+    let y_curr = y0;
+    let yp_curr = yp0;
+
+    // Compute particular solution analytically
+    const getYp = (time) => {
+      if (forcingType === 'none') return 0;
+      if (forcingType === 'constant') return F0 / k;
+      if (forcingType === 'step') return time > 0 ? F0 / k : 0;
+      if (forcingType === 'sine') {
+        const wn2 = k / m;
+        const numer = F0 * (wn2 - omega * omega);
+        const denom = (wn2 - omega * omega) * (wn2 - omega * omega) + (c / m * omega) * (c / m * omega);
+        return (numer / denom) * Math.sin(omega * time) - (F0 * (c / m) * omega / denom) * Math.cos(omega * time);
+      }
+      return 0;
+    };
+
+    // RK4 for total solution y
+    const getF = (y_val, yp_val, t_val) => {
+      let F_t = 0;
+      if (forcingType === 'constant') F_t = F0;
+      if (forcingType === 'sine') F_t = F0 * Math.sin(omega * t_val);
+      if (forcingType === 'step') F_t = t_val > 0 ? F0 : 0;
+      return (F_t - c * yp_val - k * y_val) / m;
+    };
+
+    for (let i = 0; i <= n; i++) {
+      const time = i * dt;
+      t.push(time);
+
+      // RK4 step
+      const k1_y = yp_curr;
+      const k1_yp = getF(y_curr, yp_curr, time);
+
+      const k2_y = yp_curr + 0.5 * dt * k1_yp;
+      const k2_yp = getF(y_curr + 0.5 * dt * k1_y, yp_curr + 0.5 * dt * k1_yp, time + 0.5 * dt);
+
+      const k3_y = yp_curr + 0.5 * dt * k2_yp;
+      const k3_yp = getF(y_curr + 0.5 * dt * k2_y, yp_curr + 0.5 * dt * k2_yp, time + 0.5 * dt);
+
+      const k4_y = yp_curr + dt * k3_yp;
+      const k4_yp = getF(y_curr + dt * k3_y, yp_curr + dt * k3_yp, time + dt);
+
+      y_curr += (dt / 6) * (k1_y + 2 * k2_y + 2 * k3_y + k4_y);
+      yp_curr += (dt / 6) * (k1_yp + 2 * k2_yp + 2 * k3_yp + k4_yp);
+
+      y.push(y_curr);
+      yp.push(yp_curr);
+
+      // Decompose: yc = y - yp
+      const yp_t = getYp(time);
+      yp_vals.push(yp_t);
+      yc_vals.push(y_curr - yp_t);
+    }
+
+    return { t, y, yp, yc_vals, yp_vals };
+  }
+
+  // ========== PLOTTING ==========
+  function runSimulation() {
+    const m = parseFloat(document.getElementById('mass').value);
+    const c = parseFloat(document.getElementById('damping').value);
+    const k = parseFloat(document.getElementById('stiffness').value);
+    const y0 = parseFloat(document.getElementById('y0').value);
+    const yp0 = parseFloat(document.getElementById('yp0').value);
+    const forcingType = document.getElementById('forcing').value;
+    const F0 = parseFloat(document.getElementById('force-amp').value);
+    const omega = parseFloat(document.getElementById('omega').value);
+
+    const sol = solveODE(m, c, k, F0, forcingType, omega, y0, yp0);
+
+    // Plot 1: Position vs Time
+    const trace_total = {
+      x: sol.t,
+      y: sol.y,
+      name: 'y(t) = yc + yp (Total)',
+      line: { color: '#2563eb', width: 3 }
+    };
+
+    const trace_yc = {
+      x: sol.t,
+      y: sol.yc_vals,
+      name: 'yc(t) (Natural Response)',
+      line: { color: '#7c3aed', width: 2, dash: 'dash' }
+    };
+
+    const trace_yp = {
+      x: sol.t,
+      y: sol.yp_vals,
+      name: 'yp(t) (Forced Response)',
+      line: { color: '#d97706', width: 2, dash: 'dot' }
+    };
+
+    const layout_main = {
+      title: 'Position vs Time',
+      xaxis: { title: 'Time (s)' },
+      yaxis: { title: 'Position y (m)' },
+      hovermode: 'x unified',
+      plot_bgcolor: '#f8fafc',
+      paper_bgcolor: '#ffffff'
+    };
+
+    Plotly.newPlot('plot-main', [trace_total, trace_yc, trace_yp], layout_main, { responsive: true });
+
+    // Plot 2: Phase Portrait
+    const trace_phase = {
+      x: sol.y,
+      y: sol.yp,
+      name: 'Phase Trajectory',
+      mode: 'lines',
+      line: { color: '#059669', width: 2 }
+    };
+
+    const trace_phase_initial = {
+      x: [y0],
+      y: [yp0],
+      name: 'Initial Condition',
+      mode: 'markers',
+      marker: { color: '#2563eb', size: 10, symbol: 'circle' }
+    };
+
+    const layout_phase = {
+      title: 'Phase Portrait: Velocity vs Position',
+      xaxis: { title: 'Position y (m)' },
+      yaxis: { title: 'Velocity y\' (m/s)' },
+      hovermode: 'closest',
+      plot_bgcolor: '#f8fafc',
+      paper_bgcolor: '#ffffff'
+    };
+
+    Plotly.newPlot('plot-phase', [trace_phase, trace_phase_initial], layout_phase, { responsive: true });
+
+    updateBehaviorPanel();
+
+    // Render KaTeX
+    renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });
+  }
+
+  function resetSimulation() {
+    document.getElementById('mass').value = 1;
+    document.getElementById('damping').value = 1;
+    document.getElementById('stiffness').value = 4;
+    document.getElementById('y0').value = 1;
+    document.getElementById('yp0').value = 0;
+    document.getElementById('force-amp').value = 2;
+    document.getElementById('omega').value = 2;
+    document.getElementById('forcing').value = 'none';
+
+    updateSliderValue('mass', 'mass-val');
+    updateSliderValue('damping', 'damping-val');
+    updateSliderValue('stiffness', 'stiffness-val');
+    updateSliderValue('y0', 'y0-val');
+    updateSliderValue('yp0', 'yp0-val');
+    updateSliderValue('force-amp', 'force-amp-val');
+    updateSliderValue('omega', 'omega-val');
+
+    document.getElementById('forcing-params').style.display = 'none';
+    document.getElementById('omega-group').style.display = 'none';
+
+    runSimulation();
+  }
+
+  // Initialize on page load
+  window.addEventListener('load', function() {
+    updateBehaviorPanel();
+    runSimulation();
+    renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });
+  });
+</script>
+
+</body>
+</html>

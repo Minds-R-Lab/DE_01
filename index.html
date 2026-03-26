@@ -378,6 +378,16 @@
     <h2>Chapter 2 — Second-Order Linear Equations</h2>
     <p>Four powerful methods for solving second-order ODEs. Covers constant and variable coefficient equations, with engineering applications in vibrations, circuits, and control systems.</p>
 
+    <!-- Overview & Special Topics -->
+    <a class="topic-card" href="ch2-overview.html" style="margin-bottom:1.5rem; border:2px solid var(--primary); background:var(--primary-light);">
+      <div class="topic-icon" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">&#9733;</div>
+      <div>
+        <h4>Chapter 2 Overview — Start Here</h4>
+        <p>The big picture: why second-order DEs matter, how \(y_c\) captures dynamics and \(y_p\) captures the input response, and how all four topics connect.</p>
+        <div class="math-preview">\(y = \underbrace{y_c}_{\text{dynamics}} + \underbrace{y_p}_{\text{input response}}\)</div>
+      </div>
+    </a>
+
     <div class="topic-grid">
 
       <a class="topic-card" href="ch2-homogeneous-const.html">
@@ -393,7 +403,7 @@
         <div class="topic-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">U</div>
         <div>
           <h4>2.2 — Undetermined Coefficients</h4>
-          <p>Guessing the particular solution form based on the forcing function, with overlap detection rules.</p>
+          <p>The system as a gain: how it amplifies or attenuates forcing functions, with overlap detection rules.</p>
           <div class="math-preview">\(ay'' + by' + cy = g(t)\)</div>
         </div>
       </a>
@@ -413,6 +423,28 @@
           <h4>2.4 — Euler &amp; Variable Coefficient</h4>
           <p>Euler–Cauchy equations with indicial equation method, plus reduction of order for variable coefficients.</p>
           <div class="math-preview">\(ax^2y'' + bxy' + cy = 0\)</div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Special Interactive Topics -->
+    <h3 style="margin-top:2rem; margin-bottom:0.5rem; color:var(--accent); font-size:1.1rem; font-weight:700;">Interactive Explorations</h3>
+    <div class="topic-grid">
+
+      <a class="topic-card" href="ch2-mass-spring.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">&#9881;</div>
+        <div>
+          <h4>Mass-Spring-Damper Simulator</h4>
+          <p>Interactive demo: adjust mass, damping, and spring constant to see \(y_c\) (dynamics) and \(y_p\) (input response) in real time.</p>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch2-const-vs-variable.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">&#8596;</div>
+        <div>
+          <h4>Constant vs Variable Coefficients</h4>
+          <p>Side-by-side comparison with worked examples showing how solution behavior differs between the two worlds.</p>
         </div>
       </a>
 

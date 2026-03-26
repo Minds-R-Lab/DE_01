@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 4: Chapter 2 Overview — Second-Order Differential Equations | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  .choice-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 0.75rem 1rem; margin: 0.5rem 0;
+    border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; font-size: 0.95rem; cursor: pointer;
+    transition: all 0.2s; color: #1e293b;
+  }
+  .choice-btn .katex { color: #1e293b; }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
+  .choice-btn.selected-correct .katex { color: white; }
+  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
+  .choice-btn.selected-wrong .katex { color: white; }
+
+  /* ---- PROGRESS ---- */
+  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+
+  /* ---- CHAPTER 2 OVERVIEW SPECIFIC ---- */
+  .roadmap-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem; margin: 2rem 0;
+  }
+
+  .roadmap-card {
+    background: linear-gradient(135deg, var(--primary-light) 0%, #e0e7ff 100%);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .roadmap-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+
+  .roadmap-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: #1d4ed8;
+  }
+
+  .roadmap-card h4 {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .roadmap-card .topic-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .roadmap-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .roadmap-card .btn-link {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .roadmap-card .btn-link:hover {
+    background: #1d4ed8;
+  }
+
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .flow-step {
+    flex: 1; min-width: 150px;
+    text-align: center;
+    padding: 1rem;
+    background: #f1f5f9;
+    border-radius: 8px;
+    border: 2px solid #cbd5e1;
+  }
+
+  .flow-step.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+  }
+
+  .flow-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+  }
+
+  .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 1.5rem 0;
+  }
+
+  .two-column-item {
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent);
+  }
+
+  .two-column-item h4 {
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .two-column-item p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .islamic-verse-box {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border: 2px solid var(--success);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .historical-quote-box {
+    background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    border: 2px solid #ec4899;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1rem;
+    color: #9f1239;
+  }
+
+  @media (max-width: 768px) {
+    .roadmap-grid {
+      grid-template-columns: 1fr;
+    }
+    .two-column {
+      grid-template-columns: 1fr;
+    }
+    .flow-diagram {
+      flex-direction: column;
+    }
+    .flow-arrow {
+      transform: rotate(90deg);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch2-overview.html" class="active">2.0 Overview</a>
+    <a href="ch2-homogeneous-const.html">2.1 Homogeneous</a>
+    <a href="ch2-undetermined.html">2.2 Undetermined Coeff</a>
+    <a href="ch2-variation.html">2.3 Variation of Params</a>
+    <a href="ch2-euler.html">2.4 Euler Equations</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== SECTION 1: THE BIG PICTURE =================== -->
+<section id="big-picture">
+  <h1>Chapter 2: Second-Order Differential Equations</h1>
+  <p class="subtitle">The gateway to modeling oscillations, damping, and dynamic systems</p>
+
+  <div class="definition-box">
+    <div class="box-label">Chapter Overview</div>
+    <p>Chapter 2 introduces the general second-order linear differential equation and teaches you three complementary methods to solve it. By the end of this chapter, you will be able to solve any non-homogeneous linear second-order DE with constant coefficients, and understand how to model real-world systems like springs, dampers, and electrical circuits.</p>
+  </div>
+
+  <h2>Why Study Second-Order Differential Equations?</h2>
+
+  <p>
+    While first-order DEs model systems with a single rate of change (like exponential growth or radioactive decay), <strong>second-order DEs</strong> model systems with <strong>two interacting effects</strong>: inertia and restoring forces. These are ubiquitous in engineering:
+  </p>
+
+  <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.8;">
+    <li><strong>Mechanical systems:</strong> Mass-spring-damper oscillators (cars, buildings, seismic isolation)</li>
+    <li><strong>Electrical systems:</strong> RLC circuits (filters, power supplies, signal processing)</li>
+    <li><strong>Structural engineering:</strong> Beam deflections under load</li>
+    <li><strong>Control systems:</strong> Feedback loops and system response</li>
+    <li><strong>Thermal systems:</strong> Temperature gradients and diffusion</li>
+  </ul>
+
+  <h3>The General Non-Homogeneous Equation</h3>
+
+  <p>All problems in this chapter boil down to solving:</p>
+
+  <div class="math-display">
+    $$a\,y'' + b\,y' + c\,y = g(t)$$
+  </div>
+
+  <p>where \(a, b, c\) are constants (with \(a \neq 0\)), \(g(t)\) is the external forcing function, and \(y\) is the unknown solution we seek.</p>
+
+  <h3>The Key Insight: Decomposition</h3>
+
+  <p>
+    The brilliant feature of <span class="highlight">linear differential equations</span> is that the general solution decomposes into two independent pieces:
+  </p>
+
+  <div class="theorem-box">
+    <div class="box-label">Fundamental Decomposition</div>
+    <div class="math-display">
+      $$y(t) = y_c(t) + y_p(t)$$
+    </div>
+    where:
+    <ul style="margin-top:0.75rem; padding-left:1.5rem;">
+      <li><strong>\(y_c(t)\) — the complementary (homogeneous) solution:</strong> This is the <strong>natural dynamics</strong> of the system, determined entirely by the structure of the system itself (the coefficients \(a, b, c\)). It tells you what the system does on its own, without any external forcing. Does it oscillate? Does it decay? Does it grow? The answer lies in \(y_c\).</li>
+      <li><strong>\(y_p(t)\) — the particular (forced) solution:</strong> This is the <strong>response to the external input</strong> \(g(t)\). It describes how the system reacts to the forcing function. The same system can produce different responses depending on what we force it with.</li>
+    </ul>
+  </div>
+
+  <h3>Three Analogies</h3>
+
+  <div class="two-column">
+    <div class="two-column-item">
+      <h4>Guitar String Analogy</h4>
+      <p><strong>\(y_c\):</strong> The natural frequency of the string (determined by its length, tension, and material).</p>
+      <p><strong>\(y_p\):</strong> The specific note you hear when you pluck it in a particular way (the input matters).</p>
+    </div>
+    <div class="two-column-item">
+      <h4>Car Suspension Analogy</h4>
+      <p><strong>\(y_c\):</strong> How the springs and dampers naturally respond to a sudden impulse.</p>
+      <p><strong>\(y_p\):</strong> How the suspension responds to the road bumps you're driving over.</p>
+    </div>
+  </div>
+
+  <div class="example-box" style="margin-top: 1rem;">
+    <div class="box-label">System Independence</div>
+    <p>Here's the magic: \(y_c\) and \(y_p\) are <strong>independent</strong>. The natural oscillation of the system (y_c) doesn't interfere with its response to forcing (y_p). This is why linear systems are so easy to work with — you can find each piece separately, then add them together. That's <strong>superposition</strong>.</p>
+  </div>
+
+</section>
+
+<!-- =================== SECTION 2: CHAPTER ROADMAP =================== -->
+<section id="roadmap">
+  <h2>Chapter Roadmap: Four Connected Topics</h2>
+
+  <p>This chapter is organized as a logical progression. Each section builds on the previous one and addresses a different aspect of the problem:</p>
+
+  <div class="roadmap-grid">
+    <div class="roadmap-card">
+      <div class="topic-icon">🎯</div>
+      <h4>2.1 Homogeneous<br/>(Constant Coeff.)</h4>
+      <p>Find \(y_c\): the natural dynamics of the system using the characteristic equation.</p>
+      <a href="ch2-homogeneous-const.html" class="btn-link">Go to 2.1</a>
+    </div>
+
+    <div class="roadmap-card">
+      <div class="topic-icon">⚡</div>
+      <h4>2.2 Undetermined<br/>Coefficients</h4>
+      <p>Find \(y_p\) when \(g(t)\) is "nice" (polynomial, exponential, sinusoid). Fast method for standard inputs.</p>
+      <a href="ch2-undetermined.html" class="btn-link">Go to 2.2</a>
+    </div>
+
+    <div class="roadmap-card">
+      <div class="topic-icon">🔄</div>
+      <h4>2.3 Variation of<br/>Parameters</h4>
+      <p>Find \(y_p\) for ANY forcing function \(g(t)\). The general method. Uses the Wronskian.</p>
+      <a href="ch2-variation.html" class="btn-link">Go to 2.3</a>
+    </div>
+
+    <div class="roadmap-card">
+      <div class="topic-icon">📐</div>
+      <h4>2.4 Euler &<br/>Variable Coeff.</h4>
+      <p>When the system itself changes: coefficients depend on the independent variable.</p>
+      <a href="ch2-euler.html" class="btn-link">Go to 2.4</a>
+    </div>
+  </div>
+
+  <h3>The Logical Flow</h3>
+
+  <div style="background: #f8fafc; border-radius: 8px; padding: 2rem; margin: 1.5rem 0;">
+    <p style="text-align:center; margin-bottom: 1.5rem; font-weight: 600; color: var(--text);">How the methods connect:</p>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0;">
+      <div style="background: var(--primary-light); padding: 1rem 1.5rem; border-radius: 8px; border: 2px solid var(--primary); text-align: center; font-weight: 600; color: var(--primary); min-width: 140px;">
+        2.1: Find \(y_c\)
+      </div>
+      <div style="font-size: 1.3rem; color: var(--text-muted);">→</div>
+      <div style="background: var(--accent-light); padding: 1rem 1.5rem; border-radius: 8px; border: 2px solid var(--accent); text-align: center; font-weight: 600; color: var(--accent); min-width: 140px;">
+        2.2 & 2.3: Find \(y_p\)
+      </div>
+      <div style="font-size: 1.3rem; color: var(--text-muted);">→</div>
+      <div style="background: var(--success-light); padding: 1rem 1.5rem; border-radius: 8px; border: 2px solid var(--success); text-align: center; font-weight: 600; color: var(--success); min-width: 140px;">
+        Combine: \(y = y_c + y_p\)
+      </div>
+    </div>
+
+    <p style="text-align:center; margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+      <strong>2.2</strong> is faster when \(g(t)\) is simple. <strong>2.3</strong> works for any \(g(t)\). <strong>2.4</strong> handles variable coefficients.
+    </p>
+  </div>
+
+</section>
+
+<!-- =================== SECTION 3: SUPERPOSITION PRINCIPLE =================== -->
+<section id="superposition">
+  <h2>The Superposition Principle</h2>
+
+  <p>
+    The reason we can decompose \(y = y_c + y_p\) is that our equation is <strong>linear</strong>. This means the system respects the <strong>superposition principle</strong>:
+  </p>
+
+  <div class="definition-box">
+    <div class="box-label">Superposition Principle</div>
+    <p>
+      If \(y_1(t)\) and \(y_2(t)\) are solutions to a linear differential equation, then any linear combination \(C_1 y_1(t) + C_2 y_2(t)\) is also a solution.
+    </p>
+    <p style="margin-top: 0.75rem;">
+      Applied to our problem: because the equation is linear, we can find \(y_c\) (the solution to the homogeneous equation \(ay'' + by' + cy = 0\)) and \(y_p\) (any particular solution to the non-homogeneous equation) separately, then add them to get the general solution to the full problem.
+    </p>
+  </div>
+
+  <p>
+    This is profound: <strong>the natural behavior of the system and its forced response are independent</strong>. A guitar string's natural vibration doesn't "know about" how you pluck it. A car's suspension has the same natural oscillation whether you drive over a pothole or a brick. The system decomposes cleanly.
+  </p>
+
+  <p>
+    This principle applies to all linear systems — mechanical, electrical, thermal, chemical. It's one of the most beautiful and practical ideas in mathematics.
+  </p>
+
+</section>
+
+<!-- =================== SECTION 4: ENGINEERING CONNECTION =================== -->
+<section id="engineering">
+  <h2>Engineering Connection: The Mass-Spring-Damper System</h2>
+
+  <p>
+    The quintessential second-order model is the mass-spring-damper system, which appears (in different forms) in virtually every engineering discipline:
+  </p>
+
+  <div class="math-display">
+    $$m\,y'' + c\,y' + k\,y = F(t)$$
+  </div>
+
+  <p>where:</p>
+
+  <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.9;">
+    <li><strong>\(m\)</strong> — mass (inertia). Larger \(m\) means the system "wants to keep moving".</li>
+    <li><strong>\(c\)</strong> — damping coefficient (friction, air resistance). Larger \(c\) means more energy loss.</li>
+    <li><strong>\(k\)</strong> — spring constant (stiffness). Larger \(k\) means a stronger restoring force.</li>
+    <li><strong>\(F(t)\)</strong> — external forcing (the input to the system).</li>
+    <li><strong>\(y(t)\)</strong> — displacement (the output of the system).</li>
+  </ul>
+
+  <h3>What Each Solution Piece Tells Us</h3>
+
+  <div class="two-column">
+    <div class="two-column-item">
+      <h4>\(y_c(t)\) — Natural Response</h4>
+      <p>Describes what happens when \(F(t) = 0\). The solution depends on the discriminant \(\Delta = c^2 - 4mk\):</p>
+      <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+        <li>\(\Delta > 0\): Overdamped (sluggish decay)</li>
+        <li>\(\Delta = 0\): Critically damped (fastest decay, no oscillation)</li>
+        <li>\(\Delta < 0\): Underdamped (oscillates while decaying)</li>
+      </ul>
+    </div>
+    <div class="two-column-item">
+      <h4>\(y_p(t)\) — Forced Response</h4>
+      <p>Describes the system's steady-state response to the specific forcing \(F(t)\). For example:</p>
+      <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+        <li>A constant force: constant displacement</li>
+        <li>A sinusoidal force: sinusoidal response (possibly resonance)</li>
+        <li>An impulse: special spike response</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top: 1.5rem;">
+    <div class="box-label">Real-World Insight</div>
+    <p>
+      When you design a car suspension, you choose \(m\), \(c\), and \(k\) so that \(y_c\) decays quickly (you want the oscillation to stop fast). But you also need \(y_p\) to be small (you don't want the car to bounce violently over bumps). This is the engineer's balancing act — two competing goals, both captured by our decomposition!
+    </p>
+  </div>
+
+</section>
+
+<!-- =================== SECTION 5: CONSTANT VS VARIABLE COEFFICIENTS =================== -->
+<section id="coefficients">
+  <h2>Constant vs Variable Coefficients: A Preview</h2>
+
+  <h3>Sections 2.1—2.3: Constant Coefficients</h3>
+  <p>
+    The methods in sections 2.1, 2.2, and 2.3 all assume that \(a\), \(b\), and \(c\) are <strong>numbers</strong> (constants). This means the system itself is fixed — it doesn't change over time. The characteristic equation, the method of undetermined coefficients, and the Wronskian all depend on this simplicity.
+  </p>
+
+  <h3>Section 2.4: Variable Coefficients</h3>
+  <p>
+    In section 2.4, we'll encounter equations like:
+  </p>
+
+  <div class="math-display">
+    $$x^2 y'' + x\,y' + y = 0$$
+  </div>
+
+  <p>
+    Here, the coefficients depend on the independent variable \(x\). The system itself is changing! This is harder because:
+  </p>
+
+  <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.8;">
+    <li>There's no characteristic equation (it only works for constant coefficients)</li>
+    <li>We need special tricks, like substitution or series methods</li>
+    <li>The Euler equation has a specific form that admits a power-series solution</li>
+  </ul>
+
+  <p>
+    But don't worry — the fundamental ideas (finding \(y_c\) and \(y_p\), superposition) still apply.
+  </p>
+
+</section>
+
+<!-- =================== ISLAMIC VERSE =================== -->
+<section class="islamic-verse-box">
+  <div style="font-size:1.3rem; text-align:center; margin-bottom:0.5rem; font-family:'Traditional Arabic','Scheherazade New',serif; direction:rtl; color:#059669; font-weight:600;">
+    وَقُل رَّبِّ زِدْنِي عِلْمًا
+  </div>
+  <div style="font-style:italic; color:#065f46;">
+    "And say: My Lord, increase me in knowledge."
+  </div>
+  <div style="font-weight:600; color:#059669; margin-top:0.5rem; font-size:0.9rem;">
+    — Quran, Surah Taha 20:114
+  </div>
+</section>
+
+<!-- =================== HISTORICAL QUOTE =================== -->
+<section class="historical-quote-box">
+  <p>
+    "The study of differential equations is the study of the universe itself, for every natural phenomenon can be expressed through the language of change and motion."
+  </p>
+  <p style="margin-top: 0.75rem; font-size: 0.95rem;">
+    — Joseph-Louis Lagrange (1736–1813), pioneer of differential equations and mechanics
+  </p>
+</section>
+
+<!-- =================== GETTING STARTED =================== -->
+<section id="getting-started">
+  <h2>Getting Started</h2>
+
+  <p>
+    To make the most of this chapter, follow these steps in order:
+  </p>
+
+  <ol class="step-list">
+    <li><strong>Start with 2.1 (Homogeneous equations):</strong> Learn the characteristic equation and the three cases. This is the foundation for everything else.</li>
+    <li><strong>Move to 2.2 (Undetermined Coefficients):</strong> Practice finding particular solutions for common forcing functions. This method is fast and intuitive.</li>
+    <li><strong>Study 2.3 (Variation of Parameters):</strong> Understand the Wronskian method, which works for ANY forcing function. This is more general but also more computational.</li>
+    <li><strong>Explore 2.4 (Euler Equations & Variable Coefficients):</strong> See how these ideas extend when the coefficients change.</li>
+    <li><strong>Tie it together:</strong> Return to this overview and see how all four pieces fit into the big picture.</li>
+  </ol>
+
+  <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+    Each section is self-contained but builds on the previous one. Don't skip 2.1 — the characteristic equation is absolutely essential.
+  </p>
+
+  <div style="text-align: center; margin-top: 2rem;">
+    <a href="ch2-homogeneous-const.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex;">Start with Section 2.1</a>
+  </div>
+
+</section>
+
+</div>
+
+<!-- =================== FOOTER =================== -->
+<footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Department of Mathematics and Statistics, Qatar University
+</footer>
+
+<script>
+// Render KaTeX math
+document.addEventListener('DOMContentLoaded', function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '\\(', right: '\\)', display: false},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$$', right: '$$', display: true}
+    ],
+    throwOnError: false
+  });
+});
+
+// Smooth scroll for nav
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    if (a.getAttribute('href').startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Roadmap card click navigation
+document.querySelectorAll('.roadmap-card .btn-link').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = this.getAttribute('href');
+  });
+});
+</script>
+
+</body>
+</html>

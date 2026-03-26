@@ -429,6 +429,90 @@
   </div>
 </section>
 
+<!-- =================== ENGINEERING PERSPECTIVE =================== -->
+<section id="engineering">
+  <h2>Engineering Perspective: The System as a Gain</h2>
+
+  <div class="tip-box">
+    <div class="box-label">Key Insight: Filtering and Amplification</div>
+    <p>
+      A linear constant-coefficient system \(ay'' + by' + cy = g(t)\) acts like a <strong>filter</strong> or <strong>amplifier</strong> on the input signal \(g(t)\). The particular solution \(y_p\) represents how the system <strong>processes</strong> the input. The system either:
+    </p>
+    <ul style="margin: 0.75rem 0 0 1.5rem;">
+      <li><strong>Amplifies</strong> the input (gain &gt; 1)</li>
+      <li><strong>Attenuates</strong> the input (gain &lt; 1)</li>
+      <li><strong>Passes through</strong> the input unchanged (gain = 1)</li>
+    </ul>
+  </div>
+
+  <h3>Examples of Gain Interpretation</h3>
+
+  <div style="margin: 1.5rem 0;">
+    <table style="width: 100%; border-collapse: collapse; background: #fff; margin: 1rem 0;">
+      <thead>
+        <tr style="background: #f0f9ff; border-bottom: 2px solid #0ea5e9;">
+          <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0; font-weight: 600;">Input \(g(t)\)</th>
+          <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0; font-weight: 600;">Particular Solution \(y_p\)</th>
+          <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0; font-weight: 600;">Gain Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid #e2e8f0;">
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(e^{\alpha t}\)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(Ae^{\alpha t}\)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0;">Scalar gain \(A\); system multiplies the exponential</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(\sin(\omega t)\)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(A\sin(\omega t) + B\cos(\omega t)\)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0;">Amplitude change plus phase shift</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #e2e8f0;">
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(t^n\) (polynomial)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">Polynomial of degree \(n\)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0;">Polynomial structure preserved; coefficients scaled</td>
+        </tr>
+        <tr style="background: #fef3c7;">
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(e^{rt}\) (where \(r\) is a root)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem;">\(Ate^{rt}\) or \(At^2e^{rt}\)</td>
+          <td style="padding: 1rem; border: 1px solid #e2e8f0;">Resonance! Response grows linearly or quadratically</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Resonance: The Special "Overlap" Case</div>
+    <p>
+      When \(g(t)\) is itself a solution of the homogeneous equation (that is, when the forcing frequency matches a natural frequency of the system), we have <strong>resonance</strong>. The system can't simply amplify the input because that would already be a homogeneous solution! Instead, the response <em>grows</em>: we multiply by \(t\) or \(t^2\) to create a genuinely new solution.
+    </p>
+    <p style="margin-top: 0.75rem; margin-bottom: 0;">
+      This is exactly the concept of <strong>resonance</strong> in mechanical vibrations (undamped springs driven at their natural frequency) and electrical circuits (RLC circuits driven at their resonant frequency). The system is being driven at its own natural frequency, and the energy builds up unboundedly—hence the \(t\) factor.
+    </p>
+  </div>
+
+  <h3>Complementary vs. Forced Response</h3>
+
+  <div class="definition-box">
+    <div class="box-label">Solution Components</div>
+    <p>
+      The general solution decomposes into two essential parts:
+    </p>
+    <ul style="margin: 0.75rem 0 0 1.5rem;">
+      <li><strong>\(y_c(t)\)</strong> — the <strong>complementary (or homogeneous) solution</strong>: represents the <strong>natural dynamics</strong> of the system. It decays (if damped) or oscillates (if undamped), depending only on the coefficients \(a, b, c\).</li>
+      <li><strong>\(y_p(t)\)</strong> — the <strong>particular solution</strong>: represents the <strong>forced response</strong> to the input. It shows how the system directly processes the external signal \(g(t)\).</li>
+    </ul>
+    <p style="margin-top: 0.75rem; margin-bottom: 0;">
+      The <strong>general solution \(y(t) = y_c(t) + y_p(t)\)</strong> combines both: the forced response (driven by \(g(t)\)) plus the system's own natural dynamics.
+    </p>
+  </div>
+
+  <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
+    This perspective helps you understand not just <em>how to find</em> \(y_p\), but <em>what it means</em> physically: every particular solution is the system's way of responding to a given input.
+  </p>
+
+</section>
+
 <!-- =================== WORKED EXAMPLES =================== -->
 <section id="examples">
   <h2>Worked Examples</h2>
