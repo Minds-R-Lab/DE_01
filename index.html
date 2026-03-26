@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Differential Equations — Interactive Course</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-dark: #1e40af;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #7c3aed 100%);
+    color: #fff; padding: 5rem 2rem 4rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; position: relative; }
+  .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; position: relative; }
+  .hero .badge {
+    display: inline-block; background: rgba(255,255,255,0.2); padding: 0.3rem 1rem;
+    border-radius: 20px; font-size: 0.9rem; margin-bottom: 1rem; position: relative;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Container */
+  .container { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+  /* Chapter grid */
+  .chapter-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem; margin-top: 2rem;
+  }
+  .chapter-card {
+    background: var(--card); border-radius: var(--radius);
+    border: 1.5px solid var(--border); padding: 2rem;
+    box-shadow: var(--shadow); transition: all 0.3s;
+    cursor: pointer; position: relative; overflow: hidden;
+    text-decoration: none; color: var(--text); display: block;
+  }
+  .chapter-card:hover {
+    transform: translateY(-4px); box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+  }
+  .chapter-card.active { border-color: var(--primary); }
+  .chapter-card.coming-soon { opacity: 0.6; cursor: default; }
+  .chapter-card.coming-soon:hover { transform: none; box-shadow: var(--shadow); border-color: var(--border); }
+
+  .chapter-num {
+    font-size: 3rem; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 0.75rem;
+  }
+  .chapter-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .chapter-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+  .chapter-card .topic-list {
+    margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem;
+  }
+  .topic-tag {
+    background: var(--primary-light); color: var(--primary-dark);
+    padding: 0.2rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+  }
+  .topic-tag.done { background: var(--success-light); color: var(--success); }
+  .chapter-card .status-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    padding: 0.2rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .status-badge.available { background: var(--success-light); color: var(--success); }
+  .status-badge.soon { background: #f1f5f9; color: var(--text-muted); }
+
+  /* Section header */
+  .section-header { margin-bottom: 0.5rem; }
+  .section-header h2 {
+    font-size: 1.6rem; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-header p { color: var(--text-muted); font-size: 1rem; margin-top: 0.25rem; }
+
+  /* Chapter 1 detail */
+  .ch1-detail {
+    background: var(--card); border-radius: var(--radius);
+    border: 1.5px solid var(--border); padding: 2.5rem;
+    box-shadow: var(--shadow); margin-top: 3rem;
+  }
+  .ch1-detail h2 {
+    font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem;
+    color: var(--primary);
+  }
+  .ch1-detail > p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  .topic-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .topic-card {
+    display: flex; align-items: start; gap: 1rem;
+    padding: 1.25rem; border-radius: 10px; border: 1.5px solid var(--border);
+    text-decoration: none; color: var(--text); transition: all 0.25s;
+    background: #fff;
+  }
+  .topic-card:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
+  .topic-icon {
+    width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; font-weight: 800; color: #fff;
+  }
+  .topic-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .topic-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+  .topic-card .math-preview { font-size: 0.9rem; color: var(--accent); margin-top: 0.3rem; }
+
+  /* Footer */
+  footer {
+    text-align: center; padding: 2rem; color: var(--text-muted);
+    font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem;
+  }
+
+  /* Course stats */
+  .stats {
+    display: flex; justify-content: center; gap: 3rem;
+    margin: 2rem 0 0; position: relative;
+  }
+  .stat { text-align: center; }
+  .stat .num { font-size: 2rem; font-weight: 800; }
+  .stat .label { font-size: 0.85rem; opacity: 0.8; }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 2rem; }
+    .chapter-grid { grid-template-columns: 1fr; }
+    .stats { gap: 1.5rem; }
+    .stat .num { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Interactive Learning Experience</div>
+  <h1>Differential Equations</h1>
+  <p>A comprehensive, interactive course with visualizations, step-by-step solutions, and hands-on practice problems</p>
+  <div class="stats">
+    <div class="stat"><div class="num">6</div><div class="label">Chapters</div></div>
+    <div class="stat"><div class="num">30+</div><div class="label">Topics</div></div>
+    <div class="stat"><div class="num">100+</div><div class="label">Practice Problems</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section-header">
+    <h2>Course Chapters</h2>
+    <p>Click any available chapter to explore its topics</p>
+  </div>
+
+  <div class="chapter-grid">
+
+    <!-- Chapter 1 -->
+    <a class="chapter-card active" href="#chapter1">
+      <span class="status-badge available">Available</span>
+      <div class="chapter-num">01</div>
+      <h3>First-Order Differential Equations</h3>
+      <p>Master the fundamental techniques for solving first-order ODEs, from separable equations to exact and non-exact methods.</p>
+      <div class="topic-list">
+        <span class="topic-tag done">Separable</span>
+        <span class="topic-tag done">Linear</span>
+        <span class="topic-tag done">Bernoulli</span>
+        <span class="topic-tag done">Exact</span>
+        <span class="topic-tag done">Non-Exact</span>
+      </div>
+    </a>
+
+    <!-- Chapter 2 -->
+    <div class="chapter-card coming-soon">
+      <span class="status-badge soon">Coming Soon</span>
+      <div class="chapter-num">02</div>
+      <h3>Second-Order Linear Equations</h3>
+      <p>Homogeneous and non-homogeneous equations, characteristic equations, undetermined coefficients, and variation of parameters.</p>
+      <div class="topic-list">
+        <span class="topic-tag">Homogeneous</span>
+        <span class="topic-tag">Non-Homogeneous</span>
+        <span class="topic-tag">Undetermined Coeff.</span>
+        <span class="topic-tag">Variation of Parameters</span>
+      </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter-card coming-soon">
+      <span class="status-badge soon">Coming Soon</span>
+      <div class="chapter-num">03</div>
+      <h3>Higher-Order Linear Equations</h3>
+      <p>Extending second-order methods to nth-order equations, the Wronskian, and reduction of order.</p>
+      <div class="topic-list">
+        <span class="topic-tag">nth-Order</span>
+        <span class="topic-tag">Wronskian</span>
+        <span class="topic-tag">Reduction of Order</span>
+      </div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter-card coming-soon">
+      <span class="status-badge soon">Coming Soon</span>
+      <div class="chapter-num">04</div>
+      <h3>Laplace Transforms</h3>
+      <p>Transform methods for solving IVPs, convolution, step functions, impulse functions, and transfer functions.</p>
+      <div class="topic-list">
+        <span class="topic-tag">Definition & Properties</span>
+        <span class="topic-tag">Inverse Transform</span>
+        <span class="topic-tag">Convolution</span>
+        <span class="topic-tag">Step & Impulse</span>
+      </div>
+    </div>
+
+    <!-- Chapter 5 -->
+    <div class="chapter-card coming-soon">
+      <span class="status-badge soon">Coming Soon</span>
+      <div class="chapter-num">05</div>
+      <h3>Systems of Differential Equations</h3>
+      <p>Matrix methods, eigenvalue analysis, phase portraits, stability of equilibria, and coupled systems.</p>
+      <div class="topic-list">
+        <span class="topic-tag">Matrix Methods</span>
+        <span class="topic-tag">Eigenvalues</span>
+        <span class="topic-tag">Phase Portraits</span>
+        <span class="topic-tag">Stability</span>
+      </div>
+    </div>
+
+    <!-- Chapter 6 -->
+    <div class="chapter-card coming-soon">
+      <span class="status-badge soon">Coming Soon</span>
+      <div class="chapter-num">06</div>
+      <h3>Series Solutions &amp; Numerical Methods</h3>
+      <p>Power series solutions, Frobenius method, Euler's method, Runge-Kutta, and error analysis.</p>
+      <div class="topic-list">
+        <span class="topic-tag">Power Series</span>
+        <span class="topic-tag">Frobenius</span>
+        <span class="topic-tag">Euler's Method</span>
+        <span class="topic-tag">Runge-Kutta</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Chapter 1 Detail -->
+  <div class="ch1-detail" id="chapter1">
+    <h2>Chapter 1 — First-Order Differential Equations</h2>
+    <p>Five fundamental methods for solving first-order ODEs. Each topic includes theory, derivations, interactive visualizations, worked examples, and practice problems.</p>
+
+    <div class="topic-grid">
+
+      <a class="topic-card" href="ch1-separable.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">S</div>
+        <div>
+          <h4>1.1 — Separable Equations</h4>
+          <p>Equations where variables can be separated to opposite sides and integrated independently.</p>
+          <div class="math-preview">\(g(y)\,dy = f(x)\,dx\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch1-linear.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">L</div>
+        <div>
+          <h4>1.2 — Linear Equations</h4>
+          <p>The integrating factor method for equations linear in the unknown function.</p>
+          <div class="math-preview">\(y' + P(x)y = Q(x)\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch1-bernoulli.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">B</div>
+        <div>
+          <h4>1.3 — Bernoulli Equations</h4>
+          <p>Nonlinear equations reducible to linear form through a clever substitution.</p>
+          <div class="math-preview">\(y' + P(x)y = Q(x)y^n\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch1-exact.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">E</div>
+        <div>
+          <h4>1.4 — Exact Equations</h4>
+          <p>Recognizing and solving equations that are exact differentials of a potential function.</p>
+          <div class="math-preview">\(M\,dx + N\,dy = 0\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch1-nonexact.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">N</div>
+        <div>
+          <h4>1.5 — Non-Exact Equations</h4>
+          <p>Finding integrating factors to convert non-exact equations into exact ones.</p>
+          <div class="math-preview">\(\mu(M\,dx + N\,dy) = 0\)</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Differential Equations — Interactive Course &nbsp;|&nbsp; Designed for deep understanding through visualization and practice
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  });
+});
+
+// Smooth scroll to chapter 1 detail
+document.querySelector('.chapter-card.active').addEventListener('click', function(e) {
+  e.preventDefault();
+  document.getElementById('chapter1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+</body>
+</html>

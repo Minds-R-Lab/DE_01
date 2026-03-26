@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact Differential Equations - Section 1.4</title>
+
+    <!-- KaTeX for Mathematics -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+    <!-- Plotly for Visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Fixed Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.25rem;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        p, li {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Card Styles */
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .definition-box {
+            background: #dbeafe;
+            border-color: var(--primary);
+        }
+
+        .theorem-box {
+            background: #ede9fe;
+            border-color: var(--accent);
+        }
+
+        .example-box {
+            background: #dcfce7;
+            border-color: var(--success);
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-color: var(--warning);
+        }
+
+        .tip-box {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Collapsible Examples */
+        .collapsible {
+            background: linear-gradient(to right, var(--success), #10b981);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            margin: 0.8rem 0;
+            transition: background 0.3s;
+        }
+
+        .collapsible:hover {
+            background: linear-gradient(to right, #059669, #0d9488);
+        }
+
+        .collapsible.active {
+            background: linear-gradient(to right, #047857, #0f766e);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 1.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .collapsible-content.show {
+            display: block;
+        }
+
+        /* Input Form */
+        .input-group {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-white);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', system-ui;
+        }
+
+        button {
+            background: linear-gradient(to right, var(--primary), #1d4ed8);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .result.exact {
+            background: #dcfce7;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .result.not-exact {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Quiz */
+        .quiz-container {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .quiz-question {
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .quiz-option {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 0.8rem;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .quiz-feedback.correct {
+            background: #dcfce7;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Plotly Containers */
+        .plot-container {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        /* Grid for multiple items */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .reference-card {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .reference-card h3 {
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .reference-card p {
+            color: rgba(255,255,255,0.95);
+        }
+
+        .reference-card code {
+            background: rgba(255,255,255,0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        code {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--danger);
+        }
+
+        .learning-objectives {
+            background: #ede9fe;
+            border-left: 5px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .learning-objectives ol {
+            margin-left: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-gray);
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Course Home</a></li>
+            <li><a href="ch1-separable.html">Separable</a></li>
+            <li><a href="ch1-linear.html">Linear</a></li>
+            <li><a href="ch1-bernoulli.html">Bernoulli</a></li>
+            <li><a href="ch1-exact.html" class="active">Exact</a></li>
+            <li><a href="ch1-nonexact.html">Non-Exact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Introduction Section -->
+        <section id="intro">
+            <h1>Exact Differential Equations</h1>
+            <p><strong>Section 1.4 of Differential Equations</strong></p>
+
+            <div class="learning-objectives">
+                <strong>Learning Objectives</strong>
+                <ol>
+                    <li>Understand the concept of exact differential equations</li>
+                    <li>Apply the test for exactness: $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$</li>
+                    <li>Solve exact equations by finding the potential function $F(x,y)$</li>
+                    <li>Interpret solutions geometrically as level curves</li>
+                    <li>Connect to conservative vector fields and real-world applications</li>
+                </ol>
+            </div>
+
+            <h3>What are Exact Differential Equations?</h3>
+            <p>An exact differential equation has the standard form:</p>
+            <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">$$M(x,y)\,dx + N(x,y)\,dy = 0$$</p>
+
+            <p>We call it <strong>exact</strong> if there exists a function $F(x,y)$ such that:</p>
+            <p style="text-align: center; margin: 1.5rem 0;">$$dF = \frac{\partial F}{\partial x}dx + \frac{\partial F}{\partial y}dy = M\,dx + N\,dy$$</p>
+
+            <p>This means:</p>
+            <ul>
+                <li>$\displaystyle\frac{\partial F}{\partial x} = M(x,y)$</li>
+                <li>$\displaystyle\frac{\partial F}{\partial y} = N(x,y)$</li>
+            </ul>
+
+            <h3>Geometric Interpretation</h3>
+            <p>The solution is given implicitly by $F(x,y) = C$. Geometrically, the solution curves are the <strong>level curves</strong> (contours) of the surface $F(x,y)$. This elegant connection to multivariable calculus makes exact equations powerful.</p>
+
+            <h3>Real-World Motivation</h3>
+            <p>Exact equations arise naturally in:</p>
+            <ul>
+                <li><strong>Conservative force fields:</strong> In physics, forces that come from a potential function are conservative. The exactness condition ensures energy conservation.</li>
+                <li><strong>Thermodynamics:</strong> Exact differential forms describe state functions like internal energy and enthalpy.</li>
+                <li><strong>Fluid mechanics:</strong> Incompressibility conditions lead to exact equations.</li>
+            </ul>
+        </section>
+
+        <!-- Theory Section -->
+        <section id="theory">
+            <h2>Theory and Exactness Test</h2>
+
+            <div class="definition-box">
+                <strong>Definition: Exact Differential Equation</strong>
+                The equation $M(x,y)\,dx + N(x,y)\,dy = 0$ is <strong>exact</strong> in a domain $D$ if there exists a function $F(x,y)$ defined on $D$ such that $\displaystyle\frac{\partial F}{\partial x} = M(x,y)$ and $\displaystyle\frac{\partial F}{\partial y} = N(x,y)$ for all $(x,y) \in D$.
+            </div>
+
+            <div class="theorem-box">
+                <strong>Theorem: Test for Exactness</strong>
+                If $M(x,y)$ and $N(x,y)$ have continuous partial derivatives in a simply connected domain $D$, then
+                $$M\,dx + N\,dy = 0 \text{ is exact} \iff \frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$$
+            </div>
+
+            <h3>Proof Sketch</h3>
+            <p><strong>Forward direction ($\Rightarrow$):</strong> If the equation is exact, then $F$ exists with $\frac{\partial F}{\partial x} = M$ and $\frac{\partial F}{\partial y} = N$. By Clairaut's theorem (equality of mixed partials),</p>
+            <p style="text-align: center;">$$\frac{\partial M}{\partial y} = \frac{\partial^2 F}{\partial y \partial x} = \frac{\partial^2 F}{\partial x \partial y} = \frac{\partial N}{\partial x}$$</p>
+
+            <p><strong>Backward direction ($\Leftarrow$):</strong> If $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$, the vector field $(M, N)$ is conservative, so a potential function $F$ exists. (This uses the condition that the domain is simply connected.)</p>
+
+            <h3>Finding the Potential Function</h3>
+            <p>If exactness is confirmed, solve for $F(x,y)$ by integration, treating $y$ as a constant first, then use the second equation to find the arbitrary function of $y$.</p>
+
+            <div class="tip-box">
+                <strong>Key Insight</strong>
+                The solution to an exact equation $M\,dx + N\,dy = 0$ is always given implicitly as $F(x,y) = C$. The challenge is finding $F$.
+            </div>
+        </section>
+
+        <!-- Method Section -->
+        <section id="method">
+            <h2>Step-by-Step Solution Method</h2>
+
+            <div class="warning-box">
+                <strong>Before You Start</strong>
+                Make sure the equation is in the standard form $M(x,y)\,dx + N(x,y)\,dy = 0$.
+            </div>
+
+            <h3>Step 1: Identify M and N</h3>
+            <p>Extract $M(x,y)$ (coefficient of $dx$) and $N(x,y)$ (coefficient of $dy$).</p>
+
+            <h3>Step 2: Check for Exactness</h3>
+            <p>Compute $\displaystyle\frac{\partial M}{\partial y}$ and $\displaystyle\frac{\partial N}{\partial x}$. If they are equal, proceed. If not, the equation is not exact.</p>
+
+            <h3>Step 3: Integrate M with Respect to x</h3>
+            <p>Find $\displaystyle F(x,y) = \int M(x,y)\,dx + g(y)$, where $g(y)$ is an arbitrary function of $y$ (not a constant!).</p>
+
+            <h3>Step 4: Differentiate and Match with N</h3>
+            <p>Compute $\displaystyle\frac{\partial F}{\partial y}$ and set it equal to $N(x,y)$:</p>
+            <p style="text-align: center;">$$\frac{\partial}{\partial y}\left[\int M\,dx\right] + g'(y) = N$$</p>
+            <p>Solve for $g'(y)$.</p>
+
+            <h3>Step 5: Integrate to Find g(y)</h3>
+            <p>Integrate $g'(y)$ to find $g(y)$. You may ignore the constant of integration here.</p>
+
+            <h3>Step 6: Write the Solution</h3>
+            <p>The general solution is:</p>
+            <p style="text-align: center;">$$F(x,y) = C$$</p>
+
+            <h3>Step 7: Apply Initial Condition (if given)</h3>
+            <p>If an initial condition $(x_0, y_0)$ is given, substitute to find the value of $C$.</p>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples">
+            <h2>Worked Examples</h2>
+
+            <!-- Example 1 -->
+            <button class="collapsible">Example 1: $(2xy + 3)\,dx + (x^2 + 4y)\,dy = 0$</button>
+            <div class="collapsible-content example-box">
+                <h3>Solution</h3>
+                <p><strong>Step 1:</strong> $M = 2xy + 3$, $N = x^2 + 4y$</p>
+
+                <p><strong>Step 2:</strong> Check exactness:
+                $$\frac{\partial M}{\partial y} = 2x, \quad \frac{\partial N}{\partial x} = 2x \quad \checkmark$$
+                The equation is exact.</p>
+
+                <p><strong>Step 3:</strong> Integrate $M$ with respect to $x$:
+                $$F = \int (2xy + 3)\,dx = x^2y + 3x + g(y)$$</p>
+
+                <p><strong>Step 4:</strong> Differentiate $F$ with respect to $y$:
+                $$\frac{\partial F}{\partial y} = x^2 + g'(y)$$
+                Set equal to $N$:
+                $$x^2 + g'(y) = x^2 + 4y \quad \Rightarrow \quad g'(y) = 4y$$</p>
+
+                <p><strong>Step 5:</strong> Integrate:
+                $$g(y) = \int 4y\,dy = 2y^2$$</p>
+
+                <p><strong>Step 6:</strong> General solution:
+                $$x^2y + 3x + 2y^2 = C$$</p>
+            </div>
+
+            <!-- Example 2 -->
+            <button class="collapsible">Example 2: $(ye^{xy} + 2x)\,dx + (xe^{xy} + 2y)\,dy = 0$</button>
+            <div class="collapsible-content example-box">
+                <h3>Solution</h3>
+                <p><strong>Step 1:</strong> $M = ye^{xy} + 2x$, $N = xe^{xy} + 2y$</p>
+
+                <p><strong>Step 2:</strong> Check exactness:
+                $$\frac{\partial M}{\partial y} = e^{xy} + xye^{xy}, \quad \frac{\partial N}{\partial x} = e^{xy} + xye^{xy} \quad \checkmark$$</p>
+
+                <p><strong>Step 3:</strong> Integrate $M$ with respect to $x$:
+                $$F = \int (ye^{xy} + 2x)\,dx = e^{xy} + x^2 + g(y)$$</p>
+
+                <p><strong>Step 4:</strong> Differentiate with respect to $y$:
+                $$\frac{\partial F}{\partial y} = xe^{xy} + g'(y) = xe^{xy} + 2y \quad \Rightarrow \quad g'(y) = 2y$$</p>
+
+                <p><strong>Step 5:</strong> $g(y) = y^2$</p>
+
+                <p><strong>Step 6:</strong> General solution:
+                $$e^{xy} + x^2 + y^2 = C$$</p>
+
+                <p><em>Note: This elegant result shows how exact equations can yield surprisingly simple potentials.</em></p>
+            </div>
+
+            <!-- Example 3 -->
+            <button class="collapsible">Example 3: $(3x^2y + y^3)\,dx + (x^3 + 3xy^2 + 1)\,dy = 0$</button>
+            <div class="collapsible-content example-box">
+                <h3>Solution</h3>
+                <p><strong>Step 1:</strong> $M = 3x^2y + y^3$, $N = x^3 + 3xy^2 + 1$</p>
+
+                <p><strong>Step 2:</strong> Check exactness:
+                $$\frac{\partial M}{\partial y} = 3x^2 + 3y^2, \quad \frac{\partial N}{\partial x} = 3x^2 + 3y^2 \quad \checkmark$$</p>
+
+                <p><strong>Step 3:</strong> Integrate $M$ with respect to $x$:
+                $$F = \int (3x^2y + y^3)\,dx = x^3y + xy^3 + g(y)$$</p>
+
+                <p><strong>Step 4:</strong> Differentiate with respect to $y$:
+                $$\frac{\partial F}{\partial y} = x^3 + 3xy^2 + g'(y) = x^3 + 3xy^2 + 1 \quad \Rightarrow \quad g'(y) = 1$$</p>
+
+                <p><strong>Step 5:</strong> $g(y) = y$</p>
+
+                <p><strong>Step 6:</strong> General solution:
+                $$x^3y + xy^3 + y = C$$</p>
+            </div>
+
+            <!-- Example 4 -->
+            <button class="collapsible">Example 4: IVP — $(2x + y)\,dx + (x - 3y^2)\,dy = 0$, $y(1) = 2$</button>
+            <div class="collapsible-content example-box">
+                <h3>Solution</h3>
+                <p><strong>Step 1:</strong> $M = 2x + y$, $N = x - 3y^2$</p>
+
+                <p><strong>Step 2:</strong> Check exactness:
+                $$\frac{\partial M}{\partial y} = 1, \quad \frac{\partial N}{\partial x} = 1 \quad \checkmark$$</p>
+
+                <p><strong>Step 3:</strong> Integrate $M$ with respect to $x$:
+                $$F = \int (2x + y)\,dx = x^2 + xy + g(y)$$</p>
+
+                <p><strong>Step 4:</strong> Differentiate with respect to $y$:
+                $$\frac{\partial F}{\partial y} = x + g'(y) = x - 3y^2 \quad \Rightarrow \quad g'(y) = -3y^2$$</p>
+
+                <p><strong>Step 5:</strong> $g(y) = -y^3$</p>
+
+                <p><strong>Step 6:</strong> General solution:
+                $$x^2 + xy - y^3 = C$$</p>
+
+                <p><strong>Step 7:</strong> Apply initial condition $y(1) = 2$:
+                $$1^2 + 1(2) - 2^3 = C \quad \Rightarrow \quad 1 + 2 - 8 = C \quad \Rightarrow \quad C = -5$$</p>
+
+                <p><strong>Particular solution:</strong>
+                $$x^2 + xy - y^3 = -5$$</p>
+            </div>
+        </section>
+
+        <!-- Interactive Visualizer -->
+        <section id="visualizer">
+            <h2>Interactive Exactness Checker & Visualizer</h2>
+
+            <div class="input-group">
+                <label for="funcM">Enter M(x,y):</label>
+                <input type="text" id="funcM" placeholder="e.g., 2*x*y + 3" value="2*x*y + 3">
+
+                <label for="funcN">Enter N(x,y):</label>
+                <input type="text" id="funcN" placeholder="e.g., x^2 + 4*y" value="x**2 + 4*y">
+
+                <label for="presets">Or load a preset:</label>
+                <select id="presets">
+                    <option value="">-- Choose Preset --</option>
+                    <option value="1">Example 1</option>
+                    <option value="2">Example 2</option>
+                    <option value="3">Example 3</option>
+                </select>
+
+                <button onclick="checkExactness()">Check Exactness</button>
+                <button onclick="plotContours()">Plot Solution Curves</button>
+                <div id="exactResult"></div>
+            </div>
+
+            <div class="plot-container">
+                <div id="contourPlot" style="width: 100%; height: 500px;"></div>
+            </div>
+        </section>
+
+        <!-- Geometric Visualization -->
+        <section id="geometry">
+            <h2>Geometric Interpretation: 3D Surface and Level Curves</h2>
+
+            <p>Below is a 3D visualization of the potential function $F(x,y) = x^2y + 3x + 2y^2$ from Example 1. The solution curves are the <strong>level curves</strong> (contours) of this surface.</p>
+
+            <div class="plot-container">
+                <div id="surface3D" style="width: 100%; height: 600px;"></div>
+            </div>
+
+            <p style="margin-top: 1.5rem;"><strong>Key Observation:</strong> The gradient $\nabla F = \left(\frac{\partial F}{\partial x}, \frac{\partial F}{\partial y}\right) = (M, N)$ is always perpendicular to the level curves. This is why exact equations give such clean geometric structure.</p>
+        </section>
+
+        <!-- Practice Problems -->
+        <section id="practice">
+            <h2>Practice Problems & Quiz</h2>
+
+            <div class="quiz-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p style="text-align: center; color: var(--text-gray);">Progress: <span id="progressText">0</span>/6</p>
+
+                <!-- Question 1 -->
+                <div class="quiz-question">
+                    <h3>Q1: Which equation is exact?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="a"> (A) $(x + y)\,dx + (y)\,dy = 0$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="b"> (B) $(2xy)\,dx + (x^2)\,dy = 0$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="c"> (C) $(x^2 + y)\,dx + (x)\,dy = 0$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="d"> (D) $(y^2)\,dx + (x)\,dy = 0$
+                        </label>
+                    </div>
+                    <button onclick="checkAnswer('q1', 'b')">Submit</button>
+                    <div id="feedback-q1"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question">
+                    <h3>Q2: Is $(2xy^3 + 1)\,dx + (3x^2y^2)\,dy = 0$ exact?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="a"> (A) Yes, because both sides have $x$ and $y$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="b"> (B) No, because $\frac{\partial M}{\partial y} = 6xy^2 \neq 6xy^2 = \frac{\partial N}{\partial x}$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="c"> (C) No, because $\frac{\partial M}{\partial y} = 6xy^2 \neq 6xy = \frac{\partial N}{\partial x}$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="d"> (D) Yes, it's always exact if continuous partials exist
+                        </label>
+                    </div>
+                    <button onclick="checkAnswer('q2', 'c')">Submit</button>
+                    <div id="feedback-q2"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question">
+                    <h3>Q3: For the exact equation $(2xy)\,dx + (x^2)\,dy = 0$, what is $F(x,y)$?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="a"> (A) $F = xy^2$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="b"> (B) $F = x^2y$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="c"> (C) $F = x^2y^2$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="d"> (D) $F = xy$
+                        </label>
+                    </div>
+                    <button onclick="checkAnswer('q3', 'b')">Submit</button>
+                    <div id="feedback-q3"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question">
+                    <h3>Q4: What is the solution to $(\cos y)\,dx - (x \sin y)\,dy = 0$?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="a"> (A) $x \sin y = C$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="b"> (B) $x \cos y = C$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="c"> (C) $\sin(xy) = C$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="d"> (D) $x + y = C$
+                        </label>
+                    </div>
+                    <button onclick="checkAnswer('q4', 'b')">Submit</button>
+                    <div id="feedback-q4"></div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-question">
+                    <h3>Q5: Given $F(x,y) = x^2y + y^3 = C$ with $y(0) = 1$, find $C$.</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="a"> (A) $C = 0$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="b"> (B) $C = 1$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="c"> (C) $C = 2$
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="d"> (D) $C = -1$
+                        </label>
+                    </div>
+                    <button onclick="checkAnswer('q5', 'b')">Submit</button>
+                    <div id="feedback-q5"></div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="quiz-question">
+                    <h3>Q6: Why does $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$ guarantee exactness?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="q6" value="a"> (A) It's a definition
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q6" value="b"> (B) By Clairaut's theorem, mixed partials of $F$ are equal, so a potential function exists
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q6" value="c"> (C) The domain is always simply connected
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q6" value="d"> (D) It makes $M = N$
+                        </label>
+                    </div>
+                    <button onclick="checkAnswer('q6', 'b')">Submit</button>
+                    <div id="feedback-q6"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference Card -->
+        <section id="reference">
+            <div class="reference-card">
+                <h2>Quick Reference Card</h2>
+
+                <h3>Exact Equation Form</h3>
+                <p>$$M(x,y)\,dx + N(x,y)\,dy = 0$$</p>
+
+                <h3>Exactness Test</h3>
+                <p>$$\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x} \quad \Rightarrow \text{ exact}$$</p>
+
+                <h3>Solution Method</h3>
+                <ol style="color: rgba(255,255,255,0.95);">
+                    <li>Check exactness</li>
+                    <li>Find $F = \int M\,dx + g(y)$</li>
+                    <li>Compute $\frac{\partial F}{\partial y}$ and set equal to $N$ to find $g'(y)$</li>
+                    <li>Integrate to get $g(y)$</li>
+                    <li>Solution: $F(x,y) = C$</li>
+                </ol>
+
+                <h3>Key Theorems</h3>
+                <p><strong>Clairaut's Theorem:</strong> If $\frac{\partial^2 F}{\partial x \partial y}$ and $\frac{\partial^2 F}{\partial y \partial x}$ are continuous, they are equal.</p>
+
+                <h3>Connection to Calculus III</h3>
+                <p>$M\,dx + N\,dy$ is a <strong>conservative vector field</strong> if and only if $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Differential Equations Course | Section 1.4: Exact Equations</p>
+    </footer>
+
+    <script>
+        // Initialize KaTeX rendering
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+
+            plot3DSurface();
+        });
+
+        // Collapsible Examples
+        const collapsibles = document.querySelectorAll('.collapsible');
+        collapsibles.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                this.classList.toggle('active');
+                content.classList.toggle('show');
+            });
+        });
+
+        // Presets for visualizer
+        document.getElementById('presets').addEventListener('change', function() {
+            const presets = {
+                '1': { M: '2*x*y + 3', N: 'x**2 + 4*y' },
+                '2': { M: 'y*Math.exp(x*y) + 2*x', N: 'x*Math.exp(x*y) + 2*y' },
+                '3': { M: '3*x**2*y + y**3', N: 'x**3 + 3*x*y**2 + 1' }
+            };
+            if (this.value && presets[this.value]) {
+                document.getElementById('funcM').value = presets[this.value].M;
+                document.getElementById('funcN').value = presets[this.value].N;
+            }
+        });
+
+        // Safe evaluation function
+        function safeEval(expr, x, y) {
+            const Math_funcs = {
+                'sin': Math.sin, 'cos': Math.cos, 'tan': Math.tan,
+                'exp': Math.exp, 'log': Math.log, 'sqrt': Math.sqrt,
+                'abs': Math.abs, 'pow': Math.pow
+            };
+            try {
+                const func = new Function('x', 'y', 'Math', `return ${expr}`);
+                return func(x, y, Math);
+            } catch (e) {
+                return NaN;
+            }
+        }
+
+        // Numerical partial derivative
+        function partialDerivative(expr, variable, x, y) {
+            const h = 0.0001;
+            const val1 = variable === 'x'
+                ? safeEval(expr, x + h, y)
+                : safeEval(expr, x, y + h);
+            const val2 = variable === 'x'
+                ? safeEval(expr, x - h, y)
+                : safeEval(expr, x, y - h);
+            return (val1 - val2) / (2 * h);
+        }
+
+        function checkExactness() {
+            const M = document.getElementById('funcM').value;
+            const N = document.getElementById('funcN').value;
+
+            const points = [
+                {x: 0.5, y: 0.5}, {x: 1, y: 1}, {x: 1.5, y: 1.5}
+            ];
+
+            let isExact = true;
+            for (const pt of points) {
+                const dMdy = partialDerivative(M, 'y', pt.x, pt.y);
+                const dNdx = partialDerivative(N, 'x', pt.x, pt.y);
+                if (Math.abs(dMdy - dNdx) > 0.01) {
+                    isExact = false;
+                    break;
+                }
+            }
+
+            const result = document.getElementById('exactResult');
+            if (isExact) {
+                result.innerHTML = '<div class="result exact">✓ Equation is EXACT!</div>';
+            } else {
+                result.innerHTML = '<div class="result not-exact">✗ Equation is NOT exact</div>';
+            }
+        }
+
+        function plotContours() {
+            const M = document.getElementById('funcM').value;
+            const N = document.getElementById('funcN').value;
+
+            const xRange = [-2, 3];
+            const yRange = [-2, 3];
+            const resolution = 50;
+            const x = [];
+            const y = [];
+            const z = [];
+
+            for (let i = 0; i < resolution; i++) {
+                const xVal = xRange[0] + (xRange[1] - xRange[0]) * i / resolution;
+                x.push(xVal);
+                const row = [];
+                for (let j = 0; j < resolution; j++) {
+                    const yVal = yRange[0] + (yRange[1] - yRange[0]) * j / resolution;
+                    if (i === 0) y.push(yVal);
+
+                    // Compute F as integral of M (simplified)
+                    const Mval = safeEval(M, xVal, yVal);
+                    row.push(Mval * xVal + safeEval(N, xVal, yVal) * yVal);
+                }
+                z.push(row);
+            }
+
+            const contour = {
+                z: z,
+                x: x,
+                y: y,
+                type: 'contour',
+                colorscale: 'Viridis'
+            };
+
+            const layout = {
+                title: 'Solution Curves (Level Curves of F)',
+                xaxis: { title: 'x' },
+                yaxis: { title: 'y' },
+                height: 500
+            };
+
+            Plotly.newPlot('contourPlot', [contour], layout, {responsive: true});
+        }
+
+        function plot3DSurface() {
+            // F(x,y) = x^2*y + 3x + 2y^2 from Example 1
+            const xRange = [-1, 2];
+            const yRange = [-1, 2];
+            const resolution = 30;
+
+            const x = [], y = [], z = [];
+
+            for (let i = 0; i < resolution; i++) {
+                const xVal = xRange[0] + (xRange[1] - xRange[0]) * i / resolution;
+                x.push(xVal);
+                const row = [];
+                for (let j = 0; j < resolution; j++) {
+                    const yVal = yRange[0] + (yRange[1] - yRange[0]) * j / resolution;
+                    if (i === 0) y.push(yVal);
+                    // F = x^2*y + 3x + 2y^2
+                    const F = xVal * xVal * yVal + 3 * xVal + 2 * yVal * yVal;
+                    row.push(F);
+                }
+                z.push(row);
+            }
+
+            const surface = {
+                z: z,
+                x: x,
+                y: y,
+                type: 'surface',
+                colorscale: 'Viridis'
+            };
+
+            const layout = {
+                title: 'Potential Function: F(x,y) = x²y + 3x + 2y²',
+                scene: {
+                    xaxis: { title: 'x' },
+                    yaxis: { title: 'y' },
+                    zaxis: { title: 'F(x,y)' }
+                },
+                height: 600
+            };
+
+            Plotly.newPlot('surface3D', [surface], layout, {responsive: true});
+        }
+
+        // Quiz functions
+        const quizAnswers = {
+            'q1': 'b', 'q2': 'c', 'q3': 'b', 'q4': 'b', 'q5': 'b', 'q6': 'b'
+        };
+
+        function checkAnswer(questionId, correctAnswer) {
+            const selected = document.querySelector(`input[name="${questionId}"]:checked`);
+            const feedback = document.getElementById(`feedback-${questionId}`);
+
+            if (!selected) {
+                feedback.innerHTML = '<div class="quiz-feedback incorrect">Please select an answer</div>';
+                return;
+            }
+
+            const isCorrect = selected.value === correctAnswer;
+            if (isCorrect) {
+                feedback.innerHTML = '<div class="quiz-feedback correct">✓ Correct!</div>';
+                updateProgress();
+            } else {
+                feedback.innerHTML = '<div class="quiz-feedback incorrect">✗ Incorrect. Try again.</div>';
+            }
+        }
+
+        function updateProgress() {
+            let correct = 0;
+            for (let i = 1; i <= 6; i++) {
+                const q = `q${i}`;
+                const feedback = document.getElementById(`feedback-${q}`);
+                if (feedback.innerHTML.includes('Correct')) {
+                    correct++;
+                }
+            }
+            const percent = (correct / 6) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = correct;
+        }
+
+        // Smooth scroll navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

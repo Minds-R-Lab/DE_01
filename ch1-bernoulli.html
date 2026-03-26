@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.3 Bernoulli Differential Equations | DE Course</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --light-blue: #dbeafe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f0f7 100%);
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-right: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #6b7280;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: var(--light-blue);
+            color: var(--primary);
+        }
+
+        nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 80px auto 2rem;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            scroll-margin-top: 70px;
+            margin-bottom: 3rem;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+
+        p {
+            margin: 1rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 5px solid;
+        }
+
+        .definition-box {
+            background: #eff6ff;
+            border-left-color: var(--primary);
+        }
+
+        .theorem-box {
+            background: #faf5ff;
+            border-left-color: var(--accent);
+        }
+
+        .example-box {
+            background: #f0fdf4;
+            border-left-color: var(--success);
+        }
+
+        .warning-box {
+            background: #fffbeb;
+            border-left-color: var(--warning);
+        }
+
+        .tip-box {
+            background: #ecf7f9;
+            border-left-color: #0891b2;
+        }
+
+        .equation {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Monaco', monospace;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .collapsible {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 100%);
+            border: 1px solid #d4d4ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .collapsible:hover {
+            background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .collapsible.active {
+            background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
+        }
+
+        .collapse-content {
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapse-content.active {
+            display: block;
+            max-height: 2000px;
+        }
+
+        .collapsible span {
+            font-size: 1.2rem;
+        }
+
+        .objective {
+            background: white;
+            padding: 0.75rem 1rem;
+            border-left: 3px solid var(--success);
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+
+        .step-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 1rem 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin: 1.5rem 0;
+        }
+
+        .control-group {
+            margin: 1rem 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .plot-container {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .quiz-question {
+            margin: 2rem 0;
+        }
+
+        .quiz-question h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--light-blue);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: var(--light-blue);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: #f0fdf4;
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: #fef2f2;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .reference-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .ref-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .ref-item strong {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            nav h1 {
+                font-size: 1rem;
+                margin-right: 1rem;
+            }
+
+            nav a {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            main {
+                margin: 70px auto 1rem;
+                padding: 0 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .reference-card {
+                grid-template-columns: 1fr;
+            }
+
+            .plot-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <h1>DE Course</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch1-separable.html">1.1 Separable</a></li>
+                <li><a href="ch1-linear.html">1.2 Linear</a></li>
+                <li><a href="ch1-bernoulli.html" class="active">1.3 Bernoulli</a></li>
+                <li><a href="ch1-exact.html">1.4 Exact</a></li>
+                <li><a href="ch1-nonexact.html">1.5 Non-Exact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- INTRODUCTION SECTION -->
+        <section id="intro">
+            <h1>1.3 Bernoulli Differential Equations</h1>
+
+            <p>Bernoulli differential equations represent an important class of nonlinear equations that can be reduced to linear equations through a clever substitution. Named after Jacob Bernoulli (1654–1705), these equations appear frequently in applications involving population dynamics, fluid mechanics, and chemical reactions.</p>
+
+            <div class="definition-box">
+                <h3>Learning Objectives</h3>
+                <div class="objective">Identify and classify Bernoulli differential equations</div>
+                <div class="objective">Apply the Bernoulli substitution to transform nonlinear equations to linear form</div>
+                <div class="objective">Solve Bernoulli equations and interpret physical solutions</div>
+                <div class="objective">Analyze equilibrium solutions and stability</div>
+            </div>
+
+            <div class="theorem-box">
+                <h3>Standard Form of Bernoulli Equation</h3>
+                <div class="equation">
+                    $$\frac{dy}{dx} + P(x)y = Q(x)y^n$$
+                </div>
+                <p style="margin-top: 1rem;"><strong>where:</strong> \(P(x)\) and \(Q(x)\) are continuous functions, \(n \neq 0, 1\) is a real constant.</p>
+            </div>
+
+            <p><strong>Why Bernoulli equations are important:</strong></p>
+            <ul style="margin-left: 2rem; margin: 1rem 0;">
+                <li><strong>Nonlinear yet solvable:</strong> While the equation is nonlinear (due to the \(y^n\) term), the substitution \(v = y^{1-n}\) transforms it into a linear equation.</li>
+                <li><strong>Extensions of linear theory:</strong> They generalize linear equations (when \(n=0\)) to a broader class of solvable nonlinear ODEs.</li>
+                <li><strong>Logistic models:</strong> When \(n=2\), the equation becomes the logistic model: \(\frac{dy}{dx} + P(x)y = Q(x)y^2\), fundamental in population biology.</li>
+            </ul>
+
+            <div class="card">
+                <h3>Applications</h3>
+                <p><strong>Population with Harvesting:</strong> A population \(y(t)\) with growth rate \(r\) and carrying capacity \(K\) under harvesting rate \(h(t)\) follows:
+                $$\frac{dy}{dt} = ry\left(1 - \frac{y}{K}\right) - h(t)$$
+                For \(h(t) = hy^{\alpha}\) (nonlinear harvesting), this becomes a Bernoulli equation.</p>
+
+                <p style="margin-top: 1rem;"><strong>Fluid Flow (Torricelli's Law):</strong> The velocity of fluid draining from a container with nonlinear resistance follows:
+                $$\frac{dv}{dt} + av = bv^3$$
+                a classic Bernoulli equation in fluid dynamics.</p>
+            </div>
+        </section>
+
+        <!-- THEORY SECTION -->
+        <section id="theory">
+            <h2>Theory: The Bernoulli Substitution</h2>
+
+            <p>The key insight to solving Bernoulli equations is to use a substitution that transforms the nonlinear equation into a linear one.</p>
+
+            <div class="theorem-box">
+                <h3>The Transformation Strategy</h3>
+                <p><strong>Starting equation:</strong> \(\displaystyle \frac{dy}{dx} + P(x)y = Q(x)y^n\)</p>
+
+                <p style="margin-top: 1rem;"><strong>Step 1: Make the substitution</strong>
+                $$v = y^{1-n}$$</p>
+
+                <p style="margin-top: 1rem;"><strong>Step 2: Differentiate to find \(\frac{dv}{dx}\)</strong>
+                $$\frac{dv}{dx} = (1-n)y^{-n}\frac{dy}{dx}$$
+                $$\Rightarrow \frac{dy}{dx} = \frac{1}{1-n}y^n\frac{dv}{dx}$$</p>
+
+                <p style="margin-top: 1rem;"><strong>Step 3: Substitute into the original equation</strong>
+                $$\frac{1}{1-n}y^n\frac{dv}{dx} + P(x)y = Q(x)y^n$$
+
+                Divide through by \(y^n\) (assuming \(y \neq 0\)):
+                $$\frac{1}{1-n}\frac{dv}{dx} + P(x)y^{1-n} = Q(x)$$
+
+                Since \(v = y^{1-n}\):
+                $$\frac{1}{1-n}\frac{dv}{dx} + P(x)v = Q(x)$$</p>
+
+                <p style="margin-top: 1rem;"><strong>Step 4: Standard linear form</strong>
+                $$\frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$$</p>
+            </div>
+
+            <div class="card">
+                <h3>Solving the Linear Equation</h3>
+                <p>The resulting linear equation can be solved using the integrating factor method:</p>
+                <div class="equation">
+                    $$\mu(x) = e^{\int (1-n)P(x)\,dx}$$
+                </div>
+                <p>Multiply through by \(\mu(x)\), integrate, and back-substitute \(y = v^{1/(1-n)}\).</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>Important Special Cases</h3>
+                <p><strong>Case 1: \(n = 2\) (Logistic-type)</strong>
+                $$v = y^{-1}, \quad \frac{dv}{dx} - P(x)v = -Q(x)$$</p>
+
+                <p style="margin-top: 1rem;"><strong>Case 2: \(n = 3\)</strong>
+                $$v = y^{-2}, \quad \frac{dv}{dx} + 2P(x)v = 2Q(x)$$</p>
+
+                <p style="margin-top: 1rem;"><strong>Case 3: \(n = -1\)</strong>
+                $$v = y^2, \quad \frac{dv}{dx} + 2P(x)v = 2Q(x)$$</p>
+
+                <p style="margin-top: 1rem;"><strong>Case 4: \(n = 1/2\) (Radical case)</strong>
+                $$v = y^{1/2}, \quad \frac{dv}{dx} + \frac{1}{2}P(x)v = \frac{1}{2}Q(x)$$</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Critical Consideration: The Solution \(y = 0\)</h3>
+                <p>When we divided by \(y^n\) during the substitution, we implicitly assumed \(y \neq 0\). Always check whether <strong>\(y = 0\) is a solution</strong> to the original equation:</p>
+                <p>Substitute \(y = 0\) into the original: \(\displaystyle 0 + P(x) \cdot 0 = Q(x) \cdot 0\) ✓</p>
+                <p>Therefore, <strong>\(y = 0\) is always a solution</strong> to any Bernoulli equation. The general solution formula may not capture this singular solution, so report it separately.</p>
+            </div>
+        </section>
+
+        <!-- METHOD SECTION -->
+        <section id="method">
+            <h2>Step-by-Step Solution Method</h2>
+
+            <div class="step-box">
+                <span class="step-number">1</span>
+                <strong>Identify P(x), Q(x), and n</strong>
+                <p>Rewrite the equation in standard form \(\displaystyle \frac{dy}{dx} + P(x)y = Q(x)y^n\). Extract the coefficient functions and the exponent.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2</span>
+                <strong>Apply the substitution \(v = y^{1-n}\)</strong>
+                <p>Replace \(y\) with the new variable \(v\) and compute \(\displaystyle \frac{dv}{dx} = (1-n)y^{-n}\frac{dy}{dx}\).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3</span>
+                <strong>Rewrite as a linear equation in v</strong>
+                <p>Substitute \(\displaystyle \frac{dy}{dx} = \frac{1}{1-n}y^n\frac{dv}{dx}\) into the original equation and divide by \(y^n\). This yields:
+                $$\frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$$</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4</span>
+                <strong>Solve the linear equation (integrating factor)</strong>
+                <p>Use the integrating factor method:
+                $$\mu(x) = e^{\int (1-n)P(x)\,dx}$$
+                Multiply the linear equation by \(\mu(x)\) and integrate.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">5</span>
+                <strong>Back-substitute \(y = v^{1/(1-n)}\)</strong>
+                <p>Once you have the solution \(v(x, C)\), express \(y\) in terms of \(v\) and the arbitrary constant \(C\).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">6</span>
+                <strong>Apply initial conditions and verify \(y = 0\)</strong>
+                <p>Use any initial conditions to find \(C\). Remember to report \(y = 0\) as a separate singular solution.</p>
+            </div>
+        </section>
+
+        <!-- EXAMPLES SECTION -->
+        <section id="examples">
+            <h2>Worked Examples</h2>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 1: \(\displaystyle \frac{dy}{dx} + y = y^2\) (Logistic-type)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} + y = y^2\)</p>
+
+                    <p><strong>Identify parameters:</strong> \(P(x) = 1\), \(Q(x) = 1\), \(n = 2\)</p>
+
+                    <p><strong>Step 1: Substitution.</strong> Let \(v = y^{1-2} = y^{-1}\), so \(y = v^{-1}\).
+                    $$\frac{dv}{dx} = -y^{-2}\frac{dy}{dx}$$</p>
+
+                    <p><strong>Step 2: Rewrite.</strong> From the original: \(\displaystyle \frac{dy}{dx} = y^2 - y\), so:
+                    $$\frac{dv}{dx} = -y^{-2}(y^2 - y) = -1 + y^{-1} = -1 + v$$
+                    $$\frac{dv}{dx} - v = -1$$</p>
+
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{-x}\).
+                    $$e^{-x}\frac{dv}{dx} - e^{-x}v = -e^{-x}$$
+                    $$\frac{d}{dx}\left(e^{-x}v\right) = -e^{-x}$$
+                    $$e^{-x}v = e^{-x} + C$$
+                    $$v = 1 + Ce^x$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-1}\):
+                    $$y^{-1} = 1 + Ce^x$$
+                    $$y = \frac{1}{1 + Ce^x}$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{1}{1 + Ce^x}\) (general solution) and \(y = 0\) (singular solution).</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 2: \(\displaystyle \frac{dy}{dx} - \frac{2y}{x} = -x^2y^3\) (n = 3)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} - \frac{2y}{x} = -x^2y^3\)</p>
+
+                    <p><strong>Identify parameters:</strong> \(P(x) = -\frac{2}{x}\), \(Q(x) = -x^2\), \(n = 3\)</p>
+
+                    <p><strong>Step 1: Substitution.</strong> Let \(v = y^{1-3} = y^{-2}\).
+                    $$\frac{dv}{dx} = -2y^{-3}\frac{dy}{dx}$$
+                    $$\frac{dy}{dx} = -\frac{1}{2}y^3\frac{dv}{dx}$$</p>
+
+                    <p><strong>Step 2: Rewrite.</strong> Substitute into the original equation:
+                    $$-\frac{1}{2}y^3\frac{dv}{dx} - \frac{2y}{x} = -x^2y^3$$
+
+                    Divide by \(-y^3\):
+                    $$\frac{1}{2}\frac{dv}{dx} + \frac{2y^{-2}}{x} = x^2$$
+                    $$\frac{1}{2}\frac{dv}{dx} + \frac{2v}{x} = x^2$$
+
+                    Multiply by 2:
+                    $$\frac{dv}{dx} + \frac{4v}{x} = 2x^2$$</p>
+
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\displaystyle \mu = e^{\int \frac{4}{x}dx} = e^{4\ln|x|} = x^4\).
+
+                    $$x^4\frac{dv}{dx} + 4x^3v = 2x^6$$
+                    $$\frac{d}{dx}(x^4v) = 2x^6$$
+                    $$x^4v = \frac{2x^7}{7} + C$$
+                    $$v = \frac{2x^3}{7} + \frac{C}{x^4}$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-2}\):
+                    $$y^{-2} = \frac{2x^3}{7} + \frac{C}{x^4}$$
+                    $$y = \left(\frac{2x^3}{7} + \frac{C}{x^4}\right)^{-1/2}$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \left(\frac{2x^3}{7} + \frac{C}{x^4}\right)^{-1/2}\) and \(y = 0\).</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 3: \(\displaystyle xy' + y = x^2y^2, \quad y(1) = 1\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle xy' + y = x^2y^2\) with initial condition \(y(1) = 1\).</p>
+
+                    <p><strong>Step 1: Standard form.</strong> Divide by \(x\):
+                    $$\frac{dy}{dx} + \frac{y}{x} = xy^2$$
+
+                    So \(P(x) = \frac{1}{x}\), \(Q(x) = x\), \(n = 2\).</p>
+
+                    <p><strong>Step 2: Substitution.</strong> Let \(v = y^{-1}\):
+                    $$\frac{dv}{dx} = -y^{-2}\frac{dy}{dx}$$</p>
+
+                    <p><strong>Step 3: Rewrite.</strong>
+                    $$-y^{-2}\frac{dy}{dx} - \frac{v}{x} = -x$$
+
+                    Multiply by \(-1\):
+                    $$\frac{dv}{dx} + \frac{v}{x} = x$$</p>
+
+                    <p><strong>Step 4: Solve.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{x}dx} = e^{\ln|x|} = x\).
+                    $$x\frac{dv}{dx} + v = x^2$$
+                    $$\frac{d}{dx}(xv) = x^2$$
+                    $$xv = \frac{x^3}{3} + C$$
+                    $$v = \frac{x^2}{3} + \frac{C}{x}$$</p>
+
+                    <p><strong>Step 5: Apply initial condition.</strong> \(y(1) = 1 \Rightarrow v(1) = 1\):
+                    $$1 = \frac{1}{3} + C \Rightarrow C = \frac{2}{3}$$
+
+                    So \(\displaystyle v = \frac{x^2}{3} + \frac{2}{3x} = \frac{x^3 + 2}{3x}\).</p>
+
+                    <p><strong>Step 6: Back-substitute.</strong>
+                    $$y = \frac{1}{v} = \frac{3x}{x^3 + 2}$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{3x}{x^3 + 2}\)</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 4: \(\displaystyle \frac{dy}{dx} + \frac{y}{x} = y^{1/2}\ln(x)\) (Fractional power)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} + \frac{y}{x} = y^{1/2}\ln(x)\)</p>
+
+                    <p><strong>Identify parameters:</strong> \(P(x) = \frac{1}{x}\), \(Q(x) = \ln(x)\), \(n = \frac{1}{2}\)</p>
+
+                    <p><strong>Step 1: Substitution.</strong> Let \(\displaystyle v = y^{1-1/2} = y^{1/2}\), so \(y = v^2\):
+                    $$\frac{dv}{dx} = \frac{1}{2}y^{-1/2}\frac{dy}{dx}$$
+                    $$\frac{dy}{dx} = 2y^{1/2}\frac{dv}{dx} = 2v\frac{dv}{dx}$$</p>
+
+                    <p><strong>Step 2: Rewrite.</strong> Substitute:
+                    $$2v\frac{dv}{dx} + \frac{v^2}{x} = v\ln(x)$$
+
+                    Divide by \(v\):
+                    $$2\frac{dv}{dx} + \frac{v}{x} = \ln(x)$$</p>
+
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{2x}dx} = e^{\frac{1}{2}\ln|x|} = x^{1/2}\).
+
+                    $$x^{1/2}\frac{dv}{dx} + \frac{v}{2x^{1/2}} = x^{1/2}\ln(x)$$
+                    $$\frac{d}{dx}(x^{1/2}v) = x^{1/2}\ln(x)$$
+
+                    Integrate by parts or numerically. Generally:
+                    $$x^{1/2}v = \int x^{1/2}\ln(x)\,dx + C$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong> \(y = v^2\) gives the implicit solution.</p>
+
+                    <p><strong>Solution:</strong> The solution is given implicitly through integration.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE VISUALIZER -->
+        <section id="visualizer">
+            <h2>Interactive Slope Field Visualizer</h2>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="preset-select">Select Example or Custom:</label>
+                    <select id="preset-select" onchange="loadPreset()">
+                        <option value="custom">Custom Equation</option>
+                        <option value="ex1">Example 1: dy/dx + y = y²</option>
+                        <option value="ex2">Example 2: dy/dx - (2/x)y = -x²y³</option>
+                        <option value="ex3">Example 3: xy' + y = x²y²</option>
+                        <option value="logistic">Logistic: dy/dx = y(1 - y)</option>
+                    </select>
+                </div>
+
+                <div class="control-group" id="custom-input" style="display: none;">
+                    <label for="equation-input">Enter equation (dy/dx = f(x,y)):</label>
+                    <input type="text" id="equation-input" placeholder="e.g., x*y - y**2" value="x*y - y**2">
+                    <small style="color: #6b7280; margin-top: 0.5rem; display: block;">Use ** for power, * for multiply, / for divide</small>
+                </div>
+
+                <div class="control-group">
+                    <label for="x-min">X range: <span id="x-min-val">-1</span> to <span id="x-max-val">3</span></label>
+                    <input type="range" id="x-min" min="-5" max="5" value="-1" oninput="updateRanges()">
+                    <input type="range" id="x-max" min="-5" max="5" value="3" oninput="updateRanges()" style="margin-top: 0.5rem;">
+                </div>
+
+                <div class="control-group">
+                    <label for="y-min">Y range: <span id="y-min-val">-1</span> to <span id="y-max-val">3</span></label>
+                    <input type="range" id="y-min" min="-5" max="5" value="-1" oninput="updateRanges()">
+                    <input type="range" id="y-max" min="-5" max="5" value="3" oninput="updateRanges()" style="margin-top: 0.5rem;">
+                </div>
+
+                <button onclick="drawSlopeField()">Draw Slope Field</button>
+                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">Click on the plot to trace a solution curve</small>
+            </div>
+
+            <div id="plot-slope" class="plot-container"></div>
+
+            <div class="tip-box" id="plot-info" style="display: none;">
+                <strong>Solution Trace Information:</strong>
+                <p id="trace-info"></p>
+            </div>
+        </section>
+
+        <!-- PARAMETER EXPLORER -->
+        <section id="explorer">
+            <h2>Parameter Explorer: \(\displaystyle \frac{dy}{dx} + ay = by^n\)</h2>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="a-slider">Parameter a: <span id="a-val">1</span></label>
+                    <input type="range" id="a-slider" min="-3" max="3" step="0.1" value="1" oninput="updateExplorer()">
+                </div>
+
+                <div class="control-group">
+                    <label for="b-slider">Parameter b: <span id="b-val">1</span></label>
+                    <input type="range" id="b-slider" min="-3" max="3" step="0.1" value="1" oninput="updateExplorer()">
+                </div>
+
+                <div class="control-group">
+                    <label for="n-select">Exponent n:</label>
+                    <select id="n-select" onchange="updateExplorer()">
+                        <option value="2">n = 2 (Logistic-type)</option>
+                        <option value="3">n = 3</option>
+                        <option value="-1">n = -1</option>
+                        <option value="0.5">n = 1/2 (Square root)</option>
+                        <option value="0.333">n = 1/3 (Cube root)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="y0-slider">Initial condition y₀: <span id="y0-val">0.5</span></label>
+                    <input type="range" id="y0-slider" min="0.01" max="3" step="0.1" value="0.5" oninput="updateExplorer()">
+                </div>
+
+                <button onclick="updateExplorer()">Update Solutions</button>
+            </div>
+
+            <div id="plot-explorer" class="plot-container"></div>
+
+            <div class="card" id="explorer-analysis">
+                <h3>Behavior Analysis</h3>
+                <p id="analysis-text">Adjust the parameters to see how the solutions change.</p>
+            </div>
+        </section>
+
+        <!-- PRACTICE PROBLEMS -->
+        <section id="practice">
+            <h2>Practice Problems</h2>
+
+            <div class="quiz-container">
+                <h3>Self-Assessment Quiz</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 1: Identify Bernoulli Equations</h4>
+                    <p>Which of the following is a Bernoulli equation?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(1, 'a')">
+                            (a) \(\displaystyle \frac{dy}{dx} + 2xy = e^x\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(1, 'b')">
+                            (b) \(\displaystyle \frac{dy}{dx} + xy = xy^2\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(1, 'c')">
+                            (c) \(\displaystyle \frac{dy}{dx} = 2xy + y^2\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(1, 'd')">
+                            (d) All of the above
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-1"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 2: Identify the Correct Substitution</h4>
+                    <p>For the equation \(\displaystyle \frac{dy}{dx} + 3y = 2y^4\), what is the correct substitution?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(2, 'a')">
+                            (a) \(v = y^{-3}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(2, 'b')">
+                            (b) \(v = y^{-4}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(2, 'c')">
+                            (c) \(v = y^{4}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(2, 'd')">
+                            (d) \(v = y^{3}\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-2"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 3: Transformed Linear Equation</h4>
+                    <p>After the substitution in Q2, what is the resulting linear equation in v?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(3, 'a')">
+                            (a) \(\displaystyle \frac{dv}{dx} - 9v = -6\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(3, 'b')">
+                            (b) \(\displaystyle \frac{dv}{dx} + 9v = 6\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(3, 'c')">
+                            (c) \(\displaystyle \frac{dv}{dx} - 3v = -2\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(3, 'd')">
+                            (d) \(\displaystyle \frac{dv}{dx} + 3v = 2\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-3"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 4: General Solution</h4>
+                    <p>Solve \(\displaystyle \frac{dy}{dx} - y = -y^2\). What is the general solution?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(4, 'a')">
+                            (a) \(\displaystyle y = \frac{1}{1 + Ce^x}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(4, 'b')">
+                            (b) \(\displaystyle y = \frac{1}{Ce^x - 1}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(4, 'c')">
+                            (c) \(\displaystyle y = 1 + Ce^x\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(4, 'd')">
+                            (d) \(\displaystyle y = Ce^x\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-4"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 5: Equilibrium Solutions</h4>
+                    <p>What are the equilibrium solutions of \(\displaystyle \frac{dy}{dx} + 2y = 5y^3\)?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(5, 'a')">
+                            (a) \(y = 0, y = \pm\sqrt{2/5}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(5, 'b')">
+                            (b) \(y = 0\) only
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(5, 'c')">
+                            (c) \(y = \pm 1\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(5, 'd')">
+                            (d) \(y = 0, y = 2/5\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-5"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 6: Solve Initial Value Problem</h4>
+                    <p>Solve \(\displaystyle \frac{dy}{dx} + y = y^2\) with \(y(0) = 2\). Find \(y(x)\).</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(6, 'a')">
+                            (a) \(\displaystyle y = \frac{1}{1 - e^x}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(6, 'b')">
+                            (b) \(\displaystyle y = \frac{2}{2 - e^x}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(6, 'c')">
+                            (c) \(\displaystyle y = \frac{1}{e^x}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(6, 'd')">
+                            (d) \(\displaystyle y = 2e^x\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-6"></div>
+                </div>
+
+                <button onclick="resetQuiz()" style="margin-top: 2rem;">Reset Quiz</button>
+            </div>
+        </section>
+
+        <!-- QUICK REFERENCE -->
+        <section id="reference">
+            <h2>Quick Reference Card</h2>
+
+            <div class="reference-card">
+                <div class="ref-item">
+                    <strong>Standard Form</strong>
+                    <p>\(\displaystyle \frac{dy}{dx} + P(x)y = Q(x)y^n\), \(n \neq 0, 1\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Bernoulli Substitution</strong>
+                    <p>\(v = y^{1-n}\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Derivative Relation</strong>
+                    <p>\(\displaystyle \frac{dv}{dx} = (1-n)y^{-n}\frac{dy}{dx}\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Linear Form</strong>
+                    <p>\(\displaystyle \frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Integrating Factor</strong>
+                    <p>\(\mu(x) = e^{\int (1-n)P(x)\,dx}\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Back-substitution</strong>
+                    <p>\(y = v^{1/(1-n)}\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Special: n = 2</strong>
+                    <p>\(v = y^{-1}\), \(\displaystyle \frac{dv}{dx} - P(x)v = -Q(x)\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Special: n = 3</strong>
+                    <p>\(v = y^{-2}\), \(\displaystyle \frac{dv}{dx} + 2P(x)v = 2Q(x)\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Always Remember</strong>
+                    <p>\(y = 0\) is always a solution</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Singular Solution</strong>
+                    <p>Report \(y = 0\) separately from general solution</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+
+    <script>
+        // Safe Math Expression Evaluator
+        function safeEval(expr, x, y) {
+            try {
+                let safe = expr.replace(/[^0-9+\-*/(). xy]/g, '');
+                safe = safe.replace(/\^/g, '**');
+                return Function('"use strict"; return (' + safe + ')')
+                    (x, y);
+            } catch (e) {
+                return NaN;
+            }
+        }
+
+        // RK4 Solver
+        function rk4(f, x0, y0, xf, h = 0.01) {
+            let xs = [x0], ys = [y0];
+            let x = x0, y = y0;
+            while ((xf > x0 && x < xf) || (xf < x0 && x > xf)) {
+                let k1 = f(x, y);
+                let k2 = f(x + h/2, y + k1*h/2);
+                let k3 = f(x + h/2, y + k2*h/2);
+                let k4 = f(x + h, y + k3*h);
+                y += (h/6) * (k1 + 2*k2 + 2*k3 + k4);
+                x += h;
+                xs.push(x);
+                ys.push(y);
+            }
+            return [xs, ys];
+        }
+
+        // Slope Field and Tracing
+        function drawSlopeField() {
+            let preset = document.getElementById('preset-select').value;
+            let f;
+            if (preset === 'custom') {
+                let expr = document.getElementById('equation-input').value;
+                f = (x, y) => safeEval(expr, x, y);
+            } else {
+                const presets = {
+                    'ex1': (x, y) => y - y*y,
+                    'ex2': (x, y) => (2/x)*y - x*x*y*y*y,
+                    'ex3': (x, y) => x*y - x*x*y*y,
+                    'logistic': (x, y) => y*(1-y)
+                };
+                f = presets[preset] || ((x, y) => y - y*y);
+            }
+
+            let xMin = parseFloat(document.getElementById('x-min').value);
+            let xMax = parseFloat(document.getElementById('x-max').value);
+            let yMin = parseFloat(document.getElementById('y-min').value);
+            let yMax = parseFloat(document.getElementById('y-max').value);
+
+            let quiver = { x: [], y: [], u: [], v: [] };
+            let dx = (xMax - xMin) / 12;
+            let dy = (yMax - yMin) / 12;
+
+            for (let x = xMin; x <= xMax; x += dx) {
+                for (let y = yMin; y <= yMax; y += dy) {
+                    let dydx = f(x, y);
+                    if (!isNaN(dydx)) {
+                        let scale = 0.1 / Math.max(1, Math.abs(dydx));
+                        quiver.x.push(x);
+                        quiver.y.push(y);
+                        quiver.u.push(scale);
+                        quiver.v.push(scale * dydx);
+                    }
+                }
+            }
+
+            let trace1 = {
+                type: 'scatter',
+                x: quiver.x,
+                y: quiver.y,
+                mode: 'markers',
+                marker: { size: 3, color: '#7c3aed', opacity: 0.5 },
+                hoverinfo: 'skip'
+            };
+
+            let layout = {
+                title: 'Slope Field for Bernoulli Equation',
+                xaxis: { range: [xMin, xMax], title: 'x' },
+                yaxis: { range: [yMin, yMax], title: 'y' },
+                hovermode: 'closest',
+                plot_bgcolor: '#f9fafb',
+                paper_bgcolor: '#ffffff'
+            };
+
+            Plotly.newPlot('plot-slope', [trace1], layout, { responsive: true });
+            document.getElementById('plot-slope').on('plotly_click', function(data) {
+                let pt = data.points[0];
+                traceSolution(f, pt.x, pt.y);
+            });
+        }
+
+        function traceSolution(f, x0, y0) {
+            let [xs, ys] = rk4(f, x0, y0, 5, 0.01);
+            let [xs2, ys2] = rk4(f, x0, y0, -2, -0.01);
+            xs2.reverse();
+            ys2.reverse();
+            xs = xs2.concat(xs);
+            ys = ys2.concat(ys);
+
+            let trace = {
+                x: xs, y: ys, type: 'scatter', mode: 'lines',
+                line: { color: '#dc2626', width: 2 }
+            };
+
+            Plotly.addTraces('plot-slope', [trace]);
+            document.getElementById('trace-info').textContent =
+                `Initial condition: (${x0.toFixed(2)}, ${y0.toFixed(2)})`;
+            document.getElementById('plot-info').style.display = 'block';
+        }
+
+        // Parameter Explorer
+        function updateExplorer() {
+            let a = parseFloat(document.getElementById('a-slider').value);
+            let b = parseFloat(document.getElementById('b-slider').value);
+            let n = parseFloat(document.getElementById('n-select').value);
+            let y0 = parseFloat(document.getElementById('y0-slider').value);
+
+            document.getElementById('a-val').textContent = a.toFixed(1);
+            document.getElementById('b-val').textContent = b.toFixed(1);
+            document.getElementById('y0-val').textContent = y0.toFixed(2);
+
+            let f = (x, y) => -a*y + b*Math.pow(y, n);
+
+            let data = [];
+            let y0vals = [0.2, 0.5, 1, 1.5, 2];
+            let colors = ['#2563eb', '#7c3aed', '#059669', '#d97706', '#dc2626'];
+
+            y0vals.forEach((y0i, idx) => {
+                let [xs, ys] = rk4(f, 0, y0i, 4, 0.02);
+                data.push({
+                    x: xs, y: ys, type: 'scatter', mode: 'lines',
+                    name: `y₀ = ${y0i}`,
+                    line: { color: colors[idx % colors.length], width: 2 }
+                });
+            });
+
+            let layout = {
+                title: `Solutions for dy/dx + ${a.toFixed(1)}y = ${b.toFixed(1)}y^${n.toFixed(2)}`,
+                xaxis: { title: 'x' },
+                yaxis: { title: 'y' },
+                plot_bgcolor: '#f9fafb',
+                paper_bgcolor: '#ffffff'
+            };
+
+            Plotly.newPlot('plot-explorer', data, layout, { responsive: true });
+
+            let eqText = `<strong>Equation:</strong> dy/dx + ${a.toFixed(1)}y = ${b.toFixed(1)}y^${n.toFixed(2)}<br>`;
+            eqText += `<strong>Analysis:</strong> `;
+            if (Math.abs(a) > 0.1) {
+                eqText += (a > 0 ? 'Linear damping dominates' : 'Linear growth dominates') + '. ';
+            }
+            if (b*y0 > a*0.1) {
+                eqText += 'Nonlinear term influences solution behavior. ';
+            }
+            eqText += 'Observe how different initial conditions converge or diverge.';
+            document.getElementById('analysis-text').innerHTML = eqText;
+        }
+
+        // UI Helpers
+        function toggleCollapse(el) {
+            el.classList.toggle('active');
+            el.nextElementSibling.classList.toggle('active');
+        }
+
+        function loadPreset() {
+            if (document.getElementById('preset-select').value === 'custom') {
+                document.getElementById('custom-input').style.display = 'block';
+            } else {
+                document.getElementById('custom-input').style.display = 'none';
+            }
+        }
+
+        function updateRanges() {
+            document.getElementById('x-min-val').textContent =
+                document.getElementById('x-min').value;
+            document.getElementById('x-max-val').textContent =
+                document.getElementById('x-max').value;
+            document.getElementById('y-min-val').textContent =
+                document.getElementById('y-min').value;
+            document.getElementById('y-max-val').textContent =
+                document.getElementById('y-max').value;
+        }
+
+        // Quiz System
+        const answers = { 1: 'b', 2: 'a', 3: 'a', 4: 'b', 5: 'a', 6: 'b' };
+        const feedbacks = {
+            1: { correct: 'All are Bernoulli equations. (a) is linear (n=0), but (b) and (c) are nonlinear with n=2.',
+                 incorrect: 'Check the definition: y^n term makes it Bernoulli.' },
+            2: { correct: 'Correct! With n=4, v = y^(1-4) = y^(-3).',
+                 incorrect: 'For n=4, use v = y^(1-n) = y^(-3).' },
+            3: { correct: 'Correct! Multiply by -(1-4)=-(-3)=3: 3(dv/dx) + 3(3)v = 3(2), so dv/dx - 9v = -6.',
+                 incorrect: 'Apply (1-n)P(x) and (1-n)Q(x) with n=4, P=3, Q=2.' },
+            4: { correct: 'Correct! v=1/(1-e^x), but v=y^(-1), so y=1/(1+Ce^(-x)) or 1/(Ce^x-1) depending on constant handling.',
+                 incorrect: 'With n=2: v=y^(-1), gives dv/dx - v = 1, solve and back-substitute.' },
+            5: { correct: 'Correct! y=0 and y=±√(2/5) from 2y = 5y³ when dy/dx=0.',
+                 incorrect: 'Equilibrium: dy/dx = 0, so 0 + 2y = 5y³. Factor: y(2 - 5y²)=0.' },
+            6: { correct: 'Correct! v(0)=1/2, v=1+Ce^x with C=-1/2 gives v=(1-e^x)/2, so y=2/(1-e^x).',
+                 incorrect: 'With y(0)=2: v(0)=1/2. v=1+Ce^x, so 1/2=1+C gives C=-1/2. y=1/v.' }
+        };
+
+        function checkAnswer(q, ans) {
+            let correct = answers[q] === ans;
+            let feedback = document.getElementById(`feedback-${q}`);
+            feedback.classList.add('show');
+            feedback.classList.toggle('correct', correct);
+            feedback.classList.toggle('incorrect', !correct);
+            feedback.textContent = correct ?
+                '✓ ' + feedbacks[q].correct :
+                '✗ ' + feedbacks[q].incorrect;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let correct = document.querySelectorAll('.quiz-feedback.correct').length;
+            document.getElementById('progress-fill').style.width = (correct / 6 * 100) + '%';
+        }
+
+        function resetQuiz() {
+            document.querySelectorAll('.quiz-feedback').forEach(el => {
+                el.classList.remove('show', 'correct', 'incorrect');
+            });
+            document.getElementById('progress-fill').style.width = '0%';
+        }
+
+        // KaTeX Rendering
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+            drawSlopeField();
+            updateExplorer();
+        });
+    </script>
+</body>
+</html>

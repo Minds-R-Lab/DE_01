@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Separable Differential Equations - Chapter 1.1</title>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+    <!-- Plotly for Interactive Plots -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav h1 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 80px auto 2rem;
+            padding: 0 1.5rem;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 80px;
+        }
+
+        section > h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        section > h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin: 1.5rem 0 1rem;
+        }
+
+        p, li {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        /* Cards and Boxes */
+        .definition-box,
+        .theorem-box,
+        .example-box,
+        .warning-box,
+        .tip-box {
+            background: white;
+            border-left: 5px solid;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .definition-box {
+            border-left-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .theorem-box {
+            border-left-color: var(--accent);
+            background: #f9f5ff;
+        }
+
+        .example-box {
+            border-left-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .warning-box {
+            border-left-color: var(--warning);
+            background: #fffbeb;
+        }
+
+        .tip-box {
+            border-left-color: #0ea5e9;
+            background: #ecf9ff;
+        }
+
+        .definition-box strong,
+        .theorem-box strong,
+        .example-box strong,
+        .warning-box strong,
+        .tip-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Learning Objectives */
+        .objectives {
+            list-style: none;
+        }
+
+        .objectives li {
+            padding-left: 1.8rem;
+            position: relative;
+            margin-bottom: 0.6rem;
+        }
+
+        .objectives li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Step List */
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            padding-left: 2.5rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .step-list li:before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* Collapsible Examples */
+        .example-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin: 1.2rem 0;
+            overflow: hidden;
+        }
+
+        .example-header {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            user-select: none;
+            transition: background 0.3s ease;
+        }
+
+        .example-header:hover {
+            background: linear-gradient(135deg, #047857, #059669);
+        }
+
+        .example-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .example-content.active {
+            max-height: 2000px;
+            padding: 1.5rem;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .example-content.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Math in examples */
+        .example-content .katex {
+            font-size: 0.9em;
+        }
+
+        /* Interactive Controls */
+        .control-group {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Segoe UI', system-ui;
+            margin-bottom: 1rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Plot Containers */
+        .plot-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        #slopeFieldPlot, #parameterPlot {
+            width: 100%;
+            height: 500px;
+            border-radius: 8px;
+            background: white;
+        }
+
+        /* Practice Quiz */
+        .quiz-question {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quiz-question h4 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .quiz-choices {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .choice-btn {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            background: #f3f4f6;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .choice-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .choice-btn.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .choice-btn.incorrect {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: white;
+        }
+
+        .feedback {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid var(--danger);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        /* Quick Reference */
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .reference-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .reference-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav .container {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem 0;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            main {
+                margin-top: 150px;
+            }
+
+            section > h2 {
+                font-size: 1.5rem;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <h1>DiffEq Course</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch1-separable.html" class="active">Separable</a></li>
+                <li><a href="ch1-linear.html">Linear</a></li>
+                <li><a href="ch1-bernoulli.html">Bernoulli</a></li>
+                <li><a href="ch1-exact.html">Exact</a></li>
+                <li><a href="ch1-nonexact.html">Non-Exact</a></li>
+                <li style="opacity:0.3;">|</li>
+                <li><a href="#intro">Intro</a></li>
+                <li><a href="#theory">Theory</a></li>
+                <li><a href="#method">Method</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#visualizer">Visualizer</a></li>
+                <li><a href="#practice">Practice</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Introduction Section -->
+        <section id="intro">
+            <h2>Separable Differential Equations</h2>
+
+            <div class="definition-box">
+                <strong>Learning Objectives</strong>
+                <ul class="objectives">
+                    <li>Identify separable differential equations</li>
+                    <li>Master the separation of variables technique</li>
+                    <li>Solve initial value problems using separable methods</li>
+                    <li>Understand singular and equilibrium solutions</li>
+                    <li>Determine intervals of existence and uniqueness</li>
+                </ul>
+            </div>
+
+            <h3>What is a Separable Equation?</h3>
+            <p>A separable differential equation is one where we can separate the variables on opposite sides of the equation. The general form is:</p>
+
+            <div class="theorem-box">
+                <strong>Definition: Separable Differential Equation</strong>
+                A first-order ODE is <strong>separable</strong> if it can be written as:
+                $$\frac{dy}{dx} = f(x) \cdot g(y)$$
+                or equivalently:
+                $$g(y)\,dy = f(x)\,dx$$
+            </div>
+
+            <h3>Separable vs. Non-Separable Equations</h3>
+            <p><strong>Separable examples:</strong></p>
+            <ul>
+                <li>$\frac{dy}{dx} = xy$ ✓ (factors as $x \cdot y$)</li>
+                <li>$\frac{dy}{dx} = e^{x+y} = e^x \cdot e^y$ ✓ (factors)</li>
+                <li>$\frac{dy}{dx} = \frac{x}{y}$ ✓ (can rewrite as $y\,dy = x\,dx$)</li>
+            </ul>
+            <p><strong>Non-separable examples:</strong></p>
+            <ul>
+                <li>$\frac{dy}{dx} = x + y$ ✗ (cannot factor)</li>
+                <li>$\frac{dy}{dx} = xy + x$ ✗ (cannot factor completely)</li>
+            </ul>
+
+            <h3>Real-World Applications</h3>
+            <p>Separable equations model numerous physical phenomena:</p>
+            <ul>
+                <li><strong>Exponential Growth/Decay:</strong> $\frac{dP}{dt} = kP$ (population, radioactive decay)</li>
+                <li><strong>Newton's Law of Cooling:</strong> $\frac{dT}{dt} = -k(T - T_{\text{ambient}})$</li>
+                <li><strong>Fluid Flow:</strong> Draining tanks, mixing problems</li>
+                <li><strong>Chemical Reactions:</strong> Concentration changes over time</li>
+            </ul>
+        </section>
+
+        <!-- Theory Section -->
+        <section id="theory">
+            <h2>Mathematical Theory</h2>
+
+            <h3>The Separation Technique</h3>
+            <p>Given a separable equation:</p>
+            $$\frac{dy}{dx} = f(x) \cdot g(y)$$
+
+            <p>We separate variables by:</p>
+            <ol class="step-list">
+                <li>Divide both sides by $g(y)$ (assuming $g(y) \neq 0$)</li>
+                <li>Multiply both sides by $dx$</li>
+                <li>Integrate both sides</li>
+            </ol>
+
+            <p>This gives us:</p>
+            $$\int \frac{1}{g(y)}\,dy = \int f(x)\,dx + C$$
+
+            <div class="theorem-box">
+                <strong>Theorem: Existence and Uniqueness</strong>
+                For the initial value problem $\frac{dy}{dx} = f(x)g(y)$ with $y(x_0) = y_0$:
+                <ul style="margin-top: 0.5rem;">
+                    <li>If $f(x)$ is continuous on an interval containing $x_0$</li>
+                    <li>And $g(y)$ is continuous and $g(y_0) \neq 0$</li>
+                    <li>Then there exists a unique solution in some neighborhood of $(x_0, y_0)$</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Warning: Dividing by Zero</strong>
+                When we divide by $g(y)$, we assume $g(y) \neq 0$. The points where $g(y) = 0$ are called <strong>equilibrium solutions</strong> or <strong>singular solutions</strong>. These are constant solutions that we must check separately!
+                <p style="margin-top: 0.5rem;">For example, if $\frac{dy}{dx} = y(1-y)$, both $y=0$ and $y=1$ are equilibrium solutions.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Tip: Check for Lost Solutions</strong>
+                Always verify that any equilibrium solutions (zeros of $g(y)$) are indeed solutions to the original equation. After integrating and solving for $y$, also check your implicit solution by implicit differentiation!
+            </div>
+
+            <h3>Implicit vs. Explicit Solutions</h3>
+            <p>Sometimes integrating gives us an <strong>implicit solution</strong> $F(x,y) = C$ that cannot be easily solved for $y$ explicitly. Both forms are valid solutions:</p>
+            <ul>
+                <li><strong>Explicit:</strong> $y = f(x)$ (can write $y$ as function of $x$)</li>
+                <li><strong>Implicit:</strong> $F(x,y) = C$ (equation relating $x$ and $y$)</li>
+            </ul>
+        </section>
+
+        <!-- Method Section -->
+        <section id="method">
+            <h2>Step-by-Step Solution Method</h2>
+
+            <p>Follow these six steps to solve a separable differential equation:</p>
+
+            <ol class="step-list">
+                <li>
+                    <strong>Write in separable form:</strong> Rewrite $\frac{dy}{dx} = \text{something}$ as
+                    $\frac{dy}{dx} = f(x) \cdot g(y)$ or check if it can be separated.
+                </li>
+                <li>
+                    <strong>Separate variables:</strong> Rearrange to get all $y$ terms on the left and all $x$ terms
+                    on the right: $\frac{1}{g(y)}\,dy = f(x)\,dx$
+                </li>
+                <li>
+                    <strong>Integrate both sides:</strong>
+                    $\int \frac{1}{g(y)}\,dy = \int f(x)\,dx + C$
+                </li>
+                <li>
+                    <strong>Solve for $y$ if possible:</strong> If the integrals are tractable, solve the implicit
+                    equation for $y$ explicitly. Otherwise, leave in implicit form.
+                </li>
+                <li>
+                    <strong>Apply initial conditions:</strong> Use $y(x_0) = y_0$ to find the particular constant $C$.
+                </li>
+                <li>
+                    <strong>Check for equilibrium solutions:</strong> Set $g(y) = 0$ and verify these constant solutions
+                    satisfy the original ODE.
+                </li>
+            </ol>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples">
+            <h2>Worked Examples</h2>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 1: $\dfrac{dy}{dx} = xy$ with $y(0) = 2$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$\frac{dy}{dx} = xy$$
+                    $$\frac{dy}{y} = x\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int \frac{dy}{y} = \int x\,dx$$
+                    $$\ln|y| = \frac{x^2}{2} + C$$
+
+                    <p><strong>Step 4: Solve for $y$</strong></p>
+                    $$|y| = e^{x^2/2 + C} = e^C \cdot e^{x^2/2}$$
+                    $$y = Ae^{x^2/2} \quad \text{where } A = \pm e^C$$
+
+                    <p><strong>Step 5: Apply initial condition $y(0) = 2$</strong></p>
+                    $$2 = Ae^{0} = A$$
+                    $$A = 2$$
+
+                    <p><strong>Final Solution:</strong></p>
+                    $$\boxed{y = 2e^{x^2/2}}$$
+
+                    <div class="tip-box">
+                        <strong>Note:</strong> This solution is defined for all real $x$ (global existence).
+                        Since $g(y) = y$ has only $y=0$ as equilibrium, and our initial condition is $y(0)=2 \neq 0$,
+                        we don't need to include it.
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 2: $\dfrac{dy}{dx} = \dfrac{1+y^2}{1+x^2}$ (no initial condition)</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$\frac{dy}{1+y^2} = \frac{dx}{1+x^2}$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int \frac{dy}{1+y^2} = \int \frac{dx}{1+x^2}$$
+                    $$\arctan(y) = \arctan(x) + C$$
+
+                    <p><strong>Step 4: Solve for $y$</strong></p>
+                    Taking the tangent of both sides:
+                    $$y = \tan(\arctan(x) + C)$$
+
+                    Or using the tangent addition formula:
+                    $$y = \frac{x + \tan(C)}{1 - x\tan(C)}$$
+
+                    <p><strong>General Solution (implicit form):</strong></p>
+                    $$\boxed{\arctan(y) = \arctan(x) + C}$$
+
+                    <div class="tip-box">
+                        <strong>Note:</strong> This has no equilibrium solutions since $1+y^2 > 0$ always.
+                        The implicit form is cleaner than the explicit form.
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 3: $\dfrac{dy}{dx} = y^2\cos(x)$ with $y(0) = 1$ (Blow-up!)</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$\frac{dy}{y^2} = \cos(x)\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int \frac{dy}{y^2} = \int \cos(x)\,dx$$
+                    $$-\frac{1}{y} = \sin(x) + C$$
+
+                    <p><strong>Step 5: Apply initial condition $y(0) = 1$</strong></p>
+                    $$-\frac{1}{1} = \sin(0) + C$$
+                    $$-1 = 0 + C \implies C = -1$$
+
+                    <p><strong>Step 4: Solve for $y$</strong></p>
+                    $$-\frac{1}{y} = \sin(x) - 1$$
+                    $$\frac{1}{y} = 1 - \sin(x)$$
+
+                    $$\boxed{y = \frac{1}{1 - \sin(x)}}$$
+
+                    <h4>Interval of Existence</h4>
+                    <p>The solution blows up (becomes undefined) when the denominator is zero:</p>
+                    $$1 - \sin(x) = 0 \implies \sin(x) = 1$$
+                    $$x = \frac{\pi}{2} + 2\pi k, \quad k \in \mathbb{Z}$$
+
+                    <p>The solution exists on the interval $\boxed{-\infty < x < \frac{\pi}{2}}$ (near the initial point).</p>
+
+                    <div class="warning-box">
+                        <strong>⚠️ Important:</strong> This is a <strong>finite-time blow-up</strong>. The solution becomes infinite
+                        at $x = \pi/2$. This is why the existence and uniqueness theorem only guarantees solutions in
+                        neighborhoods of $(x_0, y_0)$, not globally.
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 4: $\dfrac{dy}{dx} = \dfrac{x+1}{y-1}$ with $y(0) = 3$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$\frac{dy}{dx} = \frac{x+1}{y-1}$$
+                    $$(y-1)\,dy = (x+1)\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int (y-1)\,dy = \int (x+1)\,dx$$
+                    $$\frac{y^2}{2} - y = \frac{x^2}{2} + x + C$$
+
+                    <p><strong>Step 5: Apply initial condition $y(0) = 3$</strong></p>
+                    $$\frac{9}{2} - 3 = \frac{0}{2} + 0 + C$$
+                    $$\frac{9}{2} - \frac{6}{2} = C \implies C = \frac{3}{2}$$
+
+                    <p><strong>Solution (implicit):</strong></p>
+                    $$\boxed{\frac{y^2}{2} - y = \frac{x^2}{2} + x + \frac{3}{2}}$$
+
+                    <p>Multiplying by 2 to clean up:</p>
+                    $$y^2 - 2y = x^2 + 2x + 3$$
+                    $$y^2 - 2y - x^2 - 2x - 3 = 0$$
+
+                    <div class="example-box">
+                        <strong>Completing the square:</strong>
+                        $$(y^2 - 2y + 1) - (x^2 + 2x + 1) = 3 + 1 - 1$$
+                        $$(y-1)^2 - (x+1)^2 = 3$$
+                    </div>
+
+                    <p>This is a hyperbola. Since $y(0) = 3$, we take the upper branch.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Slope Field Visualizer -->
+        <section id="visualizer">
+            <h2>Interactive Slope Field Visualizer</h2>
+
+            <p>Explore separable equations visually! Select a preset equation or enter your own. Click on the plot to trace a solution curve.</p>
+
+            <div class="control-group">
+                <label for="equationPreset">Choose a Preset Equation:</label>
+                <select id="equationPreset" onchange="updateEquationFromPreset()">
+                    <option value="xy">dy/dx = xy (exponential)</option>
+                    <option value="x/y">dy/dx = x/y</option>
+                    <option value="y2cosx">dy/dx = y²cos(x)</option>
+                    <option value="arctanform">dy/dx = (1+y²)/(1+x²)</option>
+                    <option value="sinxy">dy/dx = sin(x)·y</option>
+                </select>
+
+                <label for="customEquation">Or enter your own: <code>f(x,y) =</code></label>
+                <input type="text" id="customEquation" placeholder="e.g., x*y, (x+1)/(y-1), etc." value="x*y">
+
+                <button onclick="drawSlopeField()">Draw Slope Field & Solution Curves</button>
+            </div>
+
+            <div class="plot-container">
+                <div id="slopeFieldPlot"></div>
+            </div>
+
+            <div class="tip-box">
+                <strong>How to use:</strong> The plot shows the direction field (slope field) as small line segments.
+                Click anywhere on the plot to trace a solution curve through that initial point. The color of each curve
+                changes. You can click multiple times to see different initial conditions.
+            </div>
+        </section>
+
+        <!-- Parameter Explorer -->
+        <section id="explorer">
+            <h2>Parameter Explorer: $\dfrac{dy}{dx} = a \cdot x^m \cdot y^n$</h2>
+
+            <p>Investigate how the parameters affect the behavior of solutions. This family of equations includes many separable equations.</p>
+
+            <div class="control-group">
+                <label for="paramA">Coefficient $a$: <span class="slider-value" id="valA">1</span></label>
+                <input type="range" id="paramA" min="-3" max="3" step="0.1" value="1" oninput="updateParamExplorer()">
+
+                <label for="paramM">Exponent $m$ (power of $x$): <span class="slider-value" id="valM">1</span></label>
+                <input type="range" id="paramM" min="0" max="3" step="1" value="1" oninput="updateParamExplorer()">
+
+                <label for="paramN">Exponent $n$ (power of $y$): <span class="slider-value" id="valN">1</span></label>
+                <input type="range" id="paramN" min="0" max="3" step="1" value="1" oninput="updateParamExplorer()">
+
+                <button onclick="updateParamExplorer()">Update Plot</button>
+            </div>
+
+            <div class="plot-container">
+                <div id="parameterPlot"></div>
+            </div>
+
+            <div id="parameterAnalysis" class="definition-box">
+                <strong>Analysis:</strong>
+                <p id="analysisText">Adjust the sliders to explore different parameter values.</p>
+            </div>
+        </section>
+
+        <!-- Practice Problems Section -->
+        <section id="practice">
+            <h2>Practice Problems</h2>
+
+            <p>Test your understanding with these multiple-choice questions. Click a choice to see if you're correct.</p>
+
+            <!-- Question 1 -->
+            <div class="quiz-question">
+                <h4>Q1: Which equation is separable?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(1, 0)">
+                        (A) $\frac{dy}{dx} = x + y$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(1, 1)">
+                        (B) $\frac{dy}{dx} = xy$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(1, 2)">
+                        (C) $\frac{dy}{dx} = xy + x$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(1, 3)">
+                        (D) $\frac{dy}{dx} = x + y^2$
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-1">
+                    <p><strong>Correct!</strong> $\frac{dy}{dx} = xy$ factors as $f(x) \cdot g(y)$ where $f(x) = x$ and $g(y) = y$.</p>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="quiz-question">
+                <h4>Q2: For $\frac{dy}{dx} = 3x^2 y$, what is the correct separation?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(2, 0)">
+                        (A) $\int y\,dy = \int 3x^2\,dx$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(2, 1)">
+                        (B) $\int \frac{dy}{y} = \int 3x^2\,dx$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(2, 2)">
+                        (C) $\int y\,dy = \int x^2\,dx$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(2, 3)">
+                        (D) $\int 3y\,dy = \int x^2\,dx$
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-2">
+                    <p><strong>Correct!</strong> Dividing by $y$ and multiplying by $dx$ gives $\frac{dy}{y} = 3x^2\,dx$.</p>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="quiz-question">
+                <h4>Q3: Solve $\frac{dy}{dx} = y$ with $y(0) = 5$</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(3, 0)">
+                        (A) $y = 5e^x$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(3, 1)">
+                        (B) $y = e^{5x}$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(3, 2)">
+                        (C) $y = 5e^{-x}$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(3, 3)">
+                        (D) $y = 5 + e^x$
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-3">
+                    <p><strong>Correct!</strong> $\int \frac{dy}{y} = \int dx$ gives $\ln|y| = x + C$, so $y = Ae^x$. With $y(0) = 5$, we get $A = 5$.</p>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="quiz-question">
+                <h4>Q4: What are the equilibrium solutions of $\frac{dy}{dx} = y(1-y)$?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(4, 0)">
+                        (A) Only $y = 0$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(4, 1)">
+                        (B) $y = 0$ and $y = 1$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(4, 2)">
+                        (C) Only $y = 1$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(4, 3)">
+                        (D) $y = 0$, $y = 1$, and $y = -1$
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-4">
+                    <p><strong>Correct!</strong> Equilibrium solutions satisfy $g(y) = y(1-y) = 0$, giving $y = 0$ and $y = 1$.</p>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="quiz-question">
+                <h4>Q5: Solve $\frac{dy}{dx} = \frac{x}{y}$ (general solution)</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(5, 0)">
+                        (A) $y = \frac{x^2}{2} + C$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(5, 1)">
+                        (B) $x^2 + y^2 = C$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(5, 2)">
+                        (C) $y = \sqrt{x^2 + C}$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(5, 3)">
+                        (D) $y^2 - x^2 = C$
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-5">
+                    <p><strong>Correct!</strong> Separating: $y\,dy = x\,dx$. Integrating: $\frac{y^2}{2} = \frac{x^2}{2} + K$, which gives $y^2 - x^2 = C$ (circles/hyperbolas).</p>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="quiz-question">
+                <h4>Q6: For $\frac{dy}{dx} = y^2$ with $y(0) = 1$, at what $x$ does the solution blow up?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(6, 0)">
+                        (A) $x = 0$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(6, 1)">
+                        (B) $x = 1$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(6, 2)">
+                        (C) $x = \frac{1}{2}$
+                    </button>
+                    <button class="choice-btn" onclick="checkChoice(6, 3)">
+                        (D) $x = -1$
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-6">
+                    <p><strong>Correct!</strong> Separating: $\frac{dy}{y^2} = dx$. Integrating: $-\frac{1}{y} = x + C$. With $y(0) = 1$: $C = -1$. So $y = \frac{1}{1-x}$, which blows up at $x = 1$.</p>
+                </div>
+            </div>
+
+            <div class="progress-bar mt-2">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText" class="text-center" style="margin-top: 0.5rem; font-weight: 600; color: var(--primary);">0 / 6 correct</p>
+        </section>
+
+        <!-- Quick Reference Card -->
+        <section id="reference">
+            <h2>Quick Reference Card</h2>
+
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h4>General Form</h4>
+                    <p>$$\frac{dy}{dx} = f(x) \cdot g(y)$$</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Separated Form</h4>
+                    <p>$$\frac{1}{g(y)}\,dy = f(x)\,dx$$</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Integration</h4>
+                    <p>$$\int \frac{dy}{g(y)} = \int f(x)\,dx + C$$</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Equilibrium Solutions</h4>
+                    <p>Set $g(y) = 0$ to find constant solutions (vertical isoclines)</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Existence & Uniqueness</h4>
+                    <p>Guaranteed near $(x_0, y_0)$ if $g(y_0) \neq 0$</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Common Integrals</h4>
+                    <p>
+                        $\int \frac{dy}{y} = \ln|y| + C$ <br>
+                        $\int \frac{dy}{1+y^2} = \arctan(y) + C$ <br>
+                        $\int \frac{dy}{a^2-y^2} = \frac{1}{2a}\ln\left|\frac{a+y}{a-y}\right| + C$
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // KaTeX Rendering
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+
+            updateProgressBar();
+        });
+
+        // Collapsible Examples
+        function toggleCollapsible(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
+
+        // Safe expression evaluator
+        function safeEval(expr, x, y) {
+            try {
+                const safe = expr
+                    .replace(/\^/g, '**')
+                    .replace(/sin/g, 'Math.sin')
+                    .replace(/cos/g, 'Math.cos')
+                    .replace(/tan/g, 'Math.tan')
+                    .replace(/exp/g, 'Math.exp')
+                    .replace(/log/g, 'Math.log')
+                    .replace(/sqrt/g, 'Math.sqrt')
+                    .replace(/abs/g, 'Math.abs')
+                    .replace(/pi/g, 'Math.PI');
+                return Function('"use strict"; return (' + safe + ')')();
+            } catch(e) {
+                return 0;
+            }
+        }
+
+        // Slope Field Visualizer
+        function updateEquationFromPreset() {
+            const presets = {
+                'xy': 'x*y',
+                'x/y': 'x/y',
+                'y2cosx': 'y*y*cos(x)',
+                'arctanform': '(1+y*y)/(1+x*x)',
+                'sinxy': 'sin(x)*y'
+            };
+            const preset = document.getElementById('equationPreset').value;
+            document.getElementById('customEquation').value = presets[preset];
+            drawSlopeField();
+        }
+
+        function drawSlopeField() {
+            const expr = document.getElementById('customEquation').value;
+            const xmin = -4, xmax = 4, ymin = -4, ymax = 4;
+            const step = 0.8;
+
+            const xarrows = [], yarrows = [], uarrows = [], varrows = [];
+            const colors = ['#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed', '#ec4899'];
+            let colorIdx = 0;
+
+            // Draw slope field
+            for (let x = xmin; x <= xmax; x += step) {
+                for (let y = ymin; y <= ymax; y += step) {
+                    const slope = safeEval(expr, x, y);
+                    if (isFinite(slope)) {
+                        const len = Math.sqrt(1 + slope * slope);
+                        const dx = 0.3 / len;
+                        const dy = (0.3 * slope) / len;
+                        xarrows.push(x - dx/2);
+                        xarrows.push(x + dx/2);
+                        yarrows.push(y - dy/2);
+                        yarrows.push(y + dy/2);
+                        uarrows.push(dx);
+                        uarrows.push(-dx);
+                        varrows.push(dy);
+                        varrows.push(-dy);
+                    }
+                }
+            }
+
+            const trace = {
+                x: xarrows,
+                y: yarrows,
+                u: uarrows,
+                v: varrows,
+                type: 'quiver',
+                mode: 'markers+lines',
+                line: {color: '#999'},
+                marker: {size: 3}
+            };
+
+            const layout = {
+                title: `Slope Field: dy/dx = ${expr}`,
+                xaxis: {range: [xmin, xmax]},
+                yaxis: {range: [ymin, ymax]},
+                hovermode: 'closest',
+                autosize: true,
+                margin: {l: 60, r: 20, t: 60, b: 60}
+            };
+
+            Plotly.newPlot('slopeFieldPlot', [trace], layout, {responsive: true});
+
+            // Add click handler for solution curves
+            const plot = document.getElementById('slopeFieldPlot');
+            plot.on('plotly_click', function(data) {
+                const x0 = data.points[0].x;
+                const y0 = data.points[0].y;
+                traceSolutionCurve(expr, x0, y0, colors[colorIdx % colors.length]);
+                colorIdx++;
+            });
+        }
+
+        // RK4 Solution Curve Tracer
+        function traceSolutionCurve(expr, x0, y0, color) {
+            const h = 0.05;
+            const xPoints = [x0], yPoints = [y0];
+
+            // Forward
+            let x = x0, y = y0;
+            for (let i = 0; i < 80; i++) {
+                const k1 = h * safeEval(expr, x, y);
+                const k2 = h * safeEval(expr, x + h/2, y + k1/2);
+                const k3 = h * safeEval(expr, x + h/2, y + k2/2);
+                const k4 = h * safeEval(expr, x + h, y + k3);
+                const dy = (k1 + 2*k2 + 2*k3 + k4) / 6;
+
+                x += h;
+                y += dy;
+
+                if (Math.abs(y) > 10 || !isFinite(y)) break;
+                xPoints.push(x);
+                yPoints.push(y);
+            }
+
+            // Backward
+            x = x0; y = y0;
+            for (let i = 0; i < 80; i++) {
+                const k1 = -h * safeEval(expr, x, y);
+                const k2 = -h * safeEval(expr, x - h/2, y + k1/2);
+                const k3 = -h * safeEval(expr, x - h/2, y + k2/2);
+                const k4 = -h * safeEval(expr, x - h, y + k3);
+                const dy = (k1 + 2*k2 + 2*k3 + k4) / 6;
+
+                x -= h;
+                y += dy;
+
+                if (Math.abs(y) > 10 || !isFinite(y)) break;
+                xPoints.unshift(x);
+                yPoints.unshift(y);
+            }
+
+            const solutionTrace = {
+                x: xPoints,
+                y: yPoints,
+                type: 'scatter',
+                mode: 'lines',
+                name: `(${x0.toFixed(2)}, ${y0.toFixed(2)})`,
+                line: {color: color, width: 2}
+            };
+
+            Plotly.addTraces('slopeFieldPlot', solutionTrace);
+        }
+
+        // Parameter Explorer
+        function updateParamExplorer() {
+            const a = parseFloat(document.getElementById('paramA').value);
+            const m = parseInt(document.getElementById('paramM').value);
+            const n = parseInt(document.getElementById('paramN').value);
+
+            document.getElementById('valA').textContent = a.toFixed(1);
+            document.getElementById('valM').textContent = m;
+            document.getElementById('valN').textContent = n;
+
+            const expr = `${a}*(x**${m})*(y**${n})`;
+            const xmin = -3, xmax = 3, ymin = -3, ymax = 3;
+            const colors = ['#2563eb', '#dc2626', '#059669'];
+            const initials = [
+                [0.5, 0.5], [1, 1], [0.5, 1.5],
+                [-0.5, 1], [-1, -0.5], [1, -1]
+            ];
+
+            let traces = [];
+
+            // Draw slope field
+            const step = 0.6;
+            const xarrows = [], yarrows = [], uarrows = [], varrows = [];
+            for (let x = xmin; x <= xmax; x += step) {
+                for (let y = ymin; y <= ymax; y += step) {
+                    if (Math.abs(y) < 0.1) continue;
+                    const slope = safeEval(expr, x, y);
+                    if (isFinite(slope)) {
+                        const len = Math.sqrt(1 + slope * slope);
+                        const dx = 0.25 / len;
+                        const dy = (0.25 * slope) / len;
+                        xarrows.push(x - dx/2);
+                        xarrows.push(x + dx/2);
+                        yarrows.push(y - dy/2);
+                        yarrows.push(y + dy/2);
+                        uarrows.push(dx);
+                        uarrows.push(-dx);
+                        varrows.push(dy);
+                        varrows.push(-dy);
+                    }
+                }
+            }
+
+            traces.push({
+                x: xarrows,
+                y: yarrows,
+                u: uarrows,
+                v: varrows,
+                type: 'quiver',
+                mode: 'markers+lines',
+                line: {color: '#ddd'},
+                marker: {size: 2},
+                showlegend: false
+            });
+
+            // Solution curves
+            for (let [x0, y0] of initials) {
+                const xPoints = [x0], yPoints = [y0];
+                const h = 0.05;
+                let x = x0, y = y0;
+
+                for (let i = 0; i < 60; i++) {
+                    const k1 = h * safeEval(expr, x, y);
+                    const k2 = h * safeEval(expr, x + h/2, y + k1/2);
+                    const k3 = h * safeEval(expr, x + h/2, y + k2/2);
+                    const k4 = h * safeEval(expr, x + h, y + k3);
+                    const dy = (k1 + 2*k2 + 2*k3 + k4) / 6;
+                    x += h; y += dy;
+                    if (Math.abs(y) > 10 || !isFinite(y)) break;
+                    xPoints.push(x);
+                    yPoints.push(y);
+                }
+
+                traces.push({
+                    x: xPoints,
+                    y: yPoints,
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: {width: 2},
+                    showlegend: false
+                });
+            }
+
+            const layout = {
+                title: `Solutions of dy/dx = ${a.toFixed(1)} · x^${m} · y^${n}`,
+                xaxis: {range: [xmin, xmax]},
+                yaxis: {range: [ymin, ymax]},
+                autosize: true,
+                margin: {l: 60, r: 20, t: 60, b: 60}
+            };
+
+            Plotly.newPlot('parameterPlot', traces, layout, {responsive: true});
+
+            // Analysis text
+            let analysis = `For dy/dx = ${a.toFixed(1)}·x^${m}·y^${n}: `;
+            if (n === 0) {
+                analysis += `This is NOT separable in the usual sense (no y in the derivative).`;
+            } else if (n === 1) {
+                analysis += `Linear in y: solutions typically grow/decay exponentially (depending on a).`;
+            } else {
+                analysis += `Nonlinear (y^${n}): solutions may blow up in finite time if ${n} > 1.`;
+            }
+
+            document.getElementById('analysisText').textContent = analysis;
+        }
+
+        // Quiz System
+        let quizAnswers = {
+            1: 1, 2: 1, 3: 0, 4: 1, 5: 3, 6: 2
+        };
+        let quizScores = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false};
+
+        function checkChoice(questionNum, choiceIdx) {
+            const correct = quizAnswers[questionNum] === choiceIdx;
+            const buttons = document.querySelectorAll(`.quiz-question:nth-of-type(${questionNum}) .choice-btn`);
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+
+            buttons.forEach((btn, idx) => {
+                if (idx === choiceIdx) {
+                    btn.classList.add(correct ? 'correct' : 'incorrect');
+                } else {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                }
+            });
+
+            feedback.classList.add('show', correct ? 'correct' : 'incorrect');
+            quizScores[questionNum] = correct;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const correct = Object.values(quizScores).filter(v => v === true).length;
+            const total = 6;
+            const percent = (correct / total) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${correct} / ${total} correct`;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateEquationFromPreset();
+            updateParamExplorer();
+        });
+    </script>
+</body>
+</html>

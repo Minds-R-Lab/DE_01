@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 1.5: Non-Exact Equations & Integrating Factors</title>
+
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+    <!-- Plotly for visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --bg-light: #f9fafb;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav h1 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-active {
+            color: var(--primary) !important;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        section h2 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 1rem;
+        }
+
+        section h3 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Box styles */
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .definition-box {
+            background: rgba(37, 99, 235, 0.05);
+            border-left-color: var(--primary);
+        }
+
+        .theorem-box {
+            background: rgba(124, 58, 237, 0.05);
+            border-left-color: var(--accent);
+            font-weight: 500;
+        }
+
+        .example-box {
+            background: rgba(5, 150, 105, 0.05);
+            border-left-color: var(--success);
+        }
+
+        .warning-box {
+            background: rgba(217, 119, 6, 0.05);
+            border-left-color: var(--warning);
+            font-weight: 500;
+        }
+
+        .tip-box {
+            background: rgba(59, 130, 246, 0.05);
+            border-left-color: #3b82f6;
+        }
+
+        /* Learning objectives */
+        .objectives {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .objective {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .objective::before {
+            content: "✓";
+            color: var(--success);
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Collapsible examples */
+        .example-toggle {
+            background: linear-gradient(135deg, var(--success), var(--accent));
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 1rem 0;
+        }
+
+        .example-toggle:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);
+        }
+
+        .example-toggle.active {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .example-content {
+            display: none;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .example-content.active {
+            display: block;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .quiz-option.correct {
+            background: rgba(5, 150, 105, 0.15);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(220, 38, 38, 0.15);
+            border-color: var(--danger);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(5, 150, 105, 0.15);
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Input forms */
+        .input-group {
+            margin: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Plots */
+        .plot-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e5e7eb;
+            min-height: 500px;
+        }
+
+        .plot-controls {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        /* Reference card */
+        .reference-card {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .reference-card h3 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .reference-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .reference-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .reference-item code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+
+        /* Math display */
+        .katex-display {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            nav .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+
+            section h2 {
+                font-size: 1.6rem;
+            }
+
+            section h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <h1>Differential Equations</h1>
+            <ul>
+                <li><a href="index.html">Course Home</a></li>
+                <li><a href="ch1-separable.html">1.1 Separable</a></li>
+                <li><a href="ch1-linear.html">1.2 Linear</a></li>
+                <li><a href="ch1-bernoulli.html">1.3 Bernoulli</a></li>
+                <li><a href="ch1-exact.html">1.4 Exact</a></li>
+                <li><a href="ch1-nonexact.html" class="nav-active">1.5 Non-Exact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Introduction Section -->
+        <section class="section" id="intro">
+            <h2>Non-Exact Equations & Integrating Factors</h2>
+
+            <div class="definition-box">
+                <strong>Problem:</strong> We have an equation $M(x,y)\,dx + N(x,y)\,dy = 0$ where
+                $\frac{\partial M}{\partial y} \neq \frac{\partial N}{\partial x}$ (not exact).
+                <br><br>
+                <strong>Solution:</strong> Multiply by an integrating factor $\mu(x,y)$ to make it exact:
+                $\mu M\,dx + \mu N\,dy = 0$ where $\frac{\partial(\mu M)}{\partial y} = \frac{\partial(\mu N)}{\partial x}$.
+            </div>
+
+            <h3>Learning Objectives</h3>
+            <div class="objectives">
+                <div class="objective">Identify when an equation is non-exact</div>
+                <div class="objective">Find integrating factors that depend only on $x$</div>
+                <div class="objective">Find integrating factors that depend only on $y$</div>
+                <div class="objective">Solve non-exact equations using integrating factors</div>
+                <div class="objective">Recognize special forms like $\mu = x^a y^b$</div>
+                <div class="objective">Connect to linear equations (a special case)</div>
+            </div>
+
+            <h3>The Big Idea</h3>
+            <p>
+                When we encounter $M\,dx + N\,dy = 0$ and find it's not exact, we can't use the exact
+                equation method directly. But here's the clever trick: multiply the entire equation by
+                some function $\mu(x,y)$ that transforms it into an exact equation.
+            </p>
+            <p style="margin-top: 1rem;">
+                The integrating factor $\mu$ is not unique—many functions might work. However, when $\mu$
+                depends only on $x$ or only on $y$, we get explicit formulas to find it.
+            </p>
+
+            <div class="tip-box">
+                <strong>Connection to Linear Equations:</strong> When you solve $\frac{dy}{dx} + P(x)y = Q(x)$,
+                you multiply by $e^{\int P(x)\,dx}$—that's an integrating factor! Linear equations are a special
+                case where the integrating factor depends only on $x$.
+            </div>
+        </section>
+
+        <!-- Theory Section -->
+        <section class="section" id="theory">
+            <h2>Theory of Integrating Factors</h2>
+
+            <h3>General Setup</h3>
+            <div class="definition-box">
+                An integrating factor $\mu(x,y)$ for $M\,dx + N\,dy = 0$ is a function such that
+                $$\mu M\,dx + \mu N\,dy = 0$$
+                is exact, meaning:
+                $$\frac{\partial(\mu M)}{\partial y} = \frac{\partial(\mu N)}{\partial x}$$
+            </div>
+
+            <p>Expanding the exactness condition:</p>
+            <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                $$\frac{\partial \mu}{\partial y} M + \mu \frac{\partial M}{\partial y} =
+                \frac{\partial \mu}{\partial x} N + \mu \frac{\partial N}{\partial x}$$
+            </div>
+
+            <p>This is hard to solve in general, but special cases yield explicit formulas!</p>
+
+            <h3>Case 1: Integrating Factor Depending Only on x</h3>
+            <div class="theorem-box">
+                If $\frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right) = h(x)$
+                (a function of $x$ only), then:
+                $$\mu(x) = e^{\int h(x)\,dx}$$
+
+                <p style="margin-top: 1rem;"><strong>Condition:</strong>
+                $h(x) = \frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right)$
+                must not depend on $y$.</p>
+            </div>
+
+            <h3>Case 2: Integrating Factor Depending Only on y</h3>
+            <div class="theorem-box">
+                If $\frac{1}{M}\left(\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}\right) = k(y)$
+                (a function of $y$ only), then:
+                $$\mu(y) = e^{\int k(y)\,dy}$$
+
+                <p style="margin-top: 1rem;"><strong>Condition:</strong>
+                $k(y) = \frac{1}{M}\left(\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}\right)$
+                must not depend on $x$.</p>
+            </div>
+
+            <h3>Case 3: Special Form $\mu = x^a y^b$</h3>
+            <div class="definition-box">
+                For some equations, an integrating factor of the form $\mu(x,y) = x^a y^b$ works.
+                Substitute into the exactness condition and solve for $a$ and $b$.
+            </div>
+
+            <h3>Important Notes</h3>
+            <div class="warning-box">
+                ⚠️ Not every non-exact equation has an integrating factor of simple form. Some equations
+                require special techniques or numerical methods. Always try Cases 1 and 2 first!
+            </div>
+
+            <div class="tip-box">
+                💡 The integrating factor is not unique. If $\mu$ is an integrating factor, so is $c \mu$
+                for any nonzero constant $c$. Different integrating factors can yield different-looking
+                but equivalent solutions.
+            </div>
+        </section>
+
+        <!-- Method Section -->
+        <section class="section" id="method">
+            <h2>Step-by-Step Solution Method</h2>
+
+            <div style="background: linear-gradient(135deg, #f0f9ff, #e0e7ff); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                <h3 style="margin-top: 0; color: var(--primary);">6-Step Algorithm</h3>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: white; border-left: 4px solid var(--primary); border-radius: 4px;">
+                    <strong>Step 1: Check Non-Exactness</strong><br>
+                    Verify that $\frac{\partial M}{\partial y} \neq \frac{\partial N}{\partial x}$
+                </div>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: white; border-left: 4px solid var(--primary); border-radius: 4px;">
+                    <strong>Step 2: Try Case 1 (μ depends on x)</strong><br>
+                    Compute $h(x) = \frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right)$<br>
+                    If $h$ has no $y$ terms, then $\mu(x) = e^{\int h(x)\,dx}$ and you're done with Case 1.
+                </div>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: white; border-left: 4px solid var(--primary); border-radius: 4px;">
+                    <strong>Step 3: Try Case 2 (μ depends on y)</strong><br>
+                    Compute $k(y) = \frac{1}{M}\left(\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}\right)$<br>
+                    If $k$ has no $x$ terms, then $\mu(y) = e^{\int k(y)\,dy}$ and you're done with Case 2.
+                </div>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: white; border-left: 4px solid var(--primary); border-radius: 4px;">
+                    <strong>Step 4: Multiply by the Integrating Factor</strong><br>
+                    Compute the new equation: $\mu M\,dx + \mu N\,dy = 0$
+                </div>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: white; border-left: 4px solid var(--primary); border-radius: 4px;">
+                    <strong>Step 5: Verify Exactness</strong><br>
+                    Check that $\frac{\partial(\mu M)}{\partial y} = \frac{\partial(\mu N)}{\partial x}$
+                </div>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: white; border-left: 4px solid var(--primary); border-radius: 4px;">
+                    <strong>Step 6: Solve as Exact Equation</strong><br>
+                    Use the method from Section 1.4: find $F(x,y)$ such that
+                    $\frac{\partial F}{\partial x} = \mu M$ and $\frac{\partial F}{\partial y} = \mu N$<br>
+                    Solution: $F(x,y) = C$
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples Section -->
+        <section class="section" id="examples">
+            <h2>Worked Examples</h2>
+
+            <button class="example-toggle" onclick="toggleExample(0)">
+                📌 Example 1: (3xy + y²)dx + (x² + xy)dy = 0
+            </button>
+            <div class="example-content" id="example-0">
+                <div class="example-box">
+                    <h4>Solution (Case 1: μ depends on x)</h4>
+                    <p><strong>Step 1: Check Non-Exactness</strong></p>
+                    <p>$M = 3xy + y^2 \Rightarrow \frac{\partial M}{\partial y} = 3x + 2y$</p>
+                    <p>$N = x^2 + xy \Rightarrow \frac{\partial N}{\partial x} = 2x + y$</p>
+                    <p>Since $3x + 2y \neq 2x + y$, the equation is <strong>not exact</strong>.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Compute h(x)</strong></p>
+                    <p>$$h(x) = \frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right)
+                    = \frac{(3x+2y) - (2x+y)}{x^2+xy} = \frac{x+y}{x(x+y)} = \frac{1}{x}$$</p>
+                    <p>Since $h(x) = \frac{1}{x}$ contains no $y$, Case 1 applies! ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3: Find μ(x)</strong></p>
+                    <p>$$\mu(x) = e^{\int \frac{1}{x}\,dx} = e^{\ln x} = x$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 4: Multiply by μ</strong></p>
+                    <p>Multiply the entire equation by $x$:</p>
+                    <p>$$(3x^2y + xy^2)\,dx + (x^3 + x^2y)\,dy = 0$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 5: Verify Exactness</strong></p>
+                    <p>$M_{\text{new}} = 3x^2y + xy^2 \Rightarrow \frac{\partial M_{\text{new}}}{\partial y} = 3x^2 + 2xy$</p>
+                    <p>$N_{\text{new}} = x^3 + x^2y \Rightarrow \frac{\partial N_{\text{new}}}{\partial x} = 3x^2 + 2xy$ ✓</p>
+                    <p>Now it's exact!</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 6: Solve</strong></p>
+                    <p>Find $F$ such that $\frac{\partial F}{\partial x} = 3x^2y + xy^2$:</p>
+                    <p>$$F(x,y) = \int (3x^2y + xy^2)\,dx = x^3y + \frac{x^2y^2}{2} + g(y)$$</p>
+                    <p>Check with $\frac{\partial F}{\partial y} = x^3 + x^2y + g'(y) = x^3 + x^2y$, so $g'(y) = 0$, thus $g(y) = C_1$.</p>
+                    <p>$$\boxed{x^3y + \frac{x^2y^2}{2} = C}$$</p>
+                </div>
+            </div>
+
+            <button class="example-toggle" onclick="toggleExample(1)">
+                📌 Example 2: (y² + y)dx - x dy = 0
+            </button>
+            <div class="example-content" id="example-1">
+                <div class="example-box">
+                    <h4>Solution (Case 2: μ depends on y)</h4>
+                    <p><strong>Step 1: Check Non-Exactness</strong></p>
+                    <p>$M = y^2 + y \Rightarrow \frac{\partial M}{\partial y} = 2y + 1$</p>
+                    <p>$N = -x \Rightarrow \frac{\partial N}{\partial x} = -1$</p>
+                    <p>Not exact since $2y + 1 \neq -1$.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Check Case 1</strong></p>
+                    <p>$$h(x) = \frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right)
+                    = \frac{(2y+1)-(-1)}{-x} = \frac{2y+2}{-x}$$</p>
+                    <p>This depends on both $x$ and $y$, so Case 1 fails.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3: Try Case 2</strong></p>
+                    <p>$$k(y) = \frac{1}{M}\left(\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}\right)
+                    = \frac{-1 - (2y+1)}{y^2+y} = \frac{-(2y+2)}{y(y+1)} = \frac{-2(y+1)}{y(y+1)} = \frac{-2}{y}$$</p>
+                    <p>Since $k(y) = -\frac{2}{y}$ contains no $x$, Case 2 applies! ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 4: Find μ(y)</strong></p>
+                    <p>$$\mu(y) = e^{\int -\frac{2}{y}\,dy} = e^{-2\ln y} = e^{\ln y^{-2}} = \frac{1}{y^2}$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 5: Multiply and Solve</strong></p>
+                    <p>Multiply by $\frac{1}{y^2}$:</p>
+                    <p>$$\left(1 + \frac{1}{y}\right)dx - \frac{x}{y^2}\,dy = 0$$</p>
+                    <p>This is now exact. Solving (integrate with respect to $x$):</p>
+                    <p>$$F(x,y) = x + \frac{x}{y} = C$$</p>
+                    <p>$$\boxed{x\left(1 + \frac{1}{y}\right) = C} \quad \text{or} \quad \boxed{\frac{x(y+1)}{y} = C}$$</p>
+                </div>
+            </div>
+
+            <button class="example-toggle" onclick="toggleExample(2)">
+                📌 Example 3: y dx - x dy = 0 (Multiple Integrating Factors!)
+            </button>
+            <div class="example-content" id="example-2">
+                <div class="example-box">
+                    <h4>Solution (Showing Non-Uniqueness)</h4>
+                    <p><strong>This classic equation has multiple integrating factors!</strong></p>
+                    <p>$M = y, \quad N = -x$</p>
+                    <p>$\frac{\partial M}{\partial y} = 1, \quad \frac{\partial N}{\partial x} = -1$ → Not exact.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Integrating Factor 1: $\mu = \frac{1}{x^2}$</strong></p>
+                    <p>$$\frac{y}{x^2}\,dx - \frac{1}{x}\,dy = 0$$</p>
+                    <p>Verify: $\frac{\partial}{\partial y}\left(\frac{y}{x^2}\right) = \frac{1}{x^2}$,
+                    $\frac{\partial}{\partial x}\left(-\frac{1}{x}\right) = \frac{1}{x^2}$ ✓</p>
+                    <p>Solution: $F(x,y) = -\frac{y}{x} = C$ or $y = -Cx$ or $\boxed{\frac{y}{x} = C}$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Integrating Factor 2: $\mu = \frac{1}{y^2}$</strong></p>
+                    <p>$$\frac{1}{y}\,dx - \frac{x}{y^2}\,dy = 0$$</p>
+                    <p>Solution: $F(x,y) = \frac{x}{y} = C$ or $\boxed{x = Cy}$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Integrating Factor 3: $\mu = \frac{1}{x^2+y^2}$</strong></p>
+                    <p>$$\frac{y}{x^2+y^2}\,dx - \frac{x}{x^2+y^2}\,dy = 0$$</p>
+                    <p>This equals $d(\arctan(y/x)) = 0$, so solution is $\boxed{\arctan(y/x) = C}$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Key Insight:</strong> All these forms are equivalent! They all describe the same
+                    family of straight lines through the origin. Different integrating factors, same solution family.</p>
+                </div>
+            </div>
+
+            <button class="example-toggle" onclick="toggleExample(3)">
+                📌 Example 4: (2y² + 3x)dx + 2xy dy = 0, y(1) = 1 (IVP)
+            </button>
+            <div class="example-content" id="example-3">
+                <div class="example-box">
+                    <h4>Solution (Initial Value Problem)</h4>
+                    <p><strong>Step 1: Check Non-Exactness</strong></p>
+                    <p>$M = 2y^2 + 3x \Rightarrow \frac{\partial M}{\partial y} = 4y$</p>
+                    <p>$N = 2xy \Rightarrow \frac{\partial N}{\partial x} = 2y$</p>
+                    <p>Not exact: $4y \neq 2y$.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Find Case 1</strong></p>
+                    <p>$$h(x) = \frac{4y - 2y}{2xy} = \frac{2y}{2xy} = \frac{1}{x}$$</p>
+                    <p>Case 1 applies! $\mu(x) = e^{\int \frac{1}{x}\,dx} = x$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3-5: Multiply and Verify</strong></p>
+                    <p>$$(2xy^2 + 3x^2)\,dx + 2x^2y\,dy = 0$$</p>
+                    <p>Now exact: $\frac{\partial}{\partial y}(2xy^2 + 3x^2) = 4xy = \frac{\partial}{\partial x}(2x^2y)$ ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 6: Solve</strong></p>
+                    <p>Find $F$ with $\frac{\partial F}{\partial x} = 2xy^2 + 3x^2$:</p>
+                    <p>$$F(x,y) = x^2y^2 + x^3 + g(y)$$</p>
+                    <p>Check: $\frac{\partial F}{\partial y} = 2x^2y + g'(y) = 2x^2y$, so $g(y) = C_1$.</p>
+                    <p>General solution: $$x^2y^2 + x^3 = C$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 7: Apply Initial Condition</strong></p>
+                    <p>At $(1,1)$: $1 \cdot 1 + 1 = C \Rightarrow C = 2$</p>
+                    <p>$$\boxed{x^2y^2 + x^3 = 2}$$</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Visualizer -->
+        <section class="section" id="visualizer">
+            <h2>Interactive Non-Exactness Checker</h2>
+
+            <p>Enter a differential equation $M(x,y)\,dx + N(x,y)\,dy = 0$ and see if it's exact,
+            what integrating factor it might need, and visualize the solution curves.</p>
+
+            <div class="plot-controls">
+                <select id="presetEq" onchange="loadPreset()">
+                    <option value="">-- Select a preset --</option>
+                    <option value="1">Example 1: (3xy + y²)dx + (x² + xy)dy = 0</option>
+                    <option value="2">Example 2: (y² + y)dx - x dy = 0</option>
+                    <option value="3">Example 3: y dx - x dy = 0</option>
+                    <option value="4">Example 4: (2y² + 3x)dx + 2xy dy = 0</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>M(x, y):</label>
+                <input type="text" id="inputM" placeholder="e.g., 3*x*y + y**2" value="3*x*y + y**2">
+            </div>
+
+            <div class="input-group">
+                <label>N(x, y):</label>
+                <input type="text" id="inputN" placeholder="e.g., x**2 + x*y" value="x**2 + x*y">
+            </div>
+
+            <button onclick="analyzeEquation()">Analyze Equation</button>
+
+            <div id="analysisResult" style="margin-top: 2rem;"></div>
+
+            <div id="plotContainer" class="plot-container" style="display: none;"></div>
+        </section>
+
+        <!-- Comparison Visualizer -->
+        <section class="section" id="comparison">
+            <h2>Before & After: Vector Fields</h2>
+
+            <p>This visualizer shows the vector field $(M, N)$ before and after applying an integrating factor.
+            Notice how multiplying by $\mu$ "aligns" the field to be conservative (the solution curves become clearer).</p>
+
+            <div class="plot-controls">
+                <select id="comparePreset" onchange="compareVectorFields()">
+                    <option value="">-- Select equation --</option>
+                    <option value="1">Example 1: y dx - x dy = 0</option>
+                    <option value="2">Example 2: (3xy + y²)dx + (x² + xy)dy = 0</option>
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                <div>
+                    <h4 style="text-align: center; color: var(--danger);">Before: Non-Exact (M, N)</h4>
+                    <div id="beforePlot" class="plot-container" style="min-height: 400px;"></div>
+                </div>
+                <div>
+                    <h4 style="text-align: center; color: var(--success);">After: Exact (μM, μN)</h4>
+                    <div id="afterPlot" class="plot-container" style="min-height: 400px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Problems -->
+        <section class="section" id="practice">
+            <h2>Practice: Quick Quiz</h2>
+
+            <div class="quiz-question">
+                <h4>Q1: Is the equation $(2y)\,dx + (x)\,dy = 0$ exact?</h4>
+                <div class="quiz-options">
+                    <label class="quiz-option" onclick="checkQuiz(1, 0)">
+                        <input type="radio" name="q1"> A) Yes, it is exact.
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(1, 1)">
+                        <input type="radio" name="q1"> B) No, and we need μ(x) only.
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(1, 2)">
+                        <input type="radio" name="q1"> C) No, and we need μ(y) only.
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(1, 3)">
+                        <input type="radio" name="q1"> D) Impossible to determine.
+                    </label>
+                </div>
+                <div class="quiz-feedback" id="feedback-1">
+                    <strong id="feedbackText-1"></strong>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q2: For $(x + y)\,dx + (2xy)\,dy = 0$, compute $\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}$:</h4>
+                <div class="quiz-options">
+                    <label class="quiz-option" onclick="checkQuiz(2, 0)">
+                        <input type="radio" name="q2"> A) $1 - 2y$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(2, 1)">
+                        <input type="radio" name="q2"> B) $2y - 1$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(2, 2)">
+                        <input type="radio" name="q2"> C) $1 - 2x$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(2, 3)">
+                        <input type="radio" name="q2"> D) $0$
+                    </label>
+                </div>
+                <div class="quiz-feedback" id="feedback-2">
+                    <strong id="feedbackText-2"></strong>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q3: Find the integrating factor for $y\,dx - x\,dy = 0$:</h4>
+                <div class="quiz-options">
+                    <label class="quiz-option" onclick="checkQuiz(3, 0)">
+                        <input type="radio" name="q3"> A) $\mu = \frac{1}{x^2}$ (or $\frac{1}{y^2}$ or $\frac{1}{x^2+y^2}$, etc.)
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(3, 1)">
+                        <input type="radio" name="q3"> B) $\mu = xy$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(3, 2)">
+                        <input type="radio" name="q3"> C) $\mu = e^{x+y}$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(3, 3)">
+                        <input type="radio" name="q3"> D) No integrating factor exists.
+                    </label>
+                </div>
+                <div class="quiz-feedback" id="feedback-3">
+                    <strong id="feedbackText-3"></strong>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q4: After multiplying $y\,dx - x\,dy = 0$ by $\mu = 1/y^2$, what is the solution?</h4>
+                <div class="quiz-options">
+                    <label class="quiz-option" onclick="checkQuiz(4, 0)">
+                        <input type="radio" name="q4"> A) $\frac{x}{y} = C$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(4, 1)">
+                        <input type="radio" name="q4"> B) $xy = C$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(4, 2)">
+                        <input type="radio" name="q4"> C) $\ln|xy| = C$
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(4, 3)">
+                        <input type="radio" name="q4"> D) $\tan(xy) = C$
+                    </label>
+                </div>
+                <div class="quiz-feedback" id="feedback-4">
+                    <strong id="feedbackText-4"></strong>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q5: Is the equation $(x + y^2)\,dx + (2xy)\,dy = 0$ exact?</h4>
+                <div class="quiz-options">
+                    <label class="quiz-option" onclick="checkQuiz(5, 0)">
+                        <input type="radio" name="q5"> A) No, it needs an integrating factor.
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(5, 1)">
+                        <input type="radio" name="q5"> B) Yes, it is exact!
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(5, 2)">
+                        <input type="radio" name="q5"> C) Can't tell without more information.
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(5, 3)">
+                        <input type="radio" name="q5"> D) It's separable instead.
+                    </label>
+                </div>
+                <div class="quiz-feedback" id="feedback-5">
+                    <strong id="feedbackText-5"></strong>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q6: For $(2y)\,dx + (x + y)\,dy = 0$, compute $(N_x - M_y)/M$:</h4>
+                <div class="quiz-options">
+                    <label class="quiz-option" onclick="checkQuiz(6, 0)">
+                        <input type="radio" name="q6"> A) $\frac{1}{2}$ (depends on y only)
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(6, 1)">
+                        <input type="radio" name="q6"> B) $\frac{1-2}{2y} = -\frac{1}{2y}$ (depends on y only)
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(6, 2)">
+                        <input type="radio" name="q6"> C) $\frac{1-2}{x+y}$ (depends on both x and y)
+                    </label>
+                    <label class="quiz-option" onclick="checkQuiz(6, 3)">
+                        <input type="radio" name="q6"> D) $0$ (the equation is exact)
+                    </label>
+                </div>
+                <div class="quiz-feedback" id="feedback-6">
+                    <strong id="feedbackText-6"></strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reference Card -->
+        <div class="reference-card">
+            <h3>Quick Reference: Integrating Factors</h3>
+            <div class="reference-grid">
+                <div class="reference-item">
+                    <strong>Case 1: μ(x)</strong>
+                    <p style="font-size: 0.9rem;">If $\frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right) = h(x)$:</p>
+                    <code>μ(x) = exp(∫h(x)dx)</code>
+                </div>
+                <div class="reference-item">
+                    <strong>Case 2: μ(y)</strong>
+                    <p style="font-size: 0.9rem;">If $\frac{1}{M}\left(\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}\right) = k(y)$:</p>
+                    <code>μ(y) = exp(∫k(y)dy)</code>
+                </div>
+                <div class="reference-item">
+                    <strong>Exactness Check</strong>
+                    <p style="font-size: 0.9rem;">After multiplying by μ:</p>
+                    <code>∂(μM)/∂y = ∂(μN)/∂x</code>
+                </div>
+                <div class="reference-item">
+                    <strong>Common μ Forms</strong>
+                    <p style="font-size: 0.9rem;">Try: $x^a, y^b, x^ay^b, e^{ax}, e^{by}$, etc.</p>
+                    <code>Check each by verifying exactness</code>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Section 1.5: Non-Exact Equations & Integrating Factors | Differential Equations Course</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">Created with KaTeX and Plotly</p>
+    </footer>
+
+    <script>
+        // Math rendering with KaTeX
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        // Safe math evaluator
+        function safeEval(expr, x, y) {
+            try {
+                // Replace symbols and prevent malicious code
+                const safe = expr.replace(/[^0-9+\-*/().^xy\s]/g, '');
+                // Safely evaluate with x, y in scope
+                return Function('"use strict"; return (' + safe + ')')
+                    .call({x, y});
+            } catch (e) {
+                return NaN;
+            }
+        }
+
+        // Numerical derivatives
+        function partialDerivative(expr, variable, x, y, h = 0.0001) {
+            if (variable === 'x') {
+                const f1 = safeEval(expr, x + h, y);
+                const f2 = safeEval(expr, x - h, y);
+                return (f1 - f2) / (2 * h);
+            } else {
+                const f1 = safeEval(expr, x, y + h);
+                const f2 = safeEval(expr, x, y - h);
+                return (f1 - f2) / (2 * h);
+            }
+        }
+
+        // Toggle examples
+        function toggleExample(idx) {
+            const content = document.getElementById('example-' + idx);
+            const button = document.querySelectorAll('.example-toggle')[idx];
+            content.classList.toggle('active');
+            button.classList.toggle('active');
+        }
+
+        // Load preset equations
+        function loadPreset() {
+            const preset = document.getElementById('presetEq').value;
+            const presets = {
+                '1': {M: '3*x*y + y**2', N: 'x**2 + x*y'},
+                '2': {M: 'y**2 + y', N: '-x'},
+                '3': {M: 'y', N: '-x'},
+                '4': {M: '2*y**2 + 3*x', N: '2*x*y'}
+            };
+            if (presets[preset]) {
+                document.getElementById('inputM').value = presets[preset].M;
+                document.getElementById('inputN').value = presets[preset].N;
+                analyzeEquation();
+            }
+        }
+
+        // Analyze equation for exactness and integrating factors
+        function analyzeEquation() {
+            const M = document.getElementById('inputM').value;
+            const N = document.getElementById('inputN').value;
+
+            if (!M || !N) {
+                alert('Please enter both M and N');
+                return;
+            }
+
+            const resultDiv = document.getElementById('analysisResult');
+            resultDiv.innerHTML = '';
+
+            // Test points
+            const x = 1.5, y = 1.0;
+            const dMdy = partialDerivative(M, 'y', x, y);
+            const dNdx = partialDerivative(N, 'x', x, y);
+
+            const isExact = Math.abs(dMdy - dNdx) < 0.01;
+
+            let html = '<div class="definition-box">';
+            html += '<strong>At test point (x=' + x.toFixed(2) + ', y=' + y.toFixed(2) + '):</strong><br>';
+            html += '∂M/∂y = ' + dMdy.toFixed(4) + '<br>';
+            html += '∂N/∂x = ' + dNdx.toFixed(4) + '<br>';
+            html += '<strong>' + (isExact ? '✓ This equation appears EXACT' : '✗ This equation is NON-EXACT') + '</strong>';
+            html += '</div>';
+
+            if (!isExact) {
+                // Check Case 1: h(x)
+                const Nval = safeEval(N, x, y);
+                const h = (dMdy - dNdx) / Nval;
+
+                html += '<div class="theorem-box">';
+                html += '<strong>Case 1 Check: (M_y - N_x)/N</strong><br>';
+                html += 'Value at (x,y): ' + h.toFixed(4) + '<br>';
+                html += 'If this is a function of x only, μ(x) = exp(∫h(x)dx)<br>';
+                html += '<em>Try algebraically: Does the expression simplify to x-only?</em>';
+                html += '</div>';
+
+                // Check Case 2: k(y)
+                const Mval = safeEval(M, x, y);
+                const k = (dNdx - dMdy) / Mval;
+
+                html += '<div class="theorem-box">';
+                html += '<strong>Case 2 Check: (N_x - M_y)/M</strong><br>';
+                html += 'Value at (x,y): ' + k.toFixed(4) + '<br>';
+                html += 'If this is a function of y only, μ(y) = exp(∫k(y)dy)<br>';
+                html += '<em>Try algebraically: Does the expression simplify to y-only?</em>';
+                html += '</div>';
+            }
+
+            resultDiv.innerHTML = html;
+            renderMath();
+        }
+
+        // Compare vector fields
+        function compareVectorFields() {
+            const choice = document.getElementById('comparePreset').value;
+
+            const equations = {
+                '1': {
+                    M: 'y',
+                    N: '-x',
+                    mu: '1/x**2',
+                    title: 'y dx - x dy = 0'
+                },
+                '2': {
+                    M: '3*x*y + y**2',
+                    N: 'x**2 + x*y',
+                    mu: 'x',
+                    title: '(3xy + y²)dx + (x² + xy)dy = 0'
+                }
+            };
+
+            if (!equations[choice]) return;
+
+            const eq = equations[choice];
+            const xRange = [-2, 2, 15];
+            const yRange = [-2, 2, 15];
+
+            let xVals = [], yVals = [], uVals = [], vVals = [];
+            let xValsMu = [], yValsMu = [], uValsMu = [], vValsMu = [];
+
+            for (let i = 0; i < xRange[2]; i++) {
+                for (let j = 0; j < yRange[2]; j++) {
+                    const x = xRange[0] + (xRange[1] - xRange[0]) * i / xRange[2];
+                    const y = yRange[0] + (yRange[1] - yRange[0]) * j / yRange[2];
+
+                    if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) continue;
+
+                    const mVal = safeEval(eq.M, x, y);
+                    const nVal = safeEval(eq.N, x, y);
+                    const len = Math.sqrt(mVal*mVal + nVal*nVal);
+
+                    if (len > 0.1) {
+                        xVals.push(x);
+                        yVals.push(y);
+                        uVals.push(mVal / len * 0.3);
+                        vVals.push(nVal / len * 0.3);
+
+                        // After multiplying by mu
+                        const muVal = safeEval(eq.mu, x, y);
+                        const muM = mVal * muVal;
+                        const muN = nVal * muVal;
+                        const lenMu = Math.sqrt(muM*muM + muN*muN);
+
+                        xValsMu.push(x);
+                        yValsMu.push(y);
+                        uValsMu.push(muM / lenMu * 0.3);
+                        vValsMu.push(muN / lenMu * 0.3);
+                    }
+                }
+            }
+
+            const traceBefore = {
+                x: xVals,
+                y: yVals,
+                u: uVals,
+                v: vVals,
+                type: 'scatter',
+                mode: 'markers',
+                marker: {symbol: 'arrow', size: 10, angleref: 'previous'},
+                name: 'Field'
+            };
+
+            const traceAfter = {
+                x: xValsMu,
+                y: yValsMu,
+                u: uValsMu,
+                v: vValsMu,
+                type: 'scatter',
+                mode: 'markers',
+                marker: {symbol: 'arrow', size: 10, angleref: 'previous'},
+                name: 'Field'
+            };
+
+            const layout = {
+                xaxis: {range: [-2, 2]},
+                yaxis: {range: [-2, 2]},
+                height: 400,
+                margin: {l: 50, r: 50, t: 40, b: 50}
+            };
+
+            Plotly.newPlot('beforePlot', [traceBefore], {
+                ...layout,
+                title: 'Before: Non-Exact (M, N)'
+            }, {responsive: true});
+
+            Plotly.newPlot('afterPlot', [traceAfter], {
+                ...layout,
+                title: 'After: Exact (μM, μN)'
+            }, {responsive: true});
+        }
+
+        // Quiz checking
+        const quizAnswers = {
+            1: 1, // B
+            2: 0, // A
+            3: 0, // A
+            4: 0, // A
+            5: 1, // B
+            6: 1  // B
+        };
+
+        const quizExplanations = {
+            1: 'Correct! ∂M/∂y = 2, ∂N/∂x = 1, so not exact. We need μ(x) since (M_y - N_x)/N = 1/x depends only on x.',
+            2: 'Correct! ∂M/∂y = 1, ∂N/∂x = 2y, so difference is 1 - 2y.',
+            3: 'Correct! Multiple integrating factors work for this classic equation: 1/x², 1/y², 1/(x²+y²), etc.',
+            4: 'Correct! With μ = 1/y², we get F(x,y) = x/y = C.',
+            5: 'Correct! ∂M/∂y = 2y = ∂N/∂x, so it IS exact (no integrating factor needed).',
+            6: 'Correct! (N_x - M_y)/M = (1 - 2)/(2y) = -1/(2y), which depends only on y.'
+        };
+
+        function checkQuiz(qNum, optNum) {
+            const isCorrect = optNum === quizAnswers[qNum];
+            const feedback = document.getElementById('feedback-' + qNum);
+            const feedbackText = document.getElementById('feedbackText-' + qNum);
+
+            if (isCorrect) {
+                feedback.className = 'quiz-feedback show correct';
+                feedbackText.textContent = '✓ ' + quizExplanations[qNum];
+            } else {
+                feedback.className = 'quiz-feedback show incorrect';
+                feedbackText.textContent = '✗ Not quite. ' + quizExplanations[qNum];
+            }
+
+            // Mark options
+            const options = document.querySelectorAll(`input[name="q${qNum}"]`);
+            options.forEach((opt, idx) => {
+                const label = opt.parentElement;
+                if (idx === quizAnswers[qNum]) {
+                    label.classList.add('correct');
+                } else if (idx === optNum) {
+                    label.classList.add('incorrect');
+                }
+                opt.disabled = true;
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMath();
+        });
+    </script>
+</body>
+</html>
