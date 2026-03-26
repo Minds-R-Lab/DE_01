@@ -110,6 +110,38 @@
   .timeline-item .year { font-weight: 700; color: var(--primary); font-size: 0.9rem; }
   .timeline-item .event { margin-top: 0.15rem; }
 
+  /* Classification table */
+  .class-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  .class-table th {
+    background: var(--primary); color: #fff; padding: 0.75rem 1rem;
+    text-align: left; font-weight: 600; font-size: 0.9rem;
+  }
+  .class-table th:first-child { border-radius: 8px 0 0 0; }
+  .class-table th:last-child { border-radius: 0 8px 0 0; }
+  .class-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .class-table tr:last-child td { border-bottom: none; }
+  .class-table tr:nth-child(even) { background: #f8fafc; }
+  .class-table tr:hover { background: var(--primary-light); }
+  .class-table .tag {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 6px;
+    font-size: 0.8rem; font-weight: 600;
+  }
+  .tag-ode { background: #dbeafe; color: #1e40af; }
+  .tag-pde { background: #ede9fe; color: #6d28d9; }
+  .tag-linear { background: #d1fae5; color: #065f46; }
+  .tag-nonlinear { background: #fee2e2; color: #991b1b; }
+
+  /* Comparison cards */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+  .compare-card {
+    background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 1.25rem; text-align: center;
+  }
+  .compare-card h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .compare-card .eq { background: #f1f5f9; border-radius: 8px; padding: 0.75rem; margin: 0.5rem 0; }
+  .compare-card .desc { font-size: 0.9rem; color: var(--text-muted); }
+  @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+
   footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem; }
 
   @media (max-width: 640px) {
@@ -184,6 +216,294 @@
     "The book of nature is written in the language of mathematics, and its characters are triangles, circles, and other geometric figures, without which it is impossible to understand a single word."
     <div class="attribution">— Galileo Galilei (1564–1642)</div>
   </div>
+</section>
+
+<!-- Classification of DEs -->
+<section id="classification">
+  <h2>Classification of Differential Equations</h2>
+
+  <p>Before we start solving differential equations, we need a precise vocabulary to describe them. Just as a doctor classifies diseases before prescribing treatment, we classify DEs before choosing a solution method. Each classification tells us something about the equation's difficulty and which tools to use.</p>
+
+  <!-- ODE vs PDE -->
+  <h3>1. ODE vs PDE: How Many Independent Variables?</h3>
+
+  <p>The first and most fundamental distinction: does the unknown function depend on <strong>one</strong> variable or <strong>several</strong>?</p>
+
+  <div class="compare-grid">
+    <div class="compare-card" style="border-color: var(--primary);">
+      <h4 style="color: var(--primary);">Ordinary DE (ODE)</h4>
+      <p class="desc">Unknown function depends on <strong>one</strong> variable</p>
+      <div class="eq">$$\frac{dy}{dt} = -ky$$</div>
+      <p class="desc">Here \(y = y(t)\) depends only on time \(t\).</p>
+      <p class="desc" style="margin-top:0.5rem;"><strong>Example:</strong> Temperature of coffee vs time</p>
+    </div>
+    <div class="compare-card" style="border-color: var(--accent);">
+      <h4 style="color: var(--accent);">Partial DE (PDE)</h4>
+      <p class="desc">Unknown function depends on <strong>two or more</strong> variables</p>
+      <div class="eq">$$\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$$</div>
+      <p class="desc">Here \(u = u(x, y)\) depends on two spatial variables.</p>
+      <p class="desc" style="margin-top:0.5rem;"><strong>Example:</strong> Heat distribution in a metal plate</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <div class="box-label">This Course</div>
+    <p>In this course (Math 4), we focus entirely on <strong>ODEs</strong>. PDEs are studied in more advanced courses and require different techniques (Fourier series, separation of variables in multiple dimensions, etc.).</p>
+  </div>
+
+  <!-- Order -->
+  <h3>2. Order: The Highest Derivative</h3>
+
+  <div class="definition-box">
+    <div class="box-label">Definition — Order</div>
+    <p>The <strong>order</strong> of a differential equation is the order of the <strong>highest derivative</strong> that appears in the equation.</p>
+  </div>
+
+  <p>This is simple to determine — just find the highest derivative:</p>
+
+  <table class="class-table">
+    <tr>
+      <th>Equation</th>
+      <th>Highest Derivative</th>
+      <th>Order</th>
+    </tr>
+    <tr>
+      <td>\(\dfrac{dy}{dx} + 2y = x\)</td>
+      <td>\(y'\) (first derivative)</td>
+      <td><strong>1st order</strong></td>
+    </tr>
+    <tr>
+      <td>\(\dfrac{d^2y}{dx^2} + 3\dfrac{dy}{dx} + y = 0\)</td>
+      <td>\(y''\) (second derivative)</td>
+      <td><strong>2nd order</strong></td>
+    </tr>
+    <tr>
+      <td>\(y''' + y' = e^x\)</td>
+      <td>\(y'''\) (third derivative)</td>
+      <td><strong>3rd order</strong></td>
+    </tr>
+    <tr>
+      <td>\(\dfrac{d^4y}{dx^4} = \sin(x)\)</td>
+      <td>\(y^{(4)}\) (fourth derivative)</td>
+      <td><strong>4th order</strong></td>
+    </tr>
+  </table>
+
+  <div class="tip-box">
+    <div class="box-label">Why It Matters</div>
+    <p>The order determines <strong>how many initial conditions</strong> you need for a unique solution. A first-order ODE needs 1 condition (e.g., \(y(0) = 5\)), a second-order needs 2 (e.g., \(y(0) = 1,\; y'(0) = 0\)), and in general an \(n\)th-order ODE needs \(n\) initial conditions.</p>
+  </div>
+
+  <!-- Degree -->
+  <h3>3. Degree: The Power of the Highest Derivative</h3>
+
+  <div class="definition-box">
+    <div class="box-label">Definition — Degree</div>
+    <p>The <strong>degree</strong> of a differential equation is the <strong>power (exponent)</strong> of the highest-order derivative, <em>after the equation has been cleared of fractions and radicals involving derivatives</em>.</p>
+  </div>
+
+  <table class="class-table">
+    <tr>
+      <th>Equation</th>
+      <th>Analysis</th>
+      <th>Order &amp; Degree</th>
+    </tr>
+    <tr>
+      <td>\(\dfrac{dy}{dx} + y = x^2\)</td>
+      <td>\(y'\) appears to the 1st power</td>
+      <td>Order 1, <strong>Degree 1</strong></td>
+    </tr>
+    <tr>
+      <td>\(\left(\dfrac{dy}{dx}\right)^3 + y = 0\)</td>
+      <td>\(y'\) is raised to the 3rd power</td>
+      <td>Order 1, <strong>Degree 3</strong></td>
+    </tr>
+    <tr>
+      <td>\(\left(\dfrac{d^2y}{dx^2}\right)^2 + \dfrac{dy}{dx} = 1\)</td>
+      <td>\(y''\) is squared</td>
+      <td>Order 2, <strong>Degree 2</strong></td>
+    </tr>
+    <tr>
+      <td>\(\dfrac{d^2y}{dx^2} = \sqrt{1 + \left(\dfrac{dy}{dx}\right)^2}\)</td>
+      <td>Square both sides first: \((y'')^2 = 1 + (y')^2\). Now \(y''\) has power 2.</td>
+      <td>Order 2, <strong>Degree 2</strong></td>
+    </tr>
+    <tr>
+      <td>\(\dfrac{dy}{dx} = \sin(y')\)</td>
+      <td>Cannot be written as polynomial in \(y'\)</td>
+      <td>Order 1, <strong>Degree undefined</strong></td>
+    </tr>
+  </table>
+
+  <div class="warning-box" style="background:var(--warning-light); border-left:5px solid var(--warning); border-radius:12px; padding:1.5rem; margin:1.5rem 0;">
+    <div class="box-label" style="color:var(--warning);">Common Mistake</div>
+    <p>Degree is <strong>not</strong> the same as order! Also, if the derivatives appear inside transcendental functions (sin, cos, exp, log), the degree is <strong>not defined</strong>. The equation must be expressible as a polynomial in the highest derivative for degree to be meaningful.</p>
+  </div>
+
+  <!-- Linearity -->
+  <h3>4. Linearity: The Most Important Classification</h3>
+
+  <div class="definition-box">
+    <div class="box-label">Definition — Linear ODE</div>
+    <p>An ODE is <strong>linear</strong> if it can be written in the form:</p>
+    <div class="math-display">$$a_n(x)\,y^{(n)} + a_{n-1}(x)\,y^{(n-1)} + \cdots + a_1(x)\,y' + a_0(x)\,y = g(x)$$</div>
+    <p>The key requirements are:</p>
+    <p style="margin-bottom:0.3rem;">• The unknown \(y\) and all its derivatives appear to the <strong>first power only</strong></p>
+    <p style="margin-bottom:0.3rem;">• There are <strong>no products</strong> of \(y\) with its derivatives (no \(y \cdot y'\))</p>
+    <p style="margin-bottom:0;">• The coefficients \(a_n(x), \ldots, a_0(x)\) and \(g(x)\) depend only on \(x\), <strong>not on \(y\)</strong></p>
+  </div>
+
+  <p>An equation that is <strong>not</strong> linear is called <strong>nonlinear</strong>. Let's see examples:</p>
+
+  <table class="class-table">
+    <tr>
+      <th>Equation</th>
+      <th>Linear or Nonlinear?</th>
+      <th>Why?</th>
+    </tr>
+    <tr>
+      <td>\(y' + 2y = x^3\)</td>
+      <td><span class="tag tag-linear">Linear</span></td>
+      <td>\(y\) and \(y'\) both to the 1st power, coefficients depend only on \(x\)</td>
+    </tr>
+    <tr>
+      <td>\(y'' + 9y = 0\)</td>
+      <td><span class="tag tag-linear">Linear</span></td>
+      <td>Standard 2nd-order linear (simple harmonic oscillator)</td>
+    </tr>
+    <tr>
+      <td>\(x^2y'' + xy' + y = \sin(x)\)</td>
+      <td><span class="tag tag-linear">Linear</span></td>
+      <td>Variable coefficients \(x^2, x\) are fine — they depend on \(x\), not \(y\)</td>
+    </tr>
+    <tr>
+      <td>\(y' + y^2 = 0\)</td>
+      <td><span class="tag tag-nonlinear">Nonlinear</span></td>
+      <td>\(y\) appears squared — \(y^2\) violates linearity</td>
+    </tr>
+    <tr>
+      <td>\(y \cdot y' = x\)</td>
+      <td><span class="tag tag-nonlinear">Nonlinear</span></td>
+      <td>Product of \(y\) and \(y'\) — not allowed in linear equations</td>
+    </tr>
+    <tr>
+      <td>\(y'' + \sin(y) = 0\)</td>
+      <td><span class="tag tag-nonlinear">Nonlinear</span></td>
+      <td>\(\sin(y)\) is a nonlinear function of \(y\) (the pendulum equation!)</td>
+    </tr>
+    <tr>
+      <td>\(y' = e^y\)</td>
+      <td><span class="tag tag-nonlinear">Nonlinear</span></td>
+      <td>\(e^y\) is nonlinear in \(y\)</td>
+    </tr>
+  </table>
+
+  <div class="tip-box">
+    <div class="box-label">Why Linearity Is So Important</div>
+    <p>Linear equations have a beautiful property: the <strong>superposition principle</strong>. If \(y_1\) and \(y_2\) are solutions to a linear homogeneous equation, then \(c_1 y_1 + c_2 y_2\) is also a solution. This means we can build complex solutions from simple ones. Nonlinear equations don't have this luxury — they are fundamentally harder and often require special techniques or numerical methods.</p>
+  </div>
+
+  <!-- Homogeneous vs Non-homogeneous -->
+  <h3>5. Homogeneous vs Non-Homogeneous</h3>
+
+  <div class="definition-box">
+    <div class="box-label">Definition</div>
+    <p>A linear ODE is <strong>homogeneous</strong> if \(g(x) = 0\) (the right-hand side is zero):</p>
+    <div class="math-display">$$a_n(x)\,y^{(n)} + \cdots + a_0(x)\,y = 0 \quad \text{(homogeneous)}$$</div>
+    <p>If \(g(x) \neq 0\), the equation is <strong>non-homogeneous</strong>:</p>
+    <div class="math-display">$$a_n(x)\,y^{(n)} + \cdots + a_0(x)\,y = g(x) \quad \text{(non-homogeneous)}$$</div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card" style="border-color: var(--success);">
+      <h4 style="color: var(--success);">Homogeneous</h4>
+      <div class="eq">$$y'' + 4y = 0$$</div>
+      <p class="desc">No external forcing. Solutions describe <strong>natural behavior</strong> (free vibrations, unforced response).</p>
+    </div>
+    <div class="compare-card" style="border-color: var(--warning);">
+      <h4 style="color: var(--warning);">Non-Homogeneous</h4>
+      <div class="eq">$$y'' + 4y = \cos(3t)$$</div>
+      <p class="desc">External forcing present. Solutions include <strong>forced response</strong> (driven oscillations, input-output).</p>
+    </div>
+  </div>
+
+  <!-- IVP vs BVP -->
+  <h3>6. Initial Value Problems vs Boundary Value Problems</h3>
+
+  <p>The type of <strong>conditions</strong> given alongside the DE determines whether you have an IVP or BVP:</p>
+
+  <div class="compare-grid">
+    <div class="compare-card" style="border-color: var(--primary);">
+      <h4 style="color: var(--primary);">Initial Value Problem (IVP)</h4>
+      <div class="eq">$$y'' + y = 0$$</div>
+      <div class="eq" style="background:#dbeafe;">$$y(0) = 1, \quad y'(0) = 0$$</div>
+      <p class="desc">All conditions given at the <strong>same point</strong> (here, \(x = 0\)). Think of knowing the starting position and velocity.</p>
+    </div>
+    <div class="compare-card" style="border-color: var(--accent);">
+      <h4 style="color: var(--accent);">Boundary Value Problem (BVP)</h4>
+      <div class="eq">$$y'' + y = 0$$</div>
+      <div class="eq" style="background:#ede9fe;">$$y(0) = 0, \quad y(\pi) = 0$$</div>
+      <p class="desc">Conditions given at <strong>different points</strong> (here, two endpoints). Think of knowing the temperature at both ends of a rod.</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <div class="box-label">In This Course</div>
+    <p>We primarily study <strong>IVPs</strong> for first- and second-order ODEs. BVPs appear in more advanced topics like heat conduction and structural analysis.</p>
+  </div>
+
+  <!-- Summary Table -->
+  <h3>Complete Classification: A Summary</h3>
+
+  <p>When you encounter a differential equation, ask these questions in order:</p>
+
+  <table class="class-table">
+    <tr>
+      <th>Question</th>
+      <th>Options</th>
+      <th>How to Tell</th>
+    </tr>
+    <tr>
+      <td><strong>ODE or PDE?</strong></td>
+      <td>Ordinary / Partial</td>
+      <td>Does the unknown depend on one variable or several?</td>
+    </tr>
+    <tr>
+      <td><strong>What order?</strong></td>
+      <td>1st, 2nd, 3rd, …</td>
+      <td>Find the highest derivative present</td>
+    </tr>
+    <tr>
+      <td><strong>What degree?</strong></td>
+      <td>1, 2, 3, … or undefined</td>
+      <td>Power of the highest derivative (after clearing radicals)</td>
+    </tr>
+    <tr>
+      <td><strong>Linear or nonlinear?</strong></td>
+      <td>Linear / Nonlinear</td>
+      <td>Is \(y\) (and its derivatives) to the 1st power only, with no products?</td>
+    </tr>
+    <tr>
+      <td><strong>Homogeneous?</strong></td>
+      <td>Homogeneous / Non-homogeneous</td>
+      <td>Is the right-hand side zero? (Only applies to linear equations)</td>
+    </tr>
+    <tr>
+      <td><strong>IVP or BVP?</strong></td>
+      <td>Initial / Boundary</td>
+      <td>Are all conditions at one point, or at different points?</td>
+    </tr>
+  </table>
+
+  <div class="definition-box">
+    <div class="box-label">Practice — Classify These!</div>
+    <p style="margin-bottom:0.5rem;">Try classifying each equation before reading the answer:</p>
+    <p>\(\displaystyle \frac{d^2y}{dx^2} + 3\frac{dy}{dx} - 2y = e^x\) → <strong>ODE, 2nd order, degree 1, linear, non-homogeneous</strong></p>
+    <p>\(\displaystyle \left(\frac{dy}{dx}\right)^2 + y = x\) → <strong>ODE, 1st order, degree 2, nonlinear</strong></p>
+    <p>\(\displaystyle y''' + y \cdot y'' = 0\) → <strong>ODE, 3rd order, degree 1, nonlinear</strong> (because of the \(y \cdot y''\) product)</p>
+    <p style="margin-bottom:0;">\(\displaystyle \frac{\partial^2 u}{\partial t^2} = c^2\frac{\partial^2 u}{\partial x^2}\) → <strong>PDE, 2nd order, degree 1, linear, homogeneous</strong> (the wave equation!)</p>
+  </div>
+
 </section>
 
 <!-- Everyday Examples -->
