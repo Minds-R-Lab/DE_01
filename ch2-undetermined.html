@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 4: Method of Undetermined Coefficients | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+  .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  .choice-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 0.75rem 1rem; margin: 0.5rem 0;
+    border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; font-size: 0.95rem; cursor: pointer;
+    transition: all 0.2s; color: #1e293b;
+  }
+  .choice-btn .katex { color: #1e293b; }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
+  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
+
+  /* ---- PROGRESS ---- */
+  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  table th, table td { padding: 0.75rem; text-align: left; border: 1px solid var(--border); }
+  table th { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch2-homogeneous-const.html">2.1 Homogeneous</a>
+    <a href="ch2-undetermined.html" class="active">2.2 Undetermined Coeff</a>
+    <a href="ch2-variation.html">2.3 Variation of Params</a>
+    <a href="ch2-euler.html">2.4 Euler Equations</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a>
+    <a href="#theory">Theory</a>
+    <a href="#method">Method</a>
+    <a href="#examples">Examples</a>
+    <a href="#visualizer">Visualizer</a>
+    <a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== INTRO =================== -->
+<section id="intro">
+  <h1>2.2 Method of Undetermined Coefficients</h1>
+  <p class="subtitle">Finding particular solutions by intelligent guessing</p>
+
+  <div class="definition-box">
+    <div class="box-label">What You'll Learn</div>
+    <p>By the end of this lesson, you will be able to:</p>
+    <ol style="padding-left:1.5rem; margin-top:0.5rem;">
+      <li>Decompose the general solution as \(y = y_c + y_p\)</li>
+      <li>Identify the complementary solution \(y_c\) (homogeneous part)</li>
+      <li>Determine the form of \(y_p\) based on the forcing function \(g(t)\)</li>
+      <li>Handle critical case: when your guess overlaps with \(y_c\)</li>
+      <li>Substitute and match coefficients to solve for unknowns</li>
+    </ol>
+  </div>
+
+  <h3>What is the Method of Undetermined Coefficients?</h3>
+  <p>
+    For second-order linear ODEs with constant coefficients and special forcing functions, we can find the general solution as a sum:
+  </p>
+  <div class="math-display">
+    $$y(t) = y_c(t) + y_p(t)$$
+  </div>
+  <p>
+    where:
+  </p>
+  <ul style="padding-left:1.5rem; margin-bottom:1rem;">
+    <li><strong>\(y_c\)</strong> = complementary solution (solves the homogeneous equation \(ay'' + by' + cy = 0\))</li>
+    <li><strong>\(y_p\)</strong> = particular solution (depends on the forcing function \(g(t)\))</li>
+  </ul>
+  <p>
+    The key idea: we <em>guess</em> the form of \(y_p\) based on what \(g(t)\) looks like, then substitute into the full equation to find the unknown coefficients.
+  </p>
+
+  <div class="warning-box">
+    <div class="box-label">Critical Principle</div>
+    <p>
+      This method only works for <strong>constant-coefficient equations</strong> with <strong>special forcing functions</strong> (polynomials, exponentials, sines, cosines, or products/sums of these). For general functions, use Variation of Parameters instead.
+    </p>
+  </div>
+</section>
+
+<!-- =================== HISTORICAL QUOTE =================== -->
+<div style="background:linear-gradient(135deg, #fefce8, #fef9c3); border-left:5px solid #d97706; border-radius:12px; padding:1.5rem 1.5rem 1.5rem 2rem; margin:1.5rem 0; font-style:italic; position:relative;">
+  <span style="font-size:4rem; color:#d97706; opacity:0.3; position:absolute; top:-0.2rem; left:0.5rem; font-family:Georgia,serif;">&ldquo;</span>
+  <p style="margin-bottom:0.5rem;">The method of undetermined coefficients emerged in the 17th century as mathematicians realized that certain forcing functions naturally suggest particular solution forms. Rather than deriving these forms from first principles each time, we simply guess and verify—a principle of elegant mathematical economy.</p>
+  <div style="font-style:normal; font-weight:600; color:#d97706; font-size:0.95rem;">— A foundational technique in differential equations, streamlined by generations of mathematicians</div>
+</div>
+
+<!-- =================== ISLAMIC VERSE =================== -->
+<div style="background:linear-gradient(135deg, #dcfce7, #bbf7d0); border-left:5px solid #059669; border-radius:12px; padding:1.5rem 1.5rem 1.5rem 2rem; margin:1.5rem 0; position:relative;">
+  <p style="margin-bottom:1rem; font-size:1.05rem;"><em>"O you who have believed, seek help through patience and prayer. Indeed, Allah is with the patient."</em></p>
+  <div style="font-weight:600; color:#059669; font-size:0.9rem;">Quran 2:153</div>
+</div>
+
+<!-- =================== THEORY =================== -->
+<section id="theory">
+  <h2>The Four Cases</h2>
+
+  <p>
+    The method of undetermined coefficients works by matching the form of \(g(t)\) with an appropriate trial form for \(y_p\). We study four main cases:
+  </p>
+
+  <div class="theorem-box">
+    <div class="box-label">Theorem — Guessing Forms for y_p</div>
+
+    <p style="margin-top:1rem;"><strong>Case 1: Polynomial Forcing</strong></p>
+    <p>If \(g(t) = P_n(t)\) (polynomial of degree \(n\)), try:</p>
+    <div class="math-display">$$y_p = A_n t^n + A_{n-1}t^{n-1} + \cdots + A_1 t + A_0$$</div>
+    <p style="margin-top:0.5rem;"><em>Exception:</em> If \(1\) is a root of the characteristic equation (i.e., \(c=0\)), multiply by \(t\). If \(1\) is a repeated root, multiply by \(t^2\).</p>
+
+    <p style="margin-top:1.5rem;"><strong>Case 2: Exponential Forcing</strong></p>
+    <p>If \(g(t) = K e^{\alpha t}\), try:</p>
+    <div class="math-display">$$y_p = A e^{\alpha t}$$</div>
+    <p style="margin-top:0.5rem;"><em>Exception:</em> If \(e^{\alpha t}\) appears in \(y_c\), multiply by \(t\). If \(te^{\alpha t}\) also appears in \(y_c\), multiply by \(t^2\).</p>
+
+    <p style="margin-top:1.5rem;"><strong>Case 3: Trigonometric Forcing</strong></p>
+    <p>If \(g(t) = K_1 \cos(\omega t) + K_2 \sin(\omega t)\), try:</p>
+    <div class="math-display">$$y_p = A\cos(\omega t) + B\sin(\omega t)$$</div>
+    <p style="margin-top:0.5rem;"><em>Exception:</em> If \(\cos(\omega t)\) and \(\sin(\omega t)\) appear in \(y_c\), multiply by \(t\).</p>
+
+    <p style="margin-top:1.5rem;"><strong>Case 4: Superposition (Sum/Product)</strong></p>
+    <p>If \(g(t) = g_1(t) + g_2(t)\), find \(y_{p1}\) for \(g_1\) and \(y_{p2}\) for \(g_2\), then:</p>
+    <div class="math-display">$$y_p = y_{p1} + y_{p2}$$</div>
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Most Common Mistake</div>
+    <p>
+      <strong>Always check: does your trial form overlap with \(y_c\)?</strong> If yes, multiply by \(t\) (or \(t^2\) for repeated roots). Ignoring this leads to linearly dependent solutions and failure of the method.
+    </p>
+  </div>
+
+  <div class="tip-box">
+    <div class="box-label">Quick Reference Table</div>
+    <table>
+      <thead>
+        <tr>
+          <th>\(g(t)\)</th>
+          <th>First Guess</th>
+          <th>If Resonance?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Polynomial degree \(n\)</td>
+          <td>\(A_n t^n + \cdots + A_0\)</td>
+          <td>Multiply by \(t\) (or \(t^2\))</td>
+        </tr>
+        <tr>
+          <td>\(e^{\alpha t}\)</td>
+          <td>\(Ae^{\alpha t}\)</td>
+          <td>Use \(Ate^{\alpha t}\) (or \(At^2e^{\alpha t}\))</td>
+        </tr>
+        <tr>
+          <td>\(\cos(\omega t)\) or \(\sin(\omega t)\)</td>
+          <td>\(A\cos(\omega t) + B\sin(\omega t)\)</td>
+          <td>Use \(t(A\cos + B\sin)\)</td>
+        </tr>
+        <tr>
+          <td>\(g_1(t) + g_2(t)\)</td>
+          <td>\(y_{p1} + y_{p2}\)</td>
+          <td>Combine with care</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- =================== STEP-BY-STEP METHOD =================== -->
+<section id="method">
+  <h2>Step-by-Step Solution Procedure</h2>
+
+  <ol class="step-list">
+    <li>
+      <strong>Find the complementary solution \(y_c\).</strong> Solve the homogeneous equation \(ay'' + by' + cy = 0\) using the characteristic equation. This gives \(y_c = C_1 y_1 + C_2 y_2\).
+    </li>
+    <li>
+      <strong>Examine \(g(t)\).</strong> Determine whether it's polynomial, exponential, trig, or a combination. This tells you the form of \(y_p\).
+    </li>
+    <li>
+      <strong>Write the trial form.</strong> Based on \(g(t)\), write \(y_p\) with unknown coefficients. <em>Check: does this form (or any of its derivatives) overlap with terms in \(y_c\)?</em> If yes, multiply by \(t\) (or \(t^2\)).
+    </li>
+    <li>
+      <strong>Compute derivatives.</strong> Find \(y_p'\) and \(y_p''\).
+    </li>
+    <li>
+      <strong>Substitute into the full equation.</strong> Replace \(y\), \(y'\), \(y''\) in \(ay'' + by' + cy = g(t)\) with \(y_p\), \(y_p'\), \(y_p''\).
+    </li>
+    <li>
+      <strong>Match coefficients.</strong> Collect like terms (same powers, same exponentials, same trig functions) and set coefficients equal. Solve the resulting system.
+    </li>
+    <li>
+      <strong>Write the general solution.</strong> \(y(t) = y_c(t) + y_p(t)\). If initial conditions are given, apply them to find \(C_1\) and \(C_2\).
+    </li>
+  </ol>
+
+  <div class="tip-box">
+    <div class="box-label">Why This Works</div>
+    <p>
+      The principle is simple: if a function of a certain form (e.g., \(e^{\alpha t}\)) is a solution to \(ay'' + by' + cy = 0\), then \(te^{\alpha t}\) might be needed for \(y_p\). By building in these multiplicities from the start, we avoid contradictions and find a unique solution.
+    </p>
+  </div>
+</section>
+
+<!-- =================== WORKED EXAMPLES =================== -->
+<section id="examples">
+  <h2>Worked Examples</h2>
+  <p>Click each example to see the full solution. Watch for the critical overlap checking!</p>
+
+  <!-- Example 1 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 1:</strong> &nbsp; \(y'' - 5y' + 6y = 2t\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 - 5r + 6 = 0\). Factor: \((r-2)(r-3) = 0\), so \(r = 2, 3\).</p>
+      <div class="math-display">$$y_c = C_1 e^{2t} + C_2 e^{3t}$$</div>
+
+      <p><strong>Step 2: Examine \(g(t)\).</strong> We have \(g(t) = 2t\), a polynomial of degree 1.</p>
+
+      <p><strong>Step 3: Write trial form.</strong> For polynomial degree 1, try \(y_p = At + B\). Check overlap: are \(1\) and \(t\) in \(y_c\)? No (only exponentials). So this form is fine.</p>
+
+      <p><strong>Step 4: Derivatives.</strong> \(y_p' = A\), \(y_p'' = 0\).</p>
+
+      <p><strong>Step 5: Substitute.</strong></p>
+      <div class="math-display">$$0 - 5A + 6(At + B) = 2t$$</div>
+      <div class="math-display">$$6At + (6B - 5A) = 2t$$</div>
+
+      <p><strong>Step 6: Match coefficients.</strong></p>
+      <ul style="padding-left:1.5rem; margin:0.5rem 0;">
+        <li>Coefficient of \(t\): \(6A = 2 \Rightarrow A = \frac{1}{3}\)</li>
+        <li>Constant term: \(6B - 5A = 0 \Rightarrow 6B = \frac{5}{3} \Rightarrow B = \frac{5}{18}\)</li>
+      </ul>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = C_1 e^{2t} + C_2 e^{3t} + \frac{t}{3} + \frac{5}{18}}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Interpretation</div>
+        <p>The first two terms represent the natural (homogeneous) response, decaying to zero. The last two terms form the particular solution—the steady-state response to the polynomial forcing.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 2 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 2:</strong> &nbsp; \(y'' - 7y' + 12y = 4e^{2t}\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 - 7r + 12 = 0\). Factor: \((r-3)(r-4) = 0\), so \(r = 3, 4\).</p>
+      <div class="math-display">$$y_c = C_1 e^{3t} + C_2 e^{4t}$$</div>
+
+      <p><strong>Step 2: Examine \(g(t)\).</strong> We have \(g(t) = 4e^{2t}\), an exponential with \(\alpha = 2\).</p>
+
+      <p><strong>Step 3: Write trial form.</strong> For exponential, try \(y_p = Ae^{2t}\). Check: is \(e^{2t}\) in \(y_c\)? No (only \(e^{3t}\) and \(e^{4t}\)). So this form is fine.</p>
+
+      <p><strong>Step 4: Derivatives.</strong> \(y_p' = 2Ae^{2t}\), \(y_p'' = 4Ae^{2t}\).</p>
+
+      <p><strong>Step 5: Substitute.</strong></p>
+      <div class="math-display">$$4Ae^{2t} - 7(2Ae^{2t}) + 12(Ae^{2t}) = 4e^{2t}$$</div>
+      <div class="math-display">$$Ae^{2t}(4 - 14 + 12) = 4e^{2t}$$</div>
+      <div class="math-display">$$2Ae^{2t} = 4e^{2t}$$</div>
+
+      <p><strong>Step 6: Solve for \(A\).</strong> \(A = 2\).</p>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = C_1 e^{3t} + C_2 e^{4t} + 2e^{2t}}$$</div>
+    </div>
+  </div>
+
+  <!-- Example 3 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 3:</strong> &nbsp; \(y'' - 7y' + 12y = 5e^{4t}\) <strong style="color:#d97706;">(Resonance!)</strong></span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Same as Example 2: \(y_c = C_1 e^{3t} + C_2 e^{4t}\).</p>
+
+      <p><strong>Step 2: Examine \(g(t)\).</strong> We have \(g(t) = 5e^{4t}\), an exponential with \(\alpha = 4\).</p>
+
+      <p><strong>Step 3: Write trial form — WITH RESONANCE CHECK.</strong> Naively, try \(y_p = Ae^{4t}\). But wait! Is \(e^{4t}\) in \(y_c\)? <strong>Yes!</strong> It appears as \(C_2 e^{4t}\). This is resonance. We must multiply by \(t\):</p>
+      <div class="math-display">$$y_p = Ate^{4t}$$</div>
+
+      <p><strong>Step 4: Derivatives.</strong></p>
+      <div class="math-display">$$y_p' = Ae^{4t} + 4Ate^{4t} = Ae^{4t}(1 + 4t)$$</div>
+      <div class="math-display">$$y_p'' = 4Ae^{4t}(1 + 4t) + 4Ae^{4t} = Ae^{4t}(4 + 16t + 4) = Ae^{4t}(8 + 16t)$$</div>
+
+      <p><strong>Step 5: Substitute.</strong></p>
+      <div class="math-display">$$Ae^{4t}(8 + 16t) - 7Ae^{4t}(1 + 4t) + 12Ate^{4t} = 5e^{4t}$$</div>
+      <div class="math-display">$$Ae^{4t}[8 + 16t - 7 - 28t + 12t] = 5e^{4t}$$</div>
+      <div class="math-display">$$Ae^{4t}(1 + 0 \cdot t) = 5e^{4t}$$</div>
+
+      <p><strong>Step 6: Solve for \(A\).</strong> The constant term gives \(A = 5\). (The coefficient of \(t\) is automatically zero—this confirms our choice was correct!)</p>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = C_1 e^{3t} + C_2 e^{4t} + 5te^{4t}}$$</div>
+
+      <div class="warning-box">
+        <div class="box-label">Critical Lesson</div>
+        <p>Without the \(t\) factor, we would have gotten \(0 = 5\), a contradiction! The resonance check saved us. This is why Step 3 must always include overlap verification.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 4 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 4:</strong> &nbsp; \(y'' - 8y' + 16y = 2e^{4t}\) <strong style="color:#d97706;">(Double Root!)</strong></span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 - 8r + 16 = 0\). Factor: \((r-4)^2 = 0\), so \(r = 4\) (double root).</p>
+      <div class="math-display">$$y_c = (C_1 + C_2 t)e^{4t}$$</div>
+
+      <p><strong>Step 2: Examine \(g(t)\).</strong> We have \(g(t) = 2e^{4t}\).</p>
+
+      <p><strong>Step 3: Resonance check.</strong> Both \(e^{4t}\) and \(te^{4t}\) appear in \(y_c\)! This is double resonance. We must multiply by \(t^2\):</p>
+      <div class="math-display">$$y_p = At^2 e^{4t}$$</div>
+
+      <p><strong>Step 4: Derivatives.</strong></p>
+      <div class="math-display">$$y_p' = 2Ate^{4t} + 4At^2e^{4t} = Ae^{4t}(2t + 4t^2)$$</div>
+      <div class="math-display">$$y_p'' = A[2e^{4t} + 4te^{4t} + 8te^{4t} + 16t^2e^{4t}] = Ae^{4t}(2 + 12t + 16t^2)$$</div>
+
+      <p><strong>Step 5: Substitute.</strong></p>
+      <div class="math-display">$$Ae^{4t}(2 + 12t + 16t^2) - 8Ae^{4t}(2t + 4t^2) + 16At^2e^{4t} = 2e^{4t}$$</div>
+      <div class="math-display">$$Ae^{4t}(2 + 12t + 16t^2 - 16t - 32t^2 + 16t^2) = 2e^{4t}$$</div>
+      <div class="math-display">$$Ae^{4t}(2 - 4t + 0 \cdot t^2) = 2e^{4t}$$</div>
+
+      <p><strong>Step 6: Solve for \(A\).</strong> Constant term: \(2A = 2 \Rightarrow A = 1\). (Coefficient of \(t\) is automatically zero.)</p>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = (C_1 + C_2 t)e^{4t} + t^2 e^{4t} = (C_1 + C_2 t + t^2)e^{4t}}$$</div>
+    </div>
+  </div>
+
+  <!-- Example 5 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 5:</strong> &nbsp; \(y'' - 2y' + y = 5\cos(2t) + 10\sin(2t)\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 - 2r + 1 = 0\). Factor: \((r-1)^2 = 0\), so \(r = 1\) (double root).</p>
+      <div class="math-display">$$y_c = (C_1 + C_2 t)e^{t}$$</div>
+
+      <p><strong>Step 2: Examine \(g(t)\).</strong> We have trig: \(g(t) = 5\cos(2t) + 10\sin(2t)\) with \(\omega = 2\).</p>
+
+      <p><strong>Step 3: Resonance check.</strong> Do \(\cos(2t)\) or \(\sin(2t)\) appear in \(y_c = (C_1 + C_2 t)e^{t}\)? No. So try:</p>
+      <div class="math-display">$$y_p = A\cos(2t) + B\sin(2t)$$</div>
+
+      <p><strong>Step 4: Derivatives.</strong></p>
+      <div class="math-display">$$y_p' = -2A\sin(2t) + 2B\cos(2t)$$</div>
+      <div class="math-display">$$y_p'' = -4A\cos(2t) - 4B\sin(2t)$$</div>
+
+      <p><strong>Step 5: Substitute.</strong></p>
+      <div class="math-display">$$-4A\cos(2t) - 4B\sin(2t) - 2[-2A\sin(2t) + 2B\cos(2t)] + [A\cos(2t) + B\sin(2t)] = 5\cos(2t) + 10\sin(2t)$$</div>
+      <div class="math-display">$$(-4A - 4B + A)\cos(2t) + (-4B + 4A + B)\sin(2t) = 5\cos(2t) + 10\sin(2t)$$</div>
+      <div class="math-display">$$(-3A - 4B)\cos(2t) + (4A - 3B)\sin(2t) = 5\cos(2t) + 10\sin(2t)$$</div>
+
+      <p><strong>Step 6: Match coefficients.</strong></p>
+      <ul style="padding-left:1.5rem; margin:0.5rem 0;">
+        <li>\(\cos(2t)\): \(-3A - 4B = 5\)</li>
+        <li>\(\sin(2t)\): \(4A - 3B = 10\)</li>
+      </ul>
+      <p>Solving: From the second equation, \(4A - 3B = 10\). Multiply by 3: \(12A - 9B = 30\). Multiply the first by 4: \(-12A - 16B = 20\). Add: \(-25B = 50\), so \(B = -2\). Then \(4A + 6 = 10\), so \(A = 1\).</p>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = (C_1 + C_2 t)e^{t} + \cos(2t) - 2\sin(2t)}$$</div>
+    </div>
+  </div>
+
+  <!-- Example 6 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 6:</strong> &nbsp; \(y'' + 4y = 8\cos(2t)\) <strong style="color:#d97706;">(Resonance!)</strong></span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 + 4 = 0\). Roots: \(r = \pm 2i\), with \(\omega_0 = 2\).</p>
+      <div class="math-display">$$y_c = C_1\cos(2t) + C_2\sin(2t)$$</div>
+
+      <p><strong>Step 2: Examine \(g(t)\).</strong> We have \(g(t) = 8\cos(2t)\) with \(\omega = 2\).</p>
+
+      <p><strong>Step 3: Resonance check.</strong> Both \(\cos(2t)\) and \(\sin(2t)\) appear in \(y_c\)! This is trig resonance (natural frequency matches forcing frequency). Multiply by \(t\):</p>
+      <div class="math-display">$$y_p = t[A\cos(2t) + B\sin(2t)]$$</div>
+
+      <p><strong>Step 4: Derivatives (product rule!).</strong></p>
+      <div class="math-display">$$y_p' = A\cos(2t) + B\sin(2t) + t[-2A\sin(2t) + 2B\cos(2t)]$$</div>
+      <div class="math-display">$$y_p' = (A + 2Bt)\cos(2t) + (B - 2At)\sin(2t)$$</div>
+      <p>And \(y_p'' = 4B\cos(2t) - 4A\sin(2t) + \text{(terms with } t \text{)}\). [Detailed expansion: apply product rule twice.]</p>
+
+      <p><strong>Step 5: Substitute into \(y'' + 4y = 8\cos(2t)\).</strong> After expansion and matching coefficients:</p>
+      <div class="math-display">$$4B\cos(2t) - 4A\sin(2t) = 8\cos(2t)$$</div>
+
+      <p><strong>Step 6: Solve.</strong> \(4B = 8 \Rightarrow B = 2\), and \(-4A = 0 \Rightarrow A = 0\).</p>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = C_1\cos(2t) + C_2\sin(2t) + 2t\sin(2t)}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Physical Insight</div>
+        <p>The term \(2t\sin(2t)\) grows without bound! This is <strong>resonance</strong> — when the forcing frequency matches the natural frequency, energy accumulates and amplitude grows linearly with time. This is why bridges must avoid matching the natural frequency of pedestrians' footsteps.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 7 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 7:</strong> &nbsp; \(y'' - 4y' = te^{t} + \cos(2t)\) <strong style="color:#d97706;">(Superposition!)</strong></span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 - 4r = r(r - 4) = 0\), so \(r = 0, 4\).</p>
+      <div class="math-display">$$y_c = C_1 + C_2 e^{4t}$$</div>
+
+      <p><strong>Step 2: Decompose \(g(t)\).</strong> We have \(g(t) = te^{t} + \cos(2t)\). Split:</p>
+      <ul style="padding-left:1.5rem; margin:0.5rem 0;">
+        <li>For \(te^{t}\): try \(y_{p1}\)</li>
+        <li>For \(\cos(2t)\): try \(y_{p2}\)</li>
+      </ul>
+
+      <p><strong>For \(te^{t}\):</strong> This is a polynomial times exponential with \(\alpha = 1\). Try \(y_{p1} = (At + B)e^{t}\). Check: is \(e^{t}\) in \(y_c\)? No. Proceed.</p>
+
+      <p>Compute derivatives and substitute into \(y'' - 4y' = te^{t}\). After algebra: \(A = -\frac{1}{3}\), \(B = -\frac{2}{9}\).</p>
+
+      <p><strong>For \(\cos(2t)\):</strong> Try \(y_{p2} = C\cos(2t) + D\sin(2t)\). Check: are trig in \(y_c\)? No. Proceed.</p>
+
+      <p>Compute and substitute into \(y'' - 4y' = \cos(2t)\):</p>
+      <div class="math-display">$$-4C\cos(2t) - 4D\sin(2t) - 4[-2C\sin(2t) + 2D\cos(2t)] = \cos(2t)$$</div>
+      <div class="math-display">$$(-4C - 8D)\cos(2t) + (-4D + 8C)\sin(2t) = \cos(2t)$$</div>
+
+      <p>Matching: \(-4C - 8D = 1\) and \(8C - 4D = 0\). Solve: \(D = 2C\) from the second, so \(-4C - 16C = 1 \Rightarrow C = -\frac{1}{20}\), \(D = -\frac{1}{10}\).</p>
+
+      <p><strong>General solution (superposition):</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(t) = C_1 + C_2 e^{4t} - \frac{1}{3}te^t - \frac{2}{9}e^t - \frac{1}{20}\cos(2t) - \frac{1}{10}\sin(2t)}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Superposition Principle</div>
+        <p>When \(g(t) = g_1 + g_2\), we can solve for \(y_{p1}\) and \(y_{p2}\) separately, then combine. This reduces a complex problem to simpler pieces.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 8 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 8:</strong> &nbsp; \(y'' + 3y' + 2y = (16+20x)\cos(x) + 10\sin(x)\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Find \(y_c\).</strong> Characteristic equation: \(r^2 + 3r + 2 = (r+1)(r+2) = 0\), so \(r = -1, -2\).</p>
+      <div class="math-display">$$y_c = C_1 e^{-x} + C_2 e^{-2x}$$</div>
+
+      <p><strong>Step 2: Examine \(g(x)\).</strong> Polynomial times trig. The highest degree is 1 (from \(20x\)), with trig \(\cos(x)\) and \(\sin(x)\) at \(\omega = 1\).</p>
+
+      <p><strong>Step 3: Trial form.</strong> For \((ax + b)[\cos(\omega x) + \text{const} \sin(\omega x)]\), try:</p>
+      <div class="math-display">$$y_p = (A_0 + A_1 x)\cos(x) + (B_0 + B_1 x)\sin(x)$$</div>
+      <p>Check: are any of \(\cos(x), \sin(x), x\cos(x), x\sin(x)\) in \(y_c\)? No (only exponentials). Proceed.</p>
+
+      <p><strong>Step 4 & 5: Derivatives and substitution.</strong> [Lengthy algebra omitted.] After computing \(y_p'\) and \(y_p''\) and substituting into the full equation, matching coefficients of \(\cos(x)\) and \(\sin(x)\) (and their \(x\) multiples):</p>
+      <ul style="padding-left:1.5rem; margin:0.5rem 0;">
+        <li>Constant in \(\cos(x)\) coeff: \(A_0 = 1\)</li>
+        <li>Linear in \(\cos(x)\) coeff: \(A_1 = 2\)</li>
+        <li>Constant in \(\sin(x)\) coeff: \(B_0 = -1\)</li>
+        <li>Linear in \(\sin(x)\) coeff: \(B_1 = 6\)</li>
+      </ul>
+
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y(x) = C_1 e^{-x} + C_2 e^{-2x} + (1+2x)\cos(x) + (-1+6x)\sin(x)}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Complex Guesses</div>
+        <p>When \(g(t)\) is a product (polynomial \(\times\) trig, or polynomial \(\times\) exponential), combine the forms: include all coefficients for all powers of the polynomial, applied to each trig/exp term.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- =================== INTERACTIVE VISUALIZER =================== -->
+<section id="visualizer">
+  <h2>Interactive Visualizer</h2>
+  <p>Explore how changing the equation affects \(y_c\), \(y_p\), and the general solution. Watch the resonance case!</p>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="eq-preset">Preset Equation:</label>
+      <select id="eq-preset" onchange="loadPreset(this.value)">
+        <option value="poly">Example 1: Polynomial</option>
+        <option value="exp">Example 2: Exponential</option>
+        <option value="resonance">Example 3: Resonance (Exp)</option>
+        <option value="trig-resonance">Example 6: Resonance (Trig)</option>
+      </select>
+    </div>
+    <button class="btn-primary" onclick="updatePlot()">Update Plot</button>
+  </div>
+
+  <div id="plot" class="plot-container"></div>
+
+  <div class="example-box" style="margin-top:1.5rem;">
+    <div class="box-label">How to Read the Plot</div>
+    <p><strong>Blue curve:</strong> \(y_c(t)\) — complementary solution (homogeneous response). Notice how it decays or grows depending on eigenvalues.</p>
+    <p><strong>Green curve:</strong> \(y_p(t)\) — particular solution (steady-state or forced response). Depends entirely on \(g(t)\).</p>
+    <p><strong>Red curve:</strong> \(y(t) = y_c + y_p\) — the complete general solution with \(C_1 = C_2 = 0\) (you can adjust with initial conditions).</p>
+  </div>
+</section>
+
+<!-- =================== PRACTICE QUIZ =================== -->
+<section id="practice">
+  <h2>Practice Quiz</h2>
+  <p>Test your understanding with 5 multiple-choice problems. Choose the correct general form for \(y_p\) or identify the solution.</p>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress" style="width:0%;"></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-problem">
+    <div class="problem-num">Problem 1</div>
+    <p>For the equation \(y'' + 2y' + y = t^2 + 1\), what is the complementary solution \(y_c\)?</p>
+    <button class="choice-btn" onclick="checkAnswer(1, 'A')">
+      <strong>A:</strong> \(y_c = (C_1 + C_2 t)e^{-t}\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(1, 'B')">
+      <strong>B:</strong> \(y_c = C_1 e^{-t} + C_2 e^{t}\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(1, 'C')">
+      <strong>C:</strong> \(y_c = C_1 \cos(t) + C_2 \sin(t)\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(1, 'D')">
+      <strong>D:</strong> \(y_c = C_1 + C_2 t + C_3 t^2\)
+    </button>
+    <div class="quiz-feedback" id="q1-feedback"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-problem">
+    <div class="problem-num">Problem 2</div>
+    <p>For \(y'' - 3y' + 2y = 5e^{2t}\), should we include a factor of \(t\) in \(y_p\) (i.e., resonance)?</p>
+    <button class="choice-btn" onclick="checkAnswer(2, 'A')">
+      <strong>A:</strong> Yes, use \(y_p = Ate^{2t}\) (simple resonance)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(2, 'B')">
+      <strong>B:</strong> No, use \(y_p = Ae^{2t}\) (no resonance)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(2, 'C')">
+      <strong>C:</strong> Yes, use \(y_p = At^2e^{2t}\) (double resonance)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(2, 'D')">
+      <strong>D:</strong> The method doesn't apply here
+    </button>
+    <div class="quiz-feedback" id="q2-feedback"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-problem">
+    <div class="problem-num">Problem 3</div>
+    <p>If the characteristic equation is \((r-2)^2(r+1) = 0\) and \(g(t) = 3e^{2t}\), which is the correct trial form for \(y_p\)?</p>
+    <button class="choice-btn" onclick="checkAnswer(3, 'A')">
+      <strong>A:</strong> \(y_p = Ae^{2t}\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(3, 'B')">
+      <strong>B:</strong> \(y_p = Ate^{2t}\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(3, 'C')">
+      <strong>C:</strong> \(y_p = At^2e^{2t}\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(3, 'D')">
+      <strong>D:</strong> \(y_p = (A + Bt)e^{2t}\)
+    </button>
+    <div class="quiz-feedback" id="q3-feedback"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-problem">
+    <div class="problem-num">Problem 4</div>
+    <p>For \(y'' + y = 2\cos(t)\), the characteristic equation gives \(r = \pm i\). What is the correct trial form for \(y_p\)?</p>
+    <button class="choice-btn" onclick="checkAnswer(4, 'A')">
+      <strong>A:</strong> \(y_p = A\cos(t) + B\sin(t)\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(4, 'B')">
+      <strong>B:</strong> \(y_p = t(A\cos(t) + B\sin(t))\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(4, 'C')">
+      <strong>C:</strong> \(y_p = At\cos(t)\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(4, 'D')">
+      <strong>D:</strong> \(y_p = Ae^{it}\)
+    </button>
+    <div class="quiz-feedback" id="q4-feedback"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-problem">
+    <div class="problem-num">Problem 5</div>
+    <p>For \(y'' - 4y' + 3y = t + e^{3t}\), how should we split the problem using superposition?</p>
+    <button class="choice-btn" onclick="checkAnswer(5, 'A')">
+      <strong>A:</strong> Find \(y_{p1}\) for \(t\) and \(y_{p2}\) for \(e^{3t}\), then \(y_p = y_{p1} + y_{p2}\)
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(5, 'B')">
+      <strong>B:</strong> Find \(y_p\) for \(t \cdot e^{3t}\) as a single term
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(5, 'C')">
+      <strong>C:</strong> The method doesn't apply to sums
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(5, 'D')">
+      <strong>D:</strong> Multiply both \(t\) and \(e^{3t}\) by an extra \(t\)
+    </button>
+    <div class="quiz-feedback" id="q5-feedback"></div>
+  </div>
+
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.9rem; margin-top:3rem;">
+  <p>Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University</p>
+  <p>Department of Mathematics and Statistics</p>
+</footer>
+
+</div>
+
+<!-- =================== JAVASCRIPT =================== -->
+<script>
+  // Collapsible examples
+  function toggleCollapsible(btn) {
+    const content = btn.nextElementSibling;
+    btn.classList.toggle('open');
+    content.classList.toggle('open');
+  }
+
+  // KaTeX auto-render
+  document.addEventListener('DOMContentLoaded', function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ]
+    });
+    initVisualizer();
+  });
+
+  // Quiz
+  const answers = {
+    1: 'A',
+    2: 'B',
+    3: 'C',
+    4: 'B',
+    5: 'A'
+  };
+
+  const explanations = {
+    1: 'Correct! r² + 2r + 1 = (r+1)² has r = -1 (double), so y_c = (C₁ + C₂t)e^(-t).',
+    2: 'Correct! Characteristic roots are r = 1, 2. Since 2 is a root, e^(2t) appears in y_c, so we need y_p = Ate^(2t).',
+    3: 'Correct! Since r = 2 is a double root, both e^(2t) and te^(2t) are in y_c. Use y_p = At²e^(2t).',
+    4: 'Correct! r = ±i means cos(t) and sin(t) are in y_c, so resonance occurs. Use y_p = t(A cos(t) + B sin(t)).',
+    5: 'Correct! Superposition: solve separately for g = t and g = e^(3t), then combine.'
+  };
+
+  function checkAnswer(question, choice) {
+    const feedback = document.getElementById('q' + question + '-feedback');
+    const buttons = feedback.parentElement.querySelectorAll('.choice-btn');
+
+    buttons.forEach(btn => btn.classList.remove('selected-correct', 'selected-wrong'));
+
+    const selected = Array.from(buttons).find(btn => btn.textContent.startsWith(choice));
+    if (selected) {
+      if (choice === answers[question]) {
+        selected.classList.add('selected-correct');
+        feedback.textContent = '✓ ' + explanations[question];
+        feedback.className = 'quiz-feedback correct';
+      } else {
+        selected.classList.add('selected-wrong');
+        feedback.textContent = '✗ Not quite. The correct answer is ' + answers[question] + '.';
+        feedback.className = 'quiz-feedback incorrect';
+      }
+    }
+
+    updateProgress();
+  }
+
+  function updateProgress() {
+    let correct = 0;
+    for (let i = 1; i <= 5; i++) {
+      const feedback = document.getElementById('q' + i + '-feedback');
+      if (feedback.classList.contains('correct')) correct++;
+    }
+    document.getElementById('progress').style.width = (correct / 5 * 100) + '%';
+  }
+
+  // Visualizer
+  function initVisualizer() {
+    loadPreset('poly');
+  }
+
+  function loadPreset(preset) {
+    const presets = {
+      poly: {
+        name: 'y\'\' - 5y\' + 6y = 2t',
+        yc_formula: (t) => Math.exp(2*t) + Math.exp(3*t),
+        yp_formula: (t) => t/3 + 5/18,
+        r1: 2, r2: 3, type: 'real'
+      },
+      exp: {
+        name: 'y\'\' - 7y\' + 12y = 4e^(2t)',
+        yc_formula: (t) => Math.exp(3*t) + Math.exp(4*t),
+        yp_formula: (t) => 2*Math.exp(2*t),
+        r1: 3, r2: 4, type: 'real'
+      },
+      resonance: {
+        name: 'y\'\' - 7y\' + 12y = 5e^(4t)',
+        yc_formula: (t) => Math.exp(3*t) + Math.exp(4*t),
+        yp_formula: (t) => 5*t*Math.exp(4*t),
+        r1: 3, r2: 4, type: 'resonance'
+      },
+      'trig-resonance': {
+        name: 'y\'\' + 4y = 8cos(2t)',
+        yc_formula: (t) => Math.cos(2*t) + Math.sin(2*t),
+        yp_formula: (t) => 2*t*Math.sin(2*t),
+        r1: 0, r2: 2, type: 'trig'
+      }
+    };
+
+    const preset_data = presets[preset];
+    const tmax = (preset === 'trig-resonance') ? 10 : 3;
+    const n = 200;
+    const t_arr = Array.from({length: n}, (_, i) => i * tmax / n);
+
+    const yc = t_arr.map(t => preset_data.yc_formula(t));
+    const yp = t_arr.map(t => preset_data.yp_formula(t));
+    const y = t_arr.map((t, i) => yc[i] + yp[i]);
+
+    const trace_yc = {x: t_arr, y: yc, name: 'y_c (Complementary)', line: {color: '#2563eb', width: 2}};
+    const trace_yp = {x: t_arr, y: yp, name: 'y_p (Particular)', line: {color: '#059669', width: 2}};
+    const trace_y = {x: t_arr, y: y, name: 'y (General Solution)', line: {color: '#dc2626', width: 2.5, dash: 'dash'}};
+
+    const layout = {
+      title: preset_data.name,
+      xaxis: {title: 't'},
+      yaxis: {title: 'y(t)'},
+      height: 420,
+      margin: {l: 60, r: 40, t: 50, b: 50}
+    };
+
+    Plotly.newPlot('plot', [trace_yc, trace_yp, trace_y], layout, {responsive: true});
+  }
+
+  function updatePlot() {
+    const preset = document.getElementById('eq-preset').value;
+    loadPreset(preset);
+  }
+</script>
+
+</body>
+</html>

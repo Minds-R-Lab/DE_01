@@ -248,18 +248,18 @@
     </a>
 
     <!-- Chapter 2 -->
-    <div class="chapter-card coming-soon">
-      <span class="status-badge soon">Coming Soon</span>
+    <a class="chapter-card active" href="#chapter2">
+      <span class="status-badge available">Available</span>
       <div class="chapter-num">02</div>
       <h3>Second-Order Linear Equations</h3>
-      <p>Homogeneous and non-homogeneous equations, characteristic equations, undetermined coefficients, and variation of parameters.</p>
+      <p>Homogeneous and non-homogeneous equations, characteristic equations, undetermined coefficients, variation of parameters, and Euler equations.</p>
       <div class="topic-list">
-        <span class="topic-tag">Homogeneous</span>
-        <span class="topic-tag">Non-Homogeneous</span>
-        <span class="topic-tag">Undetermined Coeff.</span>
-        <span class="topic-tag">Variation of Parameters</span>
+        <span class="topic-tag done">Constant Coeff.</span>
+        <span class="topic-tag done">Undetermined Coeff.</span>
+        <span class="topic-tag done">Variation of Param.</span>
+        <span class="topic-tag done">Euler / Variable Coeff.</span>
       </div>
-    </div>
+    </a>
 
     <!-- Chapter 3 -->
     <div class="chapter-card coming-soon">
@@ -373,6 +373,52 @@
     </div>
   </div>
 
+  <!-- Chapter 2 Detail -->
+  <div class="ch1-detail" id="chapter2">
+    <h2>Chapter 2 — Second-Order Linear Equations</h2>
+    <p>Four powerful methods for solving second-order ODEs. Covers constant and variable coefficient equations, with engineering applications in vibrations, circuits, and control systems.</p>
+
+    <div class="topic-grid">
+
+      <a class="topic-card" href="ch2-homogeneous-const.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">H</div>
+        <div>
+          <h4>2.1 — Constant Coefficient (Homogeneous)</h4>
+          <p>Characteristic equation method with three root cases: distinct real, repeated, and complex conjugate.</p>
+          <div class="math-preview">\(ay'' + by' + cy = 0\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch2-undetermined.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">U</div>
+        <div>
+          <h4>2.2 — Undetermined Coefficients</h4>
+          <p>Guessing the particular solution form based on the forcing function, with overlap detection rules.</p>
+          <div class="math-preview">\(ay'' + by' + cy = g(t)\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch2-variation.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">V</div>
+        <div>
+          <h4>2.3 — Variation of Parameters</h4>
+          <p>A general method using the Wronskian to find particular solutions for any forcing function.</p>
+          <div class="math-preview">\(y_p = u_1 y_1 + u_2 y_2\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch2-euler.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">E</div>
+        <div>
+          <h4>2.4 — Euler &amp; Variable Coefficient</h4>
+          <p>Euler–Cauchy equations with indicial equation method, plus reduction of order for variable coefficients.</p>
+          <div class="math-preview">\(ax^2y'' + bxy' + cy = 0\)</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
 </div>
 
 <footer>
@@ -390,10 +436,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Smooth scroll to chapter 1 detail
-document.querySelector('.chapter-card.active').addEventListener('click', function(e) {
-  e.preventDefault();
-  document.getElementById('chapter1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Smooth scroll to chapter detail sections
+document.querySelectorAll('.chapter-card.active').forEach(card => {
+  card.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = this.getAttribute('href').substring(1);
+    document.getElementById(target).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 });
 </script>
 </body>

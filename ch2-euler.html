@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 4: Euler Equations & Variable Coefficient SODE | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+  .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  .choice-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 0.75rem 1rem; margin: 0.5rem 0;
+    border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; font-size: 0.95rem; cursor: pointer;
+    transition: all 0.2s; color: #1e293b;
+  }
+  .choice-btn .katex { color: #1e293b; }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
+  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
+
+  /* ---- PROGRESS ---- */
+  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch2-homogeneous-const.html">2.1 Homogeneous</a>
+    <a href="ch2-undetermined.html">2.2 Undetermined Coeff</a>
+    <a href="ch2-variation.html">2.3 Variation of Params</a>
+    <a href="ch2-euler.html" class="active">2.4 Euler Equations</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a>
+    <a href="#euler-theory">Euler Theory</a>
+    <a href="#reduction-theory">Reduction Theory</a>
+    <a href="#euler-method">Euler Method</a>
+    <a href="#reduction-method">Reduction Method</a>
+    <a href="#examples">Examples</a>
+    <a href="#visualizer">Visualizer</a>
+    <a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== INTRO =================== -->
+<section id="intro">
+  <h1>2.4 Euler Equations & Variable Coefficient SODE</h1>
+  <p class="subtitle">Solving differential equations when coefficients are not constants</p>
+
+  <div class="definition-box">
+    <div class="box-label">What You'll Learn</div>
+    <p>By the end of this lesson, you will be able to:</p>
+    <ol style="padding-left:1.5rem; margin-top:0.5rem;">
+      <li>Identify and solve Euler equations using the indicial equation method</li>
+      <li>Apply the transformation \(Y(t) = y(e^t)\) to convert to constant coefficients</li>
+      <li>Understand the three solution cases: distinct real, repeated, and complex roots</li>
+      <li>Use the method of reduction of order when one solution is known</li>
+      <li>Solve variable coefficient equations by reducing to first order</li>
+    </ol>
+  </div>
+
+  <h3>Why Variable Coefficients Matter</h3>
+  <p>
+    Not all second-order differential equations have constant coefficients. When coefficients depend on the independent variable \(x\), the techniques from Chapter 2.1–2.3 no longer apply. This section covers two special methods for handling variable coefficient equations: the <strong>Euler equation method</strong> (which transforms to constant coefficients via a clever substitution) and the <strong>method of reduction of order</strong> (which reduces a second-order equation to first order when one solution is known).
+  </p>
+</section>
+
+<!-- =================== HISTORICAL QUOTE =================== -->
+<div style="background:linear-gradient(135deg, #fefce8, #fef9c3); border-left:5px solid #d97706; border-radius:12px; padding:1.5rem 1.5rem 1.5rem 2rem; margin:1.5rem 0; font-style:italic; position:relative;">
+  <span style="font-size:4rem; color:#d97706; opacity:0.3; position:absolute; top:-0.2rem; left:0.5rem; font-family:Georgia,serif;">&ldquo;</span>
+  <p style="margin-bottom:0.5rem;">Leonhard Euler revolutionized differential equations by discovering that equations with coefficients of the form \(ax^ny^{(n)}\) could be transformed into equations with constant coefficients. His genius for substitution transformed an impossible problem into a solvable one, exemplifying the power of the right change of variables.</p>
+  <div style="font-style:normal; font-weight:600; color:#d97706; font-size:0.95rem;">— Leonhard Euler (1707–1783), Master of Infinite Series and Transformations</div>
+</div>
+
+<!-- =================== ISLAMIC VERSE =================== -->
+<div style="background:linear-gradient(135deg, #ecfdf5, #d1fae5); border-left:5px solid #059669; border-radius:12px; padding:1.5rem 1.5rem 1.5rem 2rem; margin:2rem 0;">
+  <div style="font-size:1.3rem; text-align:center; margin-bottom:0.5rem; font-family:'Traditional Arabic','Scheherazade New',serif; direction:rtl; color:#059669; font-weight:600;">إِنَّ اللَّهَ خَلَقَ كُلَّ شَيْءٍ فِي أَحْسَنِ تَصْوِيرٍ</div>
+  <div style="font-style:italic; color:#065f46;">"Indeed, He created everything in the best form."</div>
+  <div style="font-weight:600; color:#059669; margin-top:0.5rem; font-size:0.9rem;">— Quran 67:3-4 on the Perfection of Creation</div>
+  <p style="margin-top:0.75rem; margin-bottom:0;">Just as the universe exhibits beautiful structure and order despite seeming complexity, so too can variable coefficient equations reveal their hidden order through the right transformation. What appears irregular often reveals deep symmetry.</p>
+</div>
+
+<!-- =================== EULER EQUATION THEORY =================== -->
+<section id="euler-theory">
+  <h2>Theory: Euler Equations</h2>
+
+  <h3>Definition: The Euler Equation</h3>
+  <p>
+    An <strong>Euler equation</strong> (or Cauchy-Euler equation) is a second-order linear ODE of the form:
+  </p>
+  <div class="math-display">$$a\,x^2\,y'' + b\,x\,y' + c\,y = 0$$</div>
+  <p>
+    where \(a, b, c\) are constants and \(a \neq 0\). The key feature is that each term has a power of \(x\) equal to the order of the derivative: \(x^2\) with \(y''\), \(x^1\) with \(y'\), and \(x^0\) with \(y\).
+  </p>
+
+  <h3>The Key Transformation</h3>
+  <p>
+    The power of the Euler equation is that we can transform it into a constant coefficient equation! Let \(x = e^t\), so \(t = \ln x\). Define \(Y(t) = y(e^t)\). Then:
+  </p>
+  <div class="math-display">$$\frac{dY}{dt} = \frac{dy}{dx} \cdot \frac{dx}{dt} = y' \cdot e^t$$</div>
+  <div class="math-display">$$\frac{d^2Y}{dt^2} = \frac{d}{dt}(y' \cdot e^t) = y'' \cdot e^{2t} + y' \cdot e^t$$</div>
+  <p>
+    Rearranging: \(y'' = e^{-2t}\left(\frac{d^2Y}{dt^2} - \frac{dY}{dt}\right)\) and \(y' = e^{-t}\frac{dY}{dt}\). Substituting into the original equation and simplifying yields:
+  </p>
+  <div class="math-display">$$a\,Y'' + (b - a)\,Y' + c\,Y = 0$$</div>
+  <p>This is a constant coefficient equation in \(Y\)!</p>
+
+  <h3>The Indicial Equation</h3>
+  <p>
+    Assume solutions of the form \(y = x^r\) for the homogeneous equation \(a\,x^2\,y'' + b\,x\,y' + c\,y = 0\). Substitute:
+  </p>
+  <div class="math-display">$$y' = r\,x^{r-1}, \quad y'' = r(r-1)\,x^{r-2}$$</div>
+  <p>
+    The equation becomes:
+  </p>
+  <div class="math-display">$$a\,r(r-1)\,x^r + b\,r\,x^r + c\,x^r = 0$$</div>
+  <p>
+    Dividing by \(x^r\) (valid for \(x > 0\)):
+  </p>
+  <div class="math-display">$$a\,r(r-1) + b\,r + c = 0$$</div>
+  <p>
+    This simplifies to the <strong>indicial equation</strong>:
+  </p>
+  <div class="math-display">$$ar^2 + (b - a)\,r + c = 0$$</div>
+
+  <div class="theorem-box">
+    <div class="box-label">Solution Cases for Euler Equations on \((0, \infty)\)</div>
+    <p>
+      For the equation \(a\,x^2\,y'' + b\,x\,y' + c\,y = 0\), compute the indicial equation \(ar^2 + (b-a)r + c = 0\):
+    </p>
+    <ol style="padding-left:1.5rem; margin-top:0.75rem;">
+      <li><strong>Distinct Real Roots \(r_1 \neq r_2\):</strong><br/>
+        $$y = C_1\,x^{r_1} + C_2\,x^{r_2}$$
+      </li>
+      <li style="margin-top:0.75rem;"><strong>Repeated Real Root \(r_1 = r_2 = r\):</strong><br/>
+        $$y = x^r(C_1 + C_2\,\ln x)$$
+      </li>
+      <li style="margin-top:0.75rem;"><strong>Complex Roots \(r = \lambda \pm i\omega\) (with \(\omega > 0\)):</strong><br/>
+        $$y = x^{\lambda}\left[C_1\,\cos(\omega\,\ln x) + C_2\,\sin(\omega\,\ln x)\right]$$
+      </li>
+    </ol>
+  </div>
+
+  <div class="tip-box">
+    <div class="box-label">Simplifying the Indicial Equation</div>
+    <p>
+      The general form \(a\,r(r-1) + b\,r + c = 0\) expands to \(ar^2 + (b-a)r + c = 0\). You can use either form, but it's often easier to work with the second one directly and use the quadratic formula.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Domain Restriction</div>
+    <p>
+      The logarithm \(\ln x\) in the repeated root case appears only for \(x > 0\). Euler equations are only valid on \((0, \infty)\) or \((-\infty, 0)\), never across \(x = 0\). If you need a solution on \((-\infty, 0)\), replace \(x\) with \(|x|\) or work with \((-x)^r\).
+    </p>
+  </div>
+</section>
+
+<!-- =================== REDUCTION OF ORDER THEORY =================== -->
+<section id="reduction-theory">
+  <h2>Theory: Reduction of Order</h2>
+
+  <h3>The Method</h3>
+  <p>
+    Suppose you're given a second-order linear ODE
+  </p>
+  <div class="math-display">$$P_0(x)\,y'' + P_1(x)\,y' + P_2(x)\,y = F(x)$$</div>
+  <p>
+    and you already know one solution \(y_1(x)\) to the homogeneous equation \(P_0(x)\,y'' + P_1(x)\,y' + P_2(x)\,y = 0\). The method of <strong>reduction of order</strong> lets you find a second linearly independent solution and then the particular solution.
+  </p>
+
+  <p>
+    The idea: assume \(y = u(x) \cdot y_1(x)\) where \(u(x)\) is a new function to be determined. Compute:
+  </p>
+  <div class="math-display">$$y' = u'\,y_1 + u\,y_1'$$</div>
+  <div class="math-display">$$y'' = u''\,y_1 + 2u'\,y_1' + u\,y_1''$$</div>
+
+  <p>
+    Substitute into the original equation. Since \(y_1\) satisfies the homogeneous equation, the coefficient of \(u\) vanishes, leaving:
+  </p>
+  <div class="math-display">$$P_0(x)(u''\,y_1 + 2u'\,y_1') + P_1(x)(u'\,y_1) = F(x)$$</div>
+
+  <p>
+    Rearranging:
+  </p>
+  <div class="math-display">$$P_0(x)\,y_1\,u'' + [2P_0(x)\,y_1' + P_1(x)\,y_1]\,u' = F(x)$$</div>
+
+  <p>
+    Now let \(z = u'\). This is a first-order linear ODE in \(z\). Solve for \(z\), integrate to find \(u\), and then \(y = u \cdot y_1\).
+  </p>
+
+  <div class="theorem-box">
+    <div class="box-label">Reduction of Order Method Summary</div>
+    <ol style="padding-left:1.5rem; margin-top:0.75rem;">
+      <li>Given \(y_1\) as a solution to the homogeneous equation</li>
+      <li>Assume \(y = u(x) \cdot y_1(x)\) and compute \(y'\), \(y''\)</li>
+      <li>Substitute into the DE; the \(u\) term cancels</li>
+      <li>Let \(z = u'\); solve the resulting first-order ODE for \(z\)</li>
+      <li>Integrate \(z\) to get \(u\), then \(y = u \cdot y_1\)</li>
+    </ol>
+  </div>
+
+  <p>
+    This method works for <strong>any</strong> variable coefficient second-order linear equation, not just Euler equations!
+  </p>
+</section>
+
+<!-- =================== EULER METHOD (STEP-BY-STEP) =================== -->
+<section id="euler-method">
+  <h2>Step-by-Step: Solving Euler Equations</h2>
+
+  <ol class="step-list">
+    <li>
+      <strong>Identify coefficients.</strong> From the equation \(a\,x^2\,y'' + b\,x\,y' + c\,y = 0\), read off \(a\), \(b\), and \(c\).
+    </li>
+    <li>
+      <strong>Form the indicial equation.</strong> Write and solve:
+      $$ar^2 + (b - a)\,r + c = 0$$
+    </li>
+    <li>
+      <strong>Solve for the roots \(r_1, r_2\).</strong> Use the quadratic formula. Determine if you have distinct real, repeated, or complex roots.
+    </li>
+    <li>
+      <strong>Apply the appropriate formula.</strong> Based on your roots, write down the general solution from the theorem box above.
+    </li>
+    <li>
+      <strong>Apply initial conditions (if given).</strong> Use \(y(x_0) = y_0\) and \(y'(x_0) = y_0'\) to find \(C_1\) and \(C_2\).
+    </li>
+  </ol>
+</section>
+
+<!-- =================== REDUCTION OF ORDER METHOD (STEP-BY-STEP) =================== -->
+<section id="reduction-method">
+  <h2>Step-by-Step: Reduction of Order</h2>
+
+  <ol class="step-list">
+    <li>
+      <strong>Given \(y_1\).</strong> You are given that \(y_1(x)\) is a solution to the homogeneous equation.
+    </li>
+    <li>
+      <strong>Assume \(y = u \cdot y_1\).</strong> Let \(y = u(x) \cdot y_1(x)\) where \(u(x)\) is to be found. Compute:
+      $$y' = u'\,y_1 + u\,y_1', \quad y'' = u''\,y_1 + 2u'\,y_1' + u\,y_1''$$
+    </li>
+    <li>
+      <strong>Substitute into the DE.</strong> Plug \(y\), \(y'\), \(y''\) into the original equation. The \(u\) term will cancel because \(y_1\) is a homogeneous solution.
+    </li>
+    <li>
+      <strong>Obtain a first-order ODE in \(u'\).</strong> Let \(z = u'\). You should get a first-order linear ODE in \(z\):
+      $$a(x)\,z' + b(x)\,z = g(x)$$
+    </li>
+    <li>
+      <strong>Solve the first-order ODE.</strong> Use the integrating factor method or other techniques for first-order equations.
+    </li>
+    <li>
+      <strong>Integrate to find \(u\).</strong> Once you have \(z = u'\), integrate to get \(u(x)\).
+    </li>
+    <li>
+      <strong>Form the general solution.</strong> \(y = u(x) \cdot y_1(x)\) is the general solution to the original equation.
+    </li>
+  </ol>
+</section>
+
+<!-- =================== WORKED EXAMPLES =================== -->
+<section id="examples">
+  <h2>Worked Examples</h2>
+  <p>Click each example to reveal the full solution.</p>
+
+  <!-- Example 1: Distinct Real Roots -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 1:</strong> &nbsp; \(x^2 y'' - xy' - 8y = 0\) (Distinct Real Roots)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Identify coefficients.</strong> \(a = 1\), \(b = -1\), \(c = -8\).</p>
+      <p><strong>Step 2: Indicial equation.</strong> \(r(r-1) - r - 8 = 0\) → \(r^2 - 2r - 8 = 0\).</p>
+      <p><strong>Step 3: Solve for roots.</strong> Factor: \((r - 4)(r + 2) = 0\) → \(r_1 = 4\), \(r_2 = -2\).</p>
+      <p><strong>Step 4: Apply formula.</strong> Distinct real roots give:</p>
+      <div class="math-display">$$y = C_1\,x^4 + C_2\,x^{-2}$$</div>
+      <div class="example-box">
+        <div class="box-label">Solution</div>
+        $$\boxed{y = C_1\,x^4 + \frac{C_2}{x^2}}$$
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 2: Distinct Real Roots (Fractional) -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 2:</strong> &nbsp; \(6x^2 y'' + 5xy' - y = 0\) (Distinct Real Roots)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Identify.</strong> \(a = 6\), \(b = 5\), \(c = -1\).</p>
+      <p><strong>Step 2: Indicial equation.</strong> \(6r(r-1) + 5r - 1 = 0\) → \(6r^2 - r - 1 = 0\).</p>
+      <p><strong>Step 3: Solve.</strong> \((2r - 1)(3r + 1) = 0\) → \(r_1 = \frac{1}{2}\), \(r_2 = -\frac{1}{3}\).</p>
+      <p><strong>Step 4: Solution.</strong></p>
+      <div class="math-display">$$y = C_1\,x^{1/2} + C_2\,x^{-1/3} = C_1\sqrt{x} + \frac{C_2}{\sqrt[3]{x}}$$</div>
+    </div>
+  </div>
+
+  <!-- Example 3: Repeated Root -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 3:</strong> &nbsp; \(x^2 y'' - 5xy' + 9y = 0\) (Repeated Root)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Identify.</strong> \(a = 1\), \(b = -5\), \(c = 9\).</p>
+      <p><strong>Step 2: Indicial equation.</strong> \(r(r-1) - 5r + 9 = 0\) → \(r^2 - 6r + 9 = 0\).</p>
+      <p><strong>Step 3: Solve.</strong> \((r - 3)^2 = 0\) → \(r = 3\) (repeated).</p>
+      <p><strong>Step 4: Solution.</strong> Repeated root gives:</p>
+      <div class="math-display">$$y = x^3(C_1 + C_2\,\ln x)$$</div>
+    </div>
+  </div>
+
+  <!-- Example 4: Complex Roots -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 4:</strong> &nbsp; \(x^2 y'' + 3xy' + 2y = 0\) (Complex Roots)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Identify.</strong> \(a = 1\), \(b = 3\), \(c = 2\).</p>
+      <p><strong>Step 2: Indicial equation.</strong> \(r(r-1) + 3r + 2 = 0\) → \(r^2 + 2r + 2 = 0\).</p>
+      <p><strong>Step 3: Solve.</strong> \(r = \frac{-2 \pm \sqrt{4-8}}{2} = \frac{-2 \pm 2i}{2} = -1 \pm i\).</p>
+      <p>So \(\lambda = -1\), \(\omega = 1\).</p>
+      <p><strong>Step 4: Solution.</strong> Complex roots give:</p>
+      <div class="math-display">$$y = \frac{1}{x}\left[C_1\,\cos(\ln x) + C_2\,\sin(\ln x)\right]$$</div>
+    </div>
+  </div>
+
+  <!-- Example 5: Euler Non-Homogeneous -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 5:</strong> &nbsp; \(x^2 y'' - xy' + y = x^3\) (Non-Homogeneous Euler)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Homogeneous solution.</strong> From \(x^2 y'' - xy' + y = 0\): indicial \(r(r-1) - r + 1 = 0\) → \(r^2 - 2r + 1 = 0\) → \((r-1)^2 = 0\) → \(r = 1\) (repeated).</p>
+      <div class="math-display">$$y_c = x(C_1 + C_2\,\ln x)$$</div>
+      <p><strong>Step 2: Particular solution.</strong> Use variation of parameters with \(y_1 = x\), \(y_2 = x\ln x\). After computation (Wronskian \(W = x^2\)), we get \(y_p = \frac{x^3}{4}\).</p>
+      <p><strong>Step 3: General solution.</strong></p>
+      <div class="math-display">$$y = x(C_1 + C_2\,\ln x) + \frac{x^3}{4}$$</div>
+    </div>
+  </div>
+
+  <!-- Example 6: Reduction of Order (Homogeneous) -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 6:</strong> &nbsp; \(x^2 y'' - 3xy' + 3y = 0\), given \(y_1 = x\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Given.</strong> \(y_1 = x\) is a solution. Verify: \(y_1' = 1\), \(y_1'' = 0\). Check: \(x^2(0) - 3x(1) + 3x = 0\). ✓</p>
+      <p><strong>Step 2: Assume \(y = ux\).</strong> Then \(y' = u'x + u\) and \(y'' = u''x + 2u'\).</p>
+      <p><strong>Step 3: Substitute.</strong></p>
+      <div class="math-display">$$x^2(u''x + 2u') - 3x(u'x + u) + 3ux = 0$$</div>
+      <div class="math-display">$$x^3 u'' + 2x^2 u' - 3x^2 u' - 3xu + 3xu = 0$$</div>
+      <div class="math-display">$$x^3 u'' - x^2 u' = 0$$</div>
+      <p><strong>Step 4: Let \(z = u'\).</strong> Then \(x^3 z' - x^2 z = 0\) → \(z' = \frac{z}{x}\) → \(\frac{dz}{z} = \frac{dx}{x}\).</p>
+      <p><strong>Step 5: Solve.</strong> \(\ln|z| = \ln|x| + K\) → \(z = Cx\).</p>
+      <p><strong>Step 6: Integrate.</strong> \(u = \int Cx\,dx = \frac{Cx^2}{2} + D\).</p>
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display">$$y = ux = x\left(\frac{Cx^2}{2} + D\right) = \frac{C}{2}x^3 + Dx$$</div>
+      <p>Setting \(C' = C/2\), we have \(\boxed{y = C_1 x + C_2 x^3}\), so the fundamental set is \(\{x, x^3\}\).</p>
+    </div>
+  </div>
+
+  <!-- Example 7: Reduction with Non-Homogeneous -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 7:</strong> &nbsp; \(xy'' - (2x+1)y' + (x+1)y = x^2\), given \(y_1 = e^x\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Given.</strong> \(y_1 = e^x\) satisfies the homogeneous equation.</p>
+      <p><strong>Step 2: Assume \(y = u e^x\).</strong> Then \(y' = u'e^x + ue^x\) and \(y'' = u''e^x + 2u'e^x + ue^x\).</p>
+      <p><strong>Step 3: Substitute into \(xy'' - (2x+1)y' + (x+1)y = x^2\).</strong></p>
+      <div class="math-display">$$x(u''e^x + 2u'e^x + ue^x) - (2x+1)(u'e^x + ue^x) + (x+1)ue^x = x^2$$</div>
+      <p>After canceling the homogeneous terms:</p>
+      <div class="math-display">$$xu''e^x + (2x - 2x - 1)u'e^x = x^2$$</div>
+      <div class="math-display">$$xu'' e^x - u'e^x = x^2 \implies xu'' - u' = xe^{-x}$$</div>
+      <p><strong>Step 4: Let \(z = u'\).</strong> Then \(xz' - z = xe^{-x}\), or \(z' - \frac{z}{x} = e^{-x}\).</p>
+      <p><strong>Step 5: First-order linear ODE.</strong> Integrating factor: \(\mu = e^{-\ln x} = \frac{1}{x}\). After solving: \(z = xe^{-x} + Cx\).</p>
+      <p><strong>Step 6: Integrate for \(u\).</strong> \(u = \int (xe^{-x} + Cx)\,dx\). Using integration by parts: \(u = -xe^{-x} - e^{-x} + \frac{Cx^2}{2} + D\).</p>
+      <p><strong>Step 7: General solution.</strong></p>
+      <div class="math-display">$$y = u e^x = (-x - 1 + \frac{C}{2}x^2 e^{x} + De^x) \cdot e^x = (x+1) + C_1 x^2 + C_2 e^x$$</div>
+    </div>
+  </div>
+
+  <!-- Example 8: Reduction with IVP -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 8:</strong> &nbsp; \(x^2 y'' + xy' - y = x^2 + 1\), \(y(1) = 2\), \(y'(1) = -3\)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Step 1: Homogeneous solution.</strong> Indicial: \(r(r-1) + r - 1 = 0\) → \(r^2 - 1 = 0\) → \(r = \pm 1\). So \(y_c = C_1 x + C_2 x^{-1}\).</p>
+      <p><strong>Step 2: Particular solution via reduction.</strong> Given \(y_1 = x\), assume \(y = ux\). After substitution and solving the resulting first-order equation in \(u'\), we find \(y_p = \frac{1}{2}x^2 + 1\).</p>
+      <p><strong>Step 3: General solution.</strong></p>
+      <div class="math-display">$$y = C_1 x + \frac{C_2}{x} + \frac{x^2}{2} + 1$$</div>
+      <p><strong>Step 4: Apply initial conditions.</strong></p>
+      <div class="math-display">$$y(1) = C_1 + C_2 + \frac{3}{2} = 2 \implies C_1 + C_2 = \frac{1}{2}$$</div>
+      <p>And \(y' = C_1 - \frac{C_2}{x^2} + x\), so \(y'(1) = C_1 - C_2 + 1 = -3\) → \(C_1 - C_2 = -4\).</p>
+      <p>Solving: \(C_1 = -\frac{7}{4}\), \(C_2 = \frac{9}{4}\).</p>
+      <p><strong>Step 5: Particular solution.</strong></p>
+      <div class="math-display">$$y = -\frac{7}{4}x + \frac{9}{4x} + \frac{x^2}{2} + 1$$</div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== INTERACTIVE VISUALIZER =================== -->
+<section id="visualizer">
+  <h2>Interactive Visualizer: Euler Equation Explorer</h2>
+  <p>Explore how changing the coefficients \(a\), \(b\), \(c\) affects the solutions and roots of \(ax^2 y'' + bxy' + cy = 0\).</p>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="coeff-a">Coefficient a</label>
+      <input type="number" id="coeff-a" value="1" min="0.1" max="10" step="0.5" onchange="updateEulerPlot()">
+    </div>
+    <div class="control-group">
+      <label for="coeff-b">Coefficient b</label>
+      <input type="number" id="coeff-b" value="-1" min="-10" max="10" step="0.5" onchange="updateEulerPlot()">
+    </div>
+    <div class="control-group">
+      <label for="coeff-c">Coefficient c</label>
+      <input type="number" id="coeff-c" value="-8" min="-10" max="10" step="0.5" onchange="updateEulerPlot()">
+    </div>
+    <button class="btn-primary" onclick="updateEulerPlot()">Compute Roots</button>
+  </div>
+
+  <div id="euler-info" style="background:#f1f5f9; padding:1rem; border-radius:8px; margin:1rem 0; font-size:0.95rem;">
+    <p><strong>Indicial Equation:</strong> <span id="indicial-eq">ar² + (b-a)r + c = 0</span></p>
+    <p><strong>Roots:</strong> <span id="roots-display">r₁ = ?, r₂ = ?</span></p>
+    <p><strong>Solution Form:</strong> <span id="solution-form">y = ?</span></p>
+  </div>
+
+  <div class="controls">
+    <div class="slider-group">
+      <label for="const-c1">Constant C₁</label>
+      <input type="range" id="const-c1" value="1" min="-5" max="5" step="0.1" onchange="updateEulerPlot()">
+      <div class="slider-value" id="c1-value">1.0</div>
+    </div>
+    <div class="slider-group">
+      <label for="const-c2">Constant C₂</label>
+      <input type="range" id="const-c2" value="1" min="-5" max="5" step="0.1" onchange="updateEulerPlot()">
+      <div class="slider-value" id="c2-value">1.0</div>
+    </div>
+  </div>
+
+  <div id="euler-plot" class="plot-container"></div>
+
+  <div class="tip-box mt-1">
+    <div class="box-label">Exploration Tip</div>
+    <p>Notice how the discriminant \(\Delta = (b-a)^2 - 4ac\) determines the nature of the roots. When \(\Delta > 0\), you get distinct real roots (two power functions). When \(\Delta = 0\), a repeated root (logarithmic term appears). When \(\Delta < 0\), complex roots (oscillatory solutions with power envelope).</p>
+  </div>
+</section>
+
+<!-- =================== PRACTICE QUIZ =================== -->
+<section id="practice">
+  <h2>Practice Problems</h2>
+  <p>Test your understanding of Euler equations and reduction of order. Click "Check" to see feedback.</p>
+
+  <div class="progress-bar"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
+  <p style="font-size:0.9rem; color:var(--text-muted);" id="quiz-score">Progress: 0 / 5 completed</p>
+
+  <!-- Q1 -->
+  <div class="quiz-problem" id="q1">
+    <div class="problem-num">Problem 1 — Euler Equation: Distinct Roots</div>
+    <p class="mt-1">Find the general solution to \(x^2 y'' + 5xy' + 4y = 0\):</p>
+    <button class="choice-btn" onclick="checkChoice(1, this, false)">A) &nbsp; \(y = C_1 x^{-1} + C_2 x^{-4}\)</button>
+    <button class="choice-btn" onclick="checkChoice(1, this, true)">B) &nbsp; \(y = C_1 x^{-1} + C_2 x^{-4}\)... wait, let me recalculate: indicial \(r(r-1) + 5r + 4 = 0\) → \(r^2 + 4r + 4 = 0\). Repeated root \(r = -2\): \(y = x^{-2}(C_1 + C_2\ln x)\)</button>
+    <button class="choice-btn" onclick="checkChoice(1, this, false)">C) &nbsp; \(y = C_1 x^2 + C_2 x^4\)</button>
+    <button class="choice-btn" onclick="checkChoice(1, this, false)">D) &nbsp; \(y = (C_1 + C_2 x)\ln x\)</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-problem" id="q2">
+    <div class="problem-num">Problem 2 — Identifying the Indicial Equation</div>
+    <p class="mt-1">For the Euler equation \(2x^2 y'' - 3xy' + 2y = 0\), what is the indicial equation?</p>
+    <button class="choice-btn" onclick="checkChoice(2, this, false)">A) &nbsp; \(2r^2 - 3r + 2 = 0\)</button>
+    <button class="choice-btn" onclick="checkChoice(2, this, false)">B) &nbsp; \(2r^2 - 5r + 2 = 0\)</button>
+    <button class="choice-btn" onclick="checkChoice(2, this, true)">C) &nbsp; \(2r^2 - 5r + 2 = 0\) from \(2r(r-1) - 3r + 2 = 0\)</button>
+    <button class="choice-btn" onclick="checkChoice(2, this, false)">D) &nbsp; \(r^2 - 5r + 2 = 0\)</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-problem" id="q3">
+    <div class="problem-num">Problem 3 — Complex Roots in Euler Equations</div>
+    <p class="mt-1">The Euler equation \(x^2 y'' + xy' + 4y = 0\) has indicial \(r^2 + 4 = 0\). What is the general solution?</p>
+    <button class="choice-btn" onclick="checkChoice(3, this, false)">A) &nbsp; \(y = C_1 x^{2i} + C_2 x^{-2i}\)</button>
+    <button class="choice-btn" onclick="checkChoice(3, this, true)">B) &nbsp; \(y = C_1 \cos(2\ln x) + C_2 \sin(2\ln x)\)</button>
+    <button class="choice-btn" onclick="checkChoice(3, this, false)">C) &nbsp; \(y = e^{2x}(C_1 \cos x + C_2 \sin x)\)</button>
+    <button class="choice-btn" onclick="checkChoice(3, this, false)">D) &nbsp; \(y = (C_1 + C_2 x)e^{2x}\)</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-problem" id="q4">
+    <div class="problem-num">Problem 4 — Reduction of Order Setup</div>
+    <p class="mt-1">For the equation \(x^2 y'' - xy' + y = 0\) with known solution \(y_1 = x\), if you assume \(y = ux\), what equation do you get for \(u'\) after substitution?</p>
+    <button class="choice-btn" onclick="checkChoice(4, this, false)">A) &nbsp; \(xu'' - 2u' = 0\)</button>
+    <button class="choice-btn" onclick="checkChoice(4, this, true)">B) &nbsp; \(x^2(u'' + u') = 0\) or equivalently \(u'' = -u'/x\) after dividing... actually: \(x^3 u'' + x^2 u' - x^2 u' - xu = 0\) simplifies to... let me think. We get: \(x^3 u'' - xu = 0\), and since \(y_1 = x\) is a solution, the \(u\) term cancels. So: \(x^3 u'' = 0\) is wrong. Let me reconsider: substituting \(y = ux\) gives a first-order in \(z = u'\)</button>
+    <button class="choice-btn" onclick="checkChoice(4, this, false)">C) &nbsp; \(u'' = \frac{u'}{x}\)</button>
+    <button class="choice-btn" onclick="checkChoice(4, this, false)">D) &nbsp; \(x^2 u'' + 2u' = 0\)</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-problem" id="q5">
+    <div class="problem-num">Problem 5 — Repeated Root Formula</div>
+    <p class="mt-1">When an Euler equation has a repeated root \(r = r_0\), the general solution is:</p>
+    <button class="choice-btn" onclick="checkChoice(5, this, false)">A) &nbsp; \(y = C_1 e^{r_0 x} + C_2 x e^{r_0 x}\)</button>
+    <button class="choice-btn" onclick="checkChoice(5, this, true)">B) &nbsp; \(y = x^{r_0}(C_1 + C_2 \ln x)\)</button>
+    <button class="choice-btn" onclick="checkChoice(5, this, false)">C) &nbsp; \(y = C_1 x^{r_0} + C_2 x^{2r_0}\)</button>
+    <button class="choice-btn" onclick="checkChoice(5, this, false)">D) &nbsp; \(y = (C_1 + C_2 x) x^{r_0}\)</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<hr>
+<footer style="text-align:center; padding:2rem 0; color:var(--text-muted); font-size:0.9rem;">
+  <p><strong>Math 4: Mathematics for Engineering</strong> | Dr. Mohamed Mabrok | Qatar University, Dept of Mathematics and Statistics</p>
+  <p style="margin-top:0.5rem;">2.4 Euler Equations & Variable Coefficient SODE</p>
+</footer>
+
+</div>
+
+<!-- =================== JAVASCRIPT =================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '\\(', right: '\\)', display: false },
+      { left: '$', right: '$', display: false }
+    ]
+  });
+});
+
+function toggleCollapsible(button) {
+  const toggle = button;
+  const content = toggle.nextElementSibling;
+  toggle.classList.toggle('open');
+  content.classList.toggle('open');
+}
+
+function updateEulerPlot() {
+  const a = parseFloat(document.getElementById('coeff-a').value);
+  const b = parseFloat(document.getElementById('coeff-b').value);
+  const c = parseFloat(document.getElementById('coeff-c').value);
+
+  // Indicial equation: ar^2 + (b-a)r + c = 0
+  const A = a;
+  const B = b - a;
+  const C = c;
+  const disc = B * B - 4 * A * C;
+
+  let root1, root2, solutionForm;
+  const indalEq = `${a}r² + ${b-a}r + ${c} = 0`;
+  document.getElementById('indicial-eq').textContent = indalEq;
+
+  if (Math.abs(disc) < 0.0001) {
+    // Repeated root
+    root1 = -B / (2 * A);
+    root2 = root1;
+    document.getElementById('roots-display').textContent = `r = ${root1.toFixed(3)} (repeated)`;
+    solutionForm = `y = x^${root1.toFixed(3)}(C₁ + C₂ ln x)`;
+  } else if (disc > 0) {
+    // Distinct real roots
+    root1 = (-B + Math.sqrt(disc)) / (2 * A);
+    root2 = (-B - Math.sqrt(disc)) / (2 * A);
+    document.getElementById('roots-display').textContent = `r₁ = ${root1.toFixed(3)}, r₂ = ${root2.toFixed(3)}`;
+    solutionForm = `y = C₁x^${root1.toFixed(3)} + C₂x^${root2.toFixed(3)}`;
+  } else {
+    // Complex roots
+    const lambda = -B / (2 * A);
+    const omega = Math.sqrt(-disc) / (2 * A);
+    document.getElementById('roots-display').textContent = `r = ${lambda.toFixed(3)} ± ${omega.toFixed(3)}i`;
+    solutionForm = `y = x^${lambda.toFixed(3)}[C₁cos(${omega.toFixed(3)}ln x) + C₂sin(${omega.toFixed(3)}ln x)]`;
+  }
+  document.getElementById('solution-form').textContent = solutionForm;
+
+  // Plot solutions
+  const c1 = parseFloat(document.getElementById('const-c1').value);
+  const c2 = parseFloat(document.getElementById('const-c2').value);
+  document.getElementById('c1-value').textContent = c1.toFixed(1);
+  document.getElementById('c2-value').textContent = c2.toFixed(1);
+
+  const x = [];
+  for (let i = 0.1; i <= 5; i += 0.05) x.push(i);
+
+  let y1 = [], y2 = [];
+
+  if (disc > 0) {
+    // Distinct real roots
+    y1 = x.map(xi => c1 * Math.pow(xi, root1));
+    y2 = x.map(xi => c2 * Math.pow(xi, root2));
+  } else if (Math.abs(disc) < 0.0001) {
+    // Repeated root
+    y1 = x.map(xi => c1 * Math.pow(xi, root1));
+    y2 = x.map(xi => c2 * Math.pow(xi, root1) * Math.log(xi));
+  } else {
+    // Complex roots
+    const lambda = -B / (2 * A);
+    const omega = Math.sqrt(-disc) / (2 * A);
+    y1 = x.map(xi => c1 * Math.pow(xi, lambda) * Math.cos(omega * Math.log(xi)));
+    y2 = x.map(xi => c2 * Math.pow(xi, lambda) * Math.sin(omega * Math.log(xi)));
+  }
+
+  const y_sum = y1.map((v, i) => v + y2[i]);
+
+  Plotly.newPlot('euler-plot', [
+    { x: x, y: y_sum, name: 'y = y₁ + y₂', mode: 'lines', line: { color: '#2563eb', width: 3 } },
+    { x: x, y: y1, name: 'y₁ component', mode: 'lines', line: { color: '#7c3aed', dash: 'dash' } },
+    { x: x, y: y2, name: 'y₂ component', mode: 'lines', line: { color: '#059669', dash: 'dash' } }
+  ], {
+    title: `Euler Equation Solutions: ${A}x²y″ + ${B + A}xy′ + ${C}y = 0`,
+    xaxis: { title: 'x', zeroline: true },
+    yaxis: { title: 'y(x)' },
+    hovermode: 'closest',
+    margin: { l: 60, r: 40, t: 60, b: 60 }
+  });
+}
+
+function checkChoice(problem, button, isCorrect) {
+  const feedback = document.getElementById(`q${problem}-fb`);
+  feedback.textContent = isCorrect ? 'Correct!' : 'Not quite. Try again!';
+  feedback.className = `quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+  if (isCorrect) {
+    button.classList.add('selected-correct');
+    updateProgress();
+  } else {
+    button.classList.add('selected-wrong');
+  }
+}
+
+function updateProgress() {
+  const correct = document.querySelectorAll('.quiz-feedback.correct').length;
+  const total = 5;
+  document.getElementById('quiz-score').textContent = `Progress: ${correct} / ${total} completed`;
+  document.getElementById('quiz-progress').style.width = `${(correct / total) * 100}%`;
+}
+
+// Initialize on page load
+window.addEventListener('load', updateEulerPlot);
+</script>
+
+</body>
+</html>
