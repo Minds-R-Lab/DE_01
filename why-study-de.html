@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Study Differential Equations? | Math 4 — Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1e40af;
+    --accent: #7c3aed; --accent-light: #ede9fe;
+    --success: #059669; --success-light: #d1fae5;
+    --warning: #d97706; --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-muted: #64748b;
+    --border: #e2e8f0; --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 2rem;
+    display: flex; align-items: center; height: 60px; box-shadow: var(--shadow);
+  }
+  nav .logo a { font-weight: 700; font-size: 1.15rem; color: var(--primary); text-decoration: none; margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap; transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 80px 1.5rem 3rem; }
+
+  /* Hero */
+  .page-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #7c3aed 100%);
+    color: #fff; border-radius: var(--radius); padding: 3rem 2.5rem; margin-bottom: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0; opacity: 0.06;
+    background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .page-hero h1 { font-size: 2.4rem; font-weight: 800; position: relative; margin-bottom: 0.5rem; }
+  .page-hero p { font-size: 1.1rem; opacity: 0.9; position: relative; max-width: 650px; }
+
+  section { background: var(--card); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  h2 { font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+  p { margin-bottom: 1rem; }
+
+  .quote-box {
+    background: linear-gradient(135deg, #fefce8, #fef9c3); border-left: 5px solid var(--warning);
+    border-radius: var(--radius); padding: 1.5rem 1.5rem 1.5rem 2rem; margin: 2rem 0;
+    font-style: italic; position: relative;
+  }
+  .quote-box::before { content: '\201C'; font-size: 4rem; color: var(--warning); opacity: 0.3; position: absolute; top: -0.2rem; left: 0.5rem; font-family: Georgia, serif; }
+  .quote-box .attribution { font-style: normal; font-weight: 600; color: var(--warning); margin-top: 0.5rem; font-size: 0.95rem; }
+
+  .islamic-box {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-left: 5px solid var(--success);
+    border-radius: var(--radius); padding: 1.5rem 1.5rem 1.5rem 2rem; margin: 2rem 0;
+    position: relative;
+  }
+  .islamic-box .arabic { font-size: 1.3rem; text-align: center; margin-bottom: 0.5rem; font-family: 'Traditional Arabic', 'Scheherazade New', serif; direction: rtl; color: var(--success); font-weight: 600; }
+  .islamic-box .translation { font-style: italic; color: #065f46; }
+  .islamic-box .source { font-weight: 600; color: var(--success); margin-top: 0.5rem; font-size: 0.9rem; }
+
+  .definition-box { background: var(--primary-light); border-left: 5px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; }
+  .tip-box { background: #f0f9ff; border-left: 5px solid #0ea5e9; border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; }
+  .warning-box { background: var(--warning-light); border-left: 5px solid var(--warning); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; }
+  .box-label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  .definition-box .box-label { color: var(--primary); }
+  .tip-box .box-label { color: #0ea5e9; }
+
+  .math-display { background: #f1f5f9; border-radius: 8px; padding: 1.2rem; text-align: center; margin: 1rem 0; font-size: 1.1em; overflow-x: auto; }
+
+  /* Example cards */
+  .example-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .example-card {
+    background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 1.5rem; transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .example-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .example-card .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  .example-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+  .example-card p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+  .example-card .equation { background: #f8fafc; border-radius: 8px; padding: 0.75rem; text-align: center; margin-top: 0.5rem; }
+  .example-card .takeaway { font-size: 0.9rem; color: var(--primary); font-weight: 600; margin-top: 0.75rem; }
+
+  .plot-container { width: 100%; min-height: 380px; border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 2.5rem; margin: 1.5rem 0; }
+  .timeline::before { content: ''; position: absolute; left: 0.75rem; top: 0; bottom: 0; width: 3px; background: var(--primary-light); border-radius: 2px; }
+  .timeline-item { position: relative; margin-bottom: 1.5rem; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -2.15rem; top: 0.4rem;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--primary); border: 3px solid var(--primary-light);
+  }
+  .timeline-item .year { font-weight: 700; color: var(--primary); font-size: 0.9rem; }
+  .timeline-item .event { margin-top: 0.15rem; }
+
+  footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+  @media (max-width: 640px) {
+    .page-hero h1 { font-size: 1.7rem; }
+    section { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="index.html">Math 4</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="why-study-de.html" class="active">Why DEs?</a>
+    <a href="ch1-separable.html">Separable</a>
+    <a href="ch1-linear.html">Linear</a>
+    <a href="ch1-bernoulli.html">Bernoulli</a>
+    <a href="ch1-exact.html">Exact</a>
+    <a href="ch1-nonexact.html">Non-Exact</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- Hero -->
+<div class="page-hero">
+  <h1>Why Study Differential Equations?</h1>
+  <p>The language that nature uses to describe change, motion, and the dynamics of everything around us</p>
+</div>
+
+<!-- Opening motivation -->
+<section>
+  <h2>The Language of Change</h2>
+
+  <p>Look around you. A cup of coffee cooling on your desk. Your phone battery draining. A bridge swaying in the wind. A satellite orbiting Earth. The spread of a virus through a population. <strong>Everything that changes follows rules</strong> — and those rules are written in the language of differential equations.</p>
+
+  <p>A differential equation is simply a statement about <em>how things change</em>. When you write:</p>
+
+  <div class="math-display">$$\frac{dy}{dt} = \text{something involving } y \text{ and } t$$</div>
+
+  <p>you are saying: "the rate at which \(y\) changes depends on where it is right now." That single idea — that <strong>the future depends on the present</strong> — is the foundation of virtually all mathematical modeling in engineering, physics, biology, economics, and beyond.</p>
+
+  <div class="islamic-box">
+    <div class="arabic">إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِأُولِي الْأَلْبَابِ</div>
+    <div class="translation">"Indeed, in the creation of the heavens and the earth, and the alternation of night and day, there are signs for people of understanding."</div>
+    <div class="source">— Quran 3:190</div>
+    <p style="margin-top:0.75rem; margin-bottom:0;">Differential equations are one of the tools through which we understand and appreciate the remarkable precision of the laws governing creation. Studying them is an act of reflection on the order and beauty embedded in the universe.</p>
+  </div>
+</section>
+
+<!-- The Big Idea -->
+<section>
+  <h2>The Big Idea: Modeling Dynamics</h2>
+
+  <p>Here is the central insight that makes differential equations so powerful:</p>
+
+  <div class="definition-box">
+    <div class="box-label">The Modeling Principle</div>
+    <p>In most real-world systems, we <strong>don't know the solution directly</strong>, but we <strong>do know the rules of change</strong>. A differential equation encodes those rules. Solving the equation then gives us the complete behavior of the system — past, present, and future.</p>
+  </div>
+
+  <p>Think of it this way:</p>
+
+  <p>You drop a ball. You don't need to track its position at every instant. Instead, you know <strong>one rule</strong>: gravity pulls it downward with acceleration \(g = 9.8\) m/s². That rule is a differential equation:</p>
+
+  <div class="math-display">$$\frac{d^2 y}{dt^2} = -g$$</div>
+
+  <p>From this single equation plus initial conditions (where you dropped it, how fast), you can predict the ball's position at <strong>any future time</strong>. That is the power of differential equations: <em>local rules produce global predictions</em>.</p>
+
+  <div class="quote-box">
+    "The book of nature is written in the language of mathematics, and its characters are triangles, circles, and other geometric figures, without which it is impossible to understand a single word."
+    <div class="attribution">— Galileo Galilei (1564–1642)</div>
+  </div>
+</section>
+
+<!-- Everyday Examples -->
+<section>
+  <h2>DEs Are Everywhere: Real Examples</h2>
+  <p>Let's walk through several examples from different fields — each one a real system you encounter in life or engineering, modeled by a simple first-order DE.</p>
+
+  <div class="example-grid">
+
+    <!-- Example 1: Coffee Cooling -->
+    <div class="example-card">
+      <div class="icon">&#9749;</div>
+      <h4>1. Your Morning Coffee Cooling Down</h4>
+      <p>You pour a cup of coffee at 90°C. The room is 22°C. How does the temperature change over time?</p>
+      <p><strong>Newton's Law of Cooling</strong> says: the rate of cooling is proportional to the temperature difference between the coffee and the room.</p>
+      <div class="equation">$$\frac{dT}{dt} = -k(T - 22)$$</div>
+      <p>Here \(k > 0\) is a constant that depends on the cup material, airflow, etc. This is a <strong>separable</strong> and <strong>linear</strong> first-order ODE!</p>
+      <p><strong>Solution:</strong> \(T(t) = 22 + 68\,e^{-kt}\)</p>
+      <div class="takeaway">The coffee approaches room temperature exponentially — fast at first, then slower and slower. It never quite reaches 22°C!</div>
+    </div>
+
+    <!-- Example 2: Phone Battery -->
+    <div class="example-card">
+      <div class="icon">&#128267;</div>
+      <h4>2. Your Phone Battery Draining</h4>
+      <p>Your phone battery at 100% loses charge at a rate roughly proportional to the number of active processes, which in turn depends on the current charge level (as low-power mode kicks in).</p>
+      <p>A simplified model:</p>
+      <div class="equation">$$\frac{dB}{dt} = -\alpha B$$</div>
+      <p>where \(B(t)\) is the battery percentage and \(\alpha\) depends on usage.</p>
+      <p><strong>Solution:</strong> \(B(t) = 100\,e^{-\alpha t}\)</p>
+      <div class="takeaway">Exponential decay! This is why your battery seems to last long at 80% but drains fast below 20% — the rate is proportional to what's left.</div>
+    </div>
+
+    <!-- Example 3: Population Growth -->
+    <div class="example-card">
+      <div class="icon">&#128106;</div>
+      <h4>3. Population Growth</h4>
+      <p>If a population of bacteria doubles every hour, how many are there after \(t\) hours?</p>
+      <p>The growth rate is proportional to the current population:</p>
+      <div class="equation">$$\frac{dP}{dt} = rP$$</div>
+      <p>With \(P(0) = P_0\), the solution is \(P(t) = P_0 e^{rt}\).</p>
+      <p>But resources are limited! With a carrying capacity \(K\), we get the <strong>logistic equation</strong>:</p>
+      <div class="equation">$$\frac{dP}{dt} = rP\left(1 - \frac{P}{K}\right)$$</div>
+      <div class="takeaway">This is a Bernoulli equation (n = 2)! The population grows fast initially, then slows and levels off at K. This models everything from bacteria to human populations.</div>
+    </div>
+
+    <!-- Example 4: RC Circuit -->
+    <div class="example-card">
+      <div class="icon">&#9889;</div>
+      <h4>4. Charging a Capacitor (RC Circuit)</h4>
+      <p>Connect a 12V battery to a resistor (\(R = 1\,k\Omega\)) and capacitor (\(C = 1\,mF\)) in series. What happens to the voltage across the capacitor?</p>
+      <p>Kirchhoff's voltage law gives:</p>
+      <div class="equation">$$RC\frac{dv}{dt} + v = V_0 \quad \Longrightarrow \quad \frac{dv}{dt} = \frac{12 - v}{1}$$</div>
+      <p><strong>Solution:</strong> \(v(t) = 12(1 - e^{-t})\)</p>
+      <div class="takeaway">The capacitor charges toward 12V with time constant τ = RC = 1 second. After 5 seconds, it's 99.3% charged. Every electrical engineer uses this equation daily!</div>
+    </div>
+
+    <!-- Example 5: Medicine -->
+    <div class="example-card">
+      <div class="icon">&#128138;</div>
+      <h4>5. Medicine in Your Bloodstream</h4>
+      <p>You take a 500mg dose of medicine. Your body eliminates it at a rate proportional to the current amount:</p>
+      <div class="equation">$$\frac{dA}{dt} = -\lambda A$$</div>
+      <p>The <strong>half-life</strong> is the time for half the drug to be eliminated: \(t_{1/2} = \frac{\ln 2}{\lambda}\).</p>
+      <p>If the half-life is 4 hours: \(A(t) = 500 \cdot 2^{-t/4}\)</p>
+      <div class="takeaway">This is why doctors say "take every 6 hours" — they've calculated the dosing interval using this exact differential equation to keep the drug level in the therapeutic range!</div>
+    </div>
+
+    <!-- Example 6: Mixing -->
+    <div class="example-card">
+      <div class="icon">&#127754;</div>
+      <h4>6. Salt Mixing in a Tank</h4>
+      <p>A 200-liter tank has pure water. Brine (0.1 kg/L of salt) flows in at 5 L/min, and the well-mixed solution flows out at 5 L/min. How much salt is in the tank at time \(t\)?</p>
+      <div class="equation">$$\frac{dA}{dt} = \underbrace{(0.1)(5)}_{\text{salt in}} - \underbrace{\frac{A}{200}(5)}_{\text{salt out}} = 0.5 - \frac{A}{40}$$</div>
+      <p><strong>Solution:</strong> \(A(t) = 20(1 - e^{-t/40})\) kg</p>
+      <div class="takeaway">The tank eventually reaches the same concentration as the inflow: 20/200 = 0.1 kg/L. This is used in chemical engineering, water treatment, and even dialysis machines!</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Interactive demo -->
+<section>
+  <h2>See It Live: Exponential Growth vs Decay</h2>
+  <p>The simplest DE in the world — \(\dfrac{dy}{dt} = ky\) — produces exponential behavior. Adjust \(k\) to see how the sign determines growth vs decay:</p>
+
+  <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin:1rem 0; padding:1rem; background:#f1f5f9; border-radius:8px;">
+    <label style="font-weight:600; font-size:0.9rem;">Rate constant k:</label>
+    <input type="range" id="k-slider" min="-2" max="2" step="0.1" value="0.5" style="flex:1; min-width:200px; accent-color:var(--primary);" oninput="updateGrowthPlot()">
+    <span id="k-value" style="font-weight:700; color:var(--primary); min-width:80px;">k = 0.50</span>
+  </div>
+
+  <div id="growth-plot" class="plot-container"></div>
+
+  <div class="tip-box">
+    <div class="box-label">Try This</div>
+    <p>Set \(k > 0\) for exponential growth (populations, compound interest). Set \(k < 0\) for decay (radioactivity, cooling). Set \(k = 0\) and the system is static — nothing changes. The sign of one number determines the entire qualitative behavior!</p>
+  </div>
+</section>
+
+<!-- Historical timeline -->
+<section>
+  <h2>A Brief History: How DEs Changed the World</h2>
+
+  <p>Differential equations are not just abstract math — they are one of humanity's greatest intellectual achievements, born from the desire to understand the physical world.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="year">~800 AD — Al-Khwarizmi</div>
+      <div class="event">Muhammad ibn Musa al-Khwarizmi writes <em>Al-Kitab al-Mukhtasar fi Hisab al-Jabr wal-Muqabala</em>, founding algebra — the essential prerequisite for all of calculus and differential equations. The word "algorithm" comes from his name.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="year">~1000 AD — Ibn al-Haytham</div>
+      <div class="event">Ibn al-Haytham (Alhazen) pioneers the scientific method and uses early integral calculus ideas to compute volumes of revolution — precursors to the mathematics of DEs.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="year">1665–1687 — Newton & Leibniz</div>
+      <div class="event">Isaac Newton and Gottfried Leibniz independently invent calculus. Newton uses it immediately to solve the equations of motion, deriving Kepler's laws of planetary motion from his law of gravity.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="year">1690s — The Bernoulli Brothers</div>
+      <div class="event">Jacob and Johann Bernoulli solve several classes of DEs, including the Bernoulli equation you'll study in this course. They also pose the brachistochrone problem — launching the calculus of variations.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="year">1739 — Euler</div>
+      <div class="event">Leonhard Euler develops systematic methods for solving linear DEs, introduces the integrating factor, and creates numerical methods (Euler's method) still taught today.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="year">1799 — Laplace</div>
+      <div class="event">Pierre-Simon Laplace develops the Laplace transform, turning differential equations into algebraic ones — a technique that revolutionized engineering.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="year">20th–21st Century</div>
+      <div class="event">DEs become the backbone of modern engineering: control theory, signal processing, circuit design, fluid dynamics, machine learning, climate modeling, epidemiology, and more.</div>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    "Since the fabric of the universe is most perfect and the work of a most wise Creator, nothing at all takes place in the universe in which some rule of maximum or minimum does not appear."
+    <div class="attribution">— Leonhard Euler (1707–1783)</div>
+  </div>
+</section>
+
+<!-- The modeling process -->
+<section>
+  <h2>The Modeling Process</h2>
+  <p>Every time you use DEs to solve an engineering problem, you follow this cycle:</p>
+
+  <div style="display:flex; justify-content:center; margin:2rem 0;">
+    <svg viewBox="0 0 500 320" width="500" style="max-width:100%;">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/></marker>
+      </defs>
+      <!-- Boxes -->
+      <rect x="150" y="10" width="200" height="55" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <text x="250" y="32" text-anchor="middle" fill="#1e40af" font-weight="700" font-size="14">Real-World Problem</text>
+      <text x="250" y="50" text-anchor="middle" fill="#64748b" font-size="12">Coffee cooling, circuit, population</text>
+
+      <rect x="320" y="120" width="170" height="55" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+      <text x="405" y="142" text-anchor="middle" fill="#7c3aed" font-weight="700" font-size="14">Differential Equation</text>
+      <text x="405" y="160" text-anchor="middle" fill="#64748b" font-size="12">dT/dt = -k(T - Tₐ)</text>
+
+      <rect x="150" y="235" width="200" height="55" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+      <text x="250" y="257" text-anchor="middle" fill="#059669" font-weight="700" font-size="14">Solution</text>
+      <text x="250" y="275" text-anchor="middle" fill="#64748b" font-size="12">T(t) = Tₐ + (T₀-Tₐ)e⁻ᵏᵗ</text>
+
+      <rect x="10" y="120" width="170" height="55" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+      <text x="95" y="142" text-anchor="middle" fill="#d97706" font-weight="700" font-size="14">Interpret &amp; Validate</text>
+      <text x="95" y="160" text-anchor="middle" fill="#64748b" font-size="12">Does it match reality?</text>
+
+      <!-- Arrows -->
+      <line x1="330" y1="65" x2="380" y2="120" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="380" y="90" fill="#2563eb" font-size="11" font-weight="600">Model</text>
+
+      <line x1="370" y1="175" x2="310" y2="235" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="360" y="210" fill="#7c3aed" font-size="11" font-weight="600">Solve</text>
+
+      <line x1="170" y1="235" x2="120" y2="175" stroke="#059669" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="115" y="210" fill="#059669" font-size="11" font-weight="600">Predict</text>
+
+      <line x1="50" y1="120" x2="180" y2="65" stroke="#d97706" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="85" y="90" fill="#d97706" font-size="11" font-weight="600">Refine</text>
+    </svg>
+  </div>
+
+  <p>This course teaches you <strong>step 2 (Solve)</strong> — the mathematical tools to turn differential equations into solutions. But always remember: the math serves the modeling. Every technique you learn here is a tool for understanding the real world.</p>
+</section>
+
+<!-- Closing motivation -->
+<section>
+  <div class="islamic-box">
+    <div class="arabic">وَقُلْ رَبِّ زِدْنِي عِلْمًا</div>
+    <div class="translation">"And say: My Lord, increase me in knowledge."</div>
+    <div class="source">— Quran 20:114</div>
+    <p style="margin-top:0.75rem; margin-bottom:0;">The pursuit of mathematical knowledge is a noble endeavor. Every equation you solve, every concept you master, brings you closer to understanding the magnificent precision with which this universe operates. Approach this course with curiosity, patience, and the intention to benefit yourself and others with what you learn.</p>
+  </div>
+
+  <h2>Ready to Begin?</h2>
+  <p>Start with <a href="ch1-separable.html" style="color:var(--primary); font-weight:600;">Chapter 1: First-Order Differential Equations</a>, or return to the <a href="index.html" style="color:var(--primary); font-weight:600;">Course Home</a> to see the full roadmap.</p>
+
+  <div class="quote-box">
+    "It is not knowledge, but the act of learning, not possession but the act of getting there, which grants the greatest enjoyment."
+    <div class="attribution">— Carl Friedrich Gauss (1777–1855)</div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Math 4: Mathematics for Engineering &nbsp;|&nbsp; Dr. Mohamed Mabrok &nbsp;|&nbsp; Department of Mathematics and Statistics, Qatar University
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\(', right: '\\)', display: false},
+      {left: '\\[', right: '\\]', display: true}
+    ],
+    throwOnError: false
+  });
+  updateGrowthPlot();
+});
+
+function updateGrowthPlot() {
+  const k = parseFloat(document.getElementById('k-slider').value);
+  document.getElementById('k-value').textContent = `k = ${k.toFixed(2)}`;
+
+  const t = [], y = [];
+  for (let i = 0; i <= 200; i++) {
+    const ti = i * 0.05;
+    t.push(ti);
+    y.push(Math.exp(k * ti));
+  }
+
+  const color = k >= 0 ? '#2563eb' : '#dc2626';
+  const label = k > 0 ? 'Exponential Growth' : k < 0 ? 'Exponential Decay' : 'No Change (k=0)';
+
+  Plotly.newPlot('growth-plot', [{
+    x: t, y: y, mode: 'lines',
+    line: { color: color, width: 3 },
+    name: label,
+    fill: 'tozeroy', fillcolor: k >= 0 ? 'rgba(37,99,235,0.1)' : 'rgba(220,38,38,0.1)'
+  }], {
+    xaxis: { title: 'Time t', range: [0, 10], gridcolor: '#e2e8f0' },
+    yaxis: { title: 'y(t)', gridcolor: '#e2e8f0', range: [0, Math.min(Math.max(...y), 20)] },
+    margin: { t: 30, r: 30, b: 50, l: 60 },
+    plot_bgcolor: '#fafbfc', paper_bgcolor: '#fff',
+    font: { family: 'Segoe UI, system-ui, sans-serif' },
+    annotations: [{
+      x: 5, y: Math.exp(k * 5) * 0.9,
+      text: `y = e^{${k.toFixed(1)}t}`,
+      showarrow: false, font: { size: 14, color: color }
+    }]
+  }, {responsive: true});
+}
+</script>
+</body>
+</html>
