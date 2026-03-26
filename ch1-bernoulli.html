@@ -605,7 +605,11 @@
 
         <!-- METHOD SECTION -->
         <section id="method">
-            <h2>Step-by-Step Solution Method</h2>
+            <h2>Step-by-Step Solution Method (Streamlined Shortcut)</h2>
+
+            <div class="tip-box" style="background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                <strong>Key Insight:</strong> Once you understand the derivation in the Theory section, you can use a direct shortcut. The substitution \(v = y^{1-n}\) always transforms a Bernoulli equation into a linear equation with a predictable form. Instead of re-deriving this each time, jump straight to the linear form and solve it.
+            </div>
 
             <div class="step-box">
                 <span class="step-number">1</span>
@@ -615,35 +619,31 @@
 
             <div class="step-box">
                 <span class="step-number">2</span>
-                <strong>Apply the substitution \(v = y^{1-n}\)</strong>
-                <p>Replace \(y\) with the new variable \(v\) and compute \(\displaystyle \frac{dv}{dx} = (1-n)y^{-n}\frac{dy}{dx}\).</p>
+                <strong>Write the substitution and linear form</strong>
+                <p>Set \(v = y^{1-n}\). The key shortcut is that this transformation <em>always</em> yields the linear equation:
+                $$\frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$$
+                (You don't need to re-derive this—it comes directly from the theory. Just substitute your values of \(P(x)\), \(Q(x)\), and \(n\).)</p>
             </div>
 
             <div class="step-box">
                 <span class="step-number">3</span>
-                <strong>Rewrite as a linear equation in v</strong>
-                <p>Substitute \(\displaystyle \frac{dy}{dx} = \frac{1}{1-n}y^n\frac{dv}{dx}\) into the original equation and divide by \(y^n\). This yields:
-                $$\frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$$</p>
+                <strong>Solve the linear DE using integrating factor</strong>
+                <p>Solve the linear equation above using the standard integrating factor formula:
+                $$\mu(x) = e^{\int (1-n)P(x)\,dx}$$
+                Multiply through by \(\mu(x)\) and integrate:
+                $$v = \frac{1}{\mu(x)} \left[ \int \mu(x) \cdot (1-n)Q(x) \, dx + C \right]$$</p>
             </div>
 
             <div class="step-box">
                 <span class="step-number">4</span>
-                <strong>Solve the linear equation (integrating factor)</strong>
-                <p>Use the integrating factor method:
-                $$\mu(x) = e^{\int (1-n)P(x)\,dx}$$
-                Multiply the linear equation by \(\mu(x)\) and integrate.</p>
+                <strong>Back-substitute to recover y</strong>
+                <p>Replace \(v\) with \(y^{1-n}\) and solve for \(y\):
+                $$y^{1-n} = v(x, C) \quad \Rightarrow \quad y = v(x, C)^{1/(1-n)}$$
+                Don't forget: \(y = 0\) is always a singular solution (check by substitution).</p>
             </div>
 
-            <div class="step-box">
-                <span class="step-number">5</span>
-                <strong>Back-substitute \(y = v^{1/(1-n)}\)</strong>
-                <p>Once you have the solution \(v(x, C)\), express \(y\) in terms of \(v\) and the arbitrary constant \(C\).</p>
-            </div>
-
-            <div class="step-box">
-                <span class="step-number">6</span>
-                <strong>Apply initial conditions and verify \(y = 0\)</strong>
-                <p>Use any initial conditions to find \(C\). Remember to report \(y = 0\) as a separate singular solution.</p>
+            <div class="tip-box" style="background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                <strong>Memory Aid:</strong> Bernoulli \(\to\) \(v = y^{1-n}\) \(\to\) linear form \(\to\) integrating factor \(\to\) back-substitute. Memorize the pattern of how the linear form is constructed: the coefficient of \(v\) becomes \((1-n)P(x)\) and the RHS becomes \((1-n)Q(x)\).
             </div>
         </section>
 
@@ -659,24 +659,17 @@
                 <div class="card">
                     <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} + y = y^2\)</p>
 
-                    <p><strong>Identify parameters:</strong> \(P(x) = 1\), \(Q(x) = 1\), \(n = 2\)</p>
+                    <p><strong>Step 1: Identify parameters.</strong> \(P(x) = 1\), \(Q(x) = 1\), \(n = 2\)</p>
 
-                    <p><strong>Step 1: Substitution.</strong> Let \(v = y^{1-2} = y^{-1}\), so \(y = v^{-1}\).
-                    $$\frac{dv}{dx} = -y^{-2}\frac{dy}{dx}$$</p>
-
-                    <p><strong>Step 2: Rewrite.</strong> From the original: \(\displaystyle \frac{dy}{dx} = y^2 - y\), so:
-                    $$\frac{dv}{dx} = -y^{-2}(y^2 - y) = -1 + y^{-1} = -1 + v$$
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(v = y^{1-2} = y^{-1}\). Using the shortcut formula, the linear equation is:
+                    $$\frac{dv}{dx} + (1-2)(1) \cdot v = (1-2)(1)$$
                     $$\frac{dv}{dx} - v = -1$$</p>
 
-                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{-x}\).
-                    $$e^{-x}\frac{dv}{dx} - e^{-x}v = -e^{-x}$$
-                    $$\frac{d}{dx}\left(e^{-x}v\right) = -e^{-x}$$
-                    $$e^{-x}v = e^{-x} + C$$
-                    $$v = 1 + Ce^x$$</p>
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int -1 \, dx} = e^{-x}\).
+                    $$v = e^x \left[ \int e^{-x}(-1) \, dx + C \right] = e^x \left[ e^{-x} + C \right] = 1 + Ce^x$$</p>
 
                     <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-1}\):
-                    $$y^{-1} = 1 + Ce^x$$
-                    $$y = \frac{1}{1 + Ce^x}$$</p>
+                    $$y = \frac{1}{v} = \frac{1}{1 + Ce^x}$$</p>
 
                     <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{1}{1 + Ce^x}\) (general solution) and \(y = 0\) (singular solution).</p>
                 </div>
@@ -690,32 +683,17 @@
                 <div class="card">
                     <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} - \frac{2y}{x} = -x^2y^3\)</p>
 
-                    <p><strong>Identify parameters:</strong> \(P(x) = -\frac{2}{x}\), \(Q(x) = -x^2\), \(n = 3\)</p>
+                    <p><strong>Step 1: Identify parameters.</strong> \(P(x) = -\frac{2}{x}\), \(Q(x) = -x^2\), \(n = 3\)</p>
 
-                    <p><strong>Step 1: Substitution.</strong> Let \(v = y^{1-3} = y^{-2}\).
-                    $$\frac{dv}{dx} = -2y^{-3}\frac{dy}{dx}$$
-                    $$\frac{dy}{dx} = -\frac{1}{2}y^3\frac{dv}{dx}$$</p>
-
-                    <p><strong>Step 2: Rewrite.</strong> Substitute into the original equation:
-                    $$-\frac{1}{2}y^3\frac{dv}{dx} - \frac{2y}{x} = -x^2y^3$$
-
-                    Divide by \(-y^3\):
-                    $$\frac{1}{2}\frac{dv}{dx} + \frac{2y^{-2}}{x} = x^2$$
-                    $$\frac{1}{2}\frac{dv}{dx} + \frac{2v}{x} = x^2$$
-
-                    Multiply by 2:
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(v = y^{1-3} = y^{-2}\). Using the shortcut formula:
+                    $$\frac{dv}{dx} + (1-3)\left(-\frac{2}{x}\right)v = (1-3)(-x^2)$$
                     $$\frac{dv}{dx} + \frac{4v}{x} = 2x^2$$</p>
 
-                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\displaystyle \mu = e^{\int \frac{4}{x}dx} = e^{4\ln|x|} = x^4\).
-
-                    $$x^4\frac{dv}{dx} + 4x^3v = 2x^6$$
-                    $$\frac{d}{dx}(x^4v) = 2x^6$$
-                    $$x^4v = \frac{2x^7}{7} + C$$
-                    $$v = \frac{2x^3}{7} + \frac{C}{x^4}$$</p>
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\displaystyle \mu = e^{\int \frac{4}{x}dx} = x^4\).
+                    $$v = \frac{1}{x^4} \left[ \int x^4 \cdot 2x^2 \, dx + C \right] = \frac{1}{x^4}\left[\frac{2x^7}{7} + C\right] = \frac{2x^3}{7} + \frac{C}{x^4}$$</p>
 
                     <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-2}\):
-                    $$y^{-2} = \frac{2x^3}{7} + \frac{C}{x^4}$$
-                    $$y = \left(\frac{2x^3}{7} + \frac{C}{x^4}\right)^{-1/2}$$</p>
+                    $$y^{-2} = \frac{2x^3}{7} + \frac{C}{x^4} \quad \Rightarrow \quad y = \left(\frac{2x^3}{7} + \frac{C}{x^4}\right)^{-1/2}$$</p>
 
                     <p><strong>Solution:</strong> \(\displaystyle y(x) = \left(\frac{2x^3}{7} + \frac{C}{x^4}\right)^{-1/2}\) and \(y = 0\).</p>
                 </div>
@@ -729,35 +707,25 @@
                 <div class="card">
                     <p><strong>Given equation:</strong> \(\displaystyle xy' + y = x^2y^2\) with initial condition \(y(1) = 1\).</p>
 
-                    <p><strong>Step 1: Standard form.</strong> Divide by \(x\):
+                    <p><strong>Step 1: Standard form and identify parameters.</strong> Divide by \(x\):
                     $$\frac{dy}{dx} + \frac{y}{x} = xy^2$$
-
                     So \(P(x) = \frac{1}{x}\), \(Q(x) = x\), \(n = 2\).</p>
 
-                    <p><strong>Step 2: Substitution.</strong> Let \(v = y^{-1}\):
-                    $$\frac{dv}{dx} = -y^{-2}\frac{dy}{dx}$$</p>
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(v = y^{1-2} = y^{-1}\). Using the shortcut formula:
+                    $$\frac{dv}{dx} + (1-2)\left(\frac{1}{x}\right)v = (1-2)(x)$$
+                    $$\frac{dv}{dx} - \frac{v}{x} = -x$$</p>
 
-                    <p><strong>Step 3: Rewrite.</strong>
-                    $$-y^{-2}\frac{dy}{dx} - \frac{v}{x} = -x$$
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int -\frac{1}{x}dx} = e^{-\ln|x|} = \frac{1}{x}\).
+                    $$v = x \left[ \int \frac{1}{x} \cdot (-x) \, dx + C \right] = x \left[ \int -1 \, dx + C \right] = x[-x + C] = -x^2 + Cx$$</p>
 
-                    Multiply by \(-1\):
-                    $$\frac{dv}{dx} + \frac{v}{x} = x$$</p>
+                    <p><strong>Step 4: Apply initial condition.</strong> \(y(1) = 1 \Rightarrow v(1) = 1\):
+                    $$1 = -1 + C \Rightarrow C = 2$$
+                    So \(v = -x^2 + 2x = x(2 - x)\).</p>
 
-                    <p><strong>Step 4: Solve.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{x}dx} = e^{\ln|x|} = x\).
-                    $$x\frac{dv}{dx} + v = x^2$$
-                    $$\frac{d}{dx}(xv) = x^2$$
-                    $$xv = \frac{x^3}{3} + C$$
-                    $$v = \frac{x^2}{3} + \frac{C}{x}$$</p>
+                    <p><strong>Step 5: Back-substitute.</strong> Since \(v = y^{-1}\):
+                    $$y = \frac{1}{v} = \frac{1}{x(2-x)}$$</p>
 
-                    <p><strong>Step 5: Apply initial condition.</strong> \(y(1) = 1 \Rightarrow v(1) = 1\):
-                    $$1 = \frac{1}{3} + C \Rightarrow C = \frac{2}{3}$$
-
-                    So \(\displaystyle v = \frac{x^2}{3} + \frac{2}{3x} = \frac{x^3 + 2}{3x}\).</p>
-
-                    <p><strong>Step 6: Back-substitute.</strong>
-                    $$y = \frac{1}{v} = \frac{3x}{x^3 + 2}$$</p>
-
-                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{3x}{x^3 + 2}\)</p>
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{1}{x(2-x)}\)</p>
                 </div>
             </div>
 
@@ -769,29 +737,21 @@
                 <div class="card">
                     <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} + \frac{y}{x} = y^{1/2}\ln(x)\)</p>
 
-                    <p><strong>Identify parameters:</strong> \(P(x) = \frac{1}{x}\), \(Q(x) = \ln(x)\), \(n = \frac{1}{2}\)</p>
+                    <p><strong>Step 1: Identify parameters.</strong> \(P(x) = \frac{1}{x}\), \(Q(x) = \ln(x)\), \(n = \frac{1}{2}\)</p>
 
-                    <p><strong>Step 1: Substitution.</strong> Let \(\displaystyle v = y^{1-1/2} = y^{1/2}\), so \(y = v^2\):
-                    $$\frac{dv}{dx} = \frac{1}{2}y^{-1/2}\frac{dy}{dx}$$
-                    $$\frac{dy}{dx} = 2y^{1/2}\frac{dv}{dx} = 2v\frac{dv}{dx}$$</p>
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(\displaystyle v = y^{1-1/2} = y^{1/2}\). Using the shortcut formula:
+                    $$\frac{dv}{dx} + \left(1-\frac{1}{2}\right)\left(\frac{1}{x}\right)v = \left(1-\frac{1}{2}\right)\ln(x)$$
+                    $$\frac{dv}{dx} + \frac{v}{2x} = \frac{\ln(x)}{2}$$</p>
 
-                    <p><strong>Step 2: Rewrite.</strong> Substitute:
-                    $$2v\frac{dv}{dx} + \frac{v^2}{x} = v\ln(x)$$
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{2x}dx} = x^{1/2}\).
+                    $$v = \frac{1}{\sqrt{x}} \left[ \int \sqrt{x} \cdot \frac{\ln(x)}{2} \, dx + C \right]$$
 
-                    Divide by \(v\):
-                    $$2\frac{dv}{dx} + \frac{v}{x} = \ln(x)$$</p>
+                    The integral \(\int \sqrt{x}\ln(x)\,dx\) requires integration by parts. The result is implicit:</p>
 
-                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{2x}dx} = e^{\frac{1}{2}\ln|x|} = x^{1/2}\).
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{1/2}\), we have \(y = v^2\). The implicit solution is:
+                    $$\sqrt{x} \, y^{1/2} = \int \sqrt{x} \ln(x) \, dx + C$$</p>
 
-                    $$x^{1/2}\frac{dv}{dx} + \frac{v}{2x^{1/2}} = x^{1/2}\ln(x)$$
-                    $$\frac{d}{dx}(x^{1/2}v) = x^{1/2}\ln(x)$$
-
-                    Integrate by parts or numerically. Generally:
-                    $$x^{1/2}v = \int x^{1/2}\ln(x)\,dx + C$$</p>
-
-                    <p><strong>Step 4: Back-substitute.</strong> \(y = v^2\) gives the implicit solution.</p>
-
-                    <p><strong>Solution:</strong> The solution is given implicitly through integration.</p>
+                    <p><strong>Solution:</strong> Given implicitly via the integral of \(\sqrt{x}\ln(x)\). This example shows that not all Bernoulli equations have closed-form solutions—sometimes the linear equation itself requires numerical integration.</p>
                 </div>
             </div>
 
@@ -805,34 +765,19 @@
 
                     <p>In control theory, a system with nonlinear feedback can produce a Bernoulli-type equation. This equation models a system where the output signal \(y(t)\) is subject to a restoring force that depends on the square root of the output—common in valve dynamics and hydraulic systems.</p>
 
-                    <p><strong>Identify parameters:</strong> \(P(t) = 2\), \(Q(t) = 3\), \(n = \frac{1}{2}\)</p>
+                    <p><strong>Step 1: Identify parameters.</strong> \(P(t) = 2\), \(Q(t) = 3\), \(n = \frac{1}{2}\)</p>
 
-                    <p><strong>Step 1: Substitution.</strong> Let \(\displaystyle v = y^{1-1/2} = y^{1/2}\), so \(y = v^2\):
-                    $$\frac{dv}{dt} = \frac{1}{2}y^{-1/2}\frac{dy}{dt}$$
-                    $$\frac{dy}{dt} = 2y^{1/2}\frac{dv}{dt} = 2v\frac{dv}{dt}$$</p>
-
-                    <p><strong>Step 2: Rewrite the equation.</strong> Substitute into the original equation:
-                    $$2v\frac{dv}{dt} + 2v^2 = 3v$$</p>
-
-                    <p>Divide by \(2v\) (assuming \(v \neq 0\)):
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(\displaystyle v = y^{1-1/2} = y^{1/2}\). Using the shortcut formula:
+                    $$\frac{dv}{dt} + \left(1-\frac{1}{2}\right)(2)v = \left(1-\frac{1}{2}\right)(3)$$
                     $$\frac{dv}{dt} + v = \frac{3}{2}$$</p>
 
-                    <p><strong>Step 3: Solve the linear equation.</strong> This is now a first-order linear ODE. The integrating factor is:
-                    $$\mu = e^{\int 1\,dt} = e^t$$
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int 1 \, dt} = e^t\).
+                    $$v = e^{-t} \left[ \int e^t \cdot \frac{3}{2} \, dt + C \right] = e^{-t}\left[\frac{3}{2}e^t + C\right] = \frac{3}{2} + Ce^{-t}$$</p>
 
-                    Multiply both sides:
-                    $$e^t\frac{dv}{dt} + e^t v = \frac{3}{2}e^t$$
-                    $$\frac{d}{dt}(e^t v) = \frac{3}{2}e^t$$
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{1/2}\), we have \(y = v^2\):
+                    $$y(t) = \left(\frac{3}{2} + Ce^{-t}\right)^2$$</p>
 
-                    Integrate both sides:
-                    $$e^t v = \frac{3}{2}e^t + C$$
-                    $$v(t) = \frac{3}{2} + Ce^{-t}$$</p>
-
-                    <p><strong>Step 4: Back-substitute.</strong> Since \(y = v^2\):
-                    $$y(t) = v^2 = \left(\frac{3}{2} + Ce^{-t}\right)^2$$</p>
-
-                    <p><strong>Solution:</strong> \(\displaystyle y(t) = \left(\frac{3}{2} + Ce^{-t}\right)^2\)</p>
-
+                    <p><strong>Solution:</strong> \(\displaystyle y(t) = \left(\frac{3}{2} + Ce^{-t}\right)^2\) and \(y = 0\).</p>
                     <div class="tip-box">
                         <strong>Control Theory Insight:</strong> As \(t \to \infty\), the transient term \(Ce^{-t}\) decays to zero, and the output approaches \(y \to \left(\frac{3}{2}\right)^2 = \frac{9}{4}\). This is the <strong>steady-state output</strong> of the control system—the equilibrium value the system naturally settles to. The Bernoulli substitution transformed a nonlinear control problem into a simple linear ODE, a technique frequently used in nonlinear control theory and systems analysis.
                     </div>
@@ -847,39 +792,19 @@
                 <div class="card">
                     <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} + y = e^x y^3\)</p>
 
-                    <p><strong>Identify parameters:</strong> \(P(x) = 1\), \(Q(x) = e^x\), \(n = 3\)</p>
+                    <p><strong>Step 1: Identify parameters.</strong> \(P(x) = 1\), \(Q(x) = e^x\), \(n = 3\)</p>
 
-                    <p><strong>Step 1: Divide by \(y^3\).</strong> This is a Bernoulli equation with \(n=3\). Dividing both sides by \(y^3\):
-                    $$y^{-3}\frac{dy}{dx} + y^{-2} = e^x$$</p>
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(v = y^{1-3} = y^{-2}\). Using the shortcut formula:
+                    $$\frac{dv}{dx} + (1-3)(1)v = (1-3)(e^x)$$
+                    $$\frac{dv}{dx} - 2v = -2e^x$$</p>
 
-                    <p><strong>Step 2: Substitution.</strong> Let \(z = y^{1-3} = y^{-2}\), so:
-                    $$\frac{dz}{dx} = -2y^{-3}\frac{dy}{dx}$$
-                    $$y^{-3}\frac{dy}{dx} = -\frac{1}{2}\frac{dz}{dx}$$</p>
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int -2 \, dx} = e^{-2x}\).
+                    $$v = e^{2x}\left[\int e^{-2x} \cdot (-2e^x) \, dx + C\right] = e^{2x}\left[2e^{-x} + C\right] = 2e^x + Ce^{2x}$$</p>
 
-                    <p><strong>Step 3: Rewrite as linear equation.</strong> Substitute into the divided equation:
-                    $$-\frac{1}{2}\frac{dz}{dx} + z = e^x$$
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-2}\):
+                    $$y^{-2} = 2e^x + Ce^{2x} \quad \Rightarrow \quad y = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}$$</p>
 
-                    Multiply by \(-2\):
-                    $$\frac{dz}{dx} - 2z = -2e^x$$
-
-                    Now we have a linear ODE with \(P_{new}(x) = -2\) and \(Q_{new}(x) = -2e^x\).</p>
-
-                    <p><strong>Step 4: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int -2\,dx} = e^{-2x}\).
-
-                    $$e^{-2x}\frac{dz}{dx} - 2e^{-2x}z = -2e^{-2x}e^x$$
-                    $$\frac{d}{dx}(e^{-2x}z) = -2e^{-x}$$
-
-                    Integrate both sides:
-                    $$e^{-2x}z = \int -2e^{-x}\,dx = 2e^{-x} + C$$
-                    $$z = 2e^x + Ce^{2x}$$</p>
-
-                    <p><strong>Step 5: Back-substitute.</strong> Since \(z = y^{-2}\):
-                    $$y^{-2} = 2e^x + Ce^{2x}$$
-                    $$y^2 = \frac{1}{2e^x + Ce^{2x}}$$
-                    $$y = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}$$</p>
-
-                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}\)</p>
-
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}\) and \(y = 0\).</p>
                     <div class="tip-box">
                         <strong>Always remember to substitute back!</strong> After solving for \(z\), you must return to \(y\) using the relationship \(z = y^{1-n}\). In this case, since \(z = y^{-2}\), we recover \(y\) by taking the reciprocal and square root. Forgetting this back-substitution is a common error.
                     </div>
@@ -894,40 +819,19 @@
                 <div class="card">
                     <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} - \frac{y}{x} = xy^2\)</p>
 
-                    <p><strong>Identify parameters:</strong> \(P(x) = -\frac{1}{x}\), \(Q(x) = x\), \(n = 2\)</p>
+                    <p><strong>Step 1: Identify parameters.</strong> \(P(x) = -\frac{1}{x}\), \(Q(x) = x\), \(n = 2\)</p>
 
-                    <p><strong>Note:</strong> The case \(n=2\) is one of the most commonly encountered Bernoulli equations in applications.</p>
+                    <p><strong>Step 2: Substitution and linear form.</strong> Let \(v = y^{1-2} = y^{-1}\). Using the shortcut formula:
+                    $$\frac{dv}{dx} + (1-2)\left(-\frac{1}{x}\right)v = (1-2)(x)$$
+                    $$\frac{dv}{dx} + \frac{v}{x} = -x$$</p>
 
-                    <p><strong>Step 1: Divide by \(y^2\).</strong> Dividing both sides by \(y^2\):
-                    $$y^{-2}\frac{dy}{dx} - \frac{y^{-1}}{x} = x$$</p>
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{x}dx} = x\).
+                    $$v = \frac{1}{x}\left[\int x \cdot (-x) \, dx + C\right] = \frac{1}{x}\left[-\frac{x^3}{3} + C\right] = -\frac{x^2}{3} + \frac{C}{x}$$</p>
 
-                    <p><strong>Step 2: Substitution.</strong> Let \(z = y^{1-2} = y^{-1}\), so:
-                    $$\frac{dz}{dx} = -y^{-2}\frac{dy}{dx}$$
-                    $$y^{-2}\frac{dy}{dx} = -\frac{dz}{dx}$$</p>
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-1}\):
+                    $$y = \frac{1}{v} = \frac{1}{-\frac{x^2}{3} + \frac{C}{x}} = \frac{3x}{3C - x^3}$$</p>
 
-                    <p><strong>Step 3: Rewrite as linear equation.</strong> Substitute:
-                    $$-\frac{dz}{dx} - \frac{z}{x} = x$$
-
-                    Multiply by \(-1\):
-                    $$\frac{dz}{dx} + \frac{z}{x} = -x$$
-
-                    Now we have a linear ODE with \(P_{new}(x) = \frac{1}{x}\) and \(Q_{new}(x) = -x\).</p>
-
-                    <p><strong>Step 4: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{x}dx} = e^{\ln|x|} = x\).
-
-                    $$x\frac{dz}{dx} + z = -x^2$$
-                    $$\frac{d}{dx}(xz) = -x^2$$
-
-                    Integrate:
-                    $$xz = -\frac{x^3}{3} + C$$
-                    $$z = -\frac{x^2}{3} + \frac{C}{x}$$</p>
-
-                    <p><strong>Step 5: Back-substitute.</strong> Since \(z = y^{-1}\):
-                    $$y^{-1} = -\frac{x^2}{3} + \frac{C}{x} = \frac{-x^3 + 3C}{3x}$$
-                    $$y = \frac{3x}{3C - x^3}$$</p>
-
-                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{3x}{3C - x^3}\)</p>
-
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{3x}{3C - x^3}\) and \(y = 0\).</p>
                     <div class="tip-box">
                         <strong>Why n=2 is special:</strong> The case \(n=2\) appears frequently in population dynamics (logistic growth, predator-prey models), chemical kinetics (second-order reactions), and fluid mechanics. The transformation to a linear equation is straightforward and the back-substitution is simple.
                     </div>
@@ -943,34 +847,21 @@
                     <p><strong>Given equation:</strong> \(\displaystyle e^{-x}\frac{dy}{dx} + e^{-x}y = y^3\)</p>
 
                     <p><strong>Warning: Always normalize first!</strong> Notice that the coefficient of \(\frac{dy}{dx}\) is not 1. We must divide the entire equation by \(e^{-x}\) to put it in standard form before identifying \(P(x)\), \(Q(x)\), and \(n\).</p>
-
                     <p><strong>Step 1: Normalize the equation.</strong> Divide by \(e^{-x}\):
                     $$\frac{dy}{dx} + y = y^3 e^x$$
+                    This reveals standard form with \(P(x) = 1\), \(Q(x) = e^x\), \(n = 3\).</p>
 
-                    This is the critical first step! Now we have standard form with \(P(x) = 1\), \(Q(x) = e^x\), \(n = 3\).</p>
+                    <p><strong>Step 2: Identify parameters and shortcut.</strong> This is now identical to Example 6! We have \(\frac{dy}{dx} + y = e^x y^3\). Let \(v = y^{1-3} = y^{-2}\). Using the shortcut formula:
+                    $$\frac{dv}{dx} + (1-3)(1)v = (1-3)(e^x)$$
+                    $$\frac{dv}{dx} - 2v = -2e^x$$</p>
 
-                    <p><strong>Step 2: Recognize this is the same as Example 6!</strong> We have:
-                    $$\frac{dy}{dx} + y = e^x y^3$$
+                    <p><strong>Step 3: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int -2 \, dx} = e^{-2x}\).
+                    $$v = e^{2x}\left[\int e^{-2x} \cdot (-2e^x) \, dx + C\right] = e^{2x}\left[2e^{-x} + C\right] = 2e^x + Ce^{2x}$$</p>
 
-                    The Bernoulli substitution is identical: \(z = y^{-2}\) with \(dz/dx = -2y^{-3}(dy/dx)\).</p>
-
-                    <p><strong>Step 3: Rewrite and solve.</strong> Divide by \(y^3\):
-                    $$y^{-3}\frac{dy}{dx} + y^{-2} = e^x$$
-
-                    Using \(z = y^{-2}\):
-                    $$-\frac{1}{2}\frac{dz}{dx} + z = e^x$$
-                    $$\frac{dz}{dx} - 2z = -2e^x$$
-
-                    Integrating factor: \(\mu = e^{-2x}\).
-                    $$e^{-2x}z = 2e^{-x} + C$$
-                    $$z = 2e^x + Ce^{2x}$$</p>
-
-                    <p><strong>Step 4: Back-substitute.</strong> Since \(z = y^{-2}\):
-                    $$y^{-2} = 2e^x + Ce^{2x}$$
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(v = y^{-2}\):
                     $$y = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}$$</p>
 
-                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}\)</p>
-
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}\) and \(y = 0\).</p>
                     <div class="warning-box" style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin: 15px 0; border-radius: 4px;">
                         <strong>Preprocessing is Critical:</strong> When the coefficient of \(\frac{dy}{dx}\) is not 1, you <em>must</em> normalize the equation first by dividing through. This ensures you correctly identify \(P(x)\), \(Q(x)\), and the nonlinear exponent \(n\). Skipping this step leads to incorrect identification of the equation type and wrong solutions. In this example, dividing by \(e^{-x}\) is the key insight that reveals the true structure of the problem.
                     </div>

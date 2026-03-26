@@ -361,28 +361,29 @@
 <!-- =================== STEP-BY-STEP METHOD =================== -->
 <section id="method">
   <h2>Step-by-Step Method</h2>
-  <p>Here is the systematic procedure to solve any first-order linear ODE:</p>
+  <p>Here is the streamlined procedure to solve any first-order linear ODE:</p>
 
   <ol class="step-list">
     <li>
-      <strong>Write in standard form.</strong> Make sure your equation looks like \(y' + P(x)\,y = Q(x)\). If there's a coefficient in front of \(y'\), divide through to make it \(1\). Identify \(P(x)\) and \(Q(x)\).
+      <strong>Standard form.</strong> Write your equation as \(y' + P(x)\,y = Q(x)\). If there's a coefficient in front of \(y'\), divide through first. Identify \(P(x)\) and \(Q(x)\).
     </li>
     <li>
-      <strong>Compute the integrating factor.</strong> Calculate \(\mu(x) = e^{\int P(x)\,dx}\). You don't need the \(+C\) here — any antiderivative works.
+      <strong>Compute integrating factor.</strong> Calculate \(\mu(x) = e^{\int P(x)\,dx}\). Any antiderivative works (no \(+C\) needed).
     </li>
     <li>
-      <strong>Multiply both sides by \(\mu(x)\).</strong> The left side will become \(\dfrac{d}{dx}[\mu(x)\,y]\). Verify this!
+      <strong>Apply the direct formula.</strong> Use the general solution:
+      $$y = \frac{1}{\mu(x)}\left[\int \mu(x)\,Q(x)\,dx + C\right]$$
+      Evaluate the integral and simplify.
     </li>
     <li>
-      <strong>Integrate both sides.</strong> Compute \(\displaystyle \int \mu(x)\,Q(x)\,dx\). Don't forget the constant \(C\).
-    </li>
-    <li>
-      <strong>Solve for \(y\).</strong> Divide both sides by \(\mu(x)\) to get the general solution.
-    </li>
-    <li>
-      <strong>Apply initial condition (if given).</strong> Substitute \(x = x_0\), \(y = y_0\) to find the value of \(C\).
+      <strong>Apply initial condition (if given).</strong> Substitute \(x = x_0\), \(y = y_0\) to find the constant \(C\).
     </li>
   </ol>
+
+  <div class="tip-box">
+    <div class="box-label">Why the Formula Works</div>
+    <p>The derivation above (in the Theory section) shows that multiplying by \(\mu(x)\) makes the left side collapse into a product rule derivative: \(\dfrac{d}{dx}[\mu(x)\,y]\). But in practice, you can skip straight to the formula once you know \(\mu(x)\) and \(Q(x)\). The formula encodes all those steps — just plug in and integrate!</p>
+  </div>
 </section>
 
 <!-- =================== WORKED EXAMPLES =================== -->
@@ -397,21 +398,16 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Step 1:</strong> Already in standard form with \(P(x) = 2\) and \(Q(x) = 6\).</p>
+      <p><strong>Step 1: Standard form.</strong> Already in standard form: \(P(x) = 2\), \(Q(x) = 6\).</p>
 
-      <p><strong>Step 2:</strong> Integrating factor:</p>
+      <p><strong>Step 2: Integrating factor.</strong></p>
       <div class="math-display">$$\mu(x) = e^{\int 2\,dx} = e^{2x}$$</div>
 
-      <p><strong>Step 3:</strong> Multiply both sides by \(e^{2x}\):</p>
-      <div class="math-display">$$e^{2x}y' + 2e^{2x}y = 6e^{2x} \quad\Longrightarrow\quad \frac{d}{dx}\big[e^{2x}y\big] = 6e^{2x}$$</div>
+      <p><strong>Step 3: Apply formula.</strong> Use \(y = \dfrac{1}{\mu}\left[\int \mu \cdot Q\,dx + C\right]\):</p>
+      <div class="math-display">$$y = \frac{1}{e^{2x}}\left[\int e^{2x} \cdot 6\,dx + C\right] = \frac{1}{e^{2x}}\left[\int 6e^{2x}\,dx + C\right]$$</div>
+      <div class="math-display">$$y = \frac{1}{e^{2x}}\left[3e^{2x} + C\right] = 3 + Ce^{-2x}$$</div>
 
-      <p><strong>Step 4:</strong> Integrate both sides:</p>
-      <div class="math-display">$$e^{2x}y = \int 6e^{2x}\,dx = 3e^{2x} + C$$</div>
-
-      <p><strong>Step 5:</strong> Divide by \(e^{2x}\):</p>
-      <div class="math-display">$$y = 3 + Ce^{-2x}$$</div>
-
-      <p><strong>Step 6:</strong> Apply \(y(0)=1\): &nbsp; \(1 = 3 + C\), so \(C = -2\).</p>
+      <p><strong>Step 4: Initial condition.</strong> Apply \(y(0)=1\): &nbsp; \(1 = 3 + C\), so \(C = -2\).</p>
       <div class="math-display" style="background:#d1fae5;">$$\boxed{y(x) = 3 - 2e^{-2x}}$$</div>
 
       <div class="tip-box">
@@ -428,19 +424,14 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Step 1:</strong> Standard form: \(P(x) = -3\), \(Q(x) = e^{2x}\).</p>
+      <p><strong>Step 1: Standard form.</strong> \(P(x) = -3\), \(Q(x) = e^{2x}\).</p>
 
-      <p><strong>Step 2:</strong> Integrating factor:</p>
+      <p><strong>Step 2: Integrating factor.</strong></p>
       <div class="math-display">$$\mu(x) = e^{\int -3\,dx} = e^{-3x}$$</div>
 
-      <p><strong>Step 3:</strong> Multiply by \(e^{-3x}\):</p>
-      <div class="math-display">$$\frac{d}{dx}\big[e^{-3x}y\big] = e^{-3x}\cdot e^{2x} = e^{-x}$$</div>
-
-      <p><strong>Step 4:</strong> Integrate:</p>
-      <div class="math-display">$$e^{-3x}y = \int e^{-x}\,dx = -e^{-x} + C$$</div>
-
-      <p><strong>Step 5:</strong> Divide by \(e^{-3x}\):</p>
-      <div class="math-display">$$y = -e^{-x}\cdot e^{3x} + Ce^{3x} = -e^{2x} + Ce^{3x}$$</div>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$y = \frac{1}{e^{-3x}}\left[\int e^{-3x} \cdot e^{2x}\,dx + C\right] = e^{3x}\left[\int e^{-x}\,dx + C\right]$$</div>
+      <div class="math-display">$$y = e^{3x}\left[-e^{-x} + C\right] = -e^{2x} + Ce^{3x}$$</div>
 
       <div class="math-display" style="background:#d1fae5;">$$\boxed{y(x) = Ce^{3x} - e^{2x}}$$</div>
 
@@ -458,23 +449,18 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Step 1:</strong> Divide by \(x\) to get standard form:</p>
+      <p><strong>Step 1: Standard form.</strong> Divide by \(x\):</p>
       <div class="math-display">$$y' + \frac{1}{x}\,y = x$$</div>
-      <p>So \(P(x) = \dfrac{1}{x}\) and \(Q(x) = x\). (Valid for \(x > 0\).)</p>
+      <p>So \(P(x) = \dfrac{1}{x}\) and \(Q(x) = x\) (for \(x > 0\)).</p>
 
-      <p><strong>Step 2:</strong> Integrating factor:</p>
+      <p><strong>Step 2: Integrating factor.</strong></p>
       <div class="math-display">$$\mu(x) = e^{\int \frac{1}{x}\,dx} = e^{\ln|x|} = x$$</div>
 
-      <p><strong>Step 3:</strong> Multiply by \(x\):</p>
-      <div class="math-display">$$\frac{d}{dx}[x\,y] = x \cdot x = x^2$$</div>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$y = \frac{1}{x}\left[\int x \cdot x\,dx + C\right] = \frac{1}{x}\left[\int x^2\,dx + C\right]$$</div>
+      <div class="math-display">$$y = \frac{1}{x}\left[\frac{x^3}{3} + C\right] = \frac{x^2}{3} + \frac{C}{x}$$</div>
 
-      <p><strong>Step 4:</strong> Integrate:</p>
-      <div class="math-display">$$xy = \int x^2\,dx = \frac{x^3}{3} + C$$</div>
-
-      <p><strong>Step 5:</strong> Divide by \(x\):</p>
-      <div class="math-display">$$y = \frac{x^2}{3} + \frac{C}{x}$$</div>
-
-      <p><strong>Step 6:</strong> Apply \(y(1) = 2\): &nbsp; \(2 = \frac{1}{3} + C\), so \(C = \frac{5}{3}\).</p>
+      <p><strong>Step 4: Initial condition.</strong> Apply \(y(1) = 2\): &nbsp; \(2 = \frac{1}{3} + C\), so \(C = \frac{5}{3}\).</p>
 
       <div class="math-display" style="background:#d1fae5;">$$\boxed{y(x) = \frac{x^2}{3} + \frac{5}{3x}}$$</div>
 
@@ -492,21 +478,16 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Step 1:</strong> Already in standard form: \(P(x) = \tan(x)\), \(Q(x) = \cos(x)\).</p>
+      <p><strong>Step 1: Standard form.</strong> \(P(x) = \tan(x)\), \(Q(x) = \cos(x)\).</p>
 
-      <p><strong>Step 2:</strong> Integrating factor:</p>
-      <div class="math-display">$$\mu(x) = e^{\int \tan(x)\,dx} = e^{-\ln|\cos(x)|} = \frac{1}{\cos(x)} = \sec(x)$$</div>
+      <p><strong>Step 2: Integrating factor.</strong></p>
+      <div class="math-display">$$\mu(x) = e^{\int \tan(x)\,dx} = e^{-\ln|\cos(x)|} = \sec(x)$$</div>
 
-      <p><strong>Step 3:</strong> Multiply by \(\sec(x)\):</p>
-      <div class="math-display">$$\frac{d}{dx}[\sec(x)\cdot y] = \sec(x)\cdot\cos(x) = 1$$</div>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$y = \frac{1}{\sec(x)}\left[\int \sec(x)\cdot\cos(x)\,dx + C\right] = \cos(x)\left[\int 1\,dx + C\right]$$</div>
+      <div class="math-display">$$y = \cos(x)\left[x + C\right] = (x + C)\cos(x)$$</div>
 
-      <p><strong>Step 4:</strong> Integrate:</p>
-      <div class="math-display">$$\sec(x)\cdot y = \int 1\,dx = x + C$$</div>
-
-      <p><strong>Step 5:</strong> Divide by \(\sec(x)\):</p>
-      <div class="math-display">$$y = (x + C)\cos(x)$$</div>
-
-      <p><strong>Step 6:</strong> Apply \(y(0) = 0\): &nbsp; \(0 = (0 + C)\cdot 1\), so \(C = 0\).</p>
+      <p><strong>Step 4: Initial condition.</strong> Apply \(y(0) = 0\): &nbsp; \(0 = (0 + C)\cdot 1\), so \(C = 0\).</p>
 
       <div class="math-display" style="background:#d1fae5;">$$\boxed{y(x) = x\cos(x)}$$</div>
 
@@ -526,27 +507,20 @@
     <div class="collapsible-content">
       <p><strong>Problem Setup:</strong> A 500-liter tank initially contains pure water. A brine solution with concentration 0.05 kg/L flows in at 10 L/min, and the well-mixed solution flows out at the same rate. Find the amount of salt \(A(t)\) in the tank at time \(t\).</p>
 
-      <p><strong>Step 1:</strong> Set up the differential equation using the principle: rate of change = (rate in) − (rate out).</p>
-      <div class="math-display">$$\frac{dA}{dt} = \text{(concentration in)} \times \text{(flow in)} - \frac{A}{V} \times \text{(flow out)}$$</div>
+      <p><strong>Step 1: Set up the equation.</strong> Rate of change = (rate in) − (rate out):</p>
       <div class="math-display">$$\frac{dA}{dt} = (0.05)(10) - \frac{A}{500}(10) = 0.5 - \frac{A}{50}$$</div>
 
-      <p><strong>Step 2:</strong> Rearrange to standard form with \(P(t) = \frac{1}{50}\) and \(Q(t) = 0.5\):</p>
+      <p><strong>Standard form:</strong> \(P(t) = \dfrac{1}{50}\), \(Q(t) = 0.5\):</p>
       <div class="math-display">$$\frac{dA}{dt} + \frac{1}{50}\,A = 0.5$$</div>
 
-      <p><strong>Step 3:</strong> Compute the integrating factor:</p>
+      <p><strong>Step 2: Integrating factor.</strong></p>
       <div class="math-display">$$\mu(t) = e^{\int \frac{1}{50}\,dt} = e^{t/50}$$</div>
 
-      <p><strong>Step 4:</strong> Multiply both sides by \(e^{t/50}\):</p>
-      <div class="math-display">$$e^{t/50}\frac{dA}{dt} + \frac{1}{50}e^{t/50}\,A = 0.5\,e^{t/50}$$</div>
-      <div class="math-display">$$\frac{d}{dt}\big[e^{t/50}\,A\big] = 0.5\,e^{t/50}$$</div>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$A = \frac{1}{e^{t/50}}\left[\int e^{t/50}\cdot 0.5\,dt + C\right] = e^{-t/50}\left[0.5 \cdot 50 \cdot e^{t/50} + C\right]$$</div>
+      <div class="math-display">$$A = e^{-t/50}\left[25e^{t/50} + C\right] = 25 + Ce^{-t/50}$$</div>
 
-      <p><strong>Step 5:</strong> Integrate both sides:</p>
-      <div class="math-display">$$e^{t/50}\,A = \int 0.5\,e^{t/50}\,dt = 0.5 \cdot 50 \cdot e^{t/50} + C = 25\,e^{t/50} + C$$</div>
-
-      <p><strong>Step 6:</strong> Divide by \(e^{t/50}\):</p>
-      <div class="math-display">$$A(t) = 25 + Ce^{-t/50}$$</div>
-
-      <p><strong>Step 7:</strong> Apply the initial condition \(A(0) = 0\) (pure water initially):</p>
+      <p><strong>Step 4: Initial condition.</strong> Apply \(A(0) = 0\) (pure water):</p>
       <div class="math-display">$$0 = 25 + C \quad \Rightarrow \quad C = -25$$</div>
 
       <div class="math-display" style="background:#d1fae5;">$$\boxed{A(t) = 25\big(1 - e^{-t/50}\big) \text{ kg}}$$</div>
@@ -565,31 +539,24 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Problem:</strong> Solve $x \displaystyle\frac{dy}{dx} + y = 2xe^x$.</p>
-
-      <p><strong>Step 1:</strong> Convert to standard form by dividing by $x$:</p>
+      <p><strong>Step 1: Standard form.</strong> Divide by $x$:</p>
       <div class="math-display">$$\frac{dy}{dx} + \frac{1}{x}y = 2e^x$$</div>
-      <p>Thus $P(x) = \frac{1}{x}$ and $Q(x) = 2e^x$.</p>
+      <p>Thus $P(x) = \dfrac{1}{x}$ and $Q(x) = 2e^x$.</p>
 
-      <p><strong>Step 2:</strong> Compute the integrating factor:</p>
-      <div class="math-display">$$\mu(x) = e^{\int \frac{1}{x}\,dx} = e^{\ln|x|} = |x| = x \quad \text{(taking } x > 0\text{)}$$</div>
+      <p><strong>Step 2: Integrating factor.</strong></p>
+      <div class="math-display">$$\mu(x) = e^{\int \frac{1}{x}\,dx} = e^{\ln|x|} = x \quad \text{(for } x > 0\text{)}$$</div>
 
-      <p><strong>Step 3:</strong> Multiply both sides by $\mu = x$:</p>
-      <div class="math-display">$$x\frac{dy}{dx} + y = 2xe^x$$</div>
-      <div class="math-display">$$\frac{d}{dx}(xy) = 2xe^x$$</div>
-
-      <p><strong>Step 4:</strong> Integrate both sides. This requires <strong>integration by parts</strong>:</p>
-      <div class="math-display">$$xy = \int 2xe^x\,dx$$</div>
-      <p>Using integration by parts with $u = 2x$, $dv = e^x\,dx$:</p>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$y = \frac{1}{x}\left[\int x \cdot 2e^x\,dx + C\right]$$</div>
+      <p>Integrate by parts with $u = 2x$, $dv = e^x\,dx$:</p>
       <div class="math-display">$$\int 2xe^x\,dx = 2xe^x - \int 2e^x\,dx = 2xe^x - 2e^x = 2e^x(x - 1) + C$$</div>
+      <div class="math-display">$$y = \frac{1}{x}\left[2e^x(x-1) + C\right] = 2e^x\left(1 - \frac{1}{x}\right) + \frac{C}{x}$$</div>
 
-      <p><strong>Step 5:</strong> Solve for $y$:</p>
-      <div class="math-display">$$xy = 2e^x(x-1) + C$$</div>
       <div class="math-display" style="background:#d1fae5;">$$\boxed{y = 2e^x\left(1 - \frac{1}{x}\right) + \frac{C}{x}}$$</div>
 
       <div class="tip-box">
         <div class="box-label">Integration by Parts in Linear ODEs</div>
-        <p><strong>Key insight:</strong> After multiplying by the integrating factor, the right-hand side $\mu(x) \cdot Q(x)$ must be integrated. For products like $xe^x$ or $x\sin(x)$, integration by parts is typically required. The formula $\int u\,dv = uv - \int v\,du$ is your most powerful tool when faced with such products. Practice this technique — it appears frequently in applied linear DEs!</p>
+        <p><strong>Key insight:</strong> After the integrating factor is applied, the integral $\int \mu(x) \cdot Q(x)\,dx$ must be evaluated. For products like $xe^x$ or $x\sin(x)$, integration by parts is typically required. The formula $\int u\,dv = uv - \int v\,du$ is your most powerful tool when faced with such products. Practice this technique — it appears frequently in applied linear DEs!</p>
       </div>
     </div>
   </div>
@@ -601,26 +568,20 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Problem:</strong> Solve $\displaystyle\frac{dy}{dx} + \frac{2}{x}y = x^2$.</p>
+      <p><strong>Step 1: Standard form.</strong> $P(x) = \dfrac{2}{x}$ and $Q(x) = x^2$ (already in standard form).</p>
 
-      <p><strong>Step 1:</strong> Identify $P(x) = \frac{2}{x}$ and $Q(x) = x^2$ (already in standard form).</p>
+      <p><strong>Step 2: Integrating factor.</strong></p>
+      <div class="math-display">$$\mu(x) = e^{\int \frac{2}{x}\,dx} = e^{2\ln|x|} = x^2 \quad \text{(for } x > 0\text{)}$$</div>
 
-      <p><strong>Step 2:</strong> Compute the integrating factor:</p>
-      <div class="math-display">$$\mu(x) = e^{\int \frac{2}{x}\,dx} = e^{2\ln|x|} = e^{\ln(x^2)} = x^2 \quad \text{(for } x > 0\text{)}$$</div>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$y = \frac{1}{x^2}\left[\int x^2 \cdot x^2\,dx + C\right] = \frac{1}{x^2}\left[\int x^4\,dx + C\right]$$</div>
+      <div class="math-display">$$y = \frac{1}{x^2}\left[\frac{x^5}{5} + C\right] = \frac{x^3}{5} + \frac{C}{x^2}$$</div>
 
-      <p><strong>Step 3:</strong> Multiply both sides by $\mu = x^2$:</p>
-      <div class="math-display">$$x^2\frac{dy}{dx} + 2xy = x^4$$</div>
-      <div class="math-display">$$\frac{d}{dx}(x^2 y) = x^4$$</div>
-
-      <p><strong>Step 4:</strong> Integrate both sides:</p>
-      <div class="math-display">$$x^2 y = \int x^4\,dx = \frac{x^5}{5} + C$$</div>
-
-      <p><strong>Step 5:</strong> Solve for $y$:</p>
       <div class="math-display" style="background:#d1fae5;">$$\boxed{y = \frac{x^3}{5} + \frac{C}{x^2}}$$</div>
 
       <div class="tip-box">
         <div class="box-label">Pattern Recognition: Rational Coefficients</div>
-        <p><strong>General rule:</strong> If $P(x) = \frac{n}{x}$ (a constant divided by $x$), then:</p>
+        <p><strong>General rule:</strong> If $P(x) = \dfrac{n}{x}$ (a constant divided by $x$), then:</p>
         <div class="math-display">$$\mu(x) = e^{\int \frac{n}{x}\,dx} = e^{n\ln|x|} = x^n$$</div>
         <p>This gives an integrating factor that is a power of $x$, which is excellent for simplifying products and powers. This pattern appears constantly in applications ranging from heat diffusion to population dynamics. Watch for it!</p>
       </div>
@@ -634,24 +595,16 @@
       <span class="arrow">▶</span>
     </button>
     <div class="collapsible-content">
-      <p><strong>Problem:</strong> Solve $\displaystyle\frac{dy}{dx} + y\sin(x) = \cos(x)$.</p>
+      <p><strong>Step 1: Standard form.</strong> $P(x) = \sin(x)$ and $Q(x) = \cos(x)$ (already in standard form).</p>
 
-      <p><strong>Step 1:</strong> Identify $P(x) = \sin(x)$ and $Q(x) = \cos(x)$ (already in standard form).</p>
+      <p><strong>Step 2: Integrating factor.</strong> We have $\int \sin(x)\,dx = -\cos(x) + C_0$, so:</p>
+      <div class="math-display">$$\mu(x) = e^{\int \sin(x)\,dx} = e^{-\cos(x)}$$</div>
 
-      <p><strong>Step 2:</strong> Compute the integrating factor:</p>
-      <div class="math-display">$$\mu(x) = e^{\int \sin(x)\,dx}$$</div>
-      <p>We need to evaluate $\int \sin(x)\,dx = -\cos(x) + C_0$. Taking the antiderivative without the constant:</p>
-      <div class="math-display">$$\mu(x) = e^{-\cos(x)}$$</div>
+      <p><strong>Step 3: Apply formula.</strong></p>
+      <div class="math-display">$$y = \frac{1}{e^{-\cos(x)}}\left[\int e^{-\cos(x)}\cdot\cos(x)\,dx + C\right] = e^{\cos(x)}\left[\int e^{-\cos(x)}\cos(x)\,dx + C\right]$$</div>
 
-      <p><strong>Step 3:</strong> Multiply both sides by $\mu(x) = e^{-\cos(x)}$:</p>
-      <div class="math-display">$$e^{-\cos(x)}\frac{dy}{dx} + e^{-\cos(x)}y\sin(x) = e^{-\cos(x)}\cos(x)$$</div>
-      <div class="math-display">$$\frac{d}{dx}\left(ye^{-\cos(x)}\right) = e^{-\cos(x)}\cos(x)$$</div>
-
-      <p><strong>Step 4:</strong> Integrate both sides:</p>
-      <div class="math-display">$$ye^{-\cos(x)} = \int e^{-\cos(x)}\cos(x)\,dx + C$$</div>
-
-      <p><strong>Step 5:</strong> General (Implicit) Solution:</p>
-      <div class="math-display" style="background:#fff7ed;">$$\boxed{ye^{-\cos(x)} = \int e^{-\cos(x)}\cos(x)\,dx + C}$$</div>
+      <p><strong>Step 4: General (Implicit) Solution.</strong></p>
+      <div class="math-display" style="background:#fff7ed;">$$\boxed{y = e^{\cos(x)}\left[\int e^{-\cos(x)}\cos(x)\,dx + C\right]}$$</div>
 
       <div class="warning-box" style="background:#fee2e2; border-left: 5px solid #dc2626; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1rem;">
         <div class="box-label" style="color:#991b1b;">No Closed Form</div>
