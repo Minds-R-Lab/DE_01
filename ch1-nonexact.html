@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Section 1.5: Non-Exact Equations & Integrating Factors</title>
+    <title>Math 4: Non-Exact Equations | Dr. Mohamed Mabrok</title>
 
     <!-- KaTeX for math rendering -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -730,6 +730,61 @@
                     <p>$$\boxed{x^2y^2 + x^3 = 2}$$</p>
                 </div>
             </div>
+
+            <button class="example-toggle" onclick="toggleExample(4)">
+                🌡️ Example 5: Heat Transfer in an Engineering System
+            </button>
+            <div class="example-content" id="example-4">
+                <div class="example-box">
+                    <h4>Solution (Engineering Application: Thermal Systems)</h4>
+                    <p><strong>Context:</strong> In thermal engineering, the temperature distribution in certain systems leads to non-exact equations. Consider a coupled thermal-mechanical system where:</p>
+                    <p>$$(2T)\,dt + (t + T)\,dT = 0$$</p>
+                    <p>where $T$ is temperature (K) and $t$ is time (s) in a coupled thermal-mechanical system.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 1: Check Exactness</strong></p>
+                    <p>$M = 2T \Rightarrow \frac{\partial M}{\partial T} = 2$</p>
+                    <p>$N = t + T \Rightarrow \frac{\partial N}{\partial t} = 1$</p>
+                    <p>Not exact: $2 \neq 1$ ✗</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Check Case 1 (μ depends on t only)</strong></p>
+                    <p>$$h(t) = \frac{\frac{\partial M}{\partial T} - \frac{\partial N}{\partial t}}{N} = \frac{2 - 1}{t + T} = \frac{1}{t + T}$$</p>
+                    <p>This depends on both $t$ and $T$, so Case 1 doesn't apply.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3: Check Case 2 (μ depends on T only)</strong></p>
+                    <p>$$k(T) = \frac{\frac{\partial N}{\partial t} - \frac{\partial M}{\partial T}}{M} = \frac{1 - 2}{2T} = \frac{-1}{2T}$$</p>
+                    <p>This depends on $T$ only! Case 2 applies.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 4: Find Integrating Factor μ(T)</strong></p>
+                    <p>$$\mu(T) = e^{\int \frac{-1}{2T}\,dT} = e^{-\frac{1}{2}\ln T} = e^{\ln T^{-1/2}} = \frac{1}{\sqrt{T}} = T^{-1/2}$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 5: Multiply the Equation by μ</strong></p>
+                    <p>$$\frac{2T}{\sqrt{T}}\,dt + \frac{t + T}{\sqrt{T}}\,dT = 0$$</p>
+                    <p>$$2\sqrt{T}\,dt + \left(\frac{t}{\sqrt{T}} + \sqrt{T}\right)\,dT = 0$$</p>
+                    <p>$$2T^{1/2}\,dt + (tT^{-1/2} + T^{1/2})\,dT = 0$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 6: Verify Exactness</strong></p>
+                    <p>$M^* = 2T^{1/2} \Rightarrow \frac{\partial M^*}{\partial T} = T^{-1/2}$</p>
+                    <p>$N^* = tT^{-1/2} + T^{1/2} \Rightarrow \frac{\partial N^*}{\partial t} = T^{-1/2}$</p>
+                    <p>Exact! $T^{-1/2} = T^{-1/2}$ ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 7: Solve the Exact Equation</strong></p>
+                    <p>Find $F(t, T)$ such that $\frac{\partial F}{\partial t} = 2T^{1/2}$:</p>
+                    <p>$$F(t, T) = 2tT^{1/2} + g(T) = 2t\sqrt{T} + g(T)$$</p>
+                    <p>Now use $\frac{\partial F}{\partial T} = N^*$:</p>
+                    <p>$$\frac{\partial F}{\partial T} = 2t \cdot \frac{1}{2}T^{-1/2} + g'(T) = tT^{-1/2} + T^{1/2}$$</p>
+                    <p>$$tT^{-1/2} + g'(T) = tT^{-1/2} + T^{1/2}$$</p>
+                    <p>$$g'(T) = T^{1/2}$$</p>
+                    <p>$$g(T) = \frac{2}{3}T^{3/2}$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 8: General Solution</strong></p>
+                    <p>$$F(t, T) = 2t\sqrt{T} + \frac{2}{3}T^{3/2} = C$$</p>
+                    <p>$$\boxed{2t\sqrt{T} + \frac{2}{3}T^{3/2} = C}$$</p>
+
+                    <div class="tip-box">
+                        <strong>💡 Physical Insight:</strong> In thermal systems, the integrating factor $\mu(T) = 1/\sqrt{T}$ acts as a <em>temperature-dependent scaling factor</em> that makes the energy balance equation conservative. This technique is fundamental in heat exchanger design and thermal control systems, where non-linear temperature dependencies require such transformations to yield integrable forms.
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Interactive Visualizer -->
@@ -746,6 +801,7 @@
                     <option value="2">Example 2: (y² + y)dx - x dy = 0</option>
                     <option value="3">Example 3: y dx - x dy = 0</option>
                     <option value="4">Example 4: (2y² + 3x)dx + 2xy dy = 0</option>
+                    <option value="5">Example 5: (2T)dt + (t + T)dT = 0 (Thermal)</option>
                 </select>
             </div>
 
@@ -953,9 +1009,8 @@
     </main>
 
     <!-- Footer -->
-    <footer>
-        <p>Section 1.5: Non-Exact Equations & Integrating Factors | Differential Equations Course</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem;">Created with KaTeX and Plotly</p>
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+      Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
     </footer>
 
     <script>
@@ -1011,7 +1066,8 @@
                 '1': {M: '3*x*y + y**2', N: 'x**2 + x*y'},
                 '2': {M: 'y**2 + y', N: '-x'},
                 '3': {M: 'y', N: '-x'},
-                '4': {M: '2*y**2 + 3*x', N: '2*x*y'}
+                '4': {M: '2*y**2 + 3*x', N: '2*x*y'},
+                '5': {M: '2*y', N: 'x + y'}
             };
             if (presets[preset]) {
                 document.getElementById('inputM').value = presets[preset].M;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1.3 Bernoulli Differential Equations | DE Course</title>
+    <title>Math 4: Bernoulli Equations | Dr. Mohamed Mabrok</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
     <style>
         :root {
@@ -787,6 +787,50 @@
                     <p><strong>Solution:</strong> The solution is given implicitly through integration.</p>
                 </div>
             </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 5: Nonlinear Feedback in Control Systems</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dt} + 2y = 3y^{1/2}\)</p>
+
+                    <p>In control theory, a system with nonlinear feedback can produce a Bernoulli-type equation. This equation models a system where the output signal \(y(t)\) is subject to a restoring force that depends on the square root of the output—common in valve dynamics and hydraulic systems.</p>
+
+                    <p><strong>Identify parameters:</strong> \(P(t) = 2\), \(Q(t) = 3\), \(n = \frac{1}{2}\)</p>
+
+                    <p><strong>Step 1: Substitution.</strong> Let \(\displaystyle v = y^{1-1/2} = y^{1/2}\), so \(y = v^2\):
+                    $$\frac{dv}{dt} = \frac{1}{2}y^{-1/2}\frac{dy}{dt}$$
+                    $$\frac{dy}{dt} = 2y^{1/2}\frac{dv}{dt} = 2v\frac{dv}{dt}$$</p>
+
+                    <p><strong>Step 2: Rewrite the equation.</strong> Substitute into the original equation:
+                    $$2v\frac{dv}{dt} + 2v^2 = 3v$$</p>
+
+                    <p>Divide by \(2v\) (assuming \(v \neq 0\)):
+                    $$\frac{dv}{dt} + v = \frac{3}{2}$$</p>
+
+                    <p><strong>Step 3: Solve the linear equation.</strong> This is now a first-order linear ODE. The integrating factor is:
+                    $$\mu = e^{\int 1\,dt} = e^t$$
+
+                    Multiply both sides:
+                    $$e^t\frac{dv}{dt} + e^t v = \frac{3}{2}e^t$$
+                    $$\frac{d}{dt}(e^t v) = \frac{3}{2}e^t$$
+
+                    Integrate both sides:
+                    $$e^t v = \frac{3}{2}e^t + C$$
+                    $$v(t) = \frac{3}{2} + Ce^{-t}$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(y = v^2\):
+                    $$y(t) = v^2 = \left(\frac{3}{2} + Ce^{-t}\right)^2$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(t) = \left(\frac{3}{2} + Ce^{-t}\right)^2\)</p>
+
+                    <div class="tip-box">
+                        <strong>Control Theory Insight:</strong> As \(t \to \infty\), the transient term \(Ce^{-t}\) decays to zero, and the output approaches \(y \to \left(\frac{3}{2}\right)^2 = \frac{9}{4}\). This is the <strong>steady-state output</strong> of the control system—the equilibrium value the system naturally settles to. The Bernoulli substitution transformed a nonlinear control problem into a simple linear ODE, a technique frequently used in nonlinear control theory and systems analysis.
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- INTERACTIVE VISUALIZER -->
@@ -1314,5 +1358,9 @@
             updateExplorer();
         });
     </script>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
 </body>
 </html>

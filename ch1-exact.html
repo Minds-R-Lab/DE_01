@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exact Differential Equations - Section 1.4</title>
+    <title>Math 4: Exact Equations | Dr. Mohamed Mabrok</title>
 
     <!-- KaTeX for Mathematics -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -628,6 +628,43 @@
                 <p><strong>Particular solution:</strong>
                 $$x^2 + xy - y^3 = -5$$</p>
             </div>
+
+            <!-- Example 5 -->
+            <button class="collapsible">Example 5: Conservative Force Field in Mechanical Systems</button>
+            <div class="collapsible-content example-box">
+                <h3>Physical Context: Exact Equations in Engineering</h3>
+                <p>In mechanical engineering, conservative force fields correspond to exact equations. Consider a particle moving in a 2D force field where:</p>
+
+                $$(2xy + y\cos(xy))\,dx + (x^2 + x\cos(xy))\,dy = 0$$
+
+                <p>The terms represent components of a conservative force <strong>F</strong> = (<strong>F</strong>ₓ, <strong>F</strong>ᵧ) where the potential energy function F(x,y) satisfies:</p>
+
+                $$\frac{\partial F}{\partial x} = M \quad \text{and} \quad \frac{\partial F}{\partial y} = N$$
+
+                <h3>Solution</h3>
+                <p><strong>Step 1: Check exactness.</strong></p>
+                <p>$M = 2xy + y\cos(xy)$, $\quad N = x^2 + x\cos(xy)$</p>
+
+                <p>$$\frac{\partial M}{\partial y} = 2x + \cos(xy) - xy\sin(xy)$$</p>
+                <p>$$\frac{\partial N}{\partial x} = 2x + \cos(xy) - xy\sin(xy)$$</p>
+
+                <p>They are equal! <strong style="color: var(--success);">✓ The equation is exact.</strong></p>
+
+                <p><strong>Step 2: Find F by integrating M with respect to x:</strong></p>
+                <p>$$F = \int (2xy + y\cos(xy))\,dx = x^2y + \sin(xy) + g(y)$$</p>
+
+                <p><strong>Step 3: Differentiate with respect to y and equate to N:</strong></p>
+                <p>$$\frac{\partial F}{\partial y} = x^2 + x\cos(xy) + g'(y) = x^2 + x\cos(xy)$$</p>
+
+                <p>So $g'(y) = 0$, hence $g(y) = \text{constant}$.</p>
+
+                <p><strong>General solution:</strong>
+                $$x^2y + \sin(xy) = C$$</p>
+
+                <div class="tip-box" style="background: #fef3c7; border-left: 4px solid var(--warning); padding: 1rem; margin: 1.5rem 0; border-radius: 6px;">
+                    <p><strong>Engineering Insight:</strong> In engineering, exact equations often arise from <strong>energy conservation principles</strong>. The potential function F(x,y) represents the total energy of the system, and F(x,y) = C means energy is conserved along solution curves. This deep connection between exact ODEs and conservative fields is one of the most important links between differential equations and physics.</p>
+                </div>
+            </div>
         </section>
 
         <!-- Interactive Visualizer -->
@@ -1067,5 +1104,9 @@
             });
         });
     </script>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+      Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
 </body>
 </html>

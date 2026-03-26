@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Separable Differential Equations - Chapter 1.1</title>
+    <title>Math 4: Separable Differential Equations | Dr. Mohamed Mabrok</title>
 
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -567,6 +567,7 @@
                 <li><strong>Newton's Law of Cooling:</strong> $\frac{dT}{dt} = -k(T - T_{\text{ambient}})$</li>
                 <li><strong>Fluid Flow:</strong> Draining tanks, mixing problems</li>
                 <li><strong>Chemical Reactions:</strong> Concentration changes over time</li>
+                <li><strong>Electrical Engineering:</strong> RC/RL circuits, thermal cooling, radioactive decay, and chemical reaction kinetics</li>
             </ul>
         </section>
 
@@ -835,6 +836,94 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Example 5: RC Circuit -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 5: RC Circuit — Charging a Capacitor</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Problem Setup</h4>
+                    <p>A resistor-capacitor (RC) circuit is one of the most fundamental circuits in electrical engineering. A capacitor is connected in series with a resistor to a constant voltage source $V_0$. The voltage $v(t)$ across the capacitor evolves according to Kirchhoff's voltage law:</p>
+
+                    $$RC\frac{dv}{dt} + v = V_0$$
+
+                    <p>Or equivalently, isolating the derivative:</p>
+
+                    $$\frac{dv}{dt} = \frac{V_0 - v}{RC}$$
+
+                    <p><strong>Given values:</strong></p>
+                    <ul>
+                        <li>Resistance: $R = 1000 \, \Omega$ (ohms)</li>
+                        <li>Capacitance: $C = 0.001 \, \text{F}$ (farads)</li>
+                        <li>Time constant: $\tau = RC = 1 \, \text{s}$ (second)</li>
+                        <li>Source voltage: $V_0 = 12 \, \text{V}$</li>
+                        <li>Initial condition: $v(0) = 0$ (capacitor initially uncharged)</li>
+                    </ul>
+
+                    <h4>Solution</h4>
+
+                    <p><strong>Step 1: Recognize it's separable</strong></p>
+                    <p>Rewrite the differential equation:</p>
+                    $$\frac{dv}{dt} = \frac{1}{RC}(V_0 - v)$$
+
+                    <p>This is separable! We can separate $v$ and $t$:</p>
+                    $$\frac{dv}{V_0 - v} = \frac{dt}{RC}$$
+
+                    <div class="tip-box">
+                        <strong>Key observation:</strong> This is a linear separable ODE in standard form. Even though it's also linear (solvable by integrating factors), separation of variables is the quickest route!
+                    </div>
+
+                    <p><strong>Step 2: Integrate both sides</strong></p>
+                    <p>Integrate the left side with respect to $v$ and the right side with respect to $t$:</p>
+                    $$\int \frac{dv}{V_0 - v} = \int \frac{dt}{RC}$$
+
+                    <p>Using the substitution $u = V_0 - v$, we get $du = -dv$:</p>
+                    $$-\ln|V_0 - v| = \frac{t}{RC} + C$$
+
+                    <p>Simplifying:</p>
+                    $$\ln|V_0 - v| = -\frac{t}{RC} + C'$$
+
+                    <p><strong>Step 3: Apply initial condition</strong></p>
+                    <p>At $t = 0$, $v(0) = 0$:</p>
+                    $$\ln(V_0) = C'$$
+
+                    <p>Therefore:</p>
+                    $$\ln|V_0 - v| = -\frac{t}{RC} + \ln(V_0)$$
+
+                    <p><strong>Step 4: Solve for $v(t)$ explicitly</strong></p>
+                    $$\ln\left|\frac{V_0 - v}{V_0}\right| = -\frac{t}{RC}$$
+
+                    $$\frac{V_0 - v}{V_0} = e^{-t/(RC)}$$
+
+                    $$V_0 - v = V_0 \, e^{-t/(RC)}$$
+
+                    $$\boxed{v(t) = V_0\left(1 - e^{-t/(RC)}\right) = 12\left(1 - e^{-t}\right) \text{ volts}}$$
+
+                    <h4>Physical Interpretation</h4>
+                    <ul>
+                        <li>At $t = 0$: $v(0) = 0$ (no charge yet)</li>
+                        <li>As $t \to \infty$: $v(t) \to V_0 = 12$ V (fully charged)</li>
+                        <li>At $t = \tau = RC = 1$ s: $v(1) = 12(1 - e^{-1}) \approx 12(0.632) = 7.58$ V (≈63.2% charged)</li>
+                        <li>At $t = 5\tau = 5$ s: $v(5) = 12(1 - e^{-5}) \approx 12(0.993) = 11.92$ V (≈99.3% charged)</li>
+                    </ul>
+
+                    <div class="tip-box">
+                        <strong>The Time Constant $\tau = RC$:</strong> This is the most important parameter in RC circuits!
+                        <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                            <li>$\tau$ has units of time (seconds)</li>
+                            <li>After one time constant ($t = \tau$), the capacitor reaches 63.2% of its final voltage</li>
+                            <li>After five time constants ($t = 5\tau$), the capacitor is 99.3% charged (essentially "fully" charged in practice)</li>
+                            <li>Larger $RC$ means slower charging; smaller $RC$ means faster charging</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Important observation:</strong> This is ALSO a first-order linear ODE solvable by integrating factors! Many real-world differential equations can be solved by multiple methods. In this case, separation of variables was simpler and more direct than the integrating factor method. In practice, always look for the quickest route to a solution.
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Interactive Slope Field Visualizer -->
@@ -1081,5 +1170,9 @@
 
         // Initialize
     </script>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University, Department of Mathematics and Statistics
+    </footer>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>First-Order Linear Differential Equations — Interactive Course</title>
+<title>Math 4: First-Order Linear Equations | Dr. Mohamed Mabrok</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
@@ -507,6 +507,47 @@
       <div class="tip-box">
         <div class="box-label">Elegant Result</div>
         <p>Sometimes the integrating factor and \(Q(x)\) simplify beautifully when multiplied together. Here \(\sec(x)\cdot\cos(x) = 1\), making the integration trivial. Always simplify before integrating!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 5: Industrial Mixing Tank -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 5:</strong> &nbsp; Industrial Mixing Tank — A Chemical Engineering Application</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Problem Setup:</strong> A 500-liter tank initially contains pure water. A brine solution with concentration 0.05 kg/L flows in at 10 L/min, and the well-mixed solution flows out at the same rate. Find the amount of salt \(A(t)\) in the tank at time \(t\).</p>
+
+      <p><strong>Step 1:</strong> Set up the differential equation using the principle: rate of change = (rate in) − (rate out).</p>
+      <div class="math-display">$$\frac{dA}{dt} = \text{(concentration in)} \times \text{(flow in)} - \frac{A}{V} \times \text{(flow out)}$$</div>
+      <div class="math-display">$$\frac{dA}{dt} = (0.05)(10) - \frac{A}{500}(10) = 0.5 - \frac{A}{50}$$</div>
+
+      <p><strong>Step 2:</strong> Rearrange to standard form with \(P(t) = \frac{1}{50}\) and \(Q(t) = 0.5\):</p>
+      <div class="math-display">$$\frac{dA}{dt} + \frac{1}{50}\,A = 0.5$$</div>
+
+      <p><strong>Step 3:</strong> Compute the integrating factor:</p>
+      <div class="math-display">$$\mu(t) = e^{\int \frac{1}{50}\,dt} = e^{t/50}$$</div>
+
+      <p><strong>Step 4:</strong> Multiply both sides by \(e^{t/50}\):</p>
+      <div class="math-display">$$e^{t/50}\frac{dA}{dt} + \frac{1}{50}e^{t/50}\,A = 0.5\,e^{t/50}$$</div>
+      <div class="math-display">$$\frac{d}{dt}\big[e^{t/50}\,A\big] = 0.5\,e^{t/50}$$</div>
+
+      <p><strong>Step 5:</strong> Integrate both sides:</p>
+      <div class="math-display">$$e^{t/50}\,A = \int 0.5\,e^{t/50}\,dt = 0.5 \cdot 50 \cdot e^{t/50} + C = 25\,e^{t/50} + C$$</div>
+
+      <p><strong>Step 6:</strong> Divide by \(e^{t/50}\):</p>
+      <div class="math-display">$$A(t) = 25 + Ce^{-t/50}$$</div>
+
+      <p><strong>Step 7:</strong> Apply the initial condition \(A(0) = 0\) (pure water initially):</p>
+      <div class="math-display">$$0 = 25 + C \quad \Rightarrow \quad C = -25$$</div>
+
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{A(t) = 25\big(1 - e^{-t/50}\big) \text{ kg}}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Physical Interpretation</div>
+        <p><strong>Equilibrium concentration:</strong> As \(t \to \infty\), the tank reaches equilibrium at \(A = 25\) kg, which means the concentration equals the inflow concentration: \(25/500 = 0.05\) kg/L. <strong>Time constant:</strong> The characteristic time scale \(\tau = 50\) minutes tells us how quickly the tank's composition changes. After time \(\tau\), the tank reaches \((1-e^{-1}) \approx 63\%\) of equilibrium. This mixing problem is fundamental in chemical engineering, used to design reactors, wastewater treatment systems, and pharmaceutical manufacturing processes.</p>
       </div>
     </div>
   </div>
@@ -1082,6 +1123,10 @@ document.querySelectorAll('nav a').forEach(a => {
   });
 });
 </script>
+
+<footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+</footer>
 
 </body>
 </html>

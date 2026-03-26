@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Differential Equations — Interactive Course</title>
+<title>Math 4: Mathematics for Engineering — Dr. Mohamed Mabrok</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
@@ -153,20 +153,46 @@
   .stat .num { font-size: 2rem; font-weight: 800; }
   .stat .label { font-size: 0.85rem; opacity: 0.8; }
 
+  /* Instructor card */
+  .instructor-card {
+    background: var(--card); border-radius: var(--radius);
+    border: 1.5px solid var(--border); padding: 2rem;
+    box-shadow: var(--shadow); display: flex; gap: 1.5rem; align-items: center;
+    margin-bottom: 2.5rem;
+  }
+  .instructor-photo {
+    width: 100px; height: 100px; border-radius: 50%; flex-shrink: 0;
+    object-fit: cover; border: 3px solid var(--primary);
+  }
+  .instructor-initials {
+    width: 100px; height: 100px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem; font-weight: 800; color: #fff;
+    border: 3px solid var(--primary);
+  }
+  .instructor-info h3 { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+  .instructor-info .title { color: var(--primary); font-weight: 600; font-size: 0.95rem; }
+  .instructor-info .dept { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.1rem; }
+  .instructor-info .contact { margin-top: 0.5rem; font-size: 0.85rem; }
+  .instructor-info .contact a { color: var(--primary); text-decoration: none; }
+  .instructor-info .contact a:hover { text-decoration: underline; }
+
   @media (max-width: 640px) {
     .hero h1 { font-size: 2rem; }
     .chapter-grid { grid-template-columns: 1fr; }
     .stats { gap: 1.5rem; }
     .stat .num { font-size: 1.5rem; }
+    .instructor-card { flex-direction: column; text-align: center; }
   }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="badge">Interactive Learning Experience</div>
-  <h1>Differential Equations</h1>
-  <p>A comprehensive, interactive course with visualizations, step-by-step solutions, and hands-on practice problems</p>
+  <div class="badge">Qatar University &mdash; Math 4</div>
+  <h1>Mathematics for Engineering</h1>
+  <p>Ordinary Differential Equations &mdash; an interactive course with visualizations, step-by-step solutions, and engineering applications</p>
   <div class="stats">
     <div class="stat"><div class="num">6</div><div class="label">Chapters</div></div>
     <div class="stat"><div class="num">30+</div><div class="label">Topics</div></div>
@@ -175,6 +201,21 @@
 </div>
 
 <div class="container">
+
+  <!-- Instructor Card -->
+  <div class="instructor-card">
+    <img src="instructor.png" alt="Dr. Mohamed Mabrok" class="instructor-photo"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="instructor-initials" style="display:none;">MM</div>
+    <div class="instructor-info">
+      <h3>Dr. Mohamed Mabrok</h3>
+      <div class="title">Instructor</div>
+      <div class="dept">Department of Mathematics and Statistics, Qatar University</div>
+      <div class="contact">
+        <a href="mailto:m.a.mabrok@gmail.com">m.a.mabrok@gmail.com</a>
+      </div>
+    </div>
+  </div>
 
   <div class="section-header">
     <h2>Course Chapters</h2>
@@ -327,7 +368,7 @@
 </div>
 
 <footer>
-  Differential Equations — Interactive Course &nbsp;|&nbsp; Designed for deep understanding through visualization and practice
+  Math 4: Mathematics for Engineering &nbsp;|&nbsp; Dr. Mohamed Mabrok &nbsp;|&nbsp; Department of Mathematics and Statistics, Qatar University
 </footer>
 
 <script>
