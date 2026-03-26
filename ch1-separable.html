@@ -690,32 +690,51 @@
 
             <div class="example-item">
                 <div class="example-header" onclick="toggleCollapsible(this)">
-                    <span>Example 2: $\dfrac{dy}{dx} = \dfrac{1+y^2}{1+x^2}$ (no initial condition)</span>
+                    <span>Example 2: $\dfrac{dy}{dx} - y - 14 = y\tan^2(2x) + 14\tan^2(2x)$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="example-content">
                     <h4>Solution</h4>
-                    <p><strong>Step 1–2: Separate variables</strong></p>
-                    $$\frac{dy}{1+y^2} = \frac{dx}{1+x^2}$$
 
-                    <p><strong>Step 3: Integrate both sides</strong></p>
-                    $$\int \frac{dy}{1+y^2} = \int \frac{dx}{1+x^2}$$
-                    $$\arctan(y) = \arctan(x) + C$$
+                    <div class="warning-box">
+                        <strong>Key Insight:</strong> This equation does <em>not</em> look separable at first glance! The critical step is algebraic simplification <strong>before</strong> attempting separation.
+                    </div>
 
-                    <p><strong>Step 4: Solve for $y$</strong></p>
-                    Taking the tangent of both sides:
-                    $$y = \tan(\arctan(x) + C)$$
+                    <p><strong>Step 0: Simplify by factoring</strong></p>
+                    <p>Move everything to the right side:</p>
+                    $$\frac{dy}{dx} = y + 14 + y\tan^2(2x) + 14\tan^2(2x)$$
 
-                    Or using the tangent addition formula:
-                    $$y = \frac{x + \tan(C)}{1 - x\tan(C)}$$
+                    <p>Now <strong>factor by grouping</strong> — notice $y$ and $14$ appear in the same pattern:</p>
+                    $$\frac{dy}{dx} = y\big(1 + \tan^2(2x)\big) + 14\big(1 + \tan^2(2x)\big)$$
 
-                    <p><strong>General Solution (implicit form):</strong></p>
-                    $$\boxed{\arctan(y) = \arctan(x) + C}$$
+                    $$\frac{dy}{dx} = \big(y + 14\big)\big(1 + \tan^2(2x)\big)$$
+
+                    <p>Now recall the fundamental identity: $1 + \tan^2(\theta) = \sec^2(\theta)$, so:</p>
+
+                    $$\frac{dy}{dx} = (y + 14)\sec^2(2x)$$
 
                     <div class="tip-box">
-                        <strong>Note:</strong> This has no equilibrium solutions since $1+y^2 > 0$ always.
-                        The implicit form is cleaner than the explicit form.
+                        <strong>Now it's clearly separable!</strong> We have $f(x) = \sec^2(2x)$ and $g(y) = y + 14$.
                     </div>
+
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$\frac{dy}{y + 14} = \sec^2(2x)\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int \frac{dy}{y+14} = \int \sec^2(2x)\,dx$$
+
+                    $$\ln|y + 14| = \frac{1}{2}\tan(2x) + C$$
+
+                    <p><strong>Step 4: Solve for $y$</strong></p>
+                    $$|y + 14| = e^{\frac{1}{2}\tan(2x) + C} = Ae^{\frac{1}{2}\tan(2x)}$$
+
+                    $$\boxed{y = -14 + Ae^{\frac{1}{2}\tan(2x)}}$$
+
+                    <div class="tip-box">
+                        <strong>Lesson learned:</strong> Always look for common factors before declaring an equation non-separable. Factoring by grouping and trig identities can reveal hidden separable structure.
+                    </div>
+
+                    <p><strong>Equilibrium solution:</strong> Setting $g(y) = 0$ gives $y = -14$, which is indeed a constant solution. Verify: if $y = -14$, then $dy/dx = 0$, and the right side is $(-14+14)\sec^2(2x) = 0$. ✓</p>
                 </div>
             </div>
 
@@ -760,37 +779,60 @@
 
             <div class="example-item">
                 <div class="example-header" onclick="toggleCollapsible(this)">
-                    <span>Example 4: $\dfrac{dy}{dx} = \dfrac{x+1}{y-1}$ with $y(0) = 3$</span>
+                    <span>Example 4: $\dfrac{1}{1+x^2}\dfrac{dy}{dx} = e^{2y - 3x}\cdot y^{-2}$, &nbsp; $y(0) = 1$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="example-content">
                     <h4>Solution</h4>
-                    <p><strong>Step 1–2: Separate variables</strong></p>
-                    $$\frac{dy}{dx} = \frac{x+1}{y-1}$$
-                    $$(y-1)\,dy = (x+1)\,dx$$
 
-                    <p><strong>Step 3: Integrate both sides</strong></p>
-                    $$\int (y-1)\,dy = \int (x+1)\,dx$$
-                    $$\frac{y^2}{2} - y = \frac{x^2}{2} + x + C$$
-
-                    <p><strong>Step 5: Apply initial condition $y(0) = 3$</strong></p>
-                    $$\frac{9}{2} - 3 = \frac{0}{2} + 0 + C$$
-                    $$\frac{9}{2} - \frac{6}{2} = C \implies C = \frac{3}{2}$$
-
-                    <p><strong>Solution (implicit):</strong></p>
-                    $$\boxed{\frac{y^2}{2} - y = \frac{x^2}{2} + x + \frac{3}{2}}$$
-
-                    <p>Multiplying by 2 to clean up:</p>
-                    $$y^2 - 2y = x^2 + 2x + 3$$
-                    $$y^2 - 2y - x^2 - 2x - 3 = 0$$
-
-                    <div class="example-box">
-                        <strong>Completing the square:</strong>
-                        $$(y^2 - 2y + 1) - (x^2 + 2x + 1) = 3 + 1 - 1$$
-                        $$(y-1)^2 - (x+1)^2 = 3$$
+                    <div class="warning-box">
+                        <strong>Key Insight:</strong> This equation involves products of exponentials and powers. The trick is to split the exponential $e^{2y-3x} = e^{2y}\cdot e^{-3x}$ so that $x$-terms and $y$-terms separate cleanly.
                     </div>
 
-                    <p>This is a hyperbola. Since $y(0) = 3$, we take the upper branch.</p>
+                    <p><strong>Step 0: Rewrite and identify structure</strong></p>
+                    <p>Start by multiplying both sides by $(1+x^2)$:</p>
+                    $$\frac{dy}{dx} = (1+x^2)\,e^{2y-3x}\,y^{-2}$$
+
+                    <p>Now split the exponential $e^{2y-3x} = e^{2y}\cdot e^{-3x}$:</p>
+                    $$\frac{dy}{dx} = \underbrace{(1+x^2)\,e^{-3x}}_{f(x)} \cdot \underbrace{e^{2y}\,y^{-2}}_{g(y)}$$
+
+                    <div class="tip-box">
+                        <strong>Separable!</strong> We have $f(x) = (1+x^2)e^{-3x}$ and $g(y) = e^{2y}/y^2$.
+                    </div>
+
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$y^2\,e^{-2y}\,dy = (1+x^2)\,e^{-3x}\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+
+                    <p><em>Left side:</em> $\displaystyle\int y^2 e^{-2y}\,dy$ — use integration by parts twice (or tabular method):</p>
+
+                    <p>Let $u = y^2$, $dv = e^{-2y}dy$. Apply IBP repeatedly:</p>
+                    $$\int y^2 e^{-2y}\,dy = -\frac{y^2}{2}e^{-2y} - \frac{y}{2}e^{-2y} - \frac{1}{4}e^{-2y} + C_1$$
+                    $$= -\frac{e^{-2y}}{4}(2y^2 + 2y + 1) + C_1$$
+
+                    <p><em>Right side:</em> $\displaystyle\int (1+x^2)e^{-3x}\,dx$ — also by parts:</p>
+                    $$\int e^{-3x}\,dx = -\frac{1}{3}e^{-3x}$$
+                    $$\int x^2 e^{-3x}\,dx = -\frac{x^2}{3}e^{-3x} - \frac{2x}{9}e^{-3x} - \frac{2}{27}e^{-3x}$$
+
+                    <p>Combining:</p>
+                    $$\int (1+x^2)e^{-3x}\,dx = -\frac{e^{-3x}}{27}(9x^2 + 6x + 11) + C_2$$
+
+                    <p><strong>Step 4: Implicit solution</strong></p>
+                    $$\boxed{-\frac{e^{-2y}}{4}(2y^2 + 2y + 1) = -\frac{e^{-3x}}{27}(9x^2 + 6x + 11) + C}$$
+
+                    <p><strong>Step 5: Apply initial condition $y(0) = 1$</strong></p>
+                    <p>At $x = 0$, $y = 1$:</p>
+                    $$-\frac{e^{-2}}{4}(2 + 2 + 1) = -\frac{1}{27}(0 + 0 + 11) + C$$
+                    $$-\frac{5e^{-2}}{4} = -\frac{11}{27} + C$$
+                    $$C = \frac{11}{27} - \frac{5e^{-2}}{4} = \frac{11}{27} - \frac{5}{4e^2}$$
+
+                    <div class="tip-box">
+                        <strong>Lessons from this example:</strong>
+                        <p>1. <strong>Split combined exponentials</strong> — $e^{f(x)+g(y)}$ always factors as $e^{f(x)} \cdot e^{g(y)}$.</p>
+                        <p>2. <strong>Implicit solutions are fine</strong> — not every separable equation yields an explicit $y = \ldots$ form.</p>
+                        <p>3. <strong>Integration skills matter</strong> — separable equations can produce integrals that require multiple rounds of integration by parts.</p>
+                    </div>
                 </div>
             </div>
         </section>
