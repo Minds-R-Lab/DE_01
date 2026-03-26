@@ -378,7 +378,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
+            color: #1e293b;
         }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex,
+        .choice-btn.incorrect .katex,
+        .choice-btn.selected .katex { color: white; }
 
         .choice-btn:hover {
             border-color: var(--primary);
