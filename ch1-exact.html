@@ -672,6 +672,117 @@
                     <p><strong>Engineering Insight:</strong> In engineering, exact equations often arise from <strong>energy conservation principles</strong>. The potential function F(x,y) represents the total energy of the system, and F(x,y) = C means energy is conserved along solution curves. This deep connection between exact ODEs and conservative fields is one of the most important links between differential equations and physics.</p>
                 </div>
             </div>
+
+            <!-- Example 6 -->
+            <button class="collapsible">Example 6: Polynomial Potential Function</button>
+            <div class="collapsible-content example-box">
+                <h3>Solving an Exact Equation with Polynomial Terms</h3>
+                <p>Consider the differential equation:</p>
+
+                $$(2xy - 9x^2)\,dx + (2y + x^2 + 1)\,dy = 0$$
+
+                <h3>Solution</h3>
+                <p><strong>Step 1: Identify M and N, then check exactness.</strong></p>
+                <p>$M = 2xy - 9x^2$, $\quad N = 2y + x^2 + 1$</p>
+
+                <p>$$\frac{\partial M}{\partial y} = 2x$$</p>
+                <p>$$\frac{\partial N}{\partial x} = 2x$$</p>
+
+                <p>They are equal! <strong style="color: var(--success);">✓ The equation is exact.</strong></p>
+
+                <p><strong>Step 2: Find F by integrating M with respect to x:</strong></p>
+                <p>$$F(x,y) = \int (2xy - 9x^2)\,dx + h(y) = x^2y - 3x^3 + h(y)$$</p>
+
+                <p><strong>Step 3: Differentiate with respect to y and use the condition on N:</strong></p>
+                <p>$$\frac{\partial F}{\partial y} = x^2 + h'(y) = N = 2y + x^2 + 1$$</p>
+
+                <p>Therefore: $h'(y) = 2y + 1$</p>
+
+                <p><strong>Step 4: Integrate to find h(y):</strong></p>
+                <p>$$h(y) = \int (2y + 1)\,dy = y^2 + y$$</p>
+
+                <p><strong>General solution:</strong>
+                $$x^2y - 3x^3 + y^2 + y = C$$</p>
+
+                <div class="tip-box" style="background: #fef3c7; border-left: 4px solid var(--warning); padding: 1rem; margin: 1.5rem 0; border-radius: 6px;">
+                    <p><strong>Key Observation:</strong> Notice how the potential function $F(x,y) = x^2y - 3x^3 + y^2 + y$ is a beautiful polynomial. This example shows how exactness conditions allow us to reconstruct the underlying potential from its partial derivatives. The "puzzle piece" property of exact equations ensures that the cross-partial derivatives match perfectly.</p>
+                </div>
+            </div>
+
+            <!-- Example 7 -->
+            <button class="collapsible">Example 7: Exponential Terms in Exact Equations</button>
+            <div class="collapsible-content example-box">
+                <h3>Handling Exponential Functions</h3>
+                <p>Consider the differential equation with exponential terms:</p>
+
+                $$(ye^{2x} + 8)\,dx + \left(\frac{1}{2}e^{2x} - 7y\right)\,dy = 0$$
+
+                <h3>Solution</h3>
+                <p><strong>Step 1: Identify M and N, then verify exactness.</strong></p>
+                <p>$M = ye^{2x} + 8$, $\quad N = \frac{1}{2}e^{2x} - 7y$</p>
+
+                <p>$$\frac{\partial M}{\partial y} = e^{2x}$$</p>
+                <p>$$\frac{\partial N}{\partial x} = \frac{1}{2} \cdot 2e^{2x} = e^{2x}$$</p>
+
+                <p>They are equal! <strong style="color: var(--success);">✓ The equation is exact.</strong></p>
+
+                <p><strong>Step 2: Integrate M with respect to x (careful with exponentials):</strong></p>
+                <p>$$F(x,y) = \int (ye^{2x} + 8)\,dx + h(y)$$</p>
+                <p>For the first term: $\int ye^{2x}\,dx = \frac{y}{2}e^{2x}$ (treating y as constant)</p>
+                <p>$$F(x,y) = \frac{y}{2}e^{2x} + 8x + h(y)$$</p>
+
+                <p><strong>Step 3: Differentiate F with respect to y and match with N:</strong></p>
+                <p>$$\frac{\partial F}{\partial y} = \frac{1}{2}e^{2x} + h'(y) = \frac{1}{2}e^{2x} - 7y$$</p>
+
+                <p>Therefore: $h'(y) = -7y$</p>
+
+                <p><strong>Step 4: Integrate to find h(y):</strong></p>
+                <p>$$h(y) = \int (-7y)\,dy = -\frac{7y^2}{2}$$</p>
+
+                <p><strong>General solution:</strong>
+                $$\frac{1}{2}ye^{2x} + 8x - \frac{7y^2}{2} = C$$</p>
+
+                <div class="tip-box" style="background: #fef3c7; border-left: 4px solid var(--warning); padding: 1rem; margin: 1.5rem 0; border-radius: 6px;">
+                    <p><strong>Caution with Exponentials:</strong> When integrating $ye^{2x}$ with respect to $x$, remember that $y$ is treated as a constant. The factor $\frac{1}{2}$ appears because of the chain rule: $\frac{d}{dx}\left[\frac{y}{2}e^{2x}\right] = y e^{2x}$. Careful handling of exponential integration is essential to avoid errors.</p>
+                </div>
+            </div>
+
+            <!-- Example 8 -->
+            <button class="collapsible">Example 8: Mixed Trigonometric and Polynomial Terms</button>
+            <div class="collapsible-content example-box">
+                <h3>Combining Multiple Function Types</h3>
+                <p>Consider an exact equation that blends trigonometric and polynomial functions:</p>
+
+                $$(\sin x + 4xy)\,dx + (2x^2 - \cos y)\,dy = 0$$
+
+                <h3>Solution</h3>
+                <p><strong>Step 1: Identify M and N, then check exactness.</strong></p>
+                <p>$M = \sin x + 4xy$, $\quad N = 2x^2 - \cos y$</p>
+
+                <p>$$\frac{\partial M}{\partial y} = 4x$$</p>
+                <p>$$\frac{\partial N}{\partial x} = 4x$$</p>
+
+                <p>They are equal! <strong style="color: var(--success);">✓ The equation is exact.</strong></p>
+
+                <p><strong>Step 2: Integrate M with respect to x:</strong></p>
+                <p>$$F(x,y) = \int (\sin x + 4xy)\,dx + h(y)$$</p>
+                <p>$$F(x,y) = -\cos x + 2x^2y + h(y)$$</p>
+
+                <p><strong>Step 3: Differentiate with respect to y and use the N condition:</strong></p>
+                <p>$$\frac{\partial F}{\partial y} = 2x^2 + h'(y) = 2x^2 - \cos y$$</p>
+
+                <p>Therefore: $h'(y) = -\cos y$</p>
+
+                <p><strong>Step 4: Integrate to find h(y):</strong></p>
+                <p>$$h(y) = \int (-\cos y)\,dy = -\sin y$$</p>
+
+                <p><strong>General solution:</strong>
+                $$2x^2y - \cos x - \sin y = C$$</p>
+
+                <div class="tip-box" style="background: #fef3c7; border-left: 4px solid var(--warning); padding: 1rem; margin: 1.5rem 0; border-radius: 6px;">
+                    <p><strong>The Beautiful Puzzle:</strong> Notice how the potential function $F(x,y) = 2x^2y - \cos x - \sin y$ elegantly combines polynomial, trigonometric, and mixed terms. The exactness condition $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$ ensures that everything fits together perfectly like puzzle pieces. Each component of the potential function contributes naturally from the structure of M and N, demonstrating the deep harmony of exact equations.</p>
+                </div>
+            </div>
         </section>
 
         <!-- Interactive Visualizer -->

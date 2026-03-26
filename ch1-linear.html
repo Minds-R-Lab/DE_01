@@ -557,6 +557,110 @@
       </div>
     </div>
   </div>
+
+  <!-- Example 6: Integration by Parts Pattern -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 6:</strong> &nbsp; $x \frac{dy}{dx} + y = 2xe^x$ — Integration by Parts Application</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Problem:</strong> Solve $x \displaystyle\frac{dy}{dx} + y = 2xe^x$.</p>
+
+      <p><strong>Step 1:</strong> Convert to standard form by dividing by $x$:</p>
+      <div class="math-display">$$\frac{dy}{dx} + \frac{1}{x}y = 2e^x$$</div>
+      <p>Thus $P(x) = \frac{1}{x}$ and $Q(x) = 2e^x$.</p>
+
+      <p><strong>Step 2:</strong> Compute the integrating factor:</p>
+      <div class="math-display">$$\mu(x) = e^{\int \frac{1}{x}\,dx} = e^{\ln|x|} = |x| = x \quad \text{(taking } x > 0\text{)}$$</div>
+
+      <p><strong>Step 3:</strong> Multiply both sides by $\mu = x$:</p>
+      <div class="math-display">$$x\frac{dy}{dx} + y = 2xe^x$$</div>
+      <div class="math-display">$$\frac{d}{dx}(xy) = 2xe^x$$</div>
+
+      <p><strong>Step 4:</strong> Integrate both sides. This requires <strong>integration by parts</strong>:</p>
+      <div class="math-display">$$xy = \int 2xe^x\,dx$$</div>
+      <p>Using integration by parts with $u = 2x$, $dv = e^x\,dx$:</p>
+      <div class="math-display">$$\int 2xe^x\,dx = 2xe^x - \int 2e^x\,dx = 2xe^x - 2e^x = 2e^x(x - 1) + C$$</div>
+
+      <p><strong>Step 5:</strong> Solve for $y$:</p>
+      <div class="math-display">$$xy = 2e^x(x-1) + C$$</div>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y = 2e^x\left(1 - \frac{1}{x}\right) + \frac{C}{x}}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Integration by Parts in Linear ODEs</div>
+        <p><strong>Key insight:</strong> After multiplying by the integrating factor, the right-hand side $\mu(x) \cdot Q(x)$ must be integrated. For products like $xe^x$ or $x\sin(x)$, integration by parts is typically required. The formula $\int u\,dv = uv - \int v\,du$ is your most powerful tool when faced with such products. Practice this technique — it appears frequently in applied linear DEs!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 7: Rational Function Integrating Factor -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 7:</strong> &nbsp; $\frac{dy}{dx} + \frac{2}{x}y = x^2$ — Power-Law Integrating Factor</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Problem:</strong> Solve $\displaystyle\frac{dy}{dx} + \frac{2}{x}y = x^2$.</p>
+
+      <p><strong>Step 1:</strong> Identify $P(x) = \frac{2}{x}$ and $Q(x) = x^2$ (already in standard form).</p>
+
+      <p><strong>Step 2:</strong> Compute the integrating factor:</p>
+      <div class="math-display">$$\mu(x) = e^{\int \frac{2}{x}\,dx} = e^{2\ln|x|} = e^{\ln(x^2)} = x^2 \quad \text{(for } x > 0\text{)}$$</div>
+
+      <p><strong>Step 3:</strong> Multiply both sides by $\mu = x^2$:</p>
+      <div class="math-display">$$x^2\frac{dy}{dx} + 2xy = x^4$$</div>
+      <div class="math-display">$$\frac{d}{dx}(x^2 y) = x^4$$</div>
+
+      <p><strong>Step 4:</strong> Integrate both sides:</p>
+      <div class="math-display">$$x^2 y = \int x^4\,dx = \frac{x^5}{5} + C$$</div>
+
+      <p><strong>Step 5:</strong> Solve for $y$:</p>
+      <div class="math-display" style="background:#d1fae5;">$$\boxed{y = \frac{x^3}{5} + \frac{C}{x^2}}$$</div>
+
+      <div class="tip-box">
+        <div class="box-label">Pattern Recognition: Rational Coefficients</div>
+        <p><strong>General rule:</strong> If $P(x) = \frac{n}{x}$ (a constant divided by $x$), then:</p>
+        <div class="math-display">$$\mu(x) = e^{\int \frac{n}{x}\,dx} = e^{n\ln|x|} = x^n$$</div>
+        <p>This gives an integrating factor that is a power of $x$, which is excellent for simplifying products and powers. This pattern appears constantly in applications ranging from heat diffusion to population dynamics. Watch for it!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 8: Transcendental Integrating Factor - No Closed Form -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 8:</strong> &nbsp; $\frac{dy}{dx} + y\sin(x) = \cos(x)$ — Transcendental Integrating Factor</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Problem:</strong> Solve $\displaystyle\frac{dy}{dx} + y\sin(x) = \cos(x)$.</p>
+
+      <p><strong>Step 1:</strong> Identify $P(x) = \sin(x)$ and $Q(x) = \cos(x)$ (already in standard form).</p>
+
+      <p><strong>Step 2:</strong> Compute the integrating factor:</p>
+      <div class="math-display">$$\mu(x) = e^{\int \sin(x)\,dx}$$</div>
+      <p>We need to evaluate $\int \sin(x)\,dx = -\cos(x) + C_0$. Taking the antiderivative without the constant:</p>
+      <div class="math-display">$$\mu(x) = e^{-\cos(x)}$$</div>
+
+      <p><strong>Step 3:</strong> Multiply both sides by $\mu(x) = e^{-\cos(x)}$:</p>
+      <div class="math-display">$$e^{-\cos(x)}\frac{dy}{dx} + e^{-\cos(x)}y\sin(x) = e^{-\cos(x)}\cos(x)$$</div>
+      <div class="math-display">$$\frac{d}{dx}\left(ye^{-\cos(x)}\right) = e^{-\cos(x)}\cos(x)$$</div>
+
+      <p><strong>Step 4:</strong> Integrate both sides:</p>
+      <div class="math-display">$$ye^{-\cos(x)} = \int e^{-\cos(x)}\cos(x)\,dx + C$$</div>
+
+      <p><strong>Step 5:</strong> General (Implicit) Solution:</p>
+      <div class="math-display" style="background:#fff7ed;">$$\boxed{ye^{-\cos(x)} = \int e^{-\cos(x)}\cos(x)\,dx + C}$$</div>
+
+      <div class="warning-box" style="background:#fee2e2; border-left: 5px solid #dc2626; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1rem;">
+        <div class="box-label" style="color:#991b1b;">No Closed Form</div>
+        <p style="color:#7f1d1d;"><strong>Critical insight:</strong> The integral $\displaystyle\int e^{-\cos(x)}\cos(x)\,dx$ has <strong>no elementary antiderivative</strong>. Even though the integrating factor method <em>always</em> works theoretically, it does not always yield a closed-form answer.</p>
+        <p style="color:#7f1d1d;"><strong>In practice:</strong> When faced with such integrals, we use <strong>numerical methods</strong> such as Euler's method, Runge-Kutta algorithms, or specialized ODE solvers (like those in SciPy or MATLAB). These approximate the solution to arbitrary precision without needing a formula.</p>
+        <p style="color:#7f1d1d;"><strong>Lesson:</strong> The integrating factor method is a powerful analytical tool, but nature does not always reward us with pretty answers. A working mathematician must be comfortable switching between analytical, numerical, and graphical approaches — and this example is a perfect reminder of that reality!</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- =================== SLOPE FIELD VISUALIZER =================== -->

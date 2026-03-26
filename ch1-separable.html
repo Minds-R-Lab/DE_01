@@ -930,6 +930,165 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Example 6: Factoring by Grouping -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 6: $\dfrac{dy}{dx} = y\cos(x) + \cos(x) + y + 1$ (Factoring by Grouping)</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+
+                    <p><strong>Step 1: Recognize the separable structure by factoring</strong></p>
+                    <p>The key is to group terms strategically:</p>
+                    $$\frac{dy}{dx} = \cos(x)(y + 1) + (y + 1) = (y+1)(\cos(x) + 1)$$
+
+                    <div class="tip-box">
+                        <strong>Factoring by Grouping:</strong> When you have four terms like $a + b + c + d$, try grouping them as $(a+c) + (b+d)$ or $(a+b) + (c+d)$ and factor each group. Here: $y\cos(x) + y + \cos(x) + 1 = y(\cos(x)+1) + 1(\cos(x)+1) = (y+1)(\cos(x)+1)$.
+                    </div>
+
+                    <p><strong>Step 2: Separate variables</strong></p>
+                    $$\frac{dy}{y+1} = (\cos(x) + 1)\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int \frac{dy}{y+1} = \int (\cos(x) + 1)\,dx$$
+                    $$\ln|y+1| = \sin(x) + x + C$$
+
+                    <p><strong>Step 4: Solve for $y$ (explicit solution)</strong></p>
+                    $$|y+1| = e^{\sin(x) + x + C} = e^C \cdot e^{\sin(x) + x}$$
+                    $$y + 1 = A \, e^{\sin(x) + x}$$
+
+                    where $A = \pm e^C$ is an arbitrary constant.
+
+                    $$\boxed{y = A\,e^{\sin(x) + x} - 1}$$
+
+                    <p><strong>Particular solution (if $y(0) = 0$ is given):</strong></p>
+                    <p>At $x = 0$, $y = 0$:</p>
+                    $$0 + 1 = A \, e^{\sin(0) + 0} = A \cdot e^0 = A$$
+                    $$A = 1$$
+
+                    <p>So the particular solution is:</p>
+                    $$\boxed{y = e^{\sin(x) + x} - 1}$$
+
+                    <div class="tip-box">
+                        <strong>When to Use Factoring by Grouping:</strong>
+                        <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                            <li>Look for repeated polynomial or trig factors in $\frac{dy}{dx}$</li>
+                            <li>Group like terms together and factor each group</li>
+                            <li>This technique can transform a seemingly non-separable equation into a cleanly separable one</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 7: IVP with Positive Root -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 7: $y\,\dfrac{dy}{dx} = \sin(x)$, &nbsp; $y(0) = 1$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$y\,dy = \sin(x)\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    $$\int y\,dy = \int \sin(x)\,dx$$
+                    $$\frac{y^2}{2} = -\cos(x) + C$$
+
+                    <p><strong>Step 4: Apply initial condition $y(0) = 1$</strong></p>
+                    <p>At $x = 0$, $y = 1$:</p>
+                    $$\frac{1^2}{2} = -\cos(0) + C$$
+                    $$\frac{1}{2} = -1 + C$$
+                    $$C = \frac{3}{2}$$
+
+                    <p><strong>Step 5: Implicit solution</strong></p>
+                    $$\frac{y^2}{2} = -\cos(x) + \frac{3}{2}$$
+                    $$y^2 = -2\cos(x) + 3$$
+
+                    <p><strong>Step 6: Solve for $y$ (explicit solution)</strong></p>
+                    $$y^2 = 3 - 2\cos(x)$$
+
+                    $$\boxed{y = \sqrt{3 - 2\cos(x)}}$$
+
+                    <p>We take the positive square root because the initial condition $y(0) = 1 > 0$.</p>
+
+                    <h4>Domain and Global Existence</h4>
+                    <p>Since $-1 \leq \cos(x) \leq 1$, we have:</p>
+                    $$3 - 2(1) \leq 3 - 2\cos(x) \leq 3 - 2(-1)$$
+                    $$1 \leq 3 - 2\cos(x) \leq 5$$
+
+                    <div class="tip-box">
+                        <strong>Global Existence:</strong> Since $3 - 2\cos(x) \geq 1 > 0$ for <em>all</em> $x \in \mathbb{R}$, the solution $y = \sqrt{3 - 2\cos(x)}$ is defined for all real $x$. There are no points where the solution blows up or becomes undefined — this is a <strong>global solution!</strong>
+                    </div>
+
+                    <h4>Physical Insight</h4>
+                    <ul>
+                        <li>At $x = 0$: $y = \sqrt{3 - 2(1)} = \sqrt{1} = 1$ ✓ (matches initial condition)</li>
+                        <li>At $x = \pi/2$: $y = \sqrt{3 - 2(0)} = \sqrt{3} \approx 1.73$ (maximum, since $\cos(\pi/2) = 0$)</li>
+                        <li>At $x = \pi$: $y = \sqrt{3 - 2(-1)} = \sqrt{5} \approx 2.24$ (absolute maximum, since $\cos(\pi) = -1$)</li>
+                        <li>The solution oscillates between $\sqrt{1} = 1$ and $\sqrt{5} \approx 2.24$ as $x$ varies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Example 8: Implicit Solution -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)">
+                    <span>Example 8: $(e^y - 1)\,\dfrac{dy}{dx} = 2 + \cos(x)$ (Implicit Solution)</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+
+                    <p><strong>Step 1–2: Separate variables</strong></p>
+                    $$(e^y - 1)\,dy = (2 + \cos(x))\,dx$$
+
+                    <p><strong>Step 3: Integrate both sides</strong></p>
+                    <p><em>Left side:</em></p>
+                    $$\int (e^y - 1)\,dy = e^y - y + C_1$$
+
+                    <p><em>Right side:</em></p>
+                    $$\int (2 + \cos(x))\,dx = 2x + \sin(x) + C_2$$
+
+                    <p><strong>Step 4: Implicit solution</strong></p>
+                    $$e^y - y = 2x + \sin(x) + C$$
+
+                    where $C = C_2 - C_1$ is the constant of integration.
+
+                    $$\boxed{e^y - y = 2x + \sin(x) + C}$$
+
+                    <p><strong>Particular solution (if $y(0) = 0$ is given):</strong></p>
+                    <p>At $x = 0$, $y = 0$:</p>
+                    $$e^0 - 0 = 2(0) + \sin(0) + C$$
+                    $$1 = 0 + C$$
+                    $$C = 1$$
+
+                    <p>So:</p>
+                    $$\boxed{e^y - y = 2x + \sin(x) + 1}$$
+
+                    <h4>Why We Cannot Solve Explicitly for $y$</h4>
+                    <p>The relation $e^y - y = 2x + \sin(x) + 1$ cannot be solved explicitly for $y$ in closed form. The transcendental function $f(y) = e^y - y$ does not have an inverse that can be expressed using elementary functions.</p>
+
+                    <div class="warning-box">
+                        <strong>Implicit Solutions Are Perfectly Valid!</strong> Not every differential equation yields an explicit solution $y = y(x)$. When you cannot isolate $y$ from an equation like $F(x, y) = 0$, the implicit form is still a complete and valid solution. You can:
+                        <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                            <li><strong>Evaluate numerically:</strong> Use numerical methods (Newton's method) to find $y$ for any given $x$</li>
+                            <li><strong>Analyze qualitatively:</strong> Study properties like where $\frac{dy}{dx} = 0$ or where solutions have vertical tangents</li>
+                            <li><strong>Plot implicitly:</strong> Many graphing tools can plot implicit relations $F(x,y) = 0$ directly</li>
+                        </ul>
+                    </div>
+
+                    <h4>Uniqueness Check</h4>
+                    <p>At any point $(x_0, y_0)$ satisfying the implicit relation, we can compute:</p>
+                    $$\frac{dy}{dx} = \frac{2 + \cos(x)}{e^y - 1}$$
+
+                    <p>This is well-defined as long as $e^y \neq 1$ (i.e., $y \neq 0$). By the existence and uniqueness theorem, a unique solution exists through any point $(x_0, y_0)$ with $y_0 \neq 0$.</p>
+                </div>
+            </div>
+
         </section>
 
         <!-- Islamic Motivation Box -->

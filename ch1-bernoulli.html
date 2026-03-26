@@ -838,6 +838,144 @@
                     </div>
                 </div>
             </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 6: \(\displaystyle \frac{dy}{dx} + y = e^x y^3\) (Classic n=3 Bernoulli)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} + y = e^x y^3\)</p>
+
+                    <p><strong>Identify parameters:</strong> \(P(x) = 1\), \(Q(x) = e^x\), \(n = 3\)</p>
+
+                    <p><strong>Step 1: Divide by \(y^3\).</strong> This is a Bernoulli equation with \(n=3\). Dividing both sides by \(y^3\):
+                    $$y^{-3}\frac{dy}{dx} + y^{-2} = e^x$$</p>
+
+                    <p><strong>Step 2: Substitution.</strong> Let \(z = y^{1-3} = y^{-2}\), so:
+                    $$\frac{dz}{dx} = -2y^{-3}\frac{dy}{dx}$$
+                    $$y^{-3}\frac{dy}{dx} = -\frac{1}{2}\frac{dz}{dx}$$</p>
+
+                    <p><strong>Step 3: Rewrite as linear equation.</strong> Substitute into the divided equation:
+                    $$-\frac{1}{2}\frac{dz}{dx} + z = e^x$$
+
+                    Multiply by \(-2\):
+                    $$\frac{dz}{dx} - 2z = -2e^x$$
+
+                    Now we have a linear ODE with \(P_{new}(x) = -2\) and \(Q_{new}(x) = -2e^x\).</p>
+
+                    <p><strong>Step 4: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int -2\,dx} = e^{-2x}\).
+
+                    $$e^{-2x}\frac{dz}{dx} - 2e^{-2x}z = -2e^{-2x}e^x$$
+                    $$\frac{d}{dx}(e^{-2x}z) = -2e^{-x}$$
+
+                    Integrate both sides:
+                    $$e^{-2x}z = \int -2e^{-x}\,dx = 2e^{-x} + C$$
+                    $$z = 2e^x + Ce^{2x}$$</p>
+
+                    <p><strong>Step 5: Back-substitute.</strong> Since \(z = y^{-2}\):
+                    $$y^{-2} = 2e^x + Ce^{2x}$$
+                    $$y^2 = \frac{1}{2e^x + Ce^{2x}}$$
+                    $$y = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}\)</p>
+
+                    <div class="tip-box">
+                        <strong>Always remember to substitute back!</strong> After solving for \(z\), you must return to \(y\) using the relationship \(z = y^{1-n}\). In this case, since \(z = y^{-2}\), we recover \(y\) by taking the reciprocal and square root. Forgetting this back-substitution is a common error.
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 7: \(\displaystyle \frac{dy}{dx} - \frac{y}{x} = xy^2\) (n=2 case)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} - \frac{y}{x} = xy^2\)</p>
+
+                    <p><strong>Identify parameters:</strong> \(P(x) = -\frac{1}{x}\), \(Q(x) = x\), \(n = 2\)</p>
+
+                    <p><strong>Note:</strong> The case \(n=2\) is one of the most commonly encountered Bernoulli equations in applications.</p>
+
+                    <p><strong>Step 1: Divide by \(y^2\).</strong> Dividing both sides by \(y^2\):
+                    $$y^{-2}\frac{dy}{dx} - \frac{y^{-1}}{x} = x$$</p>
+
+                    <p><strong>Step 2: Substitution.</strong> Let \(z = y^{1-2} = y^{-1}\), so:
+                    $$\frac{dz}{dx} = -y^{-2}\frac{dy}{dx}$$
+                    $$y^{-2}\frac{dy}{dx} = -\frac{dz}{dx}$$</p>
+
+                    <p><strong>Step 3: Rewrite as linear equation.</strong> Substitute:
+                    $$-\frac{dz}{dx} - \frac{z}{x} = x$$
+
+                    Multiply by \(-1\):
+                    $$\frac{dz}{dx} + \frac{z}{x} = -x$$
+
+                    Now we have a linear ODE with \(P_{new}(x) = \frac{1}{x}\) and \(Q_{new}(x) = -x\).</p>
+
+                    <p><strong>Step 4: Solve the linear equation.</strong> Integrating factor: \(\mu = e^{\int \frac{1}{x}dx} = e^{\ln|x|} = x\).
+
+                    $$x\frac{dz}{dx} + z = -x^2$$
+                    $$\frac{d}{dx}(xz) = -x^2$$
+
+                    Integrate:
+                    $$xz = -\frac{x^3}{3} + C$$
+                    $$z = -\frac{x^2}{3} + \frac{C}{x}$$</p>
+
+                    <p><strong>Step 5: Back-substitute.</strong> Since \(z = y^{-1}\):
+                    $$y^{-1} = -\frac{x^2}{3} + \frac{C}{x} = \frac{-x^3 + 3C}{3x}$$
+                    $$y = \frac{3x}{3C - x^3}$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \frac{3x}{3C - x^3}\)</p>
+
+                    <div class="tip-box">
+                        <strong>Why n=2 is special:</strong> The case \(n=2\) appears frequently in population dynamics (logistic growth, predator-prey models), chemical kinetics (second-order reactions), and fluid mechanics. The transformation to a linear equation is straightforward and the back-substitution is simple.
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 8: \(\displaystyle e^{-x}\frac{dy}{dx} + e^{-x}y = y^3\) (Preprocessing needed)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle e^{-x}\frac{dy}{dx} + e^{-x}y = y^3\)</p>
+
+                    <p><strong>Warning: Always normalize first!</strong> Notice that the coefficient of \(\frac{dy}{dx}\) is not 1. We must divide the entire equation by \(e^{-x}\) to put it in standard form before identifying \(P(x)\), \(Q(x)\), and \(n\).</p>
+
+                    <p><strong>Step 1: Normalize the equation.</strong> Divide by \(e^{-x}\):
+                    $$\frac{dy}{dx} + y = y^3 e^x$$
+
+                    This is the critical first step! Now we have standard form with \(P(x) = 1\), \(Q(x) = e^x\), \(n = 3\).</p>
+
+                    <p><strong>Step 2: Recognize this is the same as Example 6!</strong> We have:
+                    $$\frac{dy}{dx} + y = e^x y^3$$
+
+                    The Bernoulli substitution is identical: \(z = y^{-2}\) with \(dz/dx = -2y^{-3}(dy/dx)\).</p>
+
+                    <p><strong>Step 3: Rewrite and solve.</strong> Divide by \(y^3\):
+                    $$y^{-3}\frac{dy}{dx} + y^{-2} = e^x$$
+
+                    Using \(z = y^{-2}\):
+                    $$-\frac{1}{2}\frac{dz}{dx} + z = e^x$$
+                    $$\frac{dz}{dx} - 2z = -2e^x$$
+
+                    Integrating factor: \(\mu = e^{-2x}\).
+                    $$e^{-2x}z = 2e^{-x} + C$$
+                    $$z = 2e^x + Ce^{2x}$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong> Since \(z = y^{-2}\):
+                    $$y^{-2} = 2e^x + Ce^{2x}$$
+                    $$y = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}$$</p>
+
+                    <p><strong>Solution:</strong> \(\displaystyle y(x) = \pm\frac{1}{\sqrt{2e^x + Ce^{2x}}}\)</p>
+
+                    <div class="warning-box" style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin: 15px 0; border-radius: 4px;">
+                        <strong>Preprocessing is Critical:</strong> When the coefficient of \(\frac{dy}{dx}\) is not 1, you <em>must</em> normalize the equation first by dividing through. This ensures you correctly identify \(P(x)\), \(Q(x)\), and the nonlinear exponent \(n\). Skipping this step leads to incorrect identification of the equation type and wrong solutions. In this example, dividing by \(e^{-x}\) is the key insight that reveals the true structure of the problem.
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- INTERACTIVE VISUALIZER -->

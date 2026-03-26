@@ -792,6 +792,141 @@
                     </div>
                 </div>
             </div>
+
+            <button class="example-toggle" onclick="toggleExample(5)">
+                🔧 Example 6: (2xy³ - 2x³y³ - 4xy² + 2x)dx + (3x²y² + 4y)dy = 0
+            </button>
+            <div class="example-content" id="example-5">
+                <div class="example-box">
+                    <h4>Solution (Finding μ(x) via Case 1)</h4>
+                    <p><strong>Step 1: Check Non-Exactness</strong></p>
+                    <p>$M = 2xy^3 - 2x^3y^3 - 4xy^2 + 2x$</p>
+                    <p>$N = 3x^2y^2 + 4y$</p>
+                    <p>$\frac{\partial M}{\partial y} = 6xy^2 - 6x^3y^2 - 8xy$</p>
+                    <p>$\frac{\partial N}{\partial x} = 6xy^2$</p>
+                    <p>Not exact: $6xy^2 - 6x^3y^2 - 8xy \neq 6xy^2$ ✗</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Try Case 1 — Does μ(x) exist?</strong></p>
+                    <p>Compute the formula:</p>
+                    <p>$$\frac{\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}}{N} = \frac{-6x^3y^2 - 8xy}{3x^2y^2 + 4y}$$</p>
+                    <p>Factor the numerator and denominator:</p>
+                    <p>$$= \frac{-2x(3x^2y^2 + 4y)}{3x^2y^2 + 4y} = -2x$$</p>
+                    <p><strong>✓ This depends only on x!</strong> Case 1 applies.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3: Find the Integrating Factor μ(x)</strong></p>
+                    <p>$$\mu(x) = e^{\int -2x\,dx} = e^{-x^2}$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 4: Multiply by μ(x) = e^(-x²) and Verify Exactness</strong></p>
+                    <p>$$e^{-x^2}(2xy^3 - 2x^3y^3 - 4xy^2 + 2x)\,dx + e^{-x^2}(3x^2y^2 + 4y)\,dy = 0$$</p>
+                    <p>New M* and N*:</p>
+                    <p>$\frac{\partial M^*}{\partial y} = e^{-x^2}(6xy^2 - 6x^3y^2 - 8xy)$</p>
+                    <p>$\frac{\partial N^*}{\partial x} = -2x \cdot e^{-x^2}(3x^2y^2 + 4y) + e^{-x^2}(6xy^2 + 4y)$</p>
+                    <p>After simplification: Both equal $e^{-x^2}(6xy^2 - 6x^3y^2 - 8xy)$ ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 5: Solve the Exact Equation</strong></p>
+                    <p>Integrate $\frac{\partial F}{\partial y} = e^{-x^2}(3x^2y^2 + 4y)$ with respect to $y$:</p>
+                    <p>$$F(x,y) = e^{-x^2}(x^2y^3 + 2y^2) + \psi(x)$$</p>
+                    <p>Differentiate with respect to x and set equal to M*:</p>
+                    <p>$$\frac{\partial F}{\partial x} = -2x \cdot e^{-x^2}(x^2y^3 + 2y^2) + e^{-x^2}(2xy^3 + 4y) + \psi'(x) = M^*$$</p>
+                    <p>This gives $\psi'(x) = -2x e^{-x^2}$, so $\psi(x) = e^{-x^2}$.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 6: General Solution</strong></p>
+                    <p>$$\boxed{e^{-x^2}(y^2(x^2y + 2) - 1) = C}$$</p>
+
+                    <div class="tip-box">
+                        <strong>💡 Key Signal for Case 1:</strong> When you compute $\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}$ divided by $N$, if the result simplifies to a function of $x$ alone (even after algebraic factoring!), then $\mu(x)$ exists. Look for common factors in numerator and denominator — they are often the key to revealing the hidden dependence on $x$ only.
+                    </div>
+                </div>
+            </div>
+
+            <button class="example-toggle" onclick="toggleExample(6)">
+                ✨ Example 7: 2xy³ dx + (3x²y² + x²y³ + 1)dy = 0
+            </button>
+            <div class="example-content" id="example-6">
+                <div class="example-box">
+                    <h4>Solution (Finding μ(y) via Case 2)</h4>
+                    <p><strong>Step 1: Check Non-Exactness</strong></p>
+                    <p>$M = 2xy^3 \Rightarrow \frac{\partial M}{\partial y} = 6xy^2$</p>
+                    <p>$N = 3x^2y^2 + x^2y^3 + 1 \Rightarrow \frac{\partial N}{\partial x} = 6xy^2 + 2xy^3$</p>
+                    <p>Not exact: $6xy^2 \neq 6xy^2 + 2xy^3$ ✗</p>
+                    <p>Difference: $\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x} = -2xy^3$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Check Case 1 — Does μ(x) exist?</strong></p>
+                    <p>$$\frac{\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}}{N} = \frac{-2xy^3}{3x^2y^2 + x^2y^3 + 1}$$</p>
+                    <p>This contains both $x$ and other terms, and doesn't simplify to a function of $x$ only. Case 1 fails. ✗</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3: Check Case 2 — Does μ(y) exist?</strong></p>
+                    <p>$$\frac{\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}}{M} = \frac{2xy^3}{2xy^3} = 1$$</p>
+                    <p><strong>✓ This is a constant!</strong> (Depends only on y — or is independent.) Case 2 applies.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 4: Find the Integrating Factor μ(y)</strong></p>
+                    <p>$$q(y) = 1$$</p>
+                    <p>$$\mu(y) = e^{\int 1\,dy} = e^y$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 5: Multiply by μ(y) = e^y and Verify Exactness</strong></p>
+                    <p>$$2xy^3 e^y\,dx + (3x^2y^2 + x^2y^3 + 1)e^y\,dy = 0$$</p>
+                    <p>New M* and N*:</p>
+                    <p>$\frac{\partial M^*}{\partial y} = e^y(6xy^2 + 2xy^3)$</p>
+                    <p>$\frac{\partial N^*}{\partial x} = e^y(6xy^2 + 2xy^3)$</p>
+                    <p>Exact! ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 6: Solve the Exact Equation</strong></p>
+                    <p>Integrate $\frac{\partial F}{\partial x} = 2xy^3 e^y$ with respect to $x$:</p>
+                    <p>$$F(x,y) = x^2y^3 e^y + \phi(y)$$</p>
+                    <p>Differentiate with respect to y:</p>
+                    <p>$$\frac{\partial F}{\partial y} = x^2(3y^2 + y^3)e^y + \phi'(y) = (3x^2y^2 + x^2y^3 + 1)e^y$$</p>
+                    <p>Therefore: $\phi'(y) = e^y \Rightarrow \phi(y) = e^y$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 7: General Solution</strong></p>
+                    <p>$$\boxed{(x^2y^3 + 1)e^y = C}$$</p>
+
+                    <div class="tip-box">
+                        <strong>💡 When Case 1 Fails, Try Case 2!</strong> Always remember: if $\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}$ divided by $N$ doesn't work (contains both variables or won't simplify), flip the formula and compute $\frac{\partial N}{\partial x} - \frac{\partial M}{\partial y}$ divided by $M$ instead. Case 2 is your fallback, and it often works beautifully!
+                    </div>
+                </div>
+            </div>
+
+            <button class="example-toggle" onclick="toggleExample(7)">
+                ⭐ Example 8: (3x + 2y²)dx + 2xy dy = 0
+            </button>
+            <div class="example-content" id="example-7">
+                <div class="example-box">
+                    <h4>Solution (Simple Integrating Factor μ(x) = x)</h4>
+                    <p><strong>Step 1: Check Non-Exactness</strong></p>
+                    <p>$M = 3x + 2y^2 \Rightarrow \frac{\partial M}{\partial y} = 4y$</p>
+                    <p>$N = 2xy \Rightarrow \frac{\partial N}{\partial x} = 2y$</p>
+                    <p>Not exact: $4y \neq 2y$ ✗</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 2: Check for Case 1</strong></p>
+                    <p>$$\frac{\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}}{N} = \frac{4y - 2y}{2xy} = \frac{2y}{2xy} = \frac{1}{x}$$</p>
+                    <p><strong>✓ Depends only on x!</strong> Case 1 applies.</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 3: Find the Integrating Factor μ(x)</strong></p>
+                    <p>$$p(x) = \frac{1}{x}$$</p>
+                    <p>$$\mu(x) = e^{\int \frac{1}{x}\,dx} = e^{\ln x} = x$$</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 4: Multiply by μ(x) = x and Verify Exactness</strong></p>
+                    <p>$$(3x^2 + 2xy^2)\,dx + 2x^2y\,dy = 0$$</p>
+                    <p>New M* and N*:</p>
+                    <p>$\frac{\partial M^*}{\partial y} = 4xy$</p>
+                    <p>$\frac{\partial N^*}{\partial x} = 4xy$</p>
+                    <p>Exact! ✓</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 5: Solve the Exact Equation</strong></p>
+                    <p>Integrate $\frac{\partial F}{\partial x} = 3x^2 + 2xy^2$ with respect to $x$:</p>
+                    <p>$$F(x,y) = x^3 + x^2y^2 + h(y)$$</p>
+                    <p>Differentiate with respect to y and set equal to N*:</p>
+                    <p>$$\frac{\partial F}{\partial y} = 2x^2y + h'(y) = 2x^2y$$</p>
+                    <p>Therefore: $h'(y) = 0 \Rightarrow h(y) = C_1$ (a constant)</p>
+
+                    <p style="margin-top: 1rem;"><strong>Step 6: General Solution</strong></p>
+                    <p>$$\boxed{x^3 + x^2y^2 = C}$$</p>
+
+                    <div class="tip-box">
+                        <strong>⚠️ Don't Overlook Simple Integrating Factors!</strong> In this example, $\mu(x) = x$ is a simple polynomial — no exponential needed! Many integrating factors appear to be complicated exponentials, but sometimes the simplest solution is right in front of you. Always compute $\frac{1}{x}$ carefully; if you get exactly $1/x$, then $\mu(x) = x$ is waiting for you. Elegance often hides in plain sight.
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Interactive Visualizer -->
@@ -809,6 +944,9 @@
                     <option value="3">Example 3: y dx - x dy = 0</option>
                     <option value="4">Example 4: (2y² + 3x)dx + 2xy dy = 0</option>
                     <option value="5">Example 5: (2T)dt + (t + T)dT = 0 (Thermal)</option>
+                    <option value="6">Example 6: (2xy³ - 2x³y³ - 4xy² + 2x)dx + (3x²y² + 4y)dy = 0</option>
+                    <option value="7">Example 7: 2xy³ dx + (3x²y² + x²y³ + 1)dy = 0</option>
+                    <option value="8">Example 8: (3x + 2y²)dx + 2xy dy = 0</option>
                 </select>
             </div>
 
@@ -1082,7 +1220,10 @@
                 '2': {M: 'y**2 + y', N: '-x'},
                 '3': {M: 'y', N: '-x'},
                 '4': {M: '2*y**2 + 3*x', N: '2*x*y'},
-                '5': {M: '2*y', N: 'x + y'}
+                '5': {M: '2*y', N: 'x + y'},
+                '6': {M: '2*x*y**3 - 2*x**3*y**3 - 4*x*y**2 + 2*x', N: '3*x**2*y**2 + 4*y'},
+                '7': {M: '2*x*y**3', N: '3*x**2*y**2 + x**2*y**3 + 1'},
+                '8': {M: '3*x + 2*y**2', N: '2*x*y'}
             };
             if (presets[preset]) {
                 document.getElementById('inputM').value = presets[preset].M;
