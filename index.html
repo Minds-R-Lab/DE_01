@@ -185,6 +185,10 @@
     .stat .num { font-size: 1.5rem; }
     .instructor-card { flex-direction: column; text-align: center; }
   }
+
+  /* Mind map node hover effects */
+  .mm-node { transition: transform 0.2s, filter 0.2s; }
+  .mm-node:hover { transform: scale(1.05); filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); }
 </style>
 </head>
 <body>
@@ -194,7 +198,7 @@
   <h1>Mathematics for Engineering</h1>
   <p>Ordinary Differential Equations &mdash; an interactive course with visualizations, step-by-step solutions, and engineering applications</p>
   <div class="stats">
-    <div class="stat"><div class="num">6</div><div class="label">Chapters</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">Chapters</div></div>
     <div class="stat"><div class="num">30+</div><div class="label">Topics</div></div>
     <div class="stat"><div class="num">100+</div><div class="label">Practice Problems</div></div>
   </div>
@@ -215,6 +219,140 @@
         <a href="mailto:m.a.mabrok@gmail.com">m.a.mabrok@gmail.com</a>
       </div>
     </div>
+  </div>
+
+  <!-- Course Mind Map -->
+  <div class="section-header">
+    <h2>Course Roadmap</h2>
+    <p>How the chapters connect — hover over any node to see details</p>
+  </div>
+
+  <div style="background:var(--card); border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow); padding:1.5rem; margin-bottom:2rem; overflow-x:auto;">
+    <svg id="mindmap" viewBox="0 0 900 520" style="width:100%; max-width:900px; margin:0 auto; display:block; font-family:'Segoe UI',system-ui,sans-serif;">
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+        </marker>
+        <marker id="arrowhead-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#2563eb"/>
+        </marker>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="grad-center" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#1e3a8a"/>
+          <stop offset="100%" style="stop-color:#7c3aed"/>
+        </linearGradient>
+        <linearGradient id="grad-ch0" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#0f172a"/>
+          <stop offset="100%" style="stop-color:#334155"/>
+        </linearGradient>
+        <linearGradient id="grad-ch1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#059669"/>
+          <stop offset="100%" style="stop-color:#10b981"/>
+        </linearGradient>
+        <linearGradient id="grad-ch2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#2563eb"/>
+          <stop offset="100%" style="stop-color:#3b82f6"/>
+        </linearGradient>
+        <linearGradient id="grad-ch3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#7c3aed"/>
+          <stop offset="100%" style="stop-color:#8b5cf6"/>
+        </linearGradient>
+        <linearGradient id="grad-ch4" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#d97706"/>
+          <stop offset="100%" style="stop-color:#f59e0b"/>
+        </linearGradient>
+        <linearGradient id="grad-ch5" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#dc2626"/>
+          <stop offset="100%" style="stop-color:#ef4444"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Connection lines (drawn first, behind nodes) -->
+      <!-- Center to Ch0 -->
+      <line x1="450" y1="155" x2="450" y2="58" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4" opacity="0.5"/>
+      <!-- Center to Ch1 -->
+      <path d="M 350,190 C 260,190 180,160 145,135" stroke="#94a3b8" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)" opacity="0.6"/>
+      <!-- Center to Ch2 -->
+      <path d="M 350,220 C 240,250 160,300 145,335" stroke="#94a3b8" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)" opacity="0.6"/>
+      <!-- Center to Ch3 -->
+      <path d="M 550,220 C 660,250 740,300 755,335" stroke="#94a3b8" stroke-width="2.5" fill="none" marker-end="url(#arrowhead)" opacity="0.6"/>
+      <!-- Center to Ch4 (coming soon) -->
+      <path d="M 550,190 C 660,190 720,160 755,135" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrowhead)" opacity="0.3" stroke-dasharray="6,4"/>
+      <!-- Ch1 feeds into Ch2 -->
+      <path d="M 135,165 C 130,220 130,280 135,305" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowhead-blue)" opacity="0.5"/>
+      <!-- Ch2 feeds into Ch3 -->
+      <path d="M 175,370 C 300,430 600,430 725,370" stroke="#7c3aed" stroke-width="2" fill="none" marker-end="url(#arrowhead)" opacity="0.4" stroke-dasharray="5,3"/>
+      <!-- Ch1 feeds into Ch3 (via Laplace) -->
+      <path d="M 175,145 C 350,75 650,75 730,320" stroke="#059669" stroke-width="1.5" fill="none" opacity="0.25" stroke-dasharray="4,4"/>
+
+      <!-- Bottom annotation: engineering applications bar -->
+      <rect x="200" y="470" rx="8" ry="8" width="500" height="36" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="450" y="493" text-anchor="middle" font-size="13" fill="#64748b" font-weight="600">Engineering Applications: Circuits · Vibrations · Control Systems · Signal Processing</text>
+
+      <!-- Central node: Differential Equations -->
+      <g class="mm-node" style="cursor:pointer;" onclick="window.location.href='why-study-de.html'">
+        <rect x="350" y="155" rx="16" ry="16" width="200" height="80" fill="url(#grad-center)" filter="url(#glow)"/>
+        <text x="450" y="186" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">Differential</text>
+        <text x="450" y="206" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">Equations</text>
+        <text x="450" y="226" text-anchor="middle" font-size="11" fill="#c7d2fe" font-style="italic">The Language of Change</text>
+      </g>
+
+      <!-- Ch0: Why Study DEs (top center) -->
+      <g class="mm-node" style="cursor:pointer;" onclick="window.location.href='why-study-de.html'">
+        <rect x="375" y="15" rx="12" ry="12" width="150" height="42" fill="url(#grad-ch0)" rx="12" opacity="0.9"/>
+        <text x="450" y="33" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="700">CH 00</text>
+        <text x="450" y="48" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Why Study DEs?</text>
+      </g>
+
+      <!-- Ch1: First-Order (left, upper) -->
+      <g class="mm-node" style="cursor:pointer;" onclick="window.location.href='#chapter1'">
+        <rect x="20" y="85" rx="14" ry="14" width="250" height="80" fill="#fff" stroke="#059669" stroke-width="2.5"/>
+        <rect x="20" y="85" rx="14" ry="14" width="250" height="24" fill="url(#grad-ch1)" style="clip-path:inset(0 0 56px 0 round 14px);"/>
+        <text x="145" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">CH 01 · First-Order DEs</text>
+        <text x="145" y="125" text-anchor="middle" font-size="10" fill="#374151">Separable · Linear · Bernoulli</text>
+        <text x="145" y="141" text-anchor="middle" font-size="10" fill="#374151">Exact · Non-Exact</text>
+        <text x="145" y="157" text-anchor="middle" font-size="9" fill="#059669" font-style="italic">Foundation: basic techniques</text>
+      </g>
+
+      <!-- Ch2: Second-Order (left, lower) -->
+      <g class="mm-node" style="cursor:pointer;" onclick="window.location.href='#chapter2'">
+        <rect x="20" y="305" rx="14" ry="14" width="250" height="80" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+        <rect x="20" y="305" rx="14" ry="14" width="250" height="24" fill="url(#grad-ch2)" style="clip-path:inset(0 0 56px 0 round 14px);"/>
+        <text x="145" y="321" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">CH 02 · Second-Order DEs</text>
+        <text x="145" y="345" text-anchor="middle" font-size="10" fill="#374151">Constant Coeff · Undetermined</text>
+        <text x="145" y="361" text-anchor="middle" font-size="10" fill="#374151">Variation of Params · Euler</text>
+        <text x="145" y="377" text-anchor="middle" font-size="9" fill="#2563eb" font-style="italic">y = y_c (dynamics) + y_p (input)</text>
+      </g>
+
+      <!-- Ch3: Laplace Transforms (right, lower) -->
+      <g class="mm-node" style="cursor:pointer;" onclick="window.location.href='#chapter3'">
+        <rect x="630" y="305" rx="14" ry="14" width="250" height="80" fill="#fff" stroke="#7c3aed" stroke-width="2.5"/>
+        <rect x="630" y="305" rx="14" ry="14" width="250" height="24" fill="url(#grad-ch3)" style="clip-path:inset(0 0 56px 0 round 14px);"/>
+        <text x="755" y="321" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">CH 03 · Laplace Transforms</text>
+        <text x="755" y="345" text-anchor="middle" font-size="10" fill="#374151">Definition · Inverse · Solving IVPs</text>
+        <text x="755" y="361" text-anchor="middle" font-size="10" fill="#374151">Step Functions · Convolution</text>
+        <text x="755" y="377" text-anchor="middle" font-size="9" fill="#7c3aed" font-style="italic">Calculus → Algebra (s-domain)</text>
+      </g>
+
+      <!-- Ch4: Systems (right, upper) — coming soon -->
+      <g class="mm-node" style="cursor:default; opacity:0.45;">
+        <rect x="630" y="85" rx="14" ry="14" width="250" height="80" fill="#fff" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4"/>
+        <rect x="630" y="85" rx="14" ry="14" width="250" height="24" fill="url(#grad-ch4)" style="clip-path:inset(0 0 56px 0 round 14px);" opacity="0.6"/>
+        <text x="755" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">CH 04 · Systems of DEs</text>
+        <text x="755" y="125" text-anchor="middle" font-size="10" fill="#6b7280">Matrix Methods · Eigenvalues</text>
+        <text x="755" y="141" text-anchor="middle" font-size="10" fill="#6b7280">Phase Portraits · Stability</text>
+        <text x="755" y="157" text-anchor="middle" font-size="9" fill="#d97706" font-style="italic">Coming Soon</text>
+      </g>
+
+      <!-- Flow labels on key connections -->
+      <text x="105" y="240" text-anchor="middle" font-size="9" fill="#2563eb" font-weight="600" transform="rotate(-90,105,240)">builds on</text>
+      <text x="260" y="170" text-anchor="middle" font-size="9" fill="#64748b" transform="rotate(-15,260,170)">solve by hand</text>
+      <text x="640" y="270" text-anchor="middle" font-size="9" fill="#64748b" transform="rotate(15,640,270)">solve by transform</text>
+      <text x="450" y="445" text-anchor="middle" font-size="9" fill="#7c3aed" font-weight="500">Ch2 methods re-appear in Ch3 (transfer functions)</text>
+    </svg>
   </div>
 
   <div class="section-header">
