@@ -191,6 +191,9 @@
   .behavior-stats p { margin: 0.5rem 0; }
 
   /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    #anim-grid { grid-template-columns: 1fr !important; }
+  }
   @media (max-width: 640px) {
     section { padding: 1.5rem; }
     h1 { font-size: 1.6rem; }
@@ -235,6 +238,7 @@
     <a href="ch2-euler.html">2.4 Euler Equations</a>
     <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
     <a href="#system" class="active">Mass-Spring Demo</a>
+    <a href="#animation">Animation</a>
     <a href="#simulator">Simulator</a>
     <a href="#behavior">Behavior</a>
     <a href="#examples">Examples</a>
@@ -278,6 +282,115 @@
     <p style="margin-top:0.75rem; font-weight: 600; color: var(--primary);">
       Total Solution: y(t) = y<sub>c</sub>(t) + y<sub>p</sub>(t)
     </p>
+  </div>
+</section>
+
+<!-- =================== ANIMATED PHYSICAL VISUALIZATION =================== -->
+<section id="animation" style="padding-bottom:1.5rem;">
+  <h2>Live Mass-Spring-Damper Animation</h2>
+  <p style="margin-bottom:0.5rem;">Watch the physical system move in real time. Adjust parameters, then press <strong>Play</strong> to see the mass oscillate, with force arrows and a live displacement trace.</p>
+
+  <!-- Animation Controls Row -->
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;margin:1rem 0;padding:1rem;background:#f1f5f9;border-radius:8px;">
+    <div class="slider-group" style="min-width:150px;">
+      <label>Mass m (kg)</label>
+      <input type="range" id="anim-mass" min="0.5" max="10" step="0.1" value="1">
+      <div class="slider-value"><span id="anim-mass-val">1.0</span> kg</div>
+    </div>
+    <div class="slider-group" style="min-width:150px;">
+      <label>Damping c (N·s/m)</label>
+      <input type="range" id="anim-damping" min="0" max="10" step="0.1" value="1">
+      <div class="slider-value"><span id="anim-damping-val">1.0</span> N·s/m</div>
+    </div>
+    <div class="slider-group" style="min-width:150px;">
+      <label>Spring k (N/m)</label>
+      <input type="range" id="anim-stiffness" min="0.5" max="20" step="0.1" value="4">
+      <div class="slider-value"><span id="anim-stiffness-val">4.0</span> N/m</div>
+    </div>
+    <div class="slider-group" style="min-width:150px;">
+      <label>Initial Displacement (m)</label>
+      <input type="range" id="anim-y0" min="-2" max="2" step="0.1" value="1.5">
+      <div class="slider-value"><span id="anim-y0-val">1.5</span> m</div>
+    </div>
+    <div class="control-group">
+      <label for="anim-forcing">External Force</label>
+      <select id="anim-forcing">
+        <option value="none">None (Free)</option>
+        <option value="sine">Sinusoidal</option>
+        <option value="step">Step at t=2s</option>
+      </select>
+    </div>
+    <div class="slider-group" id="anim-omega-group" style="min-width:140px;display:none;">
+      <label>Forcing ω (rad/s)</label>
+      <input type="range" id="anim-omega" min="0.2" max="6" step="0.1" value="2">
+      <div class="slider-value"><span id="anim-omega-val">2.0</span> rad/s</div>
+    </div>
+  </div>
+
+  <!-- Play/Pause/Reset and Speed -->
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;margin-bottom:1rem;">
+    <button class="btn btn-primary" id="anim-play" onclick="animPlay()" style="min-width:100px;">▶ Play</button>
+    <button class="btn btn-accent" onclick="animReset()">↺ Reset</button>
+    <div class="slider-group" style="min-width:140px;">
+      <label>Speed</label>
+      <input type="range" id="anim-speed" min="0.25" max="3" step="0.25" value="1">
+      <div class="slider-value"><span id="anim-speed-val">1.0</span>x</div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:1rem;flex-wrap:wrap;">
+      <label style="font-size:0.85rem;display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" id="show-spring-force" checked> <span style="color:#2563eb;font-weight:600;">Spring Force</span>
+      </label>
+      <label style="font-size:0.85rem;display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" id="show-damping-force" checked> <span style="color:#dc2626;font-weight:600;">Damping Force</span>
+      </label>
+      <label style="font-size:0.85rem;display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" id="show-ext-force" checked> <span style="color:#059669;font-weight:600;">External Force</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Main Animation Area: two columns -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;min-height:380px;" id="anim-grid">
+    <!-- Left: Physical System SVG -->
+    <div style="background:#f8fafc;border-radius:12px;border:1px solid var(--border);overflow:hidden;position:relative;">
+      <div style="position:absolute;top:8px;left:12px;font-size:0.8rem;font-weight:600;color:var(--text-muted);">Physical System</div>
+      <div style="position:absolute;top:8px;right:12px;font-size:0.85rem;font-weight:700;color:var(--primary);" id="anim-time-label">t = 0.00 s</div>
+      <canvas id="anim-canvas" width="500" height="380" style="width:100%;height:100%;"></canvas>
+    </div>
+    <!-- Right: Live Displacement Chart -->
+    <div style="background:#f8fafc;border-radius:12px;border:1px solid var(--border);overflow:hidden;position:relative;">
+      <div style="position:absolute;top:8px;left:12px;font-size:0.8rem;font-weight:600;color:var(--text-muted);">Displacement & Forces vs Time</div>
+      <canvas id="anim-chart" width="500" height="380" style="width:100%;height:100%;"></canvas>
+    </div>
+  </div>
+
+  <!-- Force Bar Diagram -->
+  <div style="margin-top:1rem;background:#f8fafc;border-radius:12px;border:1px solid var(--border);padding:1rem 1.5rem;">
+    <div style="font-size:0.85rem;font-weight:600;color:var(--text-muted);margin-bottom:0.5rem;">Real-Time Force Magnitudes</div>
+    <div style="display:grid;grid-template-columns:100px 1fr 80px;gap:0.35rem;align-items:center;" id="force-bars">
+      <span style="font-size:0.85rem;font-weight:600;color:#2563eb;">Spring (Fs)</span>
+      <div style="background:#dbeafe;border-radius:4px;height:22px;overflow:hidden;">
+        <div id="bar-spring" style="height:100%;background:#2563eb;border-radius:4px;width:0%;transition:width 0.05s;"></div>
+      </div>
+      <span id="bar-spring-val" style="font-size:0.82rem;font-weight:600;color:#2563eb;text-align:right;">0.0 N</span>
+
+      <span style="font-size:0.85rem;font-weight:600;color:#dc2626;">Damping (Fd)</span>
+      <div style="background:#fee2e2;border-radius:4px;height:22px;overflow:hidden;">
+        <div id="bar-damping" style="height:100%;background:#dc2626;border-radius:4px;width:0%;transition:width 0.05s;"></div>
+      </div>
+      <span id="bar-damping-val" style="font-size:0.82rem;font-weight:600;color:#dc2626;text-align:right;">0.0 N</span>
+
+      <span style="font-size:0.85rem;font-weight:600;color:#059669;">External (Fe)</span>
+      <div style="background:#d1fae5;border-radius:4px;height:22px;overflow:hidden;">
+        <div id="bar-ext" style="height:100%;background:#059669;border-radius:4px;width:0%;transition:width 0.05s;"></div>
+      </div>
+      <span id="bar-ext-val" style="font-size:0.82rem;font-weight:600;color:#059669;text-align:right;">0.0 N</span>
+    </div>
+  </div>
+
+  <!-- Behavior Badge -->
+  <div id="anim-behavior-badge" style="margin-top:1rem;padding:0.75rem 1.25rem;border-radius:8px;font-weight:600;font-size:0.95rem;border:2px solid #059669;background:#d1fae5;color:#065f46;">
+    Underdamped — ζ = 0.250 — ω<sub>n</sub> = 2.00 rad/s
   </div>
 </section>
 
@@ -483,6 +596,535 @@
 </section>
 
 </div>
+
+<!-- =================== ANIMATION ENGINE =================== -->
+<script>
+(function() {
+  // ---- STATE ----
+  const S = {
+    running: false,
+    t: 0,
+    y: 0,          // displacement (m)
+    v: 0,          // velocity (m/s)
+    dt: 0.002,     // physics timestep (s)
+    history: [],   // [{t, y, Fs, Fd, Fe}]
+    maxT: 15,      // seconds of history to display
+    rafId: null,
+    lastFrameTime: null
+  };
+
+  // ---- PARAM HELPERS ----
+  function P() {
+    return {
+      m: parseFloat(document.getElementById('anim-mass').value),
+      c: parseFloat(document.getElementById('anim-damping').value),
+      k: parseFloat(document.getElementById('anim-stiffness').value),
+      y0: parseFloat(document.getElementById('anim-y0').value),
+      forcing: document.getElementById('anim-forcing').value,
+      omega: parseFloat(document.getElementById('anim-omega').value),
+      speed: parseFloat(document.getElementById('anim-speed').value)
+    };
+  }
+
+  function Fe(t, p) {
+    if (p.forcing === 'none') return 0;
+    if (p.forcing === 'sine') return 3 * Math.sin(p.omega * t);
+    if (p.forcing === 'step') return t >= 2 ? 3 : 0;
+    return 0;
+  }
+
+  // ---- RK4 STEP ----
+  function step(p) {
+    const { m, c, k } = p;
+    const acc = (yy, vv, tt) => (Fe(tt, p) - c * vv - k * yy) / m;
+
+    const dt = S.dt;
+    const t = S.t;
+    const y = S.y;
+    const v = S.v;
+
+    const k1v = acc(y, v, t);
+    const k1y = v;
+
+    const k2v = acc(y + 0.5*dt*k1y, v + 0.5*dt*k1v, t + 0.5*dt);
+    const k2y = v + 0.5*dt*k1v;
+
+    const k3v = acc(y + 0.5*dt*k2y, v + 0.5*dt*k2v, t + 0.5*dt);
+    const k3y = v + 0.5*dt*k2v;
+
+    const k4v = acc(y + dt*k3y, v + dt*k3v, t + dt);
+    const k4y = v + dt*k3v;
+
+    S.y += (dt/6) * (k1y + 2*k2y + 2*k3y + k4y);
+    S.v += (dt/6) * (k1v + 2*k2v + 2*k3v + k4v);
+    S.t += dt;
+  }
+
+  // ---- CANVAS DRAWING: PHYSICAL SYSTEM ----
+  function drawSystem(canvas) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const p = P();
+    const disp = S.y;                       // displacement in m
+    const scale = 60;                        // pixels per meter
+    const wallX = 40;
+    const eqX = 250;                         // equilibrium position of mass center
+    const massX = eqX + disp * scale;        // actual mass center X
+    const massW = 60;
+    const massH = 50;
+    const massTop = 160;
+
+    // ---- Ground ----
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillRect(0, massTop + massH, W, H - massTop - massH);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, massTop + massH);
+    ctx.lineTo(W, massTop + massH);
+    ctx.stroke();
+    // ground hatching
+    for (let gx = 0; gx < W; gx += 14) {
+      ctx.beginPath();
+      ctx.moveTo(gx, massTop + massH);
+      ctx.lineTo(gx - 8, massTop + massH + 10);
+      ctx.stroke();
+    }
+
+    // ---- Wall ----
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(wallX - 8, massTop - 40, 8, massH + 80);
+    // wall hatching
+    for (let wy = massTop - 40; wy < massTop + massH + 40; wy += 10) {
+      ctx.beginPath();
+      ctx.moveTo(wallX - 8, wy);
+      ctx.lineTo(wallX - 16, wy + 8);
+      ctx.stroke();
+    }
+
+    // ---- Spring (zig-zag) ----
+    const springStart = wallX;
+    const springEnd = massX - massW / 2;
+    const springY = massTop + 15;
+    const nCoils = 12;
+    const segLen = (springEnd - springStart) / (nCoils * 2 + 2);
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(springStart, springY);
+    ctx.lineTo(springStart + segLen, springY);
+    for (let i = 0; i < nCoils; i++) {
+      const x1 = springStart + segLen + (2 * i + 1) * segLen;
+      const x2 = springStart + segLen + (2 * i + 2) * segLen;
+      ctx.lineTo(x1, springY + (i % 2 === 0 ? -12 : 12));
+      ctx.lineTo(x2, springY + (i % 2 === 0 ? 12 : -12));
+    }
+    ctx.lineTo(springEnd, springY);
+    ctx.stroke();
+
+    // ---- Damper ----
+    const dampY = massTop + massH - 15;
+    const dampStart = wallX;
+    const dampEnd = massX - massW / 2;
+    const dampMid = (dampStart + dampEnd) / 2;
+    const pistonW = 18;
+    const cylinderLen = 30;
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 2.5;
+    // rod from wall to cylinder
+    ctx.beginPath();
+    ctx.moveTo(dampStart, dampY);
+    ctx.lineTo(dampMid - cylinderLen / 2, dampY);
+    ctx.stroke();
+    // cylinder body
+    ctx.strokeRect(dampMid - cylinderLen / 2, dampY - pistonW / 2, cylinderLen, pistonW);
+    // piston rod
+    ctx.beginPath();
+    ctx.moveTo(dampMid + cylinderLen / 2 - 4, dampY);
+    ctx.lineTo(dampEnd, dampY);
+    ctx.stroke();
+    // piston head inside cylinder
+    const pistonX = dampMid + (dampEnd - dampMid - cylinderLen / 2) * 0.3;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(Math.max(pistonX, dampMid - cylinderLen / 2 + 2), dampY - pistonW / 2 + 3);
+    ctx.lineTo(Math.max(pistonX, dampMid - cylinderLen / 2 + 2), dampY + pistonW / 2 - 3);
+    ctx.stroke();
+
+    // ---- Mass block ----
+    ctx.fillStyle = '#1e293b';
+    ctx.strokeStyle = '#0f172a';
+    ctx.lineWidth = 2;
+    const rx = 6;
+    const mx = massX - massW / 2;
+    ctx.beginPath();
+    ctx.moveTo(mx + rx, massTop);
+    ctx.lineTo(mx + massW - rx, massTop);
+    ctx.quadraticCurveTo(mx + massW, massTop, mx + massW, massTop + rx);
+    ctx.lineTo(mx + massW, massTop + massH - rx);
+    ctx.quadraticCurveTo(mx + massW, massTop + massH, mx + massW - rx, massTop + massH);
+    ctx.lineTo(mx + rx, massTop + massH);
+    ctx.quadraticCurveTo(mx, massTop + massH, mx, massTop + massH - rx);
+    ctx.lineTo(mx, massTop + rx);
+    ctx.quadraticCurveTo(mx, massTop, mx + rx, massTop);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // "m" label on mass
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 18px system-ui';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('m', massX, massTop + massH / 2);
+
+    // ---- Equilibrium dashed line ----
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(eqX, massTop - 30);
+    ctx.lineTo(eqX, massTop + massH + 15);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('equilibrium', eqX, massTop - 35);
+
+    // ---- Displacement arrow ----
+    if (Math.abs(disp) > 0.02) {
+      const arrY = massTop - 20;
+      ctx.strokeStyle = '#7c3aed';
+      ctx.fillStyle = '#7c3aed';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(eqX, arrY);
+      ctx.lineTo(massX, arrY);
+      ctx.stroke();
+      // arrowhead
+      const dir = disp > 0 ? 1 : -1;
+      ctx.beginPath();
+      ctx.moveTo(massX, arrY);
+      ctx.lineTo(massX - dir * 8, arrY - 4);
+      ctx.lineTo(massX - dir * 8, arrY + 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 12px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('y=' + disp.toFixed(2) + 'm', (eqX + massX) / 2, arrY - 8);
+    }
+
+    // ---- Force arrows on mass ----
+    const Fs = -p.k * S.y;
+    const Fd = -p.c * S.v;
+    const Fext = Fe(S.t, p);
+    const forceScale = 12;     // pixels per Newton
+    const arrowY = massTop + massH / 2;
+
+    function drawArrow(startX, mag, color, label, yOff) {
+      if (Math.abs(mag) < 0.05) return;
+      const endX = startX + mag * forceScale;
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(startX, arrowY + yOff);
+      ctx.lineTo(endX, arrowY + yOff);
+      ctx.stroke();
+      const dir = mag > 0 ? 1 : -1;
+      ctx.beginPath();
+      ctx.moveTo(endX, arrowY + yOff);
+      ctx.lineTo(endX - dir * 9, arrowY + yOff - 5);
+      ctx.lineTo(endX - dir * 9, arrowY + yOff + 5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 11px system-ui';
+      ctx.textAlign = mag > 0 ? 'left' : 'right';
+      const labelX = endX + dir * 4;
+      ctx.fillText(label + '=' + Math.abs(mag).toFixed(1) + 'N', labelX, arrowY + yOff - 7);
+    }
+
+    const showFs = document.getElementById('show-spring-force').checked;
+    const showFd = document.getElementById('show-damping-force').checked;
+    const showFe = document.getElementById('show-ext-force').checked;
+
+    if (showFs) drawArrow(massX + (Fs > 0 ? massW/2 : -massW/2), Fs, '#2563eb', 'Fs', 0);
+    if (showFd) drawArrow(massX + (Fd > 0 ? massW/2 : -massW/2), Fd, '#dc2626', 'Fd', -16);
+    if (showFe && Math.abs(Fext) > 0.01) drawArrow(massX + massW/2 + 5, Fext, '#059669', 'Fe', 16);
+
+    // ---- Labels ----
+    ctx.fillStyle = '#2563eb';
+    ctx.font = '12px system-ui';
+    ctx.textAlign = 'left';
+    ctx.fillText('k=' + p.k.toFixed(1), wallX + 10, springY - 20);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillText('c=' + p.c.toFixed(1), wallX + 10, dampY + 24);
+  }
+
+  // ---- CANVAS DRAWING: CHART ----
+  function drawChart(canvas) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const padL = 50, padR = 15, padT = 35, padB = 40;
+    const cW = W - padL - padR;
+    const cH = H - padT - padB;
+
+    // Determine time range
+    const tEnd = Math.max(S.t, 5);
+    const tStart = Math.max(0, tEnd - S.maxT);
+
+    // Determine Y range from history
+    let yMin = -2, yMax = 2;
+    for (const h of S.history) {
+      if (h.t >= tStart) {
+        yMin = Math.min(yMin, h.y - 0.3);
+        yMax = Math.max(yMax, h.y + 0.3);
+      }
+    }
+    const yRange = yMax - yMin || 1;
+
+    const toX = (t) => padL + ((t - tStart) / (tEnd - tStart)) * cW;
+    const toY = (y) => padT + (1 - (y - yMin) / yRange) * cH;
+
+    // ---- Grid ----
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    // horizontal grid
+    const nGridH = 6;
+    for (let i = 0; i <= nGridH; i++) {
+      const yy = padT + (i / nGridH) * cH;
+      ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W - padR, yy); ctx.stroke();
+    }
+    // vertical grid
+    const nGridV = 6;
+    for (let i = 0; i <= nGridV; i++) {
+      const xx = padL + (i / nGridV) * cW;
+      ctx.beginPath(); ctx.moveTo(xx, padT); ctx.lineTo(xx, padT + cH); ctx.stroke();
+    }
+
+    // ---- Zero line ----
+    if (yMin < 0 && yMax > 0) {
+      ctx.strokeStyle = '#94a3b8';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(padL, toY(0));
+      ctx.lineTo(W - padR, toY(0));
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // ---- Displacement line ----
+    const visible = S.history.filter(h => h.t >= tStart);
+    if (visible.length > 1) {
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(visible[0].t), toY(visible[0].y));
+      for (let i = 1; i < visible.length; i += 3) {
+        ctx.lineTo(toX(visible[i].t), toY(visible[i].y));
+      }
+      ctx.stroke();
+    }
+
+    // ---- Current point ----
+    if (visible.length > 0) {
+      const last = visible[visible.length - 1];
+      ctx.fillStyle = '#2563eb';
+      ctx.beginPath();
+      ctx.arc(toX(last.t), toY(last.y), 5, 0, 2*Math.PI);
+      ctx.fill();
+    }
+
+    // ---- Axes labels ----
+    ctx.fillStyle = '#64748b';
+    ctx.font = '12px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Time (s)', padL + cW / 2, H - 6);
+    // Y-axis
+    ctx.save();
+    ctx.translate(14, padT + cH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Displacement (m)', 0, 0);
+    ctx.restore();
+
+    // Tick labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= nGridV; i++) {
+      const tv = tStart + (i / nGridV) * (tEnd - tStart);
+      ctx.fillText(tv.toFixed(1), padL + (i / nGridV) * cW, padT + cH + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= nGridH; i++) {
+      const yv = yMax - (i / nGridH) * yRange;
+      ctx.fillText(yv.toFixed(1), padL - 6, padT + (i / nGridH) * cH + 4);
+    }
+
+    // ---- Legend ----
+    ctx.fillStyle = '#2563eb';
+    ctx.font = 'bold 11px system-ui';
+    ctx.textAlign = 'left';
+    ctx.fillRect(padL + 8, padT + 4, 14, 3);
+    ctx.fillText('y(t)', padL + 26, padT + 10);
+  }
+
+  // ---- FORCE BARS ----
+  function updateForceBars() {
+    const p = P();
+    const Fs = Math.abs(p.k * S.y);
+    const Fd = Math.abs(p.c * S.v);
+    const Fext = Math.abs(Fe(S.t, p));
+    const maxF = Math.max(Fs, Fd, Fext, 1);
+
+    document.getElementById('bar-spring').style.width = (Fs / maxF * 100) + '%';
+    document.getElementById('bar-spring-val').textContent = Fs.toFixed(1) + ' N';
+    document.getElementById('bar-damping').style.width = (Fd / maxF * 100) + '%';
+    document.getElementById('bar-damping-val').textContent = Fd.toFixed(1) + ' N';
+    document.getElementById('bar-ext').style.width = (Fext / maxF * 100) + '%';
+    document.getElementById('bar-ext-val').textContent = Fext.toFixed(1) + ' N';
+  }
+
+  // ---- BEHAVIOR BADGE ----
+  function updateBadge() {
+    const p = P();
+    const D = p.c * p.c - 4 * p.m * p.k;
+    const wn = Math.sqrt(p.k / p.m);
+    const zeta = p.c / (2 * Math.sqrt(p.m * p.k));
+    const badge = document.getElementById('anim-behavior-badge');
+    if (D > 0.01) {
+      badge.style.borderColor = '#dc2626';
+      badge.style.background = '#fee2e2';
+      badge.style.color = '#7f1d1d';
+      badge.innerHTML = 'Overdamped — ζ = ' + zeta.toFixed(3) + ' — ω<sub>n</sub> = ' + wn.toFixed(2) + ' rad/s';
+    } else if (D < -0.01) {
+      badge.style.borderColor = '#059669';
+      badge.style.background = '#d1fae5';
+      badge.style.color = '#065f46';
+      badge.innerHTML = 'Underdamped — ζ = ' + zeta.toFixed(3) + ' — ω<sub>n</sub> = ' + wn.toFixed(2) + ' rad/s';
+    } else {
+      badge.style.borderColor = '#d97706';
+      badge.style.background = '#fef3c7';
+      badge.style.color = '#78350f';
+      badge.innerHTML = 'Critically Damped — ζ = ' + zeta.toFixed(3) + ' — ω<sub>n</sub> = ' + wn.toFixed(2) + ' rad/s';
+    }
+  }
+
+  // ---- ANIMATION LOOP ----
+  function animLoop(timestamp) {
+    if (!S.running) return;
+    if (!S.lastFrameTime) S.lastFrameTime = timestamp;
+
+    const elapsed = (timestamp - S.lastFrameTime) / 1000;
+    S.lastFrameTime = timestamp;
+
+    const p = P();
+    const stepsPerFrame = Math.max(1, Math.round(elapsed * p.speed / S.dt));
+
+    for (let i = 0; i < stepsPerFrame && i < 200; i++) {
+      step(p);
+      if (S.history.length === 0 || S.t - S.history[S.history.length-1].t > 0.02) {
+        S.history.push({ t: S.t, y: S.y });
+      }
+    }
+
+    // Update time label
+    document.getElementById('anim-time-label').textContent = 't = ' + S.t.toFixed(2) + ' s';
+
+    // Draw
+    drawSystem(document.getElementById('anim-canvas'));
+    drawChart(document.getElementById('anim-chart'));
+    updateForceBars();
+
+    S.rafId = requestAnimationFrame(animLoop);
+  }
+
+  // ---- PUBLIC API ----
+  window.animPlay = function() {
+    if (S.running) {
+      S.running = false;
+      S.lastFrameTime = null;
+      document.getElementById('anim-play').innerHTML = '▶ Play';
+      document.getElementById('anim-play').classList.remove('btn-success');
+      document.getElementById('anim-play').classList.add('btn-primary');
+    } else {
+      S.running = true;
+      document.getElementById('anim-play').innerHTML = '⏸ Pause';
+      document.getElementById('anim-play').classList.remove('btn-primary');
+      document.getElementById('anim-play').classList.add('btn-success');
+      S.rafId = requestAnimationFrame(animLoop);
+    }
+  };
+
+  window.animReset = function() {
+    S.running = false;
+    S.lastFrameTime = null;
+    cancelAnimationFrame(S.rafId);
+    const p = P();
+    S.t = 0;
+    S.y = p.y0;
+    S.v = 0;
+    S.history = [{ t: 0, y: p.y0 }];
+    document.getElementById('anim-play').innerHTML = '▶ Play';
+    document.getElementById('anim-play').classList.remove('btn-success');
+    document.getElementById('anim-play').classList.add('btn-primary');
+    document.getElementById('anim-time-label').textContent = 't = 0.00 s';
+    drawSystem(document.getElementById('anim-canvas'));
+    drawChart(document.getElementById('anim-chart'));
+    updateForceBars();
+    updateBadge();
+  };
+
+  // ---- SLIDER WIRING ----
+  ['anim-mass','anim-damping','anim-stiffness','anim-y0','anim-omega','anim-speed'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', function() {
+      document.getElementById(id + '-val').textContent = parseFloat(this.value).toFixed(1);
+      updateBadge();
+    });
+  });
+
+  document.getElementById('anim-forcing').addEventListener('change', function() {
+    document.getElementById('anim-omega-group').style.display = this.value === 'sine' ? 'block' : 'none';
+  });
+
+  // ---- INIT ----
+  window.addEventListener('load', function() {
+    // Set canvas resolution for crisp rendering
+    ['anim-canvas','anim-chart'].forEach(id => {
+      const c = document.getElementById(id);
+      const rect = c.getBoundingClientRect();
+      c.width = rect.width * (window.devicePixelRatio || 1);
+      c.height = rect.height * (window.devicePixelRatio || 1);
+      c.getContext('2d').scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    });
+    animReset();
+  });
+
+  // Handle resize
+  window.addEventListener('resize', function() {
+    ['anim-canvas','anim-chart'].forEach(id => {
+      const c = document.getElementById(id);
+      const ctx = c.getContext('2d');
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const rect = c.getBoundingClientRect();
+      c.width = rect.width * (window.devicePixelRatio || 1);
+      c.height = rect.height * (window.devicePixelRatio || 1);
+      ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    });
+    drawSystem(document.getElementById('anim-canvas'));
+    drawChart(document.getElementById('anim-chart'));
+  });
+
+})();
+</script>
 
 <script>
   // ========== UTILITIES ==========
