@@ -33,6 +33,13 @@
     background: var(--bg); color: var(--text); line-height: 1.7;
   }
 
+  /* Top Navigation */
+  nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:1000;padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;}
+  nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+  nav a:hover{color:var(--primary);}
+  nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+  nav .active{color:var(--accent);font-weight:700;}
+
   /* Hero */
   .hero {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 35%, #3b82f6 65%, #7c3aed 100%);
@@ -233,7 +240,14 @@
 </head>
 <body>
 
-<div class="hero">
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html" class="active">Home</a>
+  <a href="exam-generator.html">Exam Generator</a>
+  <a href="videos.html">Videos</a>
+</nav>
+
+<div class="hero" style="margin-top:42px;">
   <div class="hero-inner">
     <!-- Left: Text content -->
     <div class="hero-left">
