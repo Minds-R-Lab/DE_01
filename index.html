@@ -35,21 +35,92 @@
 
   /* Hero */
   .hero {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #7c3aed 100%);
-    color: #fff; padding: 5rem 2rem 4rem; text-align: center;
-    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 35%, #3b82f6 65%, #7c3aed 100%);
+    color: #fff; padding: 0; text-align: center;
+    position: relative; overflow: hidden; min-height: 520px;
   }
   .hero::before {
     content: ''; position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 50%, rgba(59,130,246,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 350px at 80% 40%, rgba(124,58,237,0.15) 0%, transparent 70%);
   }
-  .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; position: relative; }
-  .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; position: relative; }
+  .hero-inner {
+    position: relative; z-index: 2; max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+    gap: 2rem; padding: 3rem 2rem 2.5rem; min-height: 520px;
+  }
+  .hero-left { text-align: left; }
+  .hero-right { display: flex; justify-content: center; align-items: center; }
   .hero .badge {
-    display: inline-block; background: rgba(255,255,255,0.2); padding: 0.3rem 1rem;
-    border-radius: 20px; font-size: 0.9rem; margin-bottom: 1rem; position: relative;
-    backdrop-filter: blur(4px);
+    display: inline-block; background: rgba(255,255,255,0.12); padding: 0.35rem 1.2rem;
+    border-radius: 20px; font-size: 0.9rem; margin-bottom: 1.25rem;
+    backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.03em;
   }
+  .hero h1 {
+    font-size: 3.2rem; font-weight: 800; margin-bottom: 0.3rem;
+    line-height: 1.15; letter-spacing: -0.02em;
+  }
+  .hero h1 .course-word {
+    display: block; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.25em;
+    text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(90deg, #60a5fa, #a78bfa, #f9a8d4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero .subtitle {
+    font-size: 1.15rem; opacity: 0.85; max-width: 500px; margin: 1rem 0 0;
+    line-height: 1.6;
+  }
+
+  /* Instructor integrated into hero */
+  .hero-instructor {
+    display: flex; align-items: center; gap: 1rem;
+    margin-top: 1.5rem; padding: 1rem 1.25rem;
+    background: rgba(255,255,255,0.08); border-radius: 16px;
+    backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1);
+    max-width: 420px;
+  }
+  .hero-instructor img {
+    width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+    border: 2.5px solid rgba(255,255,255,0.4); flex-shrink: 0;
+  }
+  .hero-instructor .initials-fallback {
+    width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #3b82f6, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; font-weight: 800; color: #fff;
+    border: 2.5px solid rgba(255,255,255,0.4);
+  }
+  .hero-instructor .info h3 { font-size: 1.05rem; font-weight: 700; }
+  .hero-instructor .info .role { font-size: 0.85rem; color: #93c5fd; font-weight: 500; }
+  .hero-instructor .info .dept { font-size: 0.8rem; opacity: 0.65; margin-top: 0.1rem; }
+  .hero-instructor .info .email { font-size: 0.8rem; margin-top: 0.25rem; }
+  .hero-instructor .info .email a { color: #93c5fd; text-decoration: none; }
+  .hero-instructor .info .email a:hover { text-decoration: underline; }
+
+  /* Hero SVG illustration */
+  .hero-viz {
+    width: 100%; max-width: 420px; aspect-ratio: 1;
+  }
+
+  /* Stats bar */
+  .hero-stats {
+    display: flex; gap: 0; margin-top: 2rem; max-width: 420px;
+    background: rgba(255,255,255,0.06); border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
+    backdrop-filter: blur(8px);
+  }
+  .hero-stat {
+    flex: 1; text-align: center; padding: 0.9rem 0.5rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat .num { font-size: 1.7rem; font-weight: 800; line-height: 1.1; }
+  .hero-stat .label { font-size: 0.78rem; opacity: 0.65; margin-top: 0.15rem; }
 
   /* Container */
   .container { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem; }
@@ -144,46 +215,15 @@
     font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem;
   }
 
-  /* Course stats */
-  .stats {
-    display: flex; justify-content: center; gap: 3rem;
-    margin: 2rem 0 0; position: relative;
-  }
-  .stat { text-align: center; }
-  .stat .num { font-size: 2rem; font-weight: 800; }
-  .stat .label { font-size: 0.85rem; opacity: 0.8; }
-
-  /* Instructor card */
-  .instructor-card {
-    background: var(--card); border-radius: var(--radius);
-    border: 1.5px solid var(--border); padding: 2rem;
-    box-shadow: var(--shadow); display: flex; gap: 1.5rem; align-items: center;
-    margin-bottom: 2.5rem;
-  }
-  .instructor-photo {
-    width: 100px; height: 100px; border-radius: 50%; flex-shrink: 0;
-    object-fit: cover; border: 3px solid var(--primary);
-  }
-  .instructor-initials {
-    width: 100px; height: 100px; border-radius: 50%; flex-shrink: 0;
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.2rem; font-weight: 800; color: #fff;
-    border: 3px solid var(--primary);
-  }
-  .instructor-info h3 { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
-  .instructor-info .title { color: var(--primary); font-weight: 600; font-size: 0.95rem; }
-  .instructor-info .dept { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.1rem; }
-  .instructor-info .contact { margin-top: 0.5rem; font-size: 0.85rem; }
-  .instructor-info .contact a { color: var(--primary); text-decoration: none; }
-  .instructor-info .contact a:hover { text-decoration: underline; }
-
-  @media (max-width: 640px) {
-    .hero h1 { font-size: 2rem; }
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; text-align: center; min-height: auto; padding: 2.5rem 1.5rem 2rem; }
+    .hero-left { text-align: center; }
+    .hero-right { display: none; }
+    .hero h1 { font-size: 2.2rem; }
+    .hero .subtitle { margin: 1rem auto 0; }
+    .hero-instructor { margin: 1.5rem auto 0; }
+    .hero-stats { margin: 1.5rem auto 0; }
     .chapter-grid { grid-template-columns: 1fr; }
-    .stats { gap: 1.5rem; }
-    .stat .num { font-size: 1.5rem; }
-    .instructor-card { flex-direction: column; text-align: center; }
   }
 
   /* Mind map node hover effects */
@@ -194,32 +234,126 @@
 <body>
 
 <div class="hero">
-  <div class="badge">Qatar University &mdash; Math 4</div>
-  <h1>Mathematics for Engineering</h1>
-  <p>Ordinary Differential Equations &mdash; an interactive course with visualizations, step-by-step solutions, and engineering applications</p>
-  <div class="stats">
-    <div class="stat"><div class="num">5</div><div class="label">Chapters</div></div>
-    <div class="stat"><div class="num">30+</div><div class="label">Topics</div></div>
-    <div class="stat"><div class="num">100+</div><div class="label">Practice Problems</div></div>
+  <div class="hero-inner">
+    <!-- Left: Text content -->
+    <div class="hero-left">
+      <div class="badge">Qatar University &mdash; Math 4</div>
+      <h1>
+        <span class="course-word">Course</span>
+        Mathematics for<br><span class="highlight">Engineering</span>
+      </h1>
+      <p class="subtitle">Ordinary Differential Equations &mdash; an interactive course with visualizations, step-by-step solutions, and real engineering applications.</p>
+
+      <!-- Stats row -->
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">5</div><div class="label">Chapters</div></div>
+        <div class="hero-stat"><div class="num">18</div><div class="label">Topics</div></div>
+        <div class="hero-stat"><div class="num">100+</div><div class="label">Problems</div></div>
+        <div class="hero-stat"><div class="num">15+</div><div class="label">Visualizations</div></div>
+      </div>
+
+      <!-- Instructor embedded in hero -->
+      <div class="hero-instructor">
+        <img src="mabrok.jpg" alt="Dr. Mohamed Mabrok"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="initials-fallback" style="display:none;">MM</div>
+        <div class="info">
+          <h3>Dr. Mohamed Mabrok</h3>
+          <div class="role">Associate Professor</div>
+          <div class="dept">Mathematics &amp; Statistics, Qatar University</div>
+          <div class="email"><a href="mailto:m.a.mabrok@gmail.com">m.a.mabrok@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Animated ODE visualization -->
+    <div class="hero-right">
+      <svg class="hero-viz" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hg1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(99,102,241,0.25)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <radialGradient id="hg2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(168,85,247,0.2)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+        </defs>
+        <!-- Background glow -->
+        <circle cx="200" cy="200" r="180" fill="url(#hg1)"/>
+        <circle cx="230" cy="170" r="120" fill="url(#hg2)"/>
+
+        <!-- Coordinate axes -->
+        <line x1="60" y1="340" x2="360" y2="340" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <line x1="60" y1="340" x2="60" y2="40" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <text x="365" y="345" font-size="12" fill="rgba(255,255,255,0.35)" font-style="italic">t</text>
+        <text x="50" y="38" font-size="12" fill="rgba(255,255,255,0.35)" font-style="italic">y</text>
+
+        <!-- Grid lines -->
+        <g stroke="rgba(255,255,255,0.04)" stroke-width="0.5">
+          <line x1="60" y1="190" x2="360" y2="190"/>
+          <line x1="60" y1="115" x2="360" y2="115"/>
+          <line x1="60" y1="265" x2="360" y2="265"/>
+          <line x1="135" y1="40" x2="135" y2="340"/>
+          <line x1="210" y1="40" x2="210" y2="340"/>
+          <line x1="285" y1="40" x2="285" y2="340"/>
+        </g>
+
+        <!-- Solution curve 1: exponential decay y=e^(-t) -->
+        <path d="M60,80 C100,95 140,140 180,190 S260,290 340,320" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.9">
+          <animate attributeName="stroke-dasharray" from="0,600" to="600,0" dur="2s" fill="freeze"/>
+        </path>
+
+        <!-- Solution curve 2: damped oscillation -->
+        <path d="M60,190 C80,100 110,110 140,190 S170,260 200,190 S230,140 260,190 S290,220 320,190 L340,190" fill="none" stroke="#a78bfa" stroke-width="2.5" opacity="0.8">
+          <animate attributeName="stroke-dasharray" from="0,700" to="700,0" dur="2.5s" fill="freeze"/>
+        </path>
+
+        <!-- Solution curve 3: growing exponential -->
+        <path d="M60,300 C100,295 150,285 200,260 S280,180 320,100 L340,70" fill="none" stroke="#f9a8d4" stroke-width="2" opacity="0.6">
+          <animate attributeName="stroke-dasharray" from="0,500" to="500,0" dur="3s" fill="freeze"/>
+        </path>
+
+        <!-- Tangent field arrows (direction field hints) -->
+        <g stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none">
+          <line x1="100" y1="120" x2="115" y2="130" marker-end="url(#hArrow)"/>
+          <line x1="160" y1="240" x2="175" y2="238"/>
+          <line x1="240" y1="160" x2="255" y2="168"/>
+          <line x1="300" y1="250" x2="315" y2="255"/>
+          <line x1="130" y1="300" x2="145" y2="295"/>
+          <line x1="260" y1="100" x2="275" y2="93"/>
+          <line x1="190" y1="140" x2="205" y2="148"/>
+          <line x1="320" y1="170" x2="335" y2="165"/>
+        </g>
+
+        <!-- Floating equation labels -->
+        <g font-family="'Segoe UI',system-ui,sans-serif">
+          <rect x="210" y="72" rx="8" ry="8" width="130" height="28" fill="rgba(15,23,42,0.6)" stroke="rgba(96,165,250,0.4)" stroke-width="1"/>
+          <text x="275" y="90" text-anchor="middle" font-size="13" fill="#60a5fa" font-weight="600">y' + y = 0</text>
+
+          <rect x="230" y="280" rx="8" ry="8" width="145" height="28" fill="rgba(15,23,42,0.6)" stroke="rgba(167,139,250,0.4)" stroke-width="1"/>
+          <text x="302" y="298" text-anchor="middle" font-size="13" fill="#a78bfa" font-weight="600">y'' + 2y' + 5y = 0</text>
+
+          <rect x="80" y="240" rx="8" ry="8" width="115" height="28" fill="rgba(15,23,42,0.6)" stroke="rgba(249,168,212,0.4)" stroke-width="1"/>
+          <text x="137" y="258" text-anchor="middle" font-size="13" fill="#f9a8d4" font-weight="600">y' = 2y</text>
+        </g>
+
+        <!-- Decorative dots at key points -->
+        <circle cx="60" cy="80" r="4" fill="#60a5fa" opacity="0.9">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="60" cy="190" r="4" fill="#a78bfa" opacity="0.9">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="60" cy="300" r="4" fill="#f9a8d4" opacity="0.7">
+          <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
   </div>
 </div>
 
 <div class="container">
-
-  <!-- Instructor Card -->
-  <div class="instructor-card">
-    <img src="mabrok.jpg" alt="Dr. Mohamed Mabrok" class="instructor-photo"
-         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-    <div class="instructor-initials" style="display:none;">MM</div>
-    <div class="instructor-info">
-      <h3>Dr. Mohamed Mabrok</h3>
-      <div class="title">Instructor</div>
-      <div class="dept">Department of Mathematics and Statistics, Qatar University</div>
-      <div class="contact">
-        <a href="mailto:m.a.mabrok@gmail.com">m.a.mabrok@gmail.com</a>
-      </div>
-    </div>
-  </div>
 
   <!-- Course Roadmap -->
   <div class="section-header">
