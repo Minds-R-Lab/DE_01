@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Generator | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --primary:#2563eb;--primary-light:#dbeafe;--primary-dark:#1e40af;
+  --accent:#7c3aed;--accent-light:#ede9fe;
+  --success:#059669;--success-light:#d1fae5;
+  --warning:#d97706;--warning-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --bg:#f8fafc;--card:#ffffff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;
+  --radius:14px;--shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg:0 10px 25px rgba(0,0,0,0.08);
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:1000;padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;}
+nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+nav a:hover{color:var(--primary);}
+nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+
+/* Hero */
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 35%,#3b82f6 65%,#7c3aed 100%);
+  color:#fff;padding:3.5rem 2rem 3rem;text-align:center;margin-top:48px;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 400px at 20% 50%,rgba(59,130,246,0.15) 0%,transparent 70%),radial-gradient(ellipse 500px 350px at 80% 40%,rgba(124,58,237,0.15) 0%,transparent 70%);}
+.hero-inner{position:relative;z-index:2;max-width:800px;margin:0 auto;}
+.hero h1{font-size:2.6rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em;}
+.hero .subtitle{font-size:1.1rem;opacity:0.85;max-width:600px;margin:0 auto;}
+.hero .icon-row{font-size:2.5rem;margin-bottom:1rem;}
+
+/* Container */
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* Section */
+.section{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:2rem;margin-bottom:1.5rem;}
+.section h2{font-size:1.4rem;color:var(--text);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;}
+.section p.desc{color:var(--text-muted);margin-bottom:1.5rem;font-size:0.95rem;}
+
+/* Chapter selector */
+.chapter-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+@media(max-width:600px){.chapter-grid{grid-template-columns:1fr;}}
+
+.chapter-card{
+  border:2px solid var(--border);border-radius:12px;padding:1.2rem;cursor:pointer;
+  transition:all 0.25s;position:relative;user-select:none;
+}
+.chapter-card:hover{border-color:var(--primary);background:var(--primary-light);}
+.chapter-card.selected{border-color:var(--primary);background:var(--primary-light);box-shadow:0 0 0 3px rgba(37,99,235,0.15);}
+.chapter-card .ch-badge{
+  display:inline-block;padding:0.15rem 0.6rem;border-radius:6px;font-size:0.75rem;
+  font-weight:700;color:#fff;margin-bottom:0.5rem;
+}
+.chapter-card h3{font-size:1.05rem;margin-bottom:0.3rem;}
+.chapter-card .topics{font-size:0.82rem;color:var(--text-muted);line-height:1.5;}
+.chapter-card .check-icon{
+  position:absolute;top:0.8rem;right:0.8rem;width:24px;height:24px;border-radius:50%;
+  border:2px solid var(--border);display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;font-size:0.8rem;
+}
+.chapter-card.selected .check-icon{background:var(--primary);border-color:var(--primary);color:#fff;}
+
+/* Generate button */
+.generate-btn{
+  display:block;width:100%;padding:1rem;background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;border:none;border-radius:12px;font-size:1.1rem;font-weight:700;cursor:pointer;
+  transition:all 0.3s;box-shadow:0 4px 15px rgba(37,99,235,0.3);
+}
+.generate-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,99,235,0.4);}
+.generate-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* Exam area */
+#exam-area{display:none;}
+.exam-header{
+  background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;
+  border-radius:var(--radius);padding:1.5rem 2rem;margin-bottom:1.5rem;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.exam-header h2{color:#fff;margin:0;font-size:1.3rem;}
+.exam-header .exam-info{display:flex;gap:1.5rem;font-size:0.9rem;opacity:0.9;}
+.exam-header .exam-info span{display:flex;align-items:center;gap:0.3rem;}
+.exam-actions{display:flex;gap:0.75rem;}
+.exam-actions button{
+  padding:0.5rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.85rem;
+  cursor:pointer;transition:all 0.2s;border:none;
+}
+.btn-new{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);}
+.btn-new:hover{background:rgba(255,255,255,0.25);}
+.btn-print{background:#fff;color:var(--primary);}
+.btn-print:hover{background:#dbeafe;}
+.btn-reveal-all{background:var(--success);color:#fff;}
+.btn-reveal-all:hover{background:#047857;}
+
+/* Question card */
+.question-card{
+  background:var(--card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);margin-bottom:1.25rem;overflow:hidden;
+}
+.question-header{
+  padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;
+  border-bottom:1px solid var(--border);background:#fafbfc;
+}
+.q-number{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:0.95rem;color:#fff;flex-shrink:0;
+}
+.q-mc .q-number{background:var(--accent);}
+.q-free .q-number{background:var(--primary);}
+.q-tags{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.q-tag{
+  padding:0.15rem 0.6rem;border-radius:6px;font-size:0.72rem;font-weight:600;
+}
+.q-tag.ch1{background:#d1fae5;color:#059669;}
+.q-tag.ch2{background:#dbeafe;color:#2563eb;}
+.q-tag.ch3{background:#fef3c7;color:#d97706;}
+.q-tag.ch4{background:#ede9fe;color:#7c3aed;}
+.q-tag.mc{background:#fce7f3;color:#db2777;}
+.q-tag.free{background:#e0e7ff;color:#4338ca;}
+
+.question-body{padding:1.5rem;}
+.question-body .statement{font-size:1.05rem;line-height:1.7;margin-bottom:1rem;}
+
+/* MC choices */
+.mc-choices{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;}
+.mc-choice{
+  display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border:2px solid var(--border);
+  border-radius:10px;cursor:pointer;transition:all 0.2s;
+}
+.mc-choice:hover{border-color:var(--accent);background:var(--accent-light);}
+.mc-choice.selected{border-color:var(--accent);background:var(--accent-light);}
+.mc-choice.correct{border-color:var(--success);background:var(--success-light);}
+.mc-choice.incorrect{border-color:var(--danger);background:var(--danger-light);}
+.mc-letter{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-weight:700;
+  font-size:0.85rem;flex-shrink:0;transition:all 0.2s;
+}
+.mc-choice.selected .mc-letter{border-color:var(--accent);background:var(--accent);color:#fff;}
+.mc-choice.correct .mc-letter{border-color:var(--success);background:var(--success);color:#fff;}
+.mc-choice.incorrect .mc-letter{border-color:var(--danger);background:var(--danger);color:#fff;}
+
+/* Solution reveal */
+.solution-toggle{
+  display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;
+  background:var(--primary-light);color:var(--primary);border:1px solid var(--primary);
+  border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;
+}
+.solution-toggle:hover{background:var(--primary);color:#fff;}
+
+.solution-content{
+  display:none;margin-top:1rem;padding:1.25rem;border-radius:10px;
+  background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1px solid #bbf7d0;
+}
+.solution-content.visible{display:block;}
+.solution-content h4{color:var(--success);margin-bottom:0.75rem;font-size:0.95rem;}
+.solution-content .step{margin-bottom:0.75rem;padding-left:1rem;border-left:3px solid #86efac;}
+.solution-content .step strong{color:var(--success);display:block;margin-bottom:0.2rem;font-size:0.85rem;}
+.solution-content .final-answer{
+  padding:0.75rem 1rem;background:white;border-radius:8px;border:2px solid var(--success);
+  margin-top:0.75rem;font-weight:600;text-align:center;
+}
+
+/* MC Check button */
+.check-btn{
+  padding:0.5rem 1.2rem;background:var(--accent);color:#fff;border:none;border-radius:8px;
+  font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;margin-top:0.5rem;
+}
+.check-btn:hover{background:#6d28d9;}
+.check-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.mc-result{
+  margin-top:0.75rem;padding:0.75rem 1rem;border-radius:8px;font-weight:600;font-size:0.9rem;display:none;
+}
+.mc-result.correct{display:block;background:var(--success-light);color:var(--success);}
+.mc-result.incorrect{display:block;background:var(--danger-light);color:var(--danger);}
+
+/* Score summary */
+.score-summary{
+  background:var(--card);border-radius:var(--radius);border:2px solid var(--success);
+  padding:2rem;text-align:center;margin-top:1.5rem;display:none;
+}
+.score-summary h3{font-size:1.3rem;margin-bottom:0.5rem;}
+.score-circle{
+  width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  margin:1rem auto;font-size:2rem;font-weight:800;color:#fff;
+}
+.score-circle.high{background:var(--success);}
+.score-circle.mid{background:var(--warning);}
+.score-circle.low{background:var(--danger);}
+.score-detail{font-size:0.95rem;color:var(--text-muted);}
+
+/* Print */
+@media print{
+  nav,.hero,.section:first-of-type,.exam-actions,.solution-toggle,.check-btn,.btn-new,.btn-print,.btn-reveal-all,.mc-result,.score-summary{display:none!important;}
+  body{background:#fff;}
+  .question-card{break-inside:avoid;border:1px solid #ccc;box-shadow:none;margin-bottom:1.5rem;}
+  .exam-header{background:#1e293b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #exam-area{display:block!important;}
+  .mc-choice{cursor:default;}
+  .mc-choice.selected,.mc-choice.correct,.mc-choice.incorrect{border-color:#e2e8f0;background:white;}
+  .solution-content{display:none!important;}
+}
+
+/* Responsive */
+@media(max-width:600px){
+  .hero h1{font-size:1.8rem;}
+  .exam-header{flex-direction:column;text-align:center;}
+  .container{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html">Home</a>
+  <a href="#" style="color:var(--accent);font-weight:700;">Exam Generator</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="icon-row">📝</div>
+    <h1>Practice Exam Generator</h1>
+    <p class="subtitle">Select your chapters, generate a randomized 5-question practice exam with a mix of multiple choice and free-response problems. Each exam is unique!</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Chapter Selection -->
+  <div class="section" id="setup-section">
+    <h2>📚 Select Chapters</h2>
+    <p class="desc">Choose which chapters to include in your practice exam. Select at least one.</p>
+
+    <div class="chapter-grid">
+      <div class="chapter-card" data-ch="1" onclick="toggleChapter(this)">
+        <div class="check-icon"></div>
+        <span class="ch-badge" style="background:#059669;">Ch 1</span>
+        <h3>First-Order ODEs</h3>
+        <div class="topics">Separable, Linear, Bernoulli, Exact, Non-Exact (Integrating Factors)</div>
+      </div>
+      <div class="chapter-card" data-ch="2" onclick="toggleChapter(this)">
+        <div class="check-icon"></div>
+        <span class="ch-badge" style="background:#2563eb;">Ch 2</span>
+        <h3>Second-Order ODEs</h3>
+        <div class="topics">Homogeneous (Const. Coeff.), Undetermined Coefficients, Variation of Parameters, Euler Equations</div>
+      </div>
+      <div class="chapter-card" data-ch="3" onclick="toggleChapter(this)">
+        <div class="check-icon"></div>
+        <span class="ch-badge" style="background:#d97706;">Ch 3</span>
+        <h3>Laplace Transforms</h3>
+        <div class="topics">Definition &amp; Properties, Inverse Transforms, Solving IVPs, Step Functions &amp; Convolution</div>
+      </div>
+      <div class="chapter-card" data-ch="4" onclick="toggleChapter(this)">
+        <div class="check-icon"></div>
+        <span class="ch-badge" style="background:#7c3aed;">Ch 4</span>
+        <h3>Systems of ODEs</h3>
+        <div class="topics">Eigenvalues &amp; Eigenvectors, Homogeneous Systems, Phase Portraits &amp; Classification</div>
+      </div>
+    </div>
+
+    <button class="generate-btn" id="generate-btn" onclick="generateExam()" disabled>
+      🎲 Generate Practice Exam
+    </button>
+  </div>
+
+  <!-- Exam Area -->
+  <div id="exam-area">
+    <div class="exam-header">
+      <div>
+        <h2>📋 Practice Exam</h2>
+        <div class="exam-info">
+          <span id="exam-chapters-label"></span>
+          <span>|</span>
+          <span id="exam-count-label"></span>
+        </div>
+      </div>
+      <div class="exam-actions">
+        <button class="btn-new" onclick="backToSetup()">← New Exam</button>
+        <button class="btn-print" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-reveal-all" onclick="revealAllSolutions()">👁️ Reveal All</button>
+      </div>
+    </div>
+
+    <div id="questions-container"></div>
+
+    <div class="score-summary" id="score-summary">
+      <h3>Multiple Choice Score</h3>
+      <div class="score-circle" id="score-circle"></div>
+      <p class="score-detail" id="score-detail"></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// PROBLEM BANK
+// ──────────────────────────────────────────────
+const PROBLEMS = [
+
+// ═══════════════ CHAPTER 1 ═══════════════
+
+// --- Separable ---
+{ch:1, topic:"Separable Equations", type:"free",
+ statement:"Solve the separable ODE: $$\\frac{dy}{dx} = y^2\\cos(x) + y^2 + \\cos(x) + 1$$",
+ solution:[
+   {title:"Step 1: Factor the right side", text:"$$\\frac{dy}{dx} = (y^2 + 1)(\\cos x + 1)$$"},
+   {title:"Step 2: Separate variables", text:"$$\\frac{dy}{y^2+1} = (\\cos x + 1)\\,dx$$"},
+   {title:"Step 3: Integrate both sides", text:"Left: $\\arctan(y)$. Right: $\\sin x + x + C$"},
+ ],
+ answer:"$$\\arctan(y) = x + \\sin(x) + C$$"
+},
+{ch:1, topic:"Separable Equations", type:"free",
+ statement:"Solve the separable ODE: $$\\frac{dy}{dx} = \\frac{xe^x}{y^2 + 1}$$",
+ solution:[
+   {title:"Step 1: Separate variables", text:"$$(y^2+1)\\,dy = xe^x\\,dx$$"},
+   {title:"Step 2: Integrate left side", text:"$$\\frac{y^3}{3} + y$$"},
+   {title:"Step 3: Integrate right side (by parts)", text:"$$\\int xe^x\\,dx = e^x(x-1)$$"},
+ ],
+ answer:"$$\\frac{y^3}{3} + y = xe^x - e^x + C$$"
+},
+{ch:1, topic:"Separable Equations", type:"mc",
+ statement:"Which of the following is the correct separation step for $\\dfrac{dy}{dx} = \\dfrac{2x}{3y^2 - 4}$ with $y(0)=1$?",
+ choices:[
+   "$$(3y^2 - 4)\\,dy = 2x\\,dx$$",
+   "$$\\frac{dy}{2x} = \\frac{dx}{3y^2-4}$$",
+   "$$(3y^2 - 4)\\,dx = 2x\\,dy$$",
+   "$$2x\\,dy = (3y^2 - 4)\\,dx$$"
+ ],
+ correct:0,
+ explanation:"Cross-multiply: $(3y^2-4)dy = 2x\\,dx$. Integrating gives $y^3 - 4y = x^2 + C$. With $y(0)=1$: $C=-3$."
+},
+
+// --- Linear ---
+{ch:1, topic:"Linear First-Order", type:"free",
+ statement:"Solve: $(1+x^2)\\dfrac{dy}{dx} + 2xy = \\dfrac{3}{(1+x^2)^2}$",
+ solution:[
+   {title:"Step 1: Standard form", text:"$$\\frac{dy}{dx} + \\frac{2x}{1+x^2}y = \\frac{3}{(1+x^2)^3}$$"},
+   {title:"Step 2: Integrating factor", text:"$$\\mu(x) = e^{\\int \\frac{2x}{1+x^2}dx} = 1+x^2$$"},
+   {title:"Step 3: Multiply & integrate", text:"$$\\frac{d}{dx}[(1+x^2)y] = \\frac{3}{(1+x^2)^2} \\cdot (1+x^2) = \\frac{3}{1+x^2}$$"},
+ ],
+ answer:"$$y = \\frac{3\\arctan(x) + C}{1+x^2}$$"
+},
+{ch:1, topic:"Linear First-Order", type:"mc",
+ statement:"What is the integrating factor for $xy' - 3y = x^4\\cos(x)$?",
+ choices:[
+   "$$\\mu(x) = \\frac{1}{x^3}$$",
+   "$$\\mu(x) = x^3$$",
+   "$$\\mu(x) = e^{-3x}$$",
+   "$$\\mu(x) = e^{3/x}$$"
+ ],
+ correct:0,
+ explanation:"Standard form: $y' - \\frac{3}{x}y = x^3\\cos x$. So $P(x) = -\\frac{3}{x}$, and $\\mu = e^{\\int -3/x\\,dx} = e^{-3\\ln|x|} = \\frac{1}{x^3}$."
+},
+
+// --- Bernoulli ---
+{ch:1, topic:"Bernoulli Equations", type:"mc",
+ statement:"For the Bernoulli equation $y' + \\frac{y}{x} = x^2 y^3$, what substitution transforms it into a linear ODE?",
+ choices:[
+   "$$v = y^{-2}$$",
+   "$$v = y^2$$",
+   "$$v = \\ln y$$",
+   "$$v = y^{-3}$$"
+ ],
+ correct:0,
+ explanation:"For a Bernoulli equation with $n=3$, the substitution is $v = y^{1-n} = y^{1-3} = y^{-2}$."
+},
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve the Bernoulli equation: $\\dfrac{dy}{dx} - 2y = e^x y^{1/2}$",
+ solution:[
+   {title:"Step 1: Identify n = 1/2", text:"Divide by $y^{1/2}$: $y^{-1/2}y' - 2y^{1/2} = e^x$"},
+   {title:"Step 2: Substitute $v = y^{1/2}$", text:"$v' = \\frac{1}{2}y^{-1/2}y'$ gives $2v' - 2v = e^x$, i.e., $v' - v = \\frac{e^x}{2}$"},
+   {title:"Step 3: Solve the linear ODE", text:"$\\mu = e^{-x}$. Then $\\frac{d}{dx}[e^{-x}v] = \\frac{1}{2}$, so $v = e^x(\\frac{x}{2}+C)$"},
+ ],
+ answer:"$$y = \\left[e^x\\left(\\frac{x}{2}+C\\right)\\right]^2$$"
+},
+
+// --- Exact ---
+{ch:1, topic:"Exact Equations", type:"mc",
+ statement:"Is the equation $(2xy + e^x)dx + (x^2 + \\cos y)dy = 0$ exact?",
+ choices:[
+   "Yes, because $\\frac{\\partial M}{\\partial y} = 2x = \\frac{\\partial N}{\\partial x}$",
+   "No, because $\\frac{\\partial M}{\\partial y} = 2y \\neq 2x = \\frac{\\partial N}{\\partial x}$",
+   "Yes, because $M \\cdot N = $ constant",
+   "No, because $\\frac{\\partial M}{\\partial x} \\neq \\frac{\\partial N}{\\partial y}$"
+ ],
+ correct:0,
+ explanation:"$M = 2xy + e^x \\Rightarrow M_y = 2x$. $N = x^2 + \\cos y \\Rightarrow N_x = 2x$. Since $M_y = N_x$, the equation is exact."
+},
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve the exact equation: $(3x^2 + y\\cos x)\\,dx + (\\sin x - 4y^3)\\,dy = 0$",
+ solution:[
+   {title:"Step 1: Verify exactness", text:"$M_y = \\cos x = N_x$ ✓"},
+   {title:"Step 2: Find $F(x,y)$", text:"$F = \\int M\\,dx = x^3 + y\\sin x + g(y)$"},
+   {title:"Step 3: Determine $g(y)$", text:"$F_y = \\sin x + g'(y) = \\sin x - 4y^3 \\Rightarrow g(y) = -y^4$"},
+ ],
+ answer:"$$x^3 + y\\sin x - y^4 = C$$"
+},
+
+// --- Non-Exact ---
+{ch:1, topic:"Integrating Factors", type:"mc",
+ statement:"For $3y\\,dx + 2x\\,dy = 0$, which is the correct integrating factor $\\mu(x) = x^\\alpha$?",
+ choices:[
+   "$$\\mu = x^{1/2}$$",
+   "$$\\mu = x$$",
+   "$$\\mu = x^{-1/2}$$",
+   "$$\\mu = x^2$$"
+ ],
+ correct:0,
+ explanation:"Multiply by $x^\\alpha$: exactness requires $3(\\alpha+1) = 2\\alpha + 2$ from matching partials. This gives $\\alpha = 1/2$, so $\\mu = x^{1/2}$."
+},
+
+// ═══════════════ CHAPTER 2 ═══════════════
+
+// --- Homogeneous Const Coeff ---
+{ch:2, topic:"Homogeneous (Const. Coeff.)", type:"mc",
+ statement:"The characteristic equation of $y'' + 6y' + 9y = 0$ has roots:",
+ choices:[
+   "$$r = -3 \\text{ (repeated)}$$",
+   "$$r = -3, \\; r = 3$$",
+   "$$r = -3 \\pm 3i$$",
+   "$$r = 3 \\text{ (repeated)}$$"
+ ],
+ correct:0,
+ explanation:"$r^2 + 6r + 9 = (r+3)^2 = 0$, so $r = -3$ is a repeated root. General solution: $y = (c_1 + c_2 t)e^{-3t}$."
+},
+{ch:2, topic:"Homogeneous (Const. Coeff.)", type:"free",
+ statement:"Solve the IVP: $y'' - 5y' + 6y = 0$, $\\;y(0) = 2$, $\\;y'(0) = 3$",
+ solution:[
+   {title:"Step 1: Characteristic equation", text:"$r^2 - 5r + 6 = (r-2)(r-3) = 0 \\Rightarrow r = 2, 3$"},
+   {title:"Step 2: General solution", text:"$y = c_1 e^{2t} + c_2 e^{3t}$"},
+   {title:"Step 3: Apply ICs", text:"$y(0) = c_1 + c_2 = 2$ and $y'(0) = 2c_1 + 3c_2 = 3$. Solving: $c_1 = 3$, $c_2 = -1$"},
+ ],
+ answer:"$$y(t) = 3e^{2t} - e^{3t}$$"
+},
+{ch:2, topic:"Homogeneous (Const. Coeff.)", type:"mc",
+ statement:"The general solution of $y'' - 2y' + 5y = 0$ is:",
+ choices:[
+   "$$y = e^{t}(c_1\\cos 2t + c_2\\sin 2t)$$",
+   "$$y = c_1 e^{t} + c_2 e^{5t}$$",
+   "$$y = (c_1 + c_2 t)e^{t}$$",
+   "$$y = e^{-t}(c_1\\cos 2t + c_2\\sin 2t)$$"
+ ],
+ correct:0,
+ explanation:"$r^2-2r+5=0 \\Rightarrow r = \\frac{2 \\pm \\sqrt{4-20}}{2} = 1 \\pm 2i$. Complex roots give $y = e^{t}(c_1\\cos 2t + c_2\\sin 2t)$."
+},
+
+// --- Undetermined Coefficients ---
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y'' + y = 3\\cos t$, why must the trial particular solution include a factor of $t$?",
+ choices:[
+   "Because $\\cos t$ is a solution of the homogeneous equation (resonance)",
+   "Because the equation has constant coefficients",
+   "Because the forcing function contains $\\cos t$ and $\\sin t$",
+   "Because the characteristic roots are real"
+ ],
+ correct:0,
+ explanation:"The homogeneous solution is $c_1\\cos t + c_2\\sin t$. Since $\\cos t$ appears in both the forcing and homogeneous solution, we multiply by $t$: $y_p = t(A\\cos t + B\\sin t)$."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"free",
+ statement:"Find the general solution of $y'' - 4y' + 3y = 5e^{2t}$",
+ solution:[
+   {title:"Step 1: Homogeneous solution", text:"$r^2-4r+3=(r-1)(r-3)=0$, so $y_h = c_1 e^t + c_2 e^{3t}$"},
+   {title:"Step 2: Trial $y_p = Ae^{2t}$", text:"No resonance since $r=2$ is not a root. Substitute: $4A-8A+3A = 5 \\Rightarrow -A = 5 \\Rightarrow A=-5$"},
+   {title:"Step 3: Combine", text:"$y = y_h + y_p$"},
+ ],
+ answer:"$$y = c_1 e^{t} + c_2 e^{3t} - 5e^{2t}$$"
+},
+
+// --- Variation of Parameters ---
+{ch:2, topic:"Variation of Parameters", type:"mc",
+ statement:"In the method of variation of parameters for $y''+y = \\sec t$, if $y_1 = \\cos t$ and $y_2 = \\sin t$, what is the Wronskian $W$?",
+ choices:[
+   "$$W = 1$$",
+   "$$W = 0$$",
+   "$$W = \\cos^2 t + \\sin^2 t = 2$$",
+   "$$W = -1$$"
+ ],
+ correct:0,
+ explanation:"$W = y_1 y_2' - y_2 y_1' = \\cos t \\cdot \\cos t - \\sin t \\cdot (-\\sin t) = \\cos^2 t + \\sin^2 t = 1$."
+},
+
+// --- Euler ---
+{ch:2, topic:"Euler Equations", type:"free",
+ statement:"Solve the Euler equation: $x^2 y'' + 3xy' + y = 0$",
+ solution:[
+   {title:"Step 1: Assume $y = x^r$", text:"Substitute to get the indicial equation: $r(r-1) + 3r + 1 = 0$"},
+   {title:"Step 2: Simplify", text:"$r^2 + 2r + 1 = (r+1)^2 = 0 \\Rightarrow r = -1$ (repeated)"},
+   {title:"Step 3: Repeated root form", text:"For Euler equations with repeated roots: $y = (c_1 + c_2 \\ln x)x^{-1}$"},
+ ],
+ answer:"$$y = \\frac{c_1 + c_2\\ln x}{x}$$"
+},
+{ch:2, topic:"Euler Equations", type:"mc",
+ statement:"For the Euler equation $3x^2 y'' + 5xy' - y = 0$, the indicial equation is:",
+ choices:[
+   "$$3r^2 + 2r - 1 = 0$$",
+   "$$3r^2 + 5r - 1 = 0$$",
+   "$$r^2 + 5r - 1 = 0$$",
+   "$$3r(r-1) + 5r + 1 = 0$$"
+ ],
+ correct:0,
+ explanation:"Substituting $y=x^r$: $3r(r-1)+5r-1 = 3r^2 - 3r + 5r - 1 = 3r^2 + 2r - 1 = 0$. Roots: $r = 1/3$ and $r = -1$."
+},
+
+// ═══════════════ CHAPTER 3 ═══════════════
+
+// --- Definition ---
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"Compute $\\mathcal{L}\\{t^3 e^{-2t}\\}$:",
+ choices:[
+   "$$\\frac{6}{(s+2)^4}$$",
+   "$$\\frac{3}{(s+2)^4}$$",
+   "$$\\frac{6}{(s-2)^4}$$",
+   "$$\\frac{1}{(s+2)^3}$$"
+ ],
+ correct:0,
+ explanation:"$\\mathcal{L}\\{t^n\\} = \\frac{n!}{s^{n+1}}$, so $\\mathcal{L}\\{t^3\\} = \\frac{6}{s^4}$. By the first shifting theorem ($s \\to s+2$): $\\frac{6}{(s+2)^4}$."
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"$\\mathcal{L}\\{e^{3t}\\cos(4t)\\}$ equals:",
+ choices:[
+   "$$\\frac{s-3}{(s-3)^2+16}$$",
+   "$$\\frac{s+3}{(s+3)^2+16}$$",
+   "$$\\frac{s-3}{s^2+16}$$",
+   "$$\\frac{4}{(s-3)^2+16}$$"
+ ],
+ correct:0,
+ explanation:"$\\mathcal{L}\\{\\cos(4t)\\} = \\frac{s}{s^2+16}$. Shifting by $a=3$: replace $s$ with $s-3$ to get $\\frac{s-3}{(s-3)^2+16}$."
+},
+
+// --- Inverse ---
+{ch:3, topic:"Inverse Laplace Transform", type:"free",
+ statement:"Find $\\mathcal{L}^{-1}\\left\\{\\dfrac{2s+7}{s^2+4s+13}\\right\\}$",
+ solution:[
+   {title:"Step 1: Complete the square", text:"$s^2+4s+13 = (s+2)^2 + 9$"},
+   {title:"Step 2: Rewrite numerator", text:"$2s+7 = 2(s+2) + 3$"},
+   {title:"Step 3: Split and invert", text:"$\\frac{2(s+2)}{(s+2)^2+9} + \\frac{3}{(s+2)^2+9} = 2e^{-2t}\\cos(3t) + e^{-2t}\\sin(3t)$"},
+ ],
+ answer:"$$2e^{-2t}\\cos(3t) + e^{-2t}\\sin(3t)$$"
+},
+{ch:3, topic:"Inverse Laplace Transform", type:"mc",
+ statement:"To invert $\\frac{s+3}{(s+1)(s^2+4)}$, the correct partial fraction form is:",
+ choices:[
+   "$$\\frac{A}{s+1} + \\frac{Bs+C}{s^2+4}$$",
+   "$$\\frac{A}{s+1} + \\frac{B}{s^2+4}$$",
+   "$$\\frac{A}{s+1} + \\frac{B}{s+2i} + \\frac{C}{s-2i}$$",
+   "$$\\frac{As+B}{s+1} + \\frac{C}{s^2+4}$$"
+ ],
+ correct:0,
+ explanation:"For a linear factor $(s+1)$ use $\\frac{A}{s+1}$; for an irreducible quadratic $(s^2+4)$ use $\\frac{Bs+C}{s^2+4}$."
+},
+
+// --- Solving IVPs ---
+{ch:3, topic:"Solving IVPs (Laplace)", type:"free",
+ statement:"Use Laplace transforms to solve: $y'' + 4y = 8$, $\\;y(0)=0$, $\\;y'(0)=2$",
+ solution:[
+   {title:"Step 1: Transform", text:"$s^2Y - 0 - 2 + 4Y = \\frac{8}{s}$, so $(s^2+4)Y = \\frac{8}{s} + 2$"},
+   {title:"Step 2: Solve for $Y$", text:"$Y = \\frac{8}{s(s^2+4)} + \\frac{2}{s^2+4}$"},
+   {title:"Step 3: Partial fractions & invert", text:"$\\frac{8}{s(s^2+4)} = \\frac{2}{s} - \\frac{2s}{s^2+4}$. And $\\frac{2}{s^2+4} = \\sin(2t)$"},
+ ],
+ answer:"$$y(t) = 2 - 2\\cos(2t) + \\sin(2t)$$"
+},
+
+// --- Step & Convolution ---
+{ch:3, topic:"Step Functions & Convolution", type:"mc",
+ statement:"$\\mathcal{L}^{-1}\\left\\{\\frac{3e^{-2s}}{s^2+9}\\right\\}$ is:",
+ choices:[
+   "$$u_2(t)\\sin(3(t-2))$$",
+   "$$3\\sin(3t)u(t-2)$$",
+   "$$u_2(t)\\cos(3(t-2))$$",
+   "$$3e^{-2t}\\sin(3t)$$"
+ ],
+ correct:0,
+ explanation:"By the second shifting theorem: $e^{-as}F(s) \\to u_a(t)f(t-a)$. Here $F(s) = \\frac{3}{s^2+9}$ gives $f(t) = \\sin(3t)$, so the answer is $u_2(t)\\sin(3(t-2))$."
+},
+{ch:3, topic:"Step Functions & Convolution", type:"free",
+ statement:"Use the convolution theorem to find $\\mathcal{L}^{-1}\\left\\{\\dfrac{1}{s^2(s^2+1)}\\right\\}$",
+ solution:[
+   {title:"Step 1: Factor", text:"$\\frac{1}{s^2} \\cdot \\frac{1}{s^2+1} \\leftrightarrow f(t)*g(t)$ where $f(t)=t$ and $g(t)=\\sin t$"},
+   {title:"Step 2: Compute convolution", text:"$(f*g)(t) = \\int_0^t \\tau \\sin(t-\\tau)\\,d\\tau$"},
+   {title:"Step 3: Integration by parts", text:"Evaluate: $= t - \\sin t$"},
+ ],
+ answer:"$$t - \\sin(t)$$"
+},
+
+// ═══════════════ CHAPTER 4 ═══════════════
+
+// --- Eigenvalues ---
+{ch:4, topic:"Eigenvalues & Eigenvectors", type:"free",
+ statement:"Find the eigenvalues and eigenvectors of $A = \\begin{pmatrix} 5 & -2 \\\\ 3 & -2 \\end{pmatrix}$",
+ solution:[
+   {title:"Step 1: Characteristic equation", text:"$\\det(A-\\lambda I) = (5-\\lambda)(-2-\\lambda)+6 = \\lambda^2 - 3\\lambda - 4 = (\\lambda-4)(\\lambda+1) = 0$"},
+   {title:"Step 2: $\\lambda_1 = 4$", text:"$(A-4I)\\mathbf{v} = 0$: $\\begin{pmatrix}1&-2\\\\3&-6\\end{pmatrix}$, so $\\mathbf{v}_1 = \\begin{pmatrix}2\\\\1\\end{pmatrix}$"},
+   {title:"Step 3: $\\lambda_2 = -1$", text:"$(A+I)\\mathbf{v} = 0$: $\\begin{pmatrix}6&-2\\\\3&-1\\end{pmatrix}$, so $\\mathbf{v}_2 = \\begin{pmatrix}1\\\\3\\end{pmatrix}$"},
+ ],
+ answer:"$$\\lambda_1=4,\\;\\mathbf{v}_1=\\begin{pmatrix}2\\\\1\\end{pmatrix};\\quad \\lambda_2=-1,\\;\\mathbf{v}_2=\\begin{pmatrix}1\\\\3\\end{pmatrix}$$"
+},
+{ch:4, topic:"Eigenvalues & Eigenvectors", type:"mc",
+ statement:"The eigenvalues of $A = \\begin{pmatrix} 2 & -5 \\\\ 1 & 2 \\end{pmatrix}$ are:",
+ choices:[
+   "$$\\lambda = 2 \\pm i\\sqrt{5}$$",
+   "$$\\lambda = 2, \\; \\lambda = -5$$",
+   "$$\\lambda = 2 \\pm \\sqrt{5}$$",
+   "$$\\lambda = -2 \\pm i\\sqrt{5}$$"
+ ],
+ correct:0,
+ explanation:"$\\det(A-\\lambda I) = (2-\\lambda)^2+5 = 0 \\Rightarrow \\lambda = 2 \\pm i\\sqrt{5}$ (complex conjugates)."
+},
+
+// --- Homogeneous Systems ---
+{ch:4, topic:"Homogeneous Systems", type:"free",
+ statement:"Solve: $\\mathbf{x}' = \\begin{pmatrix} 4 & -2 \\\\ 5 & -3 \\end{pmatrix}\\mathbf{x}$",
+ solution:[
+   {title:"Step 1: Eigenvalues", text:"$\\lambda^2 - \\lambda - 2 = (\\lambda-2)(\\lambda+1) = 0 \\Rightarrow \\lambda_1 = 2,\\;\\lambda_2 = -1$"},
+   {title:"Step 2: Eigenvectors", text:"$\\lambda_1=2$: $\\mathbf{v}_1=\\begin{pmatrix}1\\\\1\\end{pmatrix}$. $\\lambda_2=-1$: $\\mathbf{v}_2=\\begin{pmatrix}2\\\\5\\end{pmatrix}$"},
+   {title:"Step 3: General solution", text:"Combine the fundamental solutions"},
+ ],
+ answer:"$$\\mathbf{x}(t) = c_1 e^{2t}\\begin{pmatrix}1\\\\1\\end{pmatrix} + c_2 e^{-t}\\begin{pmatrix}2\\\\5\\end{pmatrix}$$"
+},
+{ch:4, topic:"Homogeneous Systems", type:"mc",
+ statement:"For a $2\\times 2$ system $\\mathbf{x}' = A\\mathbf{x}$ with a repeated eigenvalue $\\lambda$ and only one eigenvector, the general solution includes:",
+ choices:[
+   "$$c_1 e^{\\lambda t}\\mathbf{v} + c_2(t e^{\\lambda t}\\mathbf{v} + e^{\\lambda t}\\mathbf{w})$$",
+   "$$c_1 e^{\\lambda t}\\mathbf{v} + c_2 t e^{\\lambda t}\\mathbf{v}$$",
+   "$$c_1 e^{\\lambda t}\\mathbf{v}_1 + c_2 e^{\\lambda t}\\mathbf{v}_2$$",
+   "$$(c_1 + c_2 t^2)e^{\\lambda t}\\mathbf{v}$$"
+ ],
+ correct:0,
+ explanation:"With a deficient eigenvalue, we need a generalized eigenvector $\\mathbf{w}$ satisfying $(A-\\lambda I)\\mathbf{w} = \\mathbf{v}$. The second solution is $te^{\\lambda t}\\mathbf{v} + e^{\\lambda t}\\mathbf{w}$."
+},
+
+// --- Phase Portraits ---
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"Classify the equilibrium of $\\mathbf{x}' = \\begin{pmatrix} 1 & -3 \\\\ 3 & 1 \\end{pmatrix}\\mathbf{x}$:",
+ choices:[
+   "Unstable spiral (eigenvalues $1 \\pm 3i$)",
+   "Center ($\\pm 3i$)",
+   "Stable spiral ($-1 \\pm 3i$)",
+   "Unstable node (real positive eigenvalues)"
+ ],
+ correct:0,
+ explanation:"$\\text{tr}(A) = 2 > 0$, $\\det(A) = 1+9 = 10 > 0$, $\\Delta = 4-40 < 0$. Complex eigenvalues $1 \\pm 3i$ with positive real part: unstable spiral."
+},
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"A system with $\\text{tr}(A) = 0$ and $\\det(A) > 0$ has a:",
+ choices:[
+   "Center (purely imaginary eigenvalues)",
+   "Stable node",
+   "Saddle point",
+   "Stable spiral"
+ ],
+ correct:0,
+ explanation:"$\\text{tr}=0$ means $\\lambda_1+\\lambda_2=0$, and $\\det>0$ means $\\lambda_1\\lambda_2>0$. Together: $\\lambda = \\pm i\\sqrt{\\det(A)}$ — purely imaginary eigenvalues give a center."
+},
+
+// ═══════════════ EXTRA CONCEPTUAL MC ═══════════════
+
+{ch:1, topic:"Separable Equations", type:"mc",
+ statement:"A first-order ODE $\\frac{dy}{dx} = f(x,y)$ is separable if:",
+ choices:[
+   "It can be written as $\\frac{dy}{dx} = g(x)h(y)$",
+   "It is linear in $y$",
+   "$f(x,y)$ is a polynomial",
+   "It has constant coefficients"
+ ],
+ correct:0,
+ explanation:"A separable ODE can be factored as a product of a function of $x$ alone and a function of $y$ alone: $\\frac{dy}{dx} = g(x)h(y)$."
+},
+{ch:2, topic:"Variation of Parameters", type:"free",
+ statement:"Solve using variation of parameters: $y'' - 2y' + y = \\dfrac{e^t}{t^2}$",
+ solution:[
+   {title:"Step 1: Homogeneous solution", text:"$r^2-2r+1=(r-1)^2=0$, so $y_h = c_1 e^t + c_2 te^t$"},
+   {title:"Step 2: Wronskian", text:"$W = e^t \\cdot (e^t + te^t) - te^t \\cdot e^t = e^{2t}$"},
+   {title:"Step 3: Compute $u_1', u_2'$", text:"$u_1' = \\frac{-te^t \\cdot e^t/t^2}{e^{2t}} = \\frac{-1}{t}$, $u_2' = \\frac{e^t \\cdot e^t/t^2}{e^{2t}} = \\frac{1}{t^2}$"},
+   {title:"Step 4: Integrate", text:"$u_1 = -\\ln|t|$, $u_2 = -\\frac{1}{t}$"},
+ ],
+ answer:"$$y = c_1 e^t + c_2 te^t - e^t\\ln|t| - e^t = c_1 e^t + c_2 te^t - e^t\\ln|t|$$"
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"Which property of the Laplace transform is $\\mathcal{L}\\{e^{at}f(t)\\} = F(s-a)$?",
+ choices:[
+   "First shifting theorem ($s$-shifting)",
+   "Second shifting theorem ($t$-shifting)",
+   "Convolution theorem",
+   "Differentiation in the $s$-domain"
+ ],
+ correct:0,
+ explanation:"The first shifting theorem states that multiplying $f(t)$ by $e^{at}$ shifts the transform from $F(s)$ to $F(s-a)$."
+},
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"A saddle point occurs when:",
+ choices:[
+   "$\\det(A) < 0$ (eigenvalues are real with opposite signs)",
+   "$\\text{tr}(A) < 0$ and $\\det(A) > 0$",
+   "$\\text{tr}(A) = 0$",
+   "$\\det(A) = 0$"
+ ],
+ correct:0,
+ explanation:"When $\\det(A) < 0$, the discriminant $\\Delta = \\text{tr}^2 - 4\\det > 0$ and the eigenvalues have opposite signs, creating a saddle point."
+},
+
+// More problems for richer randomization
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve: $(y^2 + \\ln x)\\,dx + (2xy - 3)\\,dy = 0$",
+ solution:[
+   {title:"Step 1: Verify exactness", text:"$M_y = 2y = N_x$ ✓"},
+   {title:"Step 2: Integrate $M$", text:"$F = \\int(y^2+\\ln x)dx = xy^2 + x\\ln x - x + g(y)$"},
+   {title:"Step 3: Find $g(y)$", text:"$F_y = 2xy + g'(y) = 2xy - 3 \\Rightarrow g(y) = -3y$"},
+ ],
+ answer:"$$xy^2 + x\\ln x - x - 3y = C$$"
+},
+{ch:2, topic:"Euler Equations", type:"mc",
+ statement:"For an Euler equation $x^2y''+axy'+by=0$, the substitution that converts it to a constant-coefficient ODE is:",
+ choices:[
+   "$$x = e^t \\;(\\text{or } t = \\ln x)$$",
+   "$$y = x^r$$",
+   "$$v = xy$$",
+   "$$u = y/x$$"
+ ],
+ correct:0,
+ explanation:"The substitution $x = e^t$ (equivalently $t = \\ln x$) transforms the Euler equation into a constant-coefficient ODE in the variable $t$."
+},
+{ch:3, topic:"Inverse Laplace Transform", type:"free",
+ statement:"Find $\\mathcal{L}^{-1}\\left\\{\\dfrac{5s-1}{s^2-6s+10}\\right\\}$",
+ solution:[
+   {title:"Step 1: Complete the square", text:"$s^2-6s+10 = (s-3)^2+1$"},
+   {title:"Step 2: Rewrite numerator", text:"$5s-1 = 5(s-3)+14$"},
+   {title:"Step 3: Split & invert", text:"$5\\cdot\\frac{s-3}{(s-3)^2+1} + 14\\cdot\\frac{1}{(s-3)^2+1}$"},
+ ],
+ answer:"$$5e^{3t}\\cos(t) + 14e^{3t}\\sin(t)$$"
+},
+];
+
+// ──────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────
+let selectedChapters = new Set();
+let currentExam = [];
+let mcAnswers = {};
+
+// ──────────────────────────────────────────────
+// UI LOGIC
+// ──────────────────────────────────────────────
+function toggleChapter(card) {
+  const ch = parseInt(card.dataset.ch);
+  if (selectedChapters.has(ch)) {
+    selectedChapters.delete(ch);
+    card.classList.remove('selected');
+    card.querySelector('.check-icon').textContent = '';
+  } else {
+    selectedChapters.add(ch);
+    card.classList.add('selected');
+    card.querySelector('.check-icon').textContent = '✓';
+  }
+  document.getElementById('generate-btn').disabled = selectedChapters.size === 0;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function generateExam() {
+  // Filter problems by selected chapters
+  const pool = PROBLEMS.filter(p => selectedChapters.has(p.ch));
+  if (pool.length < 5) {
+    alert("Not enough problems in selected chapters. Please select more chapters.");
+    return;
+  }
+
+  // Separate MC and free-response
+  const mcPool = shuffle(pool.filter(p => p.type === 'mc'));
+  const freePool = shuffle(pool.filter(p => p.type === 'free'));
+
+  // Aim for ~2-3 MC and ~2-3 free response
+  let exam = [];
+  const mcCount = Math.min(3, mcPool.length);
+  const freeCount = Math.min(5 - mcCount, freePool.length);
+  const extraMc = 5 - mcCount - freeCount;
+
+  exam.push(...mcPool.slice(0, mcCount));
+  exam.push(...freePool.slice(0, freeCount));
+  if (extraMc > 0) exam.push(...mcPool.slice(mcCount, mcCount + extraMc));
+  if (exam.length < 5) exam.push(...shuffle(pool).slice(0, 5 - exam.length));
+
+  // Take exactly 5 and shuffle order
+  exam = shuffle(exam.slice(0, 5));
+
+  // For MC questions, shuffle choices
+  exam.forEach(q => {
+    if (q.type === 'mc' && q.choices) {
+      const origCorrect = q.choices[q.correct];
+      const shuffled = shuffle(q.choices);
+      q._shuffledChoices = shuffled;
+      q._shuffledCorrect = shuffled.indexOf(origCorrect);
+    }
+  });
+
+  currentExam = exam;
+  mcAnswers = {};
+  renderExam();
+}
+
+function renderExam() {
+  // Show exam, hide setup
+  document.getElementById('setup-section').style.display = 'none';
+  document.getElementById('exam-area').style.display = 'block';
+  document.getElementById('score-summary').style.display = 'none';
+
+  // Header info
+  const chNums = [...new Set(currentExam.map(q => q.ch))].sort();
+  document.getElementById('exam-chapters-label').textContent = 'Chapters: ' + chNums.map(c => 'Ch ' + c).join(', ');
+  const mcCount = currentExam.filter(q => q.type === 'mc').length;
+  const freeCount = currentExam.filter(q => q.type === 'free').length;
+  document.getElementById('exam-count-label').textContent = `${mcCount} MC + ${freeCount} Free Response`;
+
+  // Render questions
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  currentExam.forEach((q, idx) => {
+    container.innerHTML += renderQuestion(q, idx);
+  });
+
+  // Re-render KaTeX
+  if (window.renderMathInElement) {
+    renderMathInElement(container, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });
+  }
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function renderQuestion(q, idx) {
+  const num = idx + 1;
+  const chClass = 'ch' + q.ch;
+  const typeClass = q.type === 'mc' ? 'q-mc' : 'q-free';
+  const typeTag = q.type === 'mc'
+    ? '<span class="q-tag mc">Multiple Choice</span>'
+    : '<span class="q-tag free">Free Response</span>';
+
+  let body = `<div class="statement">${q.statement}</div>`;
+
+  if (q.type === 'mc') {
+    const choices = q._shuffledChoices || q.choices;
+    const letters = ['A', 'B', 'C', 'D'];
+    body += '<ul class="mc-choices">';
+    choices.forEach((c, ci) => {
+      body += `<li class="mc-choice" id="q${idx}-c${ci}" onclick="selectChoice(${idx},${ci})">
+        <span class="mc-letter">${letters[ci]}</span>
+        <span>${c}</span>
+      </li>`;
+    });
+    body += '</ul>';
+    body += `<button class="check-btn" id="check-btn-${idx}" onclick="checkAnswer(${idx})">Check Answer</button>`;
+    body += `<div class="mc-result" id="mc-result-${idx}"></div>`;
+  }
+
+  // Solution
+  if (q.type === 'free') {
+    let solHtml = '';
+    if (q.solution) {
+      q.solution.forEach(s => {
+        solHtml += `<div class="step"><strong>${s.title}</strong>${s.text}</div>`;
+      });
+    }
+    if (q.answer) {
+      solHtml += `<div class="final-answer">${q.answer}</div>`;
+    }
+    body += `<button class="solution-toggle" onclick="toggleSolution(this)">👁️ Reveal Solution</button>`;
+    body += `<div class="solution-content" id="sol-${idx}"><h4>✅ Solution</h4>${solHtml}</div>`;
+  } else {
+    // MC explanation
+    let explHtml = '';
+    if (q.explanation) {
+      explHtml = `<div class="step">${q.explanation}</div>`;
+    }
+    const correctLetter = ['A','B','C','D'][q._shuffledCorrect ?? q.correct];
+    explHtml += `<div class="final-answer">Correct Answer: ${correctLetter}</div>`;
+    body += `<button class="solution-toggle" onclick="toggleSolution(this)" style="margin-top:0.5rem;">👁️ Reveal Explanation</button>`;
+    body += `<div class="solution-content" id="sol-${idx}"><h4>📖 Explanation</h4>${explHtml}</div>`;
+  }
+
+  return `<div class="question-card ${typeClass}">
+    <div class="question-header">
+      <div class="q-number">${num}</div>
+      <div class="q-tags">
+        <span class="q-tag ${chClass}">Ch ${q.ch}: ${q.topic}</span>
+        ${typeTag}
+      </div>
+    </div>
+    <div class="question-body">${body}</div>
+  </div>`;
+}
+
+function selectChoice(qIdx, cIdx) {
+  // Don't allow selection after checking
+  if (document.getElementById(`check-btn-${qIdx}`).disabled) return;
+
+  // Clear previous selection
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById(`q${qIdx}-c${i}`);
+    if (el) el.classList.remove('selected');
+  }
+  document.getElementById(`q${qIdx}-c${cIdx}`).classList.add('selected');
+  mcAnswers[qIdx] = cIdx;
+}
+
+function checkAnswer(qIdx) {
+  const q = currentExam[qIdx];
+  const correctIdx = q._shuffledCorrect ?? q.correct;
+  const selected = mcAnswers[qIdx];
+
+  if (selected === undefined) {
+    alert('Please select an answer first!');
+    return;
+  }
+
+  const btn = document.getElementById(`check-btn-${qIdx}`);
+  btn.disabled = true;
+
+  const resultDiv = document.getElementById(`mc-result-${qIdx}`);
+  const selectedEl = document.getElementById(`q${qIdx}-c${selected}`);
+  const correctEl = document.getElementById(`q${qIdx}-c${correctIdx}`);
+
+  if (selected === correctIdx) {
+    selectedEl.classList.add('correct');
+    resultDiv.className = 'mc-result correct';
+    resultDiv.textContent = '✓ Correct!';
+  } else {
+    selectedEl.classList.add('incorrect');
+    correctEl.classList.add('correct');
+    resultDiv.className = 'mc-result incorrect';
+    resultDiv.textContent = '✗ Incorrect — see the correct answer highlighted in green.';
+  }
+
+  // Re-render math
+  if (window.renderMathInElement) {
+    renderMathInElement(resultDiv.closest('.question-card'), {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]
+    });
+  }
+
+  // Check if all MC answered → show score
+  const mcQuestions = currentExam.filter((q,i) => q.type === 'mc');
+  const allChecked = mcQuestions.every((q,i) => {
+    const realIdx = currentExam.indexOf(q);
+    return document.getElementById(`check-btn-${realIdx}`).disabled;
+  });
+  if (allChecked && mcQuestions.length > 0) showScore();
+}
+
+function showScore() {
+  const mcQuestions = currentExam.map((q,i) => ({q,i})).filter(x => x.q.type === 'mc');
+  let correct = 0;
+  mcQuestions.forEach(({q, i}) => {
+    const correctIdx = q._shuffledCorrect ?? q.correct;
+    if (mcAnswers[i] === correctIdx) correct++;
+  });
+  const total = mcQuestions.length;
+  const pct = Math.round((correct / total) * 100);
+
+  const summary = document.getElementById('score-summary');
+  summary.style.display = 'block';
+  const circle = document.getElementById('score-circle');
+  circle.textContent = `${correct}/${total}`;
+  circle.className = 'score-circle ' + (pct >= 80 ? 'high' : pct >= 50 ? 'mid' : 'low');
+  document.getElementById('score-detail').textContent =
+    `You got ${correct} out of ${total} multiple choice questions correct (${pct}%).`;
+}
+
+function toggleSolution(btn) {
+  const sol = btn.nextElementSibling;
+  sol.classList.toggle('visible');
+  btn.textContent = sol.classList.contains('visible') ? '🙈 Hide Solution' : '👁️ Reveal Solution';
+  if (btn.textContent.includes('Explanation')) {
+    btn.textContent = sol.classList.contains('visible') ? '🙈 Hide Explanation' : '👁️ Reveal Explanation';
+  }
+  // Re-render math in solution
+  if (window.renderMathInElement && sol.classList.contains('visible')) {
+    renderMathInElement(sol, {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]
+    });
+  }
+}
+
+function revealAllSolutions() {
+  document.querySelectorAll('.solution-content').forEach(sol => {
+    sol.classList.add('visible');
+  });
+  document.querySelectorAll('.solution-toggle').forEach(btn => {
+    btn.textContent = btn.textContent.includes('Explanation') ? '🙈 Hide Explanation' : '🙈 Hide Solution';
+  });
+  // Check all MC
+  currentExam.forEach((q, i) => {
+    if (q.type === 'mc' && !document.getElementById(`check-btn-${i}`).disabled) {
+      if (mcAnswers[i] === undefined) mcAnswers[i] = -1; // mark as unanswered
+      checkAnswer(i);
+    }
+  });
+  // Re-render math
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('questions-container'), {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]
+    });
+  }
+}
+
+function backToSetup() {
+  document.getElementById('setup-section').style.display = 'block';
+  document.getElementById('exam-area').style.display = 'none';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// KaTeX auto-render on load
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]
+    });
+  }
+});
+</script>
+
+</body>
+</html>
