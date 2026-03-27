@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5.1 — Power Series Solutions Around Ordinary Points</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      height: 60px;
+      box-shadow: var(--shadow);
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-right: 2rem;
+      white-space: nowrap;
+    }
+
+    nav .logo a {
+      text-decoration: none;
+      color: var(--primary);
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      overflow-x: auto;
+    }
+
+    nav .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    nav .nav-links a:hover,
+    nav .nav-links a.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 1.5rem 4rem;
+    }
+
+    section {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .definition-box,
+    .theorem-box,
+    .example-box,
+    .warning-box,
+    .tip-box {
+      border-left: 5px solid;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .definition-box {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .theorem-box {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .example-box {
+      background: var(--success-light);
+      border-color: var(--success);
+    }
+
+    .warning-box {
+      background: var(--warning-light);
+      border-color: var(--warning);
+    }
+
+    .tip-box {
+      background: #f0f9ff;
+      border-color: #0ea5e9;
+    }
+
+    .box-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .math-display {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 1.2rem;
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.15em;
+      overflow-x: auto;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding: 1rem 1rem 1rem 3.5rem;
+      margin-bottom: 0.75rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0.75rem;
+      top: 1rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .collapsible-toggle {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: #f1f5f9;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .collapsible-toggle:hover {
+      background: #e2e8f0;
+    }
+
+    .collapsible-toggle .arrow {
+      transform: rotate(0deg);
+      transition: transform 0.3s ease;
+    }
+
+    .collapsible-toggle.open .arrow {
+      transform: rotate(90deg);
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      border: 1.5px solid transparent;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .collapsible-content.open {
+      max-height: 5000px;
+      border-color: var(--border);
+      padding: 1.5rem;
+    }
+
+    .quiz-problem {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .choice-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+      text-align: left;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .choice-btn:disabled {
+      cursor: not-allowed;
+    }
+
+    .choice-btn.selected-correct {
+      background: var(--success-light);
+      border-color: var(--success);
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .choice-btn.selected-wrong {
+      background: var(--danger-light);
+      border-color: var(--danger);
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .quiz-feedback.incorrect {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .reference-card {
+      padding: 1.5rem;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .reference-card h4 {
+      color: var(--primary);
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .reference-card code {
+      background: #fff;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .katex-display {
+      margin: 0.5rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 70px 1rem 2rem;
+      }
+      section {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
+      nav .nav-links {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="index.html">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch5-overview.html">5.0 Overview</a>
+    <a href="ch5-power-series.html" class="active">5.1 Power Series</a>
+    <a href="ch5-frobenius.html">5.2 Frobenius</a>
+    <a href="ch5-euler-method.html">5.3 Euler's Method</a>
+    <a href="ch5-runge-kutta.html">5.4 Runge-Kutta</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a>
+    <a href="#theory">Theory</a>
+    <a href="#method">Method</a>
+    <a href="#examples">Examples</a>
+    <a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- INTRODUCTION SECTION -->
+  <section id="intro">
+    <h1>5.1 — Power Series Solutions Around Ordinary Points</h1>
+    <p class="subtitle">Finding analytic solutions to differential equations using power series expansions</p>
+
+    <div class="definition-box">
+      <div class="box-label">Learning Objectives</div>
+      <ul style="margin-left: 1.5rem;">
+        <li style="margin-bottom: 0.5rem;">Distinguish between ordinary and singular points of a differential equation</li>
+        <li style="margin-bottom: 0.5rem;">Represent solutions as power series around an ordinary point</li>
+        <li style="margin-bottom: 0.5rem;">Derive and solve recurrence relations for power series coefficients</li>
+        <li style="margin-bottom: 0.5rem;">Determine the radius of convergence for power series solutions</li>
+      </ul>
+    </div>
+
+    <h3>Why Power Series?</h3>
+    <p>
+      Many important differential equations arising in physics and engineering have no closed-form solutions using
+      the methods of Chapters 1–4. Power series solutions provide a systematic way to find analytic solutions in the form of
+      infinite series. This approach is particularly valuable for:
+    </p>
+    <ul style="margin-left: 1.5rem;">
+      <li style="margin-bottom: 0.5rem;"><strong>Airy equation</strong> ($y'' + xy = 0$) — describes diffraction and wave propagation</li>
+      <li style="margin-bottom: 0.5rem;"><strong>Bessel equation</strong> — fundamental in cylindrical and polar coordinates</li>
+      <li style="margin-bottom: 0.5rem;"><strong>Hermite and Legendre equations</strong> — central to quantum mechanics and special functions</li>
+      <li style="margin-bottom: 0.5rem;"><strong>Variable-coefficient ODEs</strong> without polynomial or rational closed forms</li>
+    </ul>
+  </section>
+
+  <!-- THEORY SECTION -->
+  <section id="theory">
+    <h2>Theory</h2>
+
+    <h3>Ordinary vs. Singular Points</h3>
+    <p>
+      Consider the second-order linear differential equation:
+    </p>
+    <div class="math-display">
+      $$P(x)y'' + Q(x)y' + R(x)y = 0$$
+    </div>
+    <p>
+      Divide by $P(x)$ (where $P(x) \neq 0$) to obtain the standard form:
+    </p>
+    <div class="math-display">
+      $$y'' + p(x)y' + q(x)y = 0$$
+    </div>
+    <p>
+      where $p(x) = \frac{Q(x)}{P(x)}$ and $q(x) = \frac{R(x)}{P(x)}$.
+    </p>
+
+    <div class="definition-box">
+      <div class="box-label">Definition: Ordinary and Singular Points</div>
+      <p>
+        A point $x_0$ is called an <strong>ordinary point</strong> of the differential equation if both $p(x)$ and $q(x)$ are
+        analytic (have convergent Taylor series) at $x_0$. Otherwise, $x_0$ is a <strong>singular point</strong>.
+      </p>
+    </div>
+
+    <h3>Existence of Power Series Solutions</h3>
+
+    <div class="theorem-box">
+      <div class="box-label">Theorem: Power Series Solution at an Ordinary Point</div>
+      <p>
+        If $x_0$ is an ordinary point of $y'' + p(x)y' + q(x)y = 0$, then the general solution can be expressed as:
+      </p>
+      <div class="math-display">
+        $$y = \sum_{n=0}^{\infty} a_n(x-x_0)^n$$
+      </div>
+      <p>
+        This series converges at least for $|x - x_0| < R$, where $R$ is the distance from $x_0$ to the nearest singular point.
+      </p>
+    </div>
+
+    <h3>Power Series Review</h3>
+    <p>Key facts about power series that we'll use:</p>
+    <ul style="margin-left: 1.5rem;">
+      <li style="margin-bottom: 0.5rem;"><strong>Term-by-term differentiation:</strong>
+        $\frac{d}{dx}\sum_{n=0}^{\infty} a_n(x-x_0)^n = \sum_{n=1}^{\infty} n a_n(x-x_0)^{n-1}$
+      </li>
+      <li style="margin-bottom: 0.5rem;"><strong>Index shifting:</strong>
+        $\sum_{n=1}^{\infty} a_n(x-x_0)^{n-1} = \sum_{n=0}^{\infty} a_{n+1}(x-x_0)^n$
+      </li>
+      <li style="margin-bottom: 0.5rem;"><strong>Coefficient comparison:</strong>
+        If $\sum a_n(x-x_0)^n = \sum b_n(x-x_0)^n$ for all $x$ in an interval, then $a_n = b_n$ for all $n$.
+      </li>
+    </ul>
+
+    <h3>Recurrence Relations</h3>
+    <p>
+      When we substitute the power series $y = \sum a_n(x-x_0)^n$ into the differential equation, we obtain an identity in powers of $(x-x_0)$.
+      Equating coefficients of like powers yields a <strong>recurrence relation</strong> — a formula expressing each coefficient in terms of
+      earlier coefficients. The first few coefficients $a_0, a_1, \ldots$ are determined by initial or boundary conditions, and the recurrence
+      relation then determines all subsequent coefficients uniquely.
+    </p>
+  </section>
+
+  <!-- METHOD SECTION -->
+  <section id="method">
+    <h2>Step-by-Step Method</h2>
+
+    <ol class="step-list">
+      <li><strong>Verify $x_0$ is ordinary:</strong> Check that $p(x)$ and $q(x)$ are analytic at $x_0$.</li>
+      <li><strong>Assume a power series solution:</strong> Let $y = \sum_{n=0}^{\infty} a_n(x-x_0)^n$</li>
+      <li><strong>Compute derivatives:</strong>
+        <div class="math-display">
+          $$y' = \sum_{n=1}^{\infty} n a_n(x-x_0)^{n-1}, \quad y'' = \sum_{n=2}^{\infty} n(n-1)a_n(x-x_0)^{n-2}$$
+        </div>
+      </li>
+      <li><strong>Substitute into the ODE:</strong> Replace $y, y', y''$ in the differential equation.</li>
+      <li><strong>Align powers of $(x-x_0)$:</strong> Shift indices so all sums have the same power $(x-x_0)^n$.</li>
+      <li><strong>Extract the recurrence relation:</strong> Set the coefficient of each power to zero. This gives a formula for $a_n$ in terms of earlier coefficients.</li>
+      <li><strong>Express general solution:</strong> Use initial conditions to determine $a_0$ and $a_1$. The recurrence then generates all other coefficients.</li>
+      <li><strong>Write the general solution:</strong> Combine the two linearly independent solutions (one with arbitrary $a_0, a_1=0$ and one with $a_0=0, a_1$ arbitrary).</li>
+    </ol>
+  </section>
+
+  <!-- EXAMPLES SECTION -->
+  <section id="examples">
+    <h2>Worked Examples</h2>
+
+    <!-- Example 1 -->
+    <button class="collapsible-toggle" onclick="toggle(this)">
+      <span><strong>Example 1:</strong> $y'' - y = 0$ around $x_0 = 0$</span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="collapsible-content">
+      <p>
+        <strong>Setup:</strong> We solve $y'' - y = 0$ using power series around $x_0 = 0$. (Note: This has the known solution $y = c_1 e^x + c_2 e^{-x}$, so we can verify our result.)
+      </p>
+      <p><strong>Point type:</strong> $x_0 = 0$ is an ordinary point (no singular points).</p>
+      <p><strong>Assume:</strong> $y = \sum_{n=0}^{\infty} a_n x^n$</p>
+      <p><strong>Derivatives:</strong></p>
+      <div class="math-display">
+        $$y' = \sum_{n=1}^{\infty} n a_n x^{n-1}, \quad y'' = \sum_{n=2}^{\infty} n(n-1) a_n x^{n-2}$$
+      </div>
+      <p><strong>Substitute into $y'' - y = 0$:</strong></p>
+      <div class="math-display">
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} - \sum_{n=0}^{\infty} a_n x^n = 0$$
+      </div>
+      <p><strong>Shift index:</strong> Let $m = n-2$ in the first sum:</p>
+      <div class="math-display">
+        $$\sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2} x^m - \sum_{n=0}^{\infty} a_n x^n = 0$$
+      </div>
+      <p><strong>Combine:</strong></p>
+      <div class="math-display">
+        $$\sum_{n=0}^{\infty} \left[(n+2)(n+1) a_{n+2} - a_n\right] x^n = 0$$
+      </div>
+      <p><strong>Recurrence relation:</strong> Each coefficient must vanish:</p>
+      <div class="math-display">
+        $$a_{n+2} = \frac{a_n}{(n+2)(n+1)} \quad \text{for } n \geq 0$$
+      </div>
+      <p><strong>Two families of solutions:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li style="margin-bottom: 0.5rem;">
+          <strong>Even indices ($a_1 = 0$):</strong>
+          $a_2 = \frac{a_0}{2!}, a_4 = \frac{a_2}{4 \cdot 3} = \frac{a_0}{4!}, a_6 = \frac{a_0}{6!}, \ldots$ gives $y_1 = a_0 \cosh x$
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <strong>Odd indices ($a_0 = 0$):</strong>
+          $a_3 = \frac{a_1}{3 \cdot 2}, a_5 = \frac{a_1}{5!}, a_7 = \frac{a_1}{7!}, \ldots$ gives $y_2 = a_1 \sinh x$
+        </li>
+      </ul>
+      <p><strong>General solution:</strong></p>
+      <div class="math-display">
+        $$y = c_1 \cosh x + c_2 \sinh x$$
+      </div>
+      <p style="color:var(--text-muted); font-size:0.95rem;">
+        This matches the known solution $c_1 e^x + c_2 e^{-x}$ (with different constants).
+      </p>
+    </div>
+
+    <!-- Example 2 -->
+    <button class="collapsible-toggle" onclick="toggle(this)">
+      <span><strong>Example 2:</strong> Airy Equation $y'' + xy = 0$ around $x_0 = 0$</span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="collapsible-content">
+      <p>
+        <strong>Setup:</strong> The Airy equation $y'' + xy = 0$ has no solution in terms of elementary functions. This classic example demonstrates the power of series methods.
+      </p>
+      <p><strong>Assume:</strong> $y = \sum_{n=0}^{\infty} a_n x^n$</p>
+      <p><strong>Derivatives:</strong></p>
+      <div class="math-display">
+        $$y'' = \sum_{n=2}^{\infty} n(n-1) a_n x^{n-2}$$
+      </div>
+      <p><strong>Substitute into $y'' + xy = 0$:</strong></p>
+      <div class="math-display">
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} + x \sum_{n=0}^{\infty} a_n x^n = 0$$
+      </div>
+      <div class="math-display">
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} + \sum_{n=0}^{\infty} a_n x^{n+1} = 0$$
+      </div>
+      <p><strong>Shift indices:</strong> First sum: $m = n-2$; second sum: $m = n+1$</p>
+      <div class="math-display">
+        $$\sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2} x^m + \sum_{m=1}^{\infty} a_{m-1} x^m = 0$$
+      </div>
+      <p><strong>Separate by power:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li style="margin-bottom: 0.5rem;">Coefficient of $x^0$: $2a_2 = 0 \Rightarrow a_2 = 0$</li>
+        <li style="margin-bottom: 0.5rem;">Coefficient of $x^n$ ($n \geq 1$): $(n+2)(n+1)a_{n+2} + a_{n-1} = 0$</li>
+      </ul>
+      <p><strong>Recurrence relation:</strong></p>
+      <div class="math-display">
+        $$a_{n+2} = -\frac{a_{n-1}}{(n+2)(n+1)} \quad \text{for } n \geq 1$$
+      </div>
+      <p><strong>First few terms:</strong></p>
+      <div class="math-display">
+        $$y_1 = a_0\left(1 + \frac{x^3}{6} + \frac{x^6}{180} + \cdots\right), \quad y_2 = a_1\left(x + \frac{x^4}{12} + \frac{x^7}{504} + \cdots\right)$$
+      </div>
+      <p>
+        The solutions are called <strong>Airy functions</strong> $\text{Ai}(x)$ and $\text{Bi}(x)$, which are essential in quantum mechanics and wave theory.
+      </p>
+    </div>
+
+    <!-- Example 3 -->
+    <button class="collapsible-toggle" onclick="toggle(this)">
+      <span><strong>Example 3:</strong> Legendre's Equation $(1-x^2)y'' - 2xy' + 6y = 0$ around $x_0 = 0$</span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="collapsible-content">
+      <p>
+        <strong>Setup:</strong> This is Legendre's equation with $n=2$. It's important in electrostatics and gravitational theory.
+      </p>
+      <p><strong>Singular points:</strong> $P(x) = 1-x^2 = 0$ at $x = \pm 1$, so $R = 1$.</p>
+      <p><strong>Assume:</strong> $y = \sum_{n=0}^{\infty} a_n x^n$</p>
+      <p><strong>Compute derivatives:</strong></p>
+      <div class="math-display">
+        $$y' = \sum_{n=1}^{\infty} n a_n x^{n-1}, \quad y'' = \sum_{n=2}^{\infty} n(n-1) a_n x^{n-2}$$
+      </div>
+      <p><strong>Substitute:</strong></p>
+      <div class="math-display">
+        $$(1-x^2)\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} - 2x\sum_{n=1}^{\infty} n a_n x^{n-1} + 6\sum_{n=0}^{\infty} a_n x^n = 0$$
+      </div>
+      <p><strong>Expand and align powers:</strong> (After shifting indices)</p>
+      <div class="math-display">
+        $$\sum_{n=0}^{\infty} [n(n+1) - 6]a_{n+2}x^n + \sum_{n=0}^{\infty} [(n+2)(n+1) - n(n+1)]a_n x^n = 0$$
+      </div>
+      <p><strong>Recurrence:</strong></p>
+      <div class="math-display">
+        $$a_{n+2} = -\frac{(n+2)(n+1) - 6}{(n+2)(n+1)}a_n = -\frac{n^2 + 3n - 4}{(n+2)(n+1)}a_n$$
+      </div>
+      <p><strong>Key observation:</strong> For $n=2$, we get $a_4 = -\frac{4+6-4}{4 \cdot 3}a_2 = 0$, and all subsequent even terms vanish if we choose $a_2$ appropriately. The solution terminates to a polynomial:</p>
+      <div class="math-display">
+        $$P_2(x) = \frac{1}{2}(3x^2 - 1)$$
+      </div>
+      <p>This is the <strong>Legendre polynomial of degree 2</strong>, a terminating power series (polynomial).</p>
+    </div>
+
+    <!-- Example 4 -->
+    <button class="collapsible-toggle" onclick="toggle(this)">
+      <span><strong>Example 4:</strong> $y'' + x^2 y = 0$ around $x_0 = 0$</span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="collapsible-content">
+      <p><strong>Assume:</strong> $y = \sum_{n=0}^{\infty} a_n x^n$</p>
+      <p><strong>Substitute:</strong></p>
+      <div class="math-display">
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} + x^2 \sum_{n=0}^{\infty} a_n x^n = 0$$
+      </div>
+      <div class="math-display">
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} + \sum_{n=0}^{\infty} a_n x^{n+2} = 0$$
+      </div>
+      <p><strong>Shift and align (first sum: $m=n-2$, second: $m=n+2$):</strong></p>
+      <div class="math-display">
+        $$\sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2} x^m + \sum_{m=2}^{\infty} a_{m-2} x^m = 0$$
+      </div>
+      <p><strong>Recurrence:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>$2a_2 = 0 \Rightarrow a_2 = 0$</li>
+        <li>$6a_3 = 0 \Rightarrow a_3 = 0$</li>
+        <li>For $n \geq 2$: $(n+2)(n+1)a_{n+2} + a_{n-2} = 0 \Rightarrow a_{n+2} = -\frac{a_{n-2}}{(n+2)(n+1)}$</li>
+      </ul>
+      <p><strong>Solution forms:</strong></p>
+      <div class="math-display">
+        $$y_1 = a_0\left(1 + \frac{x^4}{3 \cdot 4} + \frac{x^8}{3 \cdot 4 \cdot 7 \cdot 8} + \cdots\right)$$
+      </div>
+      <div class="math-display">
+        $$y_2 = a_1\left(x + \frac{x^5}{4 \cdot 5} + \frac{x^9}{4 \cdot 5 \cdot 8 \cdot 9} + \cdots\right)$$
+      </div>
+    </div>
+
+    <!-- Example 5 -->
+    <button class="collapsible-toggle" onclick="toggle(this)">
+      <span><strong>Example 5:</strong> IVP $y'' - 2xy' + 4y = 0$, $y(0)=1$, $y'(0)=0$ (Hermite)</span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="collapsible-content">
+      <p>
+        <strong>Setup:</strong> This is Hermite's equation with $n=2$. The initial conditions will force the solution to be a polynomial.
+      </p>
+      <p><strong>Assume:</strong> $y = \sum_{n=0}^{\infty} a_n x^n$</p>
+      <p><strong>From ICs:</strong> $y(0) = a_0 = 1$ and $y'(0) = a_1 = 0$</p>
+      <p><strong>Compute derivatives:</strong></p>
+      <div class="math-display">
+        $$y' = \sum_{n=1}^{\infty} n a_n x^{n-1}, \quad y'' = \sum_{n=2}^{\infty} n(n-1) a_n x^{n-2}$$
+      </div>
+      <p><strong>Substitute into $y'' - 2xy' + 4y = 0$:</strong></p>
+      <div class="math-display">
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} - 2x\sum_{n=1}^{\infty} n a_n x^{n-1} + 4\sum_{n=0}^{\infty} a_n x^n = 0$$
+      </div>
+      <p><strong>Align powers (after shifting):</strong></p>
+      <div class="math-display">
+        $$\sum_{n=0}^{\infty} \left[(n+2)(n+1)a_{n+2} - 2na_n + 4a_n\right] x^n = 0$$
+      </div>
+      <p><strong>Recurrence:</strong></p>
+      <div class="math-display">
+        $$a_{n+2} = \frac{2n - 4}{(n+2)(n+1)} a_n = \frac{2(n-2)}{(n+2)(n+1)} a_n$$
+      </div>
+      <p><strong>Compute coefficients:</strong></p>
+      <ul style="margin-left: 1.5rem;">
+        <li>$a_0 = 1$, $a_1 = 0$</li>
+        <li>$a_2 = \frac{2(0-2)}{2 \cdot 1} \cdot 1 = \frac{-4}{2} = -2$</li>
+        <li>$a_3 = \frac{2(1-2)}{3 \cdot 2} \cdot 0 = 0$</li>
+        <li>$a_4 = \frac{2(2-2)}{4 \cdot 3} \cdot (-2) = 0$</li>
+        <li>All higher terms: $a_n = 0$ for $n > 2$</li>
+      </ul>
+      <p><strong>Solution:</strong></p>
+      <div class="math-display">
+        $$y = 1 - 2x^2$$
+      </div>
+      <p style="color:var(--text-muted); font-size:0.95rem;">
+        The solution is exactly the Hermite polynomial $H_2(x) = 4x^2 - 2$ (up to scaling), proving that Hermite polynomials are solutions to Hermite's equation.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- PRACTICE SECTION -->
+  <section id="practice">
+    <h2>Practice Problems</h2>
+    <p>Test your understanding with these multiple-choice questions. Each correct answer earns one point.</p>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <p class="progress-text" id="progressText">0 / 6 correct</p>
+
+    <!-- Question 1 -->
+    <div class="quiz-problem" id="q1">
+      <p><strong>Question 1:</strong> Which of the following is a singular point of $(1-x^2)y'' - 2xy' + n(n+1)y = 0$?</p>
+      <button class="choice-btn" onclick="checkChoice(1, 0)">A) $x = 0$</button>
+      <button class="choice-btn" onclick="checkChoice(1, 1)">B) $x = 1$</button>
+      <button class="choice-btn" onclick="checkChoice(1, 2)">C) $x = 2$</button>
+      <button class="choice-btn" onclick="checkChoice(1, 3)">D) $x = -2$</button>
+      <div id="fb-1" class="quiz-feedback"></div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="quiz-problem" id="q2">
+      <p><strong>Question 2:</strong> For the recurrence relation $a_{n+2} = \frac{a_n}{(n+2)(n+1)}$, what is $a_4$ in terms of $a_0$?</p>
+      <button class="choice-btn" onclick="checkChoice(2, 0)">A) $\frac{a_0}{24}$</button>
+      <button class="choice-btn" onclick="checkChoice(2, 1)">B) $\frac{a_0}{4!}$</button>
+      <button class="choice-btn" onclick="checkChoice(2, 2)">C) $\frac{a_0}{12}$</button>
+      <button class="choice-btn" onclick="checkChoice(2, 3)">D) $\frac{a_0}{8}$</button>
+      <div id="fb-2" class="quiz-feedback"></div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="quiz-problem" id="q3">
+      <p><strong>Question 3:</strong> For the Airy equation $y'' + xy = 0$, what is the coefficient of $x^6$ in the solution $y_1 = a_0(1 + \frac{x^3}{6} + \cdots)$?</p>
+      <button class="choice-btn" onclick="checkChoice(3, 0)">A) The coefficient of $x^6$ does not appear (recurrence skips even and odd separately)</button>
+      <button class="choice-btn" onclick="checkChoice(3, 1)">B) $\frac{a_0}{360}$</button>
+      <button class="choice-btn" onclick="checkChoice(3, 2)">C) $\frac{a_0}{120}$</button>
+      <button class="choice-btn" onclick="checkChoice(3, 3)">D) $\frac{a_0}{720}$</button>
+      <div id="fb-3" class="quiz-feedback"></div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="quiz-problem" id="q4">
+      <p><strong>Question 4:</strong> A power series solution $y = \sum_{n=0}^{\infty} a_n x^n$ to a DE with radius of convergence $R = \infty$ means:</p>
+      <button class="choice-btn" onclick="checkChoice(4, 0)">A) The solution is an elementary function (polynomial, exponential, etc.)</button>
+      <button class="choice-btn" onclick="checkChoice(4, 1)">B) There are no singular points in the complex plane</button>
+      <button class="choice-btn" onclick="checkChoice(4, 2)">C) The series converges everywhere and represents an entire function</button>
+      <button class="choice-btn" onclick="checkChoice(4, 3)">D) Both B and C</button>
+      <div id="fb-4" class="quiz-feedback"></div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="quiz-problem" id="q5">
+      <p><strong>Question 5:</strong> For the equation $y'' - xy' - y = 0$, which statement about the radius of convergence $R$ around $x_0 = 0$ is correct?</p>
+      <button class="choice-btn" onclick="checkChoice(5, 0)">A) $R = 0$ (solution does not exist)</button>
+      <button class="choice-btn" onclick="checkChoice(5, 1)">B) $R = \infty$ (no singular points)</button>
+      <button class="choice-btn" onclick="checkChoice(5, 2)">C) $R = 1$ (nearest singular point at $x = 1$)</button>
+      <button class="choice-btn" onclick="checkChoice(5, 3)">D) $R = \sqrt{2}$</button>
+      <div id="fb-5" class="quiz-feedback"></div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="quiz-problem" id="q6">
+      <p><strong>Question 6:</strong> In the power series method, we derive a recurrence relation by:</p>
+      <button class="choice-btn" onclick="checkChoice(6, 0)">A) Differentiating the power series multiple times</button>
+      <button class="choice-btn" onclick="checkChoice(6, 1)">B) Substituting the series into the DE and equating coefficients of like powers of $(x-x_0)$</button>
+      <button class="choice-btn" onclick="checkChoice(6, 2)">C) Matching the boundary conditions with the initial series</button>
+      <button class="choice-btn" onclick="checkChoice(6, 3)">D) Using the ratio test to find convergence</button>
+      <div id="fb-6" class="quiz-feedback"></div>
+    </div>
+
+  </section>
+
+  <!-- REFERENCE SECTION -->
+  <section>
+    <h2>Quick Reference Card</h2>
+    <div class="reference-grid">
+      <div class="reference-card">
+        <h4>Power Series Definition</h4>
+        <p>$y = \sum_{n=0}^{\infty} a_n(x-x_0)^n$</p>
+        <p><small>Converges for $|x-x_0| < R$</small></p>
+      </div>
+      <div class="reference-card">
+        <h4>First Derivative</h4>
+        <p>$y' = \sum_{n=1}^{\infty} n a_n(x-x_0)^{n-1}$</p>
+        <p><small>Term-by-term differentiation</small></p>
+      </div>
+      <div class="reference-card">
+        <h4>Second Derivative</h4>
+        <p>$y'' = \sum_{n=2}^{\infty} n(n-1)a_n(x-x_0)^{n-2}$</p>
+        <p><small>Valid in the interval of convergence</small></p>
+      </div>
+      <div class="reference-card">
+        <h4>Index Shift Formula</h4>
+        <p>$\sum_{n=k}^{\infty} a_n x^{n-r} = \sum_{m=k-r}^{\infty} a_{m+r} x^m$</p>
+        <p><small>Use to align powers</small></p>
+      </div>
+      <div class="reference-card">
+        <h4>Radius of Convergence</h4>
+        <p>$R = $ distance to nearest singular point</p>
+        <p><small>Find singular points from $p(x), q(x)$</small></p>
+      </div>
+      <div class="reference-card">
+        <h4>Recurrence Relation</h4>
+        <p>Solve: $a_{n} = f(a_{n-1}, a_{n-2}, \ldots)$</p>
+        <p><small>Determined by equating coefficients</small></p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Department of Mathematics and Statistics, Qatar University
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+
+<script>
+function toggle(btn) {
+  const content = btn.nextElementSibling;
+  btn.classList.toggle('open');
+  content.classList.toggle('open');
+}
+
+let defined = {};
+function checkChoice(q, chosen) {
+  if (defined[q]) return;
+  defined[q] = true;
+  const correct = answers[q];
+  const btns = document.querySelectorAll('#q'+q+' .choice-btn');
+  btns.forEach((b,i) => {
+    b.disabled = true;
+    if (i === correct) b.classList.add('selected-correct');
+    else if (i === chosen) b.classList.add('selected-wrong');
+    b.style.opacity = (i === correct || i === chosen) ? '1' : '0.5';
+  });
+  const fb = document.getElementById('fb-'+q);
+  if (chosen === correct) {
+    fb.className = 'quiz-feedback correct';
+    fb.textContent = '✓ Correct!';
+    score++;
+  } else {
+    fb.className = 'quiz-feedback incorrect';
+    fb.textContent = '✗ Incorrect. The correct answer is highlighted.';
+  }
+  updateProgress();
+}
+
+var answers = {1:1, 2:1, 3:0, 4:3, 5:1, 6:1};
+var score = 0;
+
+function updateProgress() {
+  var pct = (score/6)*100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressText').textContent = score+' / 6 correct';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });
+});
+</script>
+
+</body>
+</html>

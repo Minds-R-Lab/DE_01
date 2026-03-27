@@ -266,6 +266,12 @@ nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing
         <h3>Systems of ODEs</h3>
         <div class="topics">Eigenvalues &amp; Eigenvectors, Homogeneous Systems, Phase Portraits &amp; Classification</div>
       </div>
+      <div class="chapter-card" data-ch="5" onclick="toggleChapter(this)">
+        <div class="check-icon"></div>
+        <span class="ch-badge" style="background:#dc2626;">Ch 5</span>
+        <h3>Series &amp; Numerical</h3>
+        <div class="topics">Power Series, Frobenius Method, Euler's Method, Runge-Kutta</div>
+      </div>
     </div>
 
     <button class="generate-btn" id="generate-btn" onclick="generateExam()" disabled>
@@ -738,6 +744,158 @@ const PROBLEMS = [
    {title:"Step 3: Split & invert", text:"$5\\cdot\\frac{s-3}{(s-3)^2+1} + 14\\cdot\\frac{1}{(s-3)^2+1}$"},
  ],
  answer:"$$5e^{3t}\\cos(t) + 14e^{3t}\\sin(t)$$"
+},
+
+// ──── Chapter 5: Series Solutions & Numerical Methods ────
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"For the ODE $y'' + (\\sin x)\\,y = 0$, the point $x_0 = 0$ is:",
+ choices:[
+   "An ordinary point",
+   "A regular singular point",
+   "An irregular singular point",
+   "None of the above"
+ ],
+ correct:0,
+ explanation:"Since $p(x) = 0$ and $q(x) = \\sin x$ are both analytic at $x_0 = 0$, it is an ordinary point."
+},
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"For $(x^2 - 4)y'' + 3xy' + y = 0$, the minimum radius of convergence of a power series solution about $x_0 = 0$ is:",
+ choices:[
+   "$R = 1$",
+   "$R = 2$",
+   "$R = 4$",
+   "$R = \\infty$"
+ ],
+ correct:1,
+ explanation:"Singular points are at $x = \\pm 2$, so the nearest is distance 2 from $x_0 = 0$. Thus $R \\ge 2$."
+},
+{ch:5, topic:"Power Series", type:"free",
+ statement:"Find the first four nonzero terms of a power series solution about $x_0=0$ for $y'' - xy = 0$ (Airy's equation), with $y(0)=1$, $y'(0)=0$.",
+ solution:[
+   {title:"Step 1: Assume series", text:"$y = \\sum a_n x^n$, with $a_0 = 1$, $a_1 = 0$."},
+   {title:"Step 2: Substitute", text:"$\\sum_{n=2}^{\\infty} n(n-1)a_n x^{n-2} = x \\sum a_n x^n$"},
+   {title:"Step 3: Recurrence", text:"$(n+2)(n+1)a_{n+2} = a_{n-1}$ for $n \\ge 1$, and $a_2 = 0$."},
+   {title:"Step 4: Compute terms", text:"$a_2 = 0$, $a_3 = \\frac{a_0}{6} = \\frac{1}{6}$, $a_4 = 0$, $a_5 = 0$, $a_6 = \\frac{a_3}{30} = \\frac{1}{180}$"},
+ ],
+ answer:"$$y = 1 + \\frac{x^3}{6} + \\frac{x^6}{180} + \\cdots$$"
+},
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"If $y = \\sum_{n=0}^{\\infty} a_n x^n$ is substituted into $y'' + y = 0$, the recurrence relation is:",
+ choices:[
+   "$a_{n+2} = -\\dfrac{a_n}{(n+2)(n+1)}$",
+   "$a_{n+2} = \\dfrac{a_n}{(n+2)(n+1)}$",
+   "$a_{n+1} = -\\dfrac{a_n}{n+1}$",
+   "$a_{n+2} = -\\dfrac{a_{n-1}}{(n+2)(n+1)}$"
+ ],
+ correct:0,
+ explanation:"Substituting gives $\\sum (n+2)(n+1)a_{n+2}x^n + \\sum a_n x^n = 0$, so $(n+2)(n+1)a_{n+2} + a_n = 0$."
+},
+{ch:5, topic:"Frobenius Method", type:"mc",
+ statement:"For the ODE $x^2 y'' + xy' + (x^2 - \\nu^2)y = 0$ (Bessel's equation), the point $x_0 = 0$ is:",
+ choices:[
+   "An ordinary point",
+   "A regular singular point",
+   "An irregular singular point",
+   "Not a singular point"
+ ],
+ correct:1,
+ explanation:"Dividing by $x^2$: $p(x)=1/x$, $q(x)=(x^2-\\nu^2)/x^2$. Then $xp(x)=1$ and $x^2q(x)=x^2-\\nu^2$ are both analytic, so $x_0=0$ is a regular singular point."
+},
+{ch:5, topic:"Frobenius Method", type:"mc",
+ statement:"The indicial equation for $2x^2y'' + xy' - (1+x)y = 0$ about $x_0=0$ is:",
+ choices:[
+   "$2r^2 - r - 1 = 0$",
+   "$r^2 + r - 1 = 0$",
+   "$2r(r-1) + r - 1 = 0$",
+   "$r^2 - 1 = 0$"
+ ],
+ correct:0,
+ explanation:"With $p_0 = \\lim_{x\\to 0} x \\cdot \\frac{1}{2x} = \\frac{1}{2}$ and $q_0 = \\lim_{x\\to 0} x^2 \\cdot \\frac{-(1+x)}{2x^2} = -\\frac{1}{2}$, the indicial equation is $r(r-1)+\\frac{1}{2}r - \\frac{1}{2}=0$, i.e., $2r^2 - r - 1=0$."
+},
+{ch:5, topic:"Frobenius Method", type:"free",
+ statement:"Classify the singular points of the ODE $x(x-1)^2 y'' + 2(x-1)y' + 3y = 0$.",
+ solution:[
+   {title:"Step 1: Identify singular points", text:"$P(x) = x(x-1)^2 = 0$ at $x=0$ and $x=1$."},
+   {title:"Step 2: Check $x_0=0$", text:"$xp(x) = x \\cdot \\frac{2}{x(x-1)} = \\frac{2}{x-1}$ (analytic at 0), $x^2 q(x) = x^2 \\cdot \\frac{3}{x(x-1)^2} = \\frac{3x}{(x-1)^2}$ (analytic at 0). So $x=0$ is a regular singular point."},
+   {title:"Step 3: Check $x_0=1$", text:"$(x-1)p(x) = (x-1)\\cdot\\frac{2}{x(x-1)} = \\frac{2}{x}$ (analytic at 1), $(x-1)^2 q(x) = (x-1)^2 \\cdot \\frac{3}{x(x-1)^2} = \\frac{3}{x}$ (analytic at 1). So $x=1$ is also a regular singular point."},
+ ],
+ answer:"Both $x=0$ and $x=1$ are **regular** singular points."
+},
+{ch:5, topic:"Euler's Method", type:"mc",
+ statement:"Using Euler's method with $h = 0.1$ for $y' = 2x + y$, $y(0) = 1$, the value of $y_1$ (at $x = 0.1$) is:",
+ choices:[
+   "$1.00$",
+   "$1.10$",
+   "$1.12$",
+   "$1.21$"
+ ],
+ correct:1,
+ explanation:"$y_1 = y_0 + h\\,f(x_0,y_0) = 1 + 0.1(2(0)+1) = 1 + 0.1 = 1.10$."
+},
+{ch:5, topic:"Euler's Method", type:"free",
+ statement:"Use Euler's method with step size $h=0.25$ to approximate $y(1)$ for the IVP $y' = y - x$, $y(0) = 2$.",
+ solution:[
+   {title:"Step 1: $n=0$", text:"$x_0=0,\\; y_0=2.\\;$ $f(0,2) = 2-0 = 2.\\;$ $y_1 = 2 + 0.25(2) = 2.5$"},
+   {title:"Step 2: $n=1$", text:"$x_1=0.25,\\; y_1=2.5.\\;$ $f = 2.5-0.25 = 2.25.\\;$ $y_2 = 2.5 + 0.25(2.25) = 3.0625$"},
+   {title:"Step 3: $n=2$", text:"$x_2=0.5,\\; y_2=3.0625.\\;$ $f = 3.0625-0.5 = 2.5625.\\;$ $y_3 = 3.0625 + 0.25(2.5625) = 3.703125$"},
+   {title:"Step 4: $n=3$", text:"$x_3=0.75,\\; y_3=3.703125.\\;$ $f = 3.703125-0.75 = 2.953125.\\;$ $y_4 = 3.703125 + 0.25(2.953125) = 4.441406$"},
+ ],
+ answer:"$$y(1) \\approx 4.4414$$"
+},
+{ch:5, topic:"Euler's Method", type:"mc",
+ statement:"Euler's method is a first-order method, meaning:",
+ choices:[
+   "It can only solve first-order ODEs",
+   "Its global truncation error is $O(h)$",
+   "It uses one function evaluation per step",
+   "Both B and C"
+ ],
+ correct:3,
+ explanation:"Euler's method has global error proportional to $h$ (first-order accuracy) and uses exactly one evaluation of $f(x,y)$ per step. It can solve higher-order ODEs by converting to systems."
+},
+{ch:5, topic:"Runge-Kutta", type:"mc",
+ statement:"In the classical RK4 method, how many function evaluations of $f(x,y)$ are required per step?",
+ choices:[
+   "1",
+   "2",
+   "4",
+   "6"
+ ],
+ correct:2,
+ explanation:"RK4 computes four slopes: $k_1$, $k_2$, $k_3$, $k_4$, each requiring one evaluation of $f$."
+},
+{ch:5, topic:"Runge-Kutta", type:"free",
+ statement:"Apply one step of RK4 with $h = 0.1$ to $y' = y$, $y(0) = 1$. Show all four $k$-values and the result.",
+ solution:[
+   {title:"Step 1: $k_1$", text:"$k_1 = f(0,1) = 1$"},
+   {title:"Step 2: $k_2$", text:"$k_2 = f(0.05,\\; 1 + 0.05 \\cdot 1) = f(0.05, 1.05) = 1.05$"},
+   {title:"Step 3: $k_3$", text:"$k_3 = f(0.05,\\; 1 + 0.05 \\cdot 1.05) = f(0.05, 1.0525) = 1.0525$"},
+   {title:"Step 4: $k_4$", text:"$k_4 = f(0.1,\\; 1 + 0.1 \\cdot 1.0525) = f(0.1, 1.10525) = 1.10525$"},
+   {title:"Step 5: Update", text:"$y_1 = 1 + \\frac{0.1}{6}(1 + 2(1.05) + 2(1.0525) + 1.10525) = 1 + \\frac{0.1}{6}(6.31025) \\approx 1.105171$"},
+ ],
+ answer:"$$y(0.1) \\approx 1.105171 \\quad (\\text{exact: } e^{0.1} \\approx 1.105171)$$"
+},
+{ch:5, topic:"Runge-Kutta", type:"mc",
+ statement:"The global truncation error of the classical fourth-order Runge-Kutta method is:",
+ choices:[
+   "$O(h)$",
+   "$O(h^2)$",
+   "$O(h^4)$",
+   "$O(h^5)$"
+ ],
+ correct:2,
+ explanation:"RK4 has local truncation error $O(h^5)$ and global error $O(h^4)$, making it a fourth-order method."
+},
+{ch:5, topic:"Runge-Kutta", type:"mc",
+ statement:"Compared to Euler's method with the same step size $h$, RK4 is more accurate because:",
+ choices:[
+   "It uses a smaller step size internally",
+   "It samples the slope at multiple points within each step and takes a weighted average",
+   "It solves the ODE exactly for polynomials of any degree",
+   "It uses adaptive step size control"
+ ],
+ correct:1,
+ explanation:"RK4 evaluates the slope $f(x,y)$ at the start, two midpoints, and the end of the interval, then combines them with weights $1:2:2:1$ (like Simpson's rule) for high accuracy."
 },
 ];
 

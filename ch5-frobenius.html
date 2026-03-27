@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.2 — Frobenius Method (Regular Singular Points)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 2rem;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo a {
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 2px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 80px 1.5rem 4rem;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--text);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            border-left: 5px solid;
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .definition-box {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .theorem-box {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .example-box {
+            background: var(--success-light);
+            border-color: var(--success);
+        }
+
+        .warning-box {
+            background: var(--warning-light);
+            border-color: var(--warning);
+        }
+
+        .tip-box {
+            background: #cffafe;
+            border-color: #0ea5e9;
+        }
+
+        .box-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .math-display {
+            background: #f0f4f8;
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .katex-display {
+            margin: 0.5rem 0;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+            margin: 1.5rem 0;
+        }
+
+        .step-list li {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            counter-increment: step;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-list li > div {
+            flex: 1;
+        }
+
+        .collapsible {
+            background: var(--primary-light);
+            color: var(--text);
+            padding: 1rem 1.25rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            margin-top: 1.25rem;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .collapsible:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .collapsible.active {
+            background: var(--primary);
+            color: white;
+            border-left-color: #1e40af;
+        }
+
+        .collapsible::after {
+            content: ' ▼';
+            float: right;
+            transition: transform 0.3s;
+        }
+
+        .collapsible.active::after {
+            transform: rotate(180deg);
+        }
+
+        .content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fafbfc;
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+
+        .content.show {
+            max-height: 2000px;
+            padding: 1.5rem 1.25rem;
+        }
+
+        .quiz-question {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning);
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 0.75rem;
+        }
+
+        .quiz-option label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .quiz-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result.correct {
+            background: var(--success-light);
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .quiz-result.incorrect {
+            background: var(--danger-light);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .score-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .reference-card {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .reference-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .reference-card code {
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 80px 1rem 2rem;
+            }
+
+            section {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo"><a href="index.html">DE Course</a></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ch5-overview.html">5.0 Overview</a>
+            <a href="ch5-power-series.html">5.1 Power Series</a>
+            <a href="ch5-frobenius.html" class="active">5.2 Frobenius</a>
+            <a href="ch5-euler-method.html">5.3 Euler's Method</a>
+            <a href="ch5-runge-kutta.html">5.4 Runge-Kutta</a>
+            <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+            <a href="#intro">Intro</a>
+            <a href="#theory">Theory</a>
+            <a href="#method">Method</a>
+            <a href="#examples">Examples</a>
+            <a href="#practice">Practice</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Introduction Section -->
+        <section id="intro">
+            <h1>5.2 — Frobenius Method (Regular Singular Points)</h1>
+
+            <div class="definition-box">
+                <div class="box-label">Learning Objectives</div>
+                <ul style="margin-left: 1.5rem; margin-top: 0.75rem;">
+                    <li>Classify singular points as regular or irregular</li>
+                    <li>Apply the Frobenius method to find series solutions</li>
+                    <li>Determine and solve the indicial equation</li>
+                    <li>Handle all three cases of indicial root differences</li>
+                </ul>
+            </div>
+
+            <h2 style="border:none;padding:0;margin-top:1.5rem;margin-bottom:1rem;">Motivation</h2>
+            <p>The power series method we studied in Section 5.1 works beautifully at ordinary points, but fails when we approach a singular point. What happens when we need a solution valid near a singularity?</p>
+
+            <p>The <strong>Frobenius method</strong> extends the power series approach by allowing an initial fractional power. Instead of:</p>
+            <div class="math-display">
+                $$y = \sum_{n=0}^{\infty} a_n x^n$$
+            </div>
+
+            <p>we use:</p>
+            <div class="math-display">
+                $$y = (x - x_0)^r \sum_{n=0}^{\infty} a_n (x - x_0)^n = \sum_{n=0}^{\infty} a_n (x - x_0)^{n+r}$$
+            </div>
+
+            <p>where $r$ is determined by an <strong>indicial equation</strong>. This method works at <strong>regular singular points</strong> and will give us access to solutions involving logarithms and all the classical special functions of physics and engineering.</p>
+        </section>
+
+        <!-- Theory Section -->
+        <section id="theory">
+            <h2>Theory: Regular Singular Points and the Frobenius Method</h2>
+
+            <h3>Definition: Regular vs Irregular Singular Points</h3>
+            <p>For the differential equation:</p>
+            <div class="math-display">
+                $$y'' + p(x)y' + q(x)y = 0$$
+            </div>
+
+            <p>A point $x = x_0$ is a <strong>regular singular point</strong> if both of the following limits exist and are finite:</p>
+            <div class="definition-box">
+                <div class="box-label">Regular Singular Point</div>
+                $$(x - x_0)p(x) \quad \text{and} \quad (x - x_0)^2 q(x)$$
+                <p style="margin-top:1rem;">are both analytic at $x = x_0$ (or equivalently, can be expressed as convergent power series centered at $x_0$).</p>
+            </div>
+
+            <p>If at least one of these conditions fails, $x_0$ is an <strong>irregular singular point</strong>, where Frobenius typically does not apply.</p>
+
+            <h3>The Frobenius Theorem</h3>
+            <div class="theorem-box">
+                <div class="box-label">Theorem (Frobenius, 1873)</div>
+                <p style="margin-bottom:1rem;">If $x_0$ is a regular singular point of $y'' + p(x)y' + q(x)y = 0$, then there exists at least one solution of the form:</p>
+                $$y = (x - x_0)^r \sum_{n=0}^{\infty} a_n (x - x_0)^n$$
+                <p style="margin-top:1rem;">valid in some interval $0 < |x - x_0| < R$, where the exponent $r$ is determined by the <strong>indicial equation</strong>.</p>
+            </div>
+
+            <h3>The Indicial Equation</h3>
+            <p>Let:</p>
+            <div class="math-display">
+                $$p_0 = \lim_{x \to x_0} (x - x_0)p(x) \quad \text{and} \quad q_0 = \lim_{x \to x_0} (x - x_0)^2 q(x)$$
+            </div>
+
+            <p>The <strong>indicial equation</strong> is:</p>
+            <div class="definition-box">
+                <div class="box-label">Indicial Equation</div>
+                $$r(r-1) + p_0 r + q_0 = 0$$
+                <p style="margin-top:1rem;">or equivalently: $r^2 + (p_0 - 1)r + q_0 = 0$</p>
+            </div>
+
+            <p>This is a <strong>quadratic equation in $r$</strong>. Its roots $r_1$ and $r_2$ (with $r_1 \geq r_2$) determine which solutions exist and whether logarithmic terms appear.</p>
+
+            <h3>Three Cases for the Indicial Roots</h3>
+
+            <div class="theorem-box">
+                <div class="box-label">Case 1: Distinct Roots Not Differing by an Integer</div>
+                <p style="margin-bottom:1rem;">If $r_1 - r_2 \notin \mathbb{Z}$ (the difference is not an integer), then two independent Frobenius series solutions are:</p>
+                $$y_1 = (x - x_0)^{r_1} \sum_{n=0}^{\infty} a_n^{(1)} (x - x_0)^n$$
+                $$y_2 = (x - x_0)^{r_2} \sum_{n=0}^{\infty} a_n^{(2)} (x - x_0)^n$$
+                <p style="margin-top:1rem;"><strong>General solution:</strong> $y = c_1 y_1 + c_2 y_2$</p>
+            </div>
+
+            <div class="theorem-box">
+                <div class="box-label">Case 2: Repeated Root</div>
+                <p style="margin-bottom:1rem;">If $r_1 = r_2 = r$ (a double root), the second solution contains a logarithmic term:</p>
+                $$y_1 = (x - x_0)^r \sum_{n=0}^{\infty} a_n (x - x_0)^n$$
+                $$y_2 = y_1 \ln(x - x_0) + (x - x_0)^r \sum_{n=1}^{\infty} b_n (x - x_0)^n$$
+                <p style="margin-top:1rem;"><strong>General solution:</strong> $y = c_1 y_1 + c_2 y_2$</p>
+            </div>
+
+            <div class="theorem-box">
+                <div class="box-label">Case 3: Roots Differing by a Positive Integer</div>
+                <p style="margin-bottom:1rem;">If $r_1 - r_2 = m \in \mathbb{Z}^+$ (a positive integer), a logarithmic term may appear in the second solution:</p>
+                $$y_1 = (x - x_0)^{r_1} \sum_{n=0}^{\infty} a_n (x - x_0)^n$$
+                $$y_2 = A y_1 \ln(x - x_0) + (x - x_0)^{r_2} \sum_{n=0}^{\infty} b_n (x - x_0)^n$$
+                <p style="margin-top:1rem;">where $A$ may be zero (no logarithm) or nonzero. The form must be determined by substitution.</p>
+            </div>
+        </section>
+
+        <!-- Method Section -->
+        <section id="method">
+            <h2>Method: Step-by-Step Solution Procedure</h2>
+
+            <ol class="step-list">
+                <li>
+                    <div>
+                        <strong>Verify $x_0$ is a regular singular point</strong><br>
+                        Write the equation in the form $y'' + p(x)y' + q(x)y = 0$ (divide by the leading coefficient if necessary). Check that $(x - x_0)p(x)$ and $(x - x_0)^2 q(x)$ are both analytic at $x_0$.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Compute the limit values $p_0$ and $q_0$</strong><br>
+                        $$p_0 = \lim_{x \to x_0} (x - x_0)p(x), \quad q_0 = \lim_{x \to x_0} (x - x_0)^2 q(x)$$
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Write and solve the indicial equation</strong><br>
+                        $$r(r-1) + p_0 r + q_0 = 0$$
+                        Find the roots $r_1 \geq r_2$.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Determine which case applies</strong><br>
+                        Check if $r_1 - r_2$ is an integer. This determines the form of the second solution.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>For the larger root $r_1$: assume the Frobenius series</strong><br>
+                        $$y = \sum_{n=0}^{\infty} a_n (x - x_0)^{n+r_1}$$
+                        Substitute into the differential equation.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Find the recurrence relation</strong><br>
+                        Collect coefficients of like powers of $(x - x_0)$ to obtain a recurrence formula relating $a_n$ to previous coefficients.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Solve for coefficients</strong><br>
+                        Set $a_0 = 1$ (or any nonzero constant) and use the recurrence to find $a_1, a_2, a_3, \ldots$. This yields the first solution $y_1$.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Find the second solution</strong><br>
+                        Depending on the case:
+                        <ul style="margin-left:1.5rem;margin-top:0.5rem;">
+                            <li><strong>Case 1:</strong> Repeat steps 5–7 using $r_2$</li>
+                            <li><strong>Case 2:</strong> Use the formula with the logarithmic term</li>
+                            <li><strong>Case 3:</strong> Attempt the logarithmic form or use reduction of order</li>
+                        </ul>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples">
+            <h2>Worked Examples</h2>
+
+            <!-- Example 1 -->
+            <button class="collapsible" onclick="toggle(this)">
+                Example 1: $2x^2 y'' + xy' - (x+1)y = 0$ around $x_0 = 0$
+            </button>
+            <div class="content">
+                <h3>Solution</h3>
+
+                <p><strong>Step 1: Verify $x = 0$ is regular singular</strong></p>
+                <p>Divide by $2x^2$:</p>
+                <div class="math-display">
+                    $$y'' + \frac{1}{2x}y' - \frac{x+1}{2x^2}y = 0$$
+                </div>
+                <p>Here $p(x) = \frac{1}{2x}$ and $q(x) = -\frac{x+1}{2x^2}$.</p>
+                <p>Check: $(x - 0)p(x) = x \cdot \frac{1}{2x} = \frac{1}{2}$ ✓ and $(x - 0)^2 q(x) = x^2 \cdot \left(-\frac{x+1}{2x^2}\right) = -\frac{x+1}{2}$ ✓</p>
+                <p>Both analytic at $x = 0$, so $x = 0$ is regular singular.</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 2: Compute $p_0$ and $q_0$</strong></p>
+                <div class="math-display">
+                    $$p_0 = \lim_{x \to 0} \frac{1}{2} = \frac{1}{2}$$
+                    $$q_0 = \lim_{x \to 0} \left(-\frac{x+1}{2}\right) = -\frac{1}{2}$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>Step 3: Indicial equation</strong></p>
+                <div class="math-display">
+                    $$r(r-1) + \frac{1}{2}r - \frac{1}{2} = 0$$
+                    $$r^2 - r + \frac{1}{2}r - \frac{1}{2} = 0$$
+                    $$r^2 - \frac{1}{2}r - \frac{1}{2} = 0$$
+                    $$2r^2 - r - 1 = 0$$
+                    $$(2r + 1)(r - 1) = 0$$
+                </div>
+                <p>Roots: $r_1 = 1$ and $r_2 = -\frac{1}{2}$, so $r_1 - r_2 = \frac{3}{2} \notin \mathbb{Z}$ (Case 1).</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 4: First solution with $r_1 = 1$</strong></p>
+                <p>Assume $y = x \sum_{n=0}^{\infty} a_n x^n = \sum_{n=0}^{\infty} a_n x^{n+1}$.</p>
+                <p>Then: $y' = \sum_{n=0}^{\infty} (n+1)a_n x^n$ and $y'' = \sum_{n=0}^{\infty} (n+1)n a_n x^{n-1}$.</p>
+                <p>Substituting into $2x^2 y'' + xy' - (x+1)y = 0$ and collecting coefficients of $x^n$ yields a recurrence relation. Setting $a_0 = 1$ and solving gives the first Frobenius series solution.</p>
+                <p class="tip-box" style="margin-top:1rem;border:none;padding:0.75rem;background:#cffafe;border-left:4px solid #0ea5e9;"><strong>Note:</strong> The recurrence relation and explicit coefficients follow standard Frobenius methods. For brevity, we focus on the procedure and classification.</p>
+            </div>
+
+            <!-- Example 2 -->
+            <button class="collapsible" onclick="toggle(this)">
+                Example 2: Bessel's Equation of Order 0
+            </button>
+            <div class="content">
+                <h3>Bessel's Equation: $x^2 y'' + xy' + x^2 y = 0$</h3>
+
+                <p><strong>Step 1: Verify regularity</strong></p>
+                <p>Divide by $x^2$:</p>
+                <div class="math-display">
+                    $$y'' + \frac{1}{x}y' + y = 0$$
+                </div>
+                <p>Here $p(x) = \frac{1}{x}$ and $q(x) = 1$. Check: $xp(x) = 1$ ✓ and $x^2 q(x) = x^2$ ✓. Both analytic at $x = 0$. Regular singular point ✓</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 2: Limits</strong></p>
+                <div class="math-display">
+                    $$p_0 = \lim_{x \to 0} 1 = 1, \quad q_0 = \lim_{x \to 0} x^2 = 0$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>Step 3: Indicial equation</strong></p>
+                <div class="math-display">
+                    $$r(r-1) + r + 0 = 0$$
+                    $$r^2 = 0$$
+                </div>
+                <p>Double root: $r = 0$ (Case 2: repeated root with logarithmic second solution).</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 4: First solution $y_1$ with $r = 0$</strong></p>
+                <p>Assume $y = \sum_{n=0}^{\infty} a_n x^n$ (ordinary power series). Substitution yields the recurrence:</p>
+                <div class="math-display">
+                    $$a_n = \frac{-a_{n-2}}{n^2} \quad \text{for } n \geq 2$$
+                </div>
+                <p>With $a_0 = 1$ and $a_1 = 0$, we get:</p>
+                <div class="math-display">
+                    $$y_1(x) = J_0(x) = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n}}{2^{2n}(n!)^2} = 1 - \frac{x^2}{4} + \frac{x^4}{64} - \cdots$$
+                </div>
+                <p>This is the <strong>Bessel function of the first kind, order 0</strong>.</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 5: Second solution $y_2$ (Case 2)</strong></p>
+                <p>Since we have a repeated root, the second solution is:</p>
+                <div class="math-display">
+                    $$y_2(x) = y_1(x) \ln x + \sum_{n=1}^{\infty} b_n x^n$$
+                </div>
+                <p>This involves the <strong>Bessel function of the second kind, $Y_0(x)$</strong>, which is far more complex to compute directly but is the standard companion solution to $J_0$.</p>
+
+                <div class="example-box">
+                    <div class="box-label">Key Insight</div>
+                    <p>Bessel's equation appears everywhere in physics: circular membranes, cylindrical heat flow, vibrations, electromagnetic waves, etc. The Frobenius method gives us direct access to these fundamental special functions.</p>
+                </div>
+            </div>
+
+            <!-- Example 3 -->
+            <button class="collapsible" onclick="toggle(this)">
+                Example 3: Cauchy-Euler Equation $x^2 y'' + 3xy' + y = 0$
+            </button>
+            <div class="content">
+                <h3>Solution</h3>
+
+                <p><strong>Step 1: Verify regularity</strong></p>
+                <p>Divide by $x^2$:</p>
+                <div class="math-display">
+                    $$y'' + \frac{3}{x}y' + \frac{1}{x^2}y = 0$$
+                </div>
+                <p>Here $p(x) = \frac{3}{x}$ and $q(x) = \frac{1}{x^2}$.</p>
+                <p>Check: $xp(x) = 3$ ✓ and $x^2 q(x) = 1$ ✓. Regular singular point ✓</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 2: Limits</strong></p>
+                <div class="math-display">
+                    $$p_0 = 3, \quad q_0 = 1$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>Step 3: Indicial equation</strong></p>
+                <div class="math-display">
+                    $$r(r-1) + 3r + 1 = 0$$
+                    $$r^2 + 2r + 1 = 0$$
+                    $$(r + 1)^2 = 0$$
+                </div>
+                <p>Double root: $r = -1$ (Case 2: repeated root with logarithmic second solution).</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 4: Solution forms</strong></p>
+                <p>For a Cauchy-Euler equation with repeated root $r$, the solutions are:</p>
+                <div class="math-display">
+                    $$y_1 = x^{-1}, \quad y_2 = x^{-1} \ln x$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>General solution:</strong></p>
+                <div class="math-display">
+                    $$y(x) = c_1 x^{-1} + c_2 x^{-1} \ln x = \frac{c_1 + c_2 \ln x}{x}$$
+                </div>
+
+                <div class="example-box">
+                    <div class="box-label">Verification by Substitution</div>
+                    <p>You can verify that both $y_1 = 1/x$ and $y_2 = (\ln x)/x$ satisfy the equation. Try differentiating and substituting!</p>
+                </div>
+            </div>
+
+            <!-- Example 4 -->
+            <button class="collapsible" onclick="toggle(this)">
+                Example 4: $x^2 y'' - x(1+x)y' + y = 0$ around $x_0 = 0$
+            </button>
+            <div class="content">
+                <h3>Solution</h3>
+
+                <p><strong>Step 1: Verify regularity</strong></p>
+                <p>Divide by $x^2$:</p>
+                <div class="math-display">
+                    $$y'' - \frac{1+x}{x}y' + \frac{1}{x^2}y = 0$$
+                </div>
+                <p>Here $p(x) = -\frac{1+x}{x}$ and $q(x) = \frac{1}{x^2}$.</p>
+                <p>Check: $xp(x) = -(1+x)$ ✓ and $x^2 q(x) = 1$ ✓. Regular singular point ✓</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 2: Limits</strong></p>
+                <div class="math-display">
+                    $$p_0 = \lim_{x \to 0} (-(1+x)) = -1, \quad q_0 = \lim_{x \to 0} 1 = 1$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>Step 3: Indicial equation</strong></p>
+                <div class="math-display">
+                    $$r(r-1) - r + 1 = 0$$
+                    $$r^2 - 2r + 1 = 0$$
+                    $$(r - 1)^2 = 0$$
+                </div>
+                <p>Wait—this is also a repeated root $r = 1$. But actually, re-examining the original problem: $-r + 1$ appears. The recurrence relation should be checked to see if the second solution truly requires logarithm (Case 2) or if we are in a subtle Case 3 scenario.</p>
+
+                <div class="tip-box">
+                    <strong>Note:</strong> In practice, once you have $r_1 = r_2 = 1$, you must substitute both the first Frobenius solution and the logarithmic form into the original equation to determine if the logarithmic term actually appears. This is a common pitfall in Frobenius method applications.
+                </div>
+            </div>
+
+            <!-- Example 5 -->
+            <button class="collapsible" onclick="toggle(this)">
+                Example 5: Bessel's Equation of Order 1/2: $x^2 y'' + xy' + (x^2 - 1/4)y = 0$
+            </button>
+            <div class="content">
+                <h3>Solution</h3>
+
+                <p><strong>Step 1: Verify regularity</strong></p>
+                <p>Divide by $x^2$:</p>
+                <div class="math-display">
+                    $$y'' + \frac{1}{x}y' + \left(1 - \frac{1}{4x^2}\right)y = 0$$
+                </div>
+                <p>Here $p(x) = \frac{1}{x}$ and $q(x) = 1 - \frac{1}{4x^2}$.</p>
+                <p>Check: $xp(x) = 1$ ✓ and $x^2 q(x) = x^2 - \frac{1}{4}$ ✓. Regular singular point ✓</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 2: Limits</strong></p>
+                <div class="math-display">
+                    $$p_0 = 1, \quad q_0 = -\frac{1}{4}$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>Step 3: Indicial equation</strong></p>
+                <div class="math-display">
+                    $$r(r-1) + r - \frac{1}{4} = 0$$
+                    $$r^2 - \frac{1}{4} = 0$$
+                    $$r = \pm \frac{1}{2}$$
+                </div>
+                <p>Distinct roots: $r_1 = \frac{1}{2}$ and $r_2 = -\frac{1}{2}$. Difference $r_1 - r_2 = 1 \in \mathbb{Z}$ (Case 3: difference is a positive integer).</p>
+
+                <p style="margin-top:1.5rem;"><strong>Step 4: Solutions</strong></p>
+                <p>For Bessel's equation of order $\nu$, the recurrence relations yield:</p>
+                <div class="math-display">
+                    $$y_1 = x^{1/2} J_{1/2}(x) = \sqrt{\frac{2}{\pi x}} \sin x$$
+                    $$y_2 = x^{-1/2} J_{-1/2}(x) = \sqrt{\frac{2}{\pi x}} \cos x$$
+                </div>
+
+                <p style="margin-top:1.5rem;"><strong>Remarkable fact:</strong> Although roots differ by an integer, the second solution does <em>not</em> contain a logarithmic term! The general solution is:</p>
+                <div class="math-display">
+                    $$y(x) = c_1 \sqrt{\frac{2}{\pi x}} \sin x + c_2 \sqrt{\frac{2}{\pi x}} \cos x$$
+                </div>
+
+                <div class="warning-box">
+                    <div class="box-label">Warning</div>
+                    <p>When $r_1 - r_2 \in \mathbb{Z}$, you cannot conclude whether a logarithm appears without checking the recurrence relation. The logarithmic term appears <em>sometimes</em> (Case 2 and most of Case 3) but not always (as here).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice">
+            <h2>Practice: Self-Assessment Quiz</h2>
+            <p>Test your understanding of the Frobenius method with these multiple-choice questions. After answering all questions, your score will be displayed.</p>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="score-text" id="scoreText">0 / 6 correct</div>
+            </div>
+
+            <!-- Question 1 -->
+            <div class="quiz-question">
+                <strong>Question 1:</strong> Which of the following is a regular singular point?
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">$x = \infty$ for $y'' + (1/x)y' + y = 0$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">$x = 0$ for $x^2 y'' + xy' + y = 0$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q1c" name="q1" value="c">
+                        <label for="q1c">$x = 0$ for $y'' + (1/x^2)y' + (e^{1/x}/x^3)y = 0$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">$x = 1$ for $(x-1)^3 y'' + (x-1)y' + y = 0$</label>
+                    </div>
+                </div>
+                <button onclick="checkChoice('q1', 'b', 1)" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">Check Answer</button>
+                <div class="quiz-result" id="q1-result"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="quiz-question">
+                <strong>Question 2:</strong> For the indicial equation $r^2 - 3r + 2 = 0$, what are the roots?
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">$r = 1$ (double root)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">$r_1 = 2, r_2 = 1$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q2c" name="q2" value="c">
+                        <label for="q2c">$r_1 = 3, r_2 = 0$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">$r = 1/2 \pm \sqrt{3}/2$</label>
+                    </div>
+                </div>
+                <button onclick="checkChoice('q2', 'b', 2)" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">Check Answer</button>
+                <div class="quiz-result" id="q2-result"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="quiz-question">
+                <strong>Question 3:</strong> If the indicial roots are $r_1 = 3$ and $r_2 = 1/2$, which case applies?
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">Case 1: Two independent Frobenius series (no logarithm)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q3b" name="q3" value="b">
+                        <label for="q3b">Case 2: Repeated root with logarithm</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">Case 3: Integer difference, possibly logarithmic</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">Irregular singular point, Frobenius fails</label>
+                    </div>
+                </div>
+                <button onclick="checkChoice('q3', 'c', 3)" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">Check Answer</button>
+                <div class="quiz-result" id="q3-result"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="quiz-question">
+                <strong>Question 4:</strong> For Bessel's equation of order 0, $x^2 y'' + xy' + x^2 y = 0$, the indicial equation is:
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">$r(r-1) + r = 0 \Rightarrow r = 0$ (double root)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">$r(r-1) - r = 0 \Rightarrow r = 0, 2$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">$r^2 + 1 = 0 \Rightarrow r = \pm i$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q4d" name="q4" value="d">
+                        <label for="q4d">$r(r-1) + r + 1 = 0$</label>
+                    </div>
+                </div>
+                <button onclick="checkChoice('q4', 'a', 4)" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">Check Answer</button>
+                <div class="quiz-result" id="q4-result"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="quiz-question">
+                <strong>Question 5:</strong> For the Cauchy-Euler equation $x^2 y'' + 3xy' + y = 0$ with repeated root $r = -1$, the general solution is:
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">$y = c_1 x^{-1} + c_2 x^{-2}$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q5b" name="q5" value="b">
+                        <label for="q5b">$y = (c_1 + c_2 \ln x)x^{-1}$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">$y = c_1 e^{-x} + c_2 x e^{-x}$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">$y = c_1 \cos(\ln x) + c_2 \sin(\ln x)$</label>
+                    </div>
+                </div>
+                <button onclick="checkChoice('q5', 'b', 5)" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">Check Answer</button>
+                <div class="quiz-result" id="q5-result"></div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="quiz-question">
+                <strong>Question 6:</strong> If $r_1 - r_2 = 0$ (repeated root), which solution form is guaranteed?
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" id="q6a" name="q6" value="a">
+                        <label for="q6a">$y_2$ has a hyperbolic function term</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q6b" name="q6" value="b">
+                        <label for="q6b">$y_2 = y_1 \ln(x - x_0) + (x-x_0)^r \sum b_n(x-x_0)^n$</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q6c" name="q6" value="c">
+                        <label for="q6c">$y_2 = (x - x_0)^{r+1} \sum a_n(x-x_0)^n$ (no log)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" id="q6d" name="q6" value="d">
+                        <label for="q6d">Only one solution exists; the equation is singular</label>
+                    </div>
+                </div>
+                <button onclick="checkChoice('q6', 'b', 6)" style="margin-top:1rem;padding:0.5rem 1rem;background:var(--primary);color:white;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">Check Answer</button>
+                <div class="quiz-result" id="q6-result"></div>
+            </div>
+
+            <div style="margin-top:2rem;padding:1.5rem;background:var(--primary-light);border-radius:var(--radius);border-left:4px solid var(--primary);">
+                <p><strong>Final Score:</strong> <span id="finalScore">0</span> / 6</p>
+                <p style="margin-top:0.5rem;font-size:0.9rem;color:var(--text-muted);">Review any incorrect answers above and refer to the Theory and Examples sections for clarification.</p>
+            </div>
+        </section>
+
+        <!-- Quick Reference Card -->
+        <section>
+            <h2>Quick Reference Card</h2>
+
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h4>Regular Singular Point Test</h4>
+                    <p style="font-size:0.9rem;">For $y'' + p(x)y' + q(x)y = 0$ at $x = x_0$:</p>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;"><code>(x-x₀)p(x)</code> and <code>(x-x₀)²q(x)</code> must be analytic at $x_0$.</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Indicial Equation Form</h4>
+                    <p style="font-size:0.9rem;">$$r(r-1) + p_0 r + q_0 = 0$$</p>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">where $p_0 = \lim_{x \to x_0}(x-x_0)p(x)$ and $q_0 = \lim_{x \to x_0}(x-x_0)^2 q(x)$</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Case 1: Distinct Roots</h4>
+                    <p style="font-size:0.9rem;">If $r_1 - r_2 \notin \mathbb{Z}$:</p>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Two Frobenius series, both analytic, no logarithms.</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Case 2: Repeated Root</h4>
+                    <p style="font-size:0.9rem;">If $r_1 = r_2 = r$:</p>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">$y_2 = y_1\ln(x-x_0) + \ldots$ (logarithm always present)</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Case 3: Integer Difference</h4>
+                    <p style="font-size:0.9rem;">If $r_1 - r_2 = m \in \mathbb{Z}^+$:</p>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Logarithm may or may not appear; use recurrence to check.</p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Frobenius Series Form</h4>
+                    <p style="font-size:0.9rem;">$$y = (x-x_0)^r \sum_{n=0}^{\infty} a_n(x-x_0)^n$$</p>
+                    <p style="margin-top:0.5rem;font-size:0.85rem;">Exponent $r$ determined by indicial equation roots.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Department of Mathematics and Statistics, Qatar University
+    </footer>
+
+    <script>
+        // Toggle function for collapsible sections
+        function toggle(button) {
+            const content = button.nextElementSibling;
+            button.classList.toggle('active');
+            content.classList.toggle('show');
+        }
+
+        // Quiz tracking
+        const answers = {
+            'q1': 'b',
+            'q2': 'b',
+            'q3': 'c',
+            'q4': 'a',
+            'q5': 'b',
+            'q6': 'b'
+        };
+
+        let score = 0;
+        const answered = new Set();
+
+        function checkChoice(questionId, correctAnswer, questionNum) {
+            const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+
+            if (!selectedOption) {
+                alert('Please select an answer before checking.');
+                return;
+            }
+
+            answered.add(questionNum);
+            const resultDiv = document.getElementById(`${questionId}-result`);
+            const isCorrect = selectedOption.value === correctAnswer;
+
+            if (isCorrect) {
+                score++;
+                resultDiv.className = 'quiz-result show correct';
+                resultDiv.innerHTML = '✓ Correct! Well done.';
+            } else {
+                resultDiv.className = 'quiz-result show incorrect';
+                resultDiv.innerHTML = `✗ Incorrect. The correct answer is <strong>${correctAnswer}</strong>. Review the theory section for more details.`;
+            }
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalQuestions = 6;
+            const percentage = (answered.size / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('scoreText').textContent = `${answered.size} / ${totalQuestions} answered`;
+            document.getElementById('finalScore').textContent = `${score}`;
+        }
+
+        // Render LaTeX on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false }
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: Ch5 Overview — Series Solutions &amp; Numerical Methods | Dr. Mohamed Mabrok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb; --primary-light: #dbeafe;
+            --accent: #7c3aed; --accent-light: #ede9fe;
+            --success: #059669; --success-light: #d1fae5;
+            --warning: #d97706; --warning-light: #fef3c7;
+            --danger: #dc2626; --danger-light: #fee2e2;
+            --bg: #f8fafc; --card: #ffffff;
+            --text: #1e293b; --text-muted: #64748b;
+            --border: #e2e8f0; --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; height: 60px; box-shadow: var(--shadow); }
+        nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+        nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+        nav .nav-links a { text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap; transition: all 0.2s; }
+        nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+        .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+        section { background: var(--card); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+        h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+        p { margin-bottom: 1rem; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box { border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; border-left: 5px solid; }
+        .definition-box { background: var(--primary-light); border-color: var(--primary); }
+        .theorem-box { background: var(--accent-light); border-color: var(--accent); }
+        .example-box { background: var(--success-light); border-color: var(--success); }
+        .warning-box { background: var(--warning-light); border-color: var(--warning); }
+        .tip-box { background: #f0f9ff; border-color: #0ea5e9; }
+        .box-label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .definition-box .box-label { color: var(--primary); }
+        .theorem-box .box-label { color: var(--accent); }
+        .example-box .box-label { color: var(--success); }
+        .warning-box .box-label { color: var(--warning); }
+        .tip-box .box-label { color: #0ea5e9; }
+        .math-display { background: #f1f5f9; border-radius: 8px; padding: 1.2rem; text-align: center; margin: 1rem 0; font-size: 1.15em; overflow-x: auto; }
+        .katex-display { margin: 0.5rem 0; }
+
+        /* Learning objectives box */
+        .objectives-box { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border-radius: var(--radius); padding: 2rem; margin: 1.5rem 0; border-left: 5px solid var(--primary); }
+        .objectives-box h3 { color: var(--primary); margin-top: 0; }
+        .objectives-box ul { list-style: none; padding: 0; }
+        .objectives-box li { padding: 0.5rem 0 0.5rem 1.8rem; position: relative; }
+        .objectives-box li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        /* Islamic verse box */
+        .islamic-box { background: linear-gradient(135deg, #fef3c7, #fcd34d); border-radius: var(--radius); padding: 2rem; margin: 2rem 0; border: 2px solid #f59e0b; text-align: center; }
+        .islamic-box .arabic-text { font-size: 1.3rem; line-height: 2; color: #b45309; margin-bottom: 1rem; font-weight: 500; }
+        .islamic-box .translation { font-size: 0.95rem; color: #92400e; font-style: italic; margin-bottom: 0.5rem; }
+        .islamic-box .source { font-size: 0.85rem; color: #b45309; }
+
+        /* Quote box */
+        .quote-box { background: #f0f9ff; border-left: 5px solid #0ea5e9; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 8px; font-size: 1rem; font-style: italic; color: #0c4a6e; }
+        .quote-author { text-align: right; font-weight: 600; margin-top: 1rem; color: #0369a1; }
+
+        /* Comparison table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        .comparison-table th { background: var(--primary); color: white; padding: 1rem; text-align: left; font-weight: 600; }
+        .comparison-table td { padding: 1rem; border-bottom: 1px solid var(--border); }
+        .comparison-table tr:nth-child(even) { background: #f8fafc; }
+
+        /* Roadmap cards */
+        .roadmap-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .roadmap-card { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.3s; cursor: pointer; text-decoration: none; }
+        .roadmap-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+        .roadmap-card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .roadmap-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0; }
+
+        /* Flowchart */
+        .flowchart { background: #f8fafc; padding: 2rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; }
+        .flow-item { background: var(--primary); color: white; padding: 1rem 1.5rem; border-radius: 8px; margin: 0.5rem 0; display: inline-block; font-weight: 600; }
+        .flow-arrow { font-size: 1.5rem; color: var(--primary); margin: 0.5rem 0; }
+
+        /* Split columns */
+        .split-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1.5rem 0; }
+        .split-columns h3 { margin-top: 0; }
+
+        @media (max-width: 640px) {
+            section { padding: 1.5rem; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+            .roadmap-container { grid-template-columns: 1fr; }
+            .split-columns { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.9rem; }
+            .comparison-table th, .comparison-table td { padding: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ch5-overview.html" class="active">5.0 Overview</a>
+            <a href="ch5-power-series.html">5.1 Power Series</a>
+            <a href="ch5-frobenius.html">5.2 Frobenius</a>
+            <a href="ch5-euler-method.html">5.3 Euler's Method</a>
+            <a href="ch5-runge-kutta.html">5.4 Runge-Kutta</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Introduction Section -->
+        <section>
+            <h1>Chapter 5: Series Solutions &amp; Numerical Methods</h1>
+            <p class="subtitle">Extending the reach of differential equations beyond Chapters 1–4 to handle special functions and complex real-world problems</p>
+
+            <div class="objectives-box">
+                <h3>Learning Objectives</h3>
+                <ul>
+                    <li>Understand why the methods from Chapters 1–4 cannot solve all differential equations</li>
+                    <li>Recognize ordinary points and singular points in differential equations</li>
+                    <li>Solve ODEs using power series methods near ordinary points</li>
+                    <li>Apply Frobenius method for regular singular points</li>
+                    <li>Implement numerical methods (Euler and Runge-Kutta) for equations without closed-form solutions</li>
+                    <li>Analyze error and convergence in numerical approximations</li>
+                    <li>Connect analytical and numerical approaches for solving real-world engineering problems</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                "The beauty of mathematics lies not only in solving equations perfectly, but in approximating them wisely." — Adapted from Richard Feynman
+            </div>
+
+            <div class="islamic-box">
+                <div class="arabic-text">إِنَّ اللَّهَ يُحِبُّ إِذَا عَمِلَ أَحَدُكُمْ عَمَلًا أَنْ يُتْقِنَهُ</div>
+                <div class="translation">"Indeed, Allah loves when any of you does something, that you do it with excellence."</div>
+                <div class="source">— Prophet Muhammad (PBUH), Sunan al-Bayhaqi</div>
+            </div>
+        </section>
+
+        <!-- The Limitation Problem -->
+        <section>
+            <h2>Why We Need Series &amp; Numerical Solutions</h2>
+
+            <p>
+                The methods from Chapters 1–4 are powerful, but they have fundamental limitations. Many important differential equations simply cannot be solved using separation of variables, integrating factors, or matrix eigenvalues. This is where series solutions and numerical methods become essential.
+            </p>
+
+            <h3>The Problem: Equations We Cannot Solve</h3>
+            <p>
+                Consider these famous equations that arise throughout science and engineering:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li><strong>Bessel's Equation:</strong> $x^2y'' + xy' + (x^2 - \nu^2)y = 0$ — vibrations of circular drums, heat flow in cylinders</li>
+                <li><strong>Legendre's Equation:</strong> $(1-x^2)y'' - 2xy' + n(n+1)y = 0$ — solutions of Laplace's equation in spherical coordinates, quantum mechanics</li>
+                <li><strong>Hermite's Equation:</strong> $y'' - 2xy' + 2ny = 0$ — quantum harmonic oscillator, probability theory</li>
+                <li><strong>Airy's Equation:</strong> $y'' - xy = 0$ — wave equations, optics, quantum tunneling</li>
+                <li><strong>Nonlinear Equations:</strong> $y' = e^{x^2}$ — cannot be solved exactly; $y' = y^2 + x$ — nonlinear behavior</li>
+            </ul>
+
+            <div class="warning-box">
+                <div class="box-label">Critical Limitation</div>
+                <p style="margin-bottom: 0;">
+                    Methods from Chapters 1–4 work only when the differential equation has <em>closed-form solutions</em> (solutions expressible in terms of elementary functions). The vast majority of real-world ODEs do not.
+                </p>
+            </div>
+
+            <h3>Real-World Engineering Examples</h3>
+            <p>
+                In practice, you will encounter problems where:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li><strong>Heat Transfer:</strong> Temperature distribution in complex geometries involves Bessel functions</li>
+                <li><strong>Quantum Mechanics:</strong> Energy levels and wave functions involve special functions (Hermite, Laguerre)</li>
+                <li><strong>Weather Modeling:</strong> Atmospheric dynamics require numerical integration of 3D systems</li>
+                <li><strong>Structural Engineering:</strong> Vibration analysis of non-uniform beams involves Airy functions</li>
+                <li><strong>Fluid Dynamics:</strong> Navier-Stokes equations are nonlinear; numerical methods are the only practical approach</li>
+            </ul>
+
+            <div class="tip-box">
+                <div class="box-label">Key Insight</div>
+                <p style="margin-bottom: 0;">
+                    Chapter 5 gives you two complementary tools: <strong>power series</strong> provide exact (infinitely accurate) solutions in a restricted domain, while <strong>numerical methods</strong provide approximate solutions that work anywhere.
+                </p>
+            </div>
+        </section>
+
+        <!-- The Two Pillars -->
+        <section>
+            <h2>The Two Pillars: Analytical vs Numerical</h2>
+
+            <p>
+                When the techniques from Chapters 1–4 fail, we have two fundamentally different approaches:
+            </p>
+
+            <div class="split-columns">
+                <div>
+                    <h3>Analytical: Power Series Methods</h3>
+                    <ul style="margin-left: 1.5rem;">
+                        <li><strong>Power Series (5.1):</strong> Assume $y = \sum_{n=0}^{\infty} a_n(x-x_0)^n$ and find coefficients recursively</li>
+                        <li><strong>Frobenius Method (5.2):</strong> Generalize for singular points: $y = \sum_{n=0}^{\infty} a_n(x-x_0)^{n+r}$</li>
+                        <li><strong>Advantages:</strong> Exact, infinitely accurate within radius of convergence</li>
+                        <li><strong>Disadvantages:</strong> Only works near ordinary/singular points; series may have limited domain</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Numerical: Step-by-Step Integration</h3>
+                    <ul style="margin-left: 1.5rem;">
+                        <li><strong>Euler's Method (5.3):</strong> Simple: $y_{n+1} = y_n + h f(x_n, y_n)$</li>
+                        <li><strong>Runge-Kutta (5.4):</strong> Higher-order: $y_{n+1} = y_n + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)$</li>
+                        <li><strong>Advantages:</strong> Works for any ODE; global solutions on arbitrary domains</li>
+                        <li><strong>Disadvantages:</strong> Approximate; error accumulates; requires careful step-size tuning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Comparison Table</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Power Series (5.1–5.2)</th>
+                        <th>Numerical Methods (5.3–5.4)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Accuracy</strong></td>
+                        <td>Exact (infinite series)</td>
+                        <td>Approximate (truncation error)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Domain</strong></td>
+                        <td>Limited by convergence radius</td>
+                        <td>Global (any interval)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Computation</strong></td>
+                        <td>Recursive formula for coefficients</td>
+                        <td>Stepwise integration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Applications</strong></td>
+                        <td>Special functions, theoretical analysis</td>
+                        <td>Real-world engineering, nonlinear systems</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prerequisites</strong></td>
+                        <td>Ordinary/singular point classification</td>
+                        <td>Initial conditions and step-size control</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error Analysis</strong></td>
+                        <td>Radius of convergence</td>
+                        <td>Local and global truncation error</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="theorem-box">
+                <div class="box-label">In Practice: They Work Together</div>
+                <p style="margin-bottom: 0;">
+                    Power series solutions are used to generate <em>exact reference solutions</em> against which numerical methods are tested and validated. Conversely, numerical methods are used to understand the behavior of special functions beyond their convergence region.
+                </p>
+            </div>
+        </section>
+
+        <!-- How Topics Connect -->
+        <section>
+            <h2>How the Topics Connect: The Solution Strategy Flowchart</h2>
+
+            <p>
+                When faced with an ODE you cannot solve by the methods from Chapters 1–4, follow this decision tree:
+            </p>
+
+            <div class="flowchart">
+                <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem;">Given an ODE $y' = f(x, y)$, $y(x_0) = y_0$</div>
+
+                <div class="flow-item">Try Ch1–Ch4 methods<br>(Separable, Exact, Integrating Factor, Linear, Homogeneous, Laplace)</div>
+                <div class="flow-arrow">↓</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%;">
+                    <div>
+                        <div class="flow-item" style="background: var(--success);">Closed-form solution found?</div>
+                        <div class="flow-arrow">↓ NO</div>
+                    </div>
+                    <div style="opacity: 0.3;">
+                        <div class="flow-item" style="background: var(--success);">YES → Use it!</div>
+                    </div>
+                </div>
+
+                <div class="flow-item" style="background: var(--accent);">Identify point of interest $x_0$</div>
+                <div class="flow-arrow">↓</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%;">
+                    <div>
+                        <div class="flow-item" style="background: var(--accent);">Ordinary Point?</div>
+                        <div class="flow-arrow">↓ YES</div>
+                        <div class="flow-item" style="background: #0ea5e9;">Use Power Series (5.1)</div>
+                    </div>
+                    <div>
+                        <div class="flow-item" style="background: var(--accent);">Regular Singular Point?</div>
+                        <div class="flow-arrow">↓ YES</div>
+                        <div class="flow-item" style="background: #0ea5e9;">Use Frobenius (5.2)</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <div class="flow-arrow">↓ Need global solution or nonlinear</div>
+                    <div class="flow-item" style="background: var(--warning);">Use Numerical Methods</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div>
+                            <div class="flow-arrow">↓ Simple, fast</div>
+                            <div class="flow-item" style="background: #f59e0b;">Euler's Method (5.3)</div>
+                        </div>
+                        <div>
+                            <div class="flow-arrow">↓ Accurate, practical</div>
+                            <div class="flow-item" style="background: #f59e0b;">Runge-Kutta (5.4)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="definition-box">
+                <div class="box-label">Key Definitions</div>
+                <p style="margin-bottom: 0;">
+                    <strong>Ordinary Point $x_0$:</strong> A point where the coefficients of the ODE are analytic (smooth, no singularities). Power series $\sum a_n(x-x_0)^n$ converge in a neighborhood of $x_0$.<br><br>
+                    <strong>Singular Point $x_0$:</strong> A point where at least one coefficient has a singularity. The solution may have a branch point or pole.<br><br>
+                    <strong>Regular Singular Point:</strong> A special singular point where the Frobenius method works. Not all singular points are regular.
+                </p>
+            </div>
+        </section>
+
+        <!-- Key Concepts Preview -->
+        <section>
+            <h2>Key Definitions &amp; Concepts</h2>
+
+            <h3>Point Classification</h3>
+            <p>
+                For an ODE in the form $P(x)y'' + Q(x)y' + R(x)y = 0$:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li><strong>$x_0$ is ordinary</strong> if $P(x_0) \neq 0$ → power series $\sum a_n(x-x_0)^n$ works</li>
+                <li><strong>$x_0$ is singular</strong> if $P(x_0) = 0$ → may need special methods</li>
+                <li><strong>$x_0$ is regular singular</strong> if $\frac{Q(x)}{P(x)}$ and $\frac{R(x)}{P(x)}$ have poles of order $\leq 1$ and $2$ respectively → Frobenius works</li>
+            </ul>
+
+            <h3>Convergence &amp; Radius of Convergence</h3>
+            <p>
+                When we write $y = \sum_{n=0}^{\infty} a_n(x-x_0)^n$, this series converges only for $|x-x_0| < R$, where $R$ is the <strong>radius of convergence</strong>. The solution is valid only within this disk.
+            </p>
+            <div class="math-display">
+                $$R = \frac{1}{\limsup_{n \to \infty} |a_n|^{1/n}} \quad \text{or via ratio test: } R = \lim_{n \to \infty} \left|\frac{a_n}{a_{n+1}}\right|$$
+            </div>
+
+            <h3>Error in Numerical Methods</h3>
+            <p>
+                Numerical methods introduce two types of error:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li><strong>Local Truncation Error (LTE):</strong> Error in a single step, typically $O(h^p)$ where $h$ is step size and $p$ is method order</li>
+                <li><strong>Global Truncation Error (GTE):</strong> Cumulative error over the entire interval, typically $O(h^{p-1})$ due to error propagation</li>
+            </ul>
+
+            <div class="example-box">
+                <div class="box-label">Example: Error Scaling</div>
+                <p style="margin-bottom: 0;">
+                    Euler's method has LTE = $O(h^2)$ and GTE = $O(h)$. Halving the step size halves the global error.<br>
+                    Runge-Kutta (4th order) has LTE = $O(h^5)$ and GTE = $O(h^4)$. Halving $h$ reduces error by a factor of $2^4 = 16$.
+                </p>
+            </div>
+        </section>
+
+        <!-- What You'll Learn -->
+        <section>
+            <h2>Chapter 5 Topics: What You'll Learn</h2>
+
+            <div class="roadmap-container">
+                <a href="ch5-power-series.html" class="roadmap-card">
+                    <h4>5.1 Power Series Solutions</h4>
+                    <p>Solve ODEs at ordinary points using series expansions. Derive recurrence relations for coefficients.</p>
+                </a>
+                <a href="ch5-frobenius.html" class="roadmap-card">
+                    <h4>5.2 Frobenius Method</h4>
+                    <p>Extend power series to regular singular points. Generate special functions (Bessel, Legendre).</p>
+                </a>
+                <a href="ch5-euler-method.html" class="roadmap-card">
+                    <h4>5.3 Euler's Method</h4>
+                    <p>Simplest numerical approach. Understand step-by-step integration and error accumulation.</p>
+                </a>
+                <a href="ch5-runge-kutta.html" class="roadmap-card">
+                    <h4>5.4 Runge-Kutta Methods</h4>
+                    <p>Higher-order numerical methods. Achieve high accuracy with adaptive step-size control.</p>
+                </a>
+            </div>
+
+            <div class="tip-box">
+                <div class="box-label">Why All Four Topics Matter</div>
+                <p style="margin-bottom: 0;">
+                    <strong>5.1 & 5.2 (Series)</strong> teach you the <em>structure</em> of solutions to special equations and how mathematical functions arise naturally from differential equations.<br><br>
+                    <strong>5.3 & 5.4 (Numerical)</strong> teach you the <em>practice</em> of solving anything, anywhere, with controlled error. This is what you will actually use in engineering jobs.
+                </p>
+            </div>
+        </section>
+
+        <!-- Mathematical Formulas Overview -->
+        <section>
+            <h2>Key Formulas &amp; Methods</h2>
+
+            <h3>Power Series Form</h3>
+            <p>
+                Assume a series solution around $x = x_0$:
+            </p>
+            <div class="math-display">
+                $$y(x) = \sum_{n=0}^{\infty} a_n (x - x_0)^n$$
+            </div>
+            <p>
+                Substitute into the ODE and match coefficients to find recurrence relations for $a_n$.
+            </p>
+
+            <h3>Frobenius Method (at Regular Singular Point)</h3>
+            <p>
+                Generalize with an exponent $r$:
+            </p>
+            <div class="math-display">
+                $$y(x) = (x - x_0)^r \sum_{n=0}^{\infty} a_n (x - x_0)^n = \sum_{n=0}^{\infty} a_n (x - x_0)^{n+r}$$
+            </div>
+            <p>
+                The indicial equation determines the possible values of $r$ (usually two values); find corresponding series for each.
+            </p>
+
+            <h3>Euler's Method</h3>
+            <p>
+                For the initial value problem $y' = f(x, y)$, $y(x_0) = y_0$:
+            </p>
+            <div class="math-display">
+                $$y_{n+1} = y_n + h \, f(x_n, y_n)$$
+            </div>
+            <p>
+                where $x_{n+1} = x_n + h$ and $h$ is the step size. Simple but accumulates error quickly.
+            </p>
+
+            <h3>4th-Order Runge-Kutta Method</h3>
+            <p>
+                More accurate alternative:
+            </p>
+            <div class="math-display">
+                $$y_{n+1} = y_n + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+            </div>
+            <p>
+                where:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li>$k_1 = f(x_n, y_n)$</li>
+                <li>$k_2 = f(x_n + \tfrac{h}{2}, y_n + \tfrac{h}{2}k_1)$</li>
+                <li>$k_3 = f(x_n + \tfrac{h}{2}, y_n + \tfrac{h}{2}k_2)$</li>
+                <li>$k_4 = f(x_n + h, y_n + hk_3)$</li>
+            </ul>
+            <p>
+                This achieves $O(h^5)$ local error and $O(h^4)$ global error.
+            </p>
+
+            <div class="warning-box">
+                <div class="box-label">Common Mistake</div>
+                <p style="margin-bottom: 0;">
+                    Don't confuse power series <em>convergence</em> with the domain of applicability. Even if a power series converges for all $x$, you may choose to use numerical methods for speed. Conversely, even if a power series has limited radius of convergence, it provides exact answers within that domain.
+                </p>
+            </div>
+        </section>
+
+        <!-- Why Chapter 5 is Critical -->
+        <section>
+            <h2>Why Chapter 5 is Critical for Engineering</h2>
+
+            <p>
+                This chapter bridges the gap between theoretical mathematics and practical engineering:
+            </p>
+
+            <div class="split-columns">
+                <div>
+                    <h3>Understanding Special Functions</h3>
+                    <p>
+                        In Chapters 1–4, you learned about exponentials, sines, and cosines. Chapter 5 shows where <em>other</em> important functions come from:
+                    </p>
+                    <ul style="margin-left: 1.5rem;">
+                        <li>Bessel functions $J_\nu(x)$</li>
+                        <li>Legendre polynomials $P_n(x)$</li>
+                        <li>Hermite polynomials $H_n(x)$</li>
+                        <li>Error function $\text{erf}(x)$</li>
+                    </ul>
+                    <p>
+                        These are not arbitrarily invented—they are the <em>natural solutions</em> to important equations.
+                    </p>
+                </div>
+                <div>
+                    <h3>Solving Real Problems</h3>
+                    <p>
+                        Many engineering systems cannot be solved exactly:
+                    </p>
+                    <ul style="margin-left: 1.5rem;">
+                        <li>Nonlinear vibrations</li>
+                        <li>Chaotic systems</li>
+                        <li>Climate modeling</li>
+                        <li>Drug concentration in bloodstream</li>
+                        <li>Projectile motion with air resistance</li>
+                    </ul>
+                    <p>
+                        Numerical methods are your only tool here.
+                    </p>
+                </div>
+            </div>
+
+            <div class="theorem-box">
+                <div class="box-label">The Real Mathematician's Toolkit</div>
+                <p style="margin-bottom: 0;">
+                    In industry, you will spend:
+                    <ul style="margin: 1rem 0 0 2rem;">
+                        <li>20% of time solving ODEs analytically (Chapters 1–4)</li>
+                        <li>30% of time working with special functions and power series (Chapter 5, analytical)</li>
+                        <li>50% of time implementing numerical methods and interpreting results (Chapter 5, numerical)</li>
+                    </ul>
+                </p>
+            </div>
+        </section>
+
+        <!-- Getting Ready -->
+        <section>
+            <h2>Getting Ready: Prerequisites &amp; Preparation</h2>
+
+            <h3>What You Should Review</h3>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li><strong>Taylor Series:</strong> If $f(x)$ is analytic, $f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n$</li>
+                <li><strong>Term-by-term differentiation:</strong> $\frac{d}{dx}\sum a_n x^n = \sum n a_n x^{n-1}$</li>
+                <li><strong>Index shifting:</strong> Reindexing sums to align powers of $x$ for matching coefficients</li>
+                <li><strong>Initial Value Problems:</strong> Given $y(x_0) = y_0$, find unique solution</li>
+                <li><strong>Basic Programming (for 5.3–5.4):</strong> Loops, arrays, error tracking</li>
+            </ul>
+
+            <h3>What You'll Need for This Chapter</h3>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li>Pencil and paper (for series work)</li>
+                <li>Calculator or computer algebra system (Wolfram Alpha, Mathematica, Python)</li>
+                <li>Programming language (Python with NumPy/SciPy recommended for numerical sections)</li>
+                <li>Graphing software to plot solutions (Matplotlib, Desmos, or built-in plotting)</li>
+            </ul>
+
+            <div class="tip-box">
+                <div class="box-label">Pro Tip</div>
+                <p style="margin-bottom: 0;">
+                    For power series work, keep a reference list of common series handy: $(1-x)^{-1} = \sum x^n$, $e^x = \sum \frac{x^n}{n!}$, $\sin x = \sum \frac{(-1)^n x^{2n+1}}{(2n+1)!}$, etc. Don't memorize—reference!
+                </p>
+            </div>
+        </section>
+
+        <!-- Looking Ahead -->
+        <section>
+            <h2>Looking Ahead: How Chapter 5 Fits into Your Mathematics Journey</h2>
+
+            <p>
+                After Chapter 5, you will have completed the foundational differential equations course. You will be ready for:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li><strong>Partial Differential Equations (PDE):</strong> Heat equation, wave equation, Schrödinger equation—all solved via separation of variables + special functions (Chapter 5)</li>
+                <li><strong>Advanced Numerical Analysis:</strong> Error analysis, stability, adaptive methods, finite difference / finite element methods</li>
+                <li><strong>Control Theory:</strong> Stability analysis of systems (Chapter 4) combined with practical implementation (Chapter 5 numerical)</li>
+                <li><strong>Modeling Courses:</strong> Apply all these tools to real-world engineering problems</li>
+            </ul>
+
+            <div class="example-box">
+                <div class="box-label">Concrete Example: From Today to Industry</div>
+                <p style="margin-bottom: 0;">
+                    You model heat conduction in a cylindrical rod. The PDE reduces to Bessel's equation (solved in 5.2). To understand the solution's behavior at specific temperatures and times, you use Frobenius method (exact). To simulate a complex boundary condition, you use Runge-Kutta (5.4). All three tools are essential for real problems.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <footer style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.9rem; border-top:1px solid var(--border); margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Department of Mathematics and Statistics, Qatar University
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+</html>

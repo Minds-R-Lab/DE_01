@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.4 — Runge-Kutta Methods | Differential Equations</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: auto;
+        }
+
+        .logo a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 80px 1.5rem 4rem;
+        }
+
+        section {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            color: var(--accent);
+            font-size: 1.6rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-light);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin-top: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .box-primary {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .box-accent {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .box-success {
+            background: var(--success-light);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .box-warning {
+            background: var(--warning-light);
+            border-left: 4px solid var(--warning);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .box-danger {
+            background: var(--danger-light);
+            border-left: 4px solid var(--danger);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theorem-box {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--primary-light) 100%);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tip-box {
+            background: var(--success-light);
+            border: 2px solid var(--success);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .box-label {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        .math-display {
+            overflow-x: auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius);
+            margin: 1rem 0;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.2rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--accent);
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+            width: 100%;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .toggle-btn:hover {
+            background: var(--accent);
+        }
+
+        .toggle-btn.active {
+            background: var(--accent);
+        }
+
+        .toggle-content {
+            display: none;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-bottom-left-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+            background: rgba(37, 99, 235, 0.02);
+        }
+
+        .toggle-content.active {
+            display: block;
+        }
+
+        .quiz-problem {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .quiz-problem h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .choice-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .choice-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .choice-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .choice-btn.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .choice-btn.incorrect {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: var(--success-light);
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        .progress-bar {
+            background: var(--border);
+            height: 8px;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--success);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: var(--bg);
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .katex-display {
+            overflow-x: auto;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-links {
+                gap: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 70px 1rem 2rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo"><a href="index.html">DE Course</a></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ch5-overview.html">5.0 Overview</a>
+            <a href="ch5-power-series.html">5.1 Power Series</a>
+            <a href="ch5-frobenius.html">5.2 Frobenius</a>
+            <a href="ch5-euler-method.html">5.3 Euler's Method</a>
+            <a href="ch5-runge-kutta.html" class="active">5.4 Runge-Kutta</a>
+            <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+            <a href="#intro">Intro</a>
+            <a href="#theory">Theory</a>
+            <a href="#method">Method</a>
+            <a href="#examples">Examples</a>
+            <a href="#practice">Practice</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Introduction Section -->
+        <section id="intro">
+            <h1>5.4 — Runge-Kutta Methods</h1>
+            <p class="subtitle">The workhorse of numerical differential equations</p>
+
+            <h2>Learning Objectives</h2>
+            <ul class="step-list">
+                <li>Understand the RK4 algorithm and why it uses four slope evaluations</li>
+                <li>Compute all four slopes (<span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span>, <span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span>, <span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub></math></span>, <span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub></math></span>) in a single step</li>
+                <li>Compare the accuracy of RK4 with Euler's method</li>
+                <li>Understand the error order and practical implications</li>
+                <li>Apply RK4 to systems of differential equations</li>
+            </ul>
+
+            <h2>Motivation</h2>
+            <div class="box-accent">
+                <p><strong>Why Runge-Kutta?</strong> The RK4 method is considered the workhorse of numerical methods in science and engineering. It provides exceptional accuracy with manageable computational cost. You will encounter RK4 in:</p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li>Engineering simulations (structural mechanics, control systems)</li>
+                    <li>Physics simulations (orbital mechanics, fluid dynamics)</li>
+                    <li>Biology and medicine (pharmacokinetics, population dynamics)</li>
+                    <li>Climate modeling and weather prediction</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Theory Section -->
+        <section id="theory">
+            <h2>From Euler to Runge-Kutta</h2>
+            <p>Euler's method uses a single slope evaluation at the beginning of each step, giving <span class="katex"><math><mi>O</mi><mo>(</mo><mi>h</mi><mo>)</mo></math></span> accuracy. Runge-Kutta methods use <em>multiple</em> slope evaluations at strategic points to achieve higher-order accuracy. The 4th-order method (RK4) uses four slope evaluations to achieve <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>4</mn></msup><mo>)</mo></math></span> accuracy.</p>
+
+            <h2>The RK4 Formulas</h2>
+            <div class="definition-box">
+                <p class="box-label">Definition: Fourth-Order Runge-Kutta (RK4)</p>
+                <p>Given <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mi>f</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo></math></span> with initial condition <span class="katex"><math><mi>y</mi><mo>(</mo><msub><mi>x</mi><mn>0</mn></msub><mo>)</mo><mo>=</mo><msub><mi>y</mi><mn>0</mn></msub></math></span> and step size <span class="katex"><math><mi>h</mi></math></span>, the RK4 step is:</p>
+
+                <div class="math-display">
+                    <div class="katex-display">$$k_1 = f(x_n, y_n)$$</div>
+                    <div class="katex-display">$$k_2 = f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{h}{2}k_1\right)$$</div>
+                    <div class="katex-display">$$k_3 = f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{h}{2}k_2\right)$$</div>
+                    <div class="katex-display">$$k_4 = f(x_n + h,\; y_n + h\,k_3)$$</div>
+                    <div class="katex-display">$$y_{n+1} = y_n + \tfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$</div>
+                </div>
+            </div>
+
+            <h3>Intuition Behind RK4</h3>
+            <p><strong><span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span>:</strong> Slope at the start of the interval: <span class="katex"><math><mi>f</mi><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>)</mo></math></span></p>
+
+            <p><strong><span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span>:</strong> Slope at the midpoint using <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span> to estimate the midpoint value</p>
+
+            <p><strong><span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub></math></span>:</strong> Slope at the midpoint using <span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span> (a refined estimate)</p>
+
+            <p><strong><span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub></math></span>:</strong> Slope at the end of the interval using <span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub></math></span></p>
+
+            <p>The final update uses a <strong>weighted average</strong> of these four slopes:</p>
+            <div class="math-display">
+                <div class="katex-display">$$\text{weight} = \frac{1}{6}(1 + 2 + 2 + 1)$$</div>
+            </div>
+            <p>This weighting (Simpson's rule-like) gives extraordinary accuracy by sampling the slope in a strategic pattern.</p>
+
+            <h2>Error Analysis</h2>
+            <div class="theorem-box">
+                <p class="box-label">Theorem: RK4 Error</p>
+                <p><strong>Local Truncation Error:</strong> <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>5</mn></msup><mo>)</mo></math></span></p>
+                <p><strong>Global Error:</strong> <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>4</mn></msup><mo>)</mo></math></span></p>
+                <p>RK4 is a fourth-order method. To reduce error by a factor of 16, halve the step size <span class="katex"><math><mi>h</mi></math></span>.</p>
+            </div>
+
+            <h2>Comparison of Methods</h2>
+            <div class="tip-box">
+                <p class="box-label">Quick Reference: Comparing Numerical Methods</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Order</th>
+                            <th><span class="katex"><math><mi>f</mi></math></span> Evaluations per Step</th>
+                            <th>Typical Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Euler</td>
+                            <td><span class="katex"><math><mi>O</mi><mo>(</mo><mi>h</mi><mo>)</mo></math></span></td>
+                            <td>1</td>
+                            <td>Quick sketches, educational purposes</td>
+                        </tr>
+                        <tr>
+                            <td>Improved Euler (RK2)</td>
+                            <td><span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>2</mn></msup><mo>)</mo></math></span></td>
+                            <td>2</td>
+                            <td>Better accuracy, simple code</td>
+                        </tr>
+                        <tr>
+                            <td>RK4</td>
+                            <td><span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>4</mn></msup><mo>)</mo></math></span></td>
+                            <td>4</td>
+                            <td>Standard default for production code</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Method Section -->
+        <section id="method">
+            <h2>Step-by-Step RK4 Algorithm</h2>
+            <ol class="step-list">
+                <li><strong>Set up:</strong> Define the differential equation <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mi>f</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo></math></span>, initial condition <span class="katex"><math><mo>(</mo><msub><mi>x</mi><mn>0</mn></msub><mo>,</mo><msub><mi>y</mi><mn>0</mn></msub><mo>)</mo></math></span>, and step size <span class="katex"><math><mi>h</mi></math></span>.</li>
+                <li><strong>Compute <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span>:</strong> <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>)</mo></math></span></li>
+                <li><strong>Compute <span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span>:</strong> <span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><mo>/</mo><mn>2</mn><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>+</mo><mo>(</mo><mi>h</mi><mo>/</mo><mn>2</mn><mo>)</mo><msub><mi>k</mi><mn>1</mn></msub><mo>)</mo></math></span></li>
+                <li><strong>Compute <span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub></math></span>:</strong> <span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><mo>/</mo><mn>2</mn><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>+</mo><mo>(</mo><mi>h</mi><mo>/</mo><mn>2</mn><mo>)</mo><msub><mi>k</mi><mn>2</mn></msub><mo>)</mo></math></span></li>
+                <li><strong>Compute <span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub></math></span>:</strong> <span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><msub><mi>k</mi><mn>3</mn></msub><mo>)</mo></math></span></li>
+                <li><strong>Update:</strong> <span class="katex"><math><msub><mi>y</mi><mi>n</mi><mo>+</mo><mn>1</mn></msub><mo>=</mo><msub><mi>y</mi><mi>n</mi></msub><mo>+</mo><mo>(</mo><mi>h</mi><mo>/</mo><mn>6</mn><mo>)</mo><mo>(</mo><msub><mi>k</mi><mn>1</mn></msub><mo>+</mo><mn>2</mn><msub><mi>k</mi><mn>2</mn></msub><mo>+</mo><mn>2</mn><msub><mi>k</mi><mn>3</mn></msub><mo>+</mo><msub><mi>k</mi><mn>4</mn></msub><mo>)</mo></math></span></li>
+                <li><strong>Advance:</strong> <span class="katex"><math><msub><mi>x</mi><mi>n</mi><mo>+</mo><mn>1</mn></msub><mo>=</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi></math></span></li>
+                <li><strong>Repeat:</strong> Continue until you reach the desired endpoint.</li>
+            </ol>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples">
+            <h2>Worked Examples</h2>
+
+            <!-- Example 1 -->
+            <button class="toggle-btn" onclick="toggleContent(this)">Example 1: y' = y with One Step</button>
+            <div class="toggle-content">
+                <div class="box-primary">
+                    <p><strong>Problem:</strong> Solve <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mi>y</mi></math></span>, <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mn>1</mn></math></span>, with <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.1</mn></math></span>. Find <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0.1</mn><mo>)</mo></math></span>.</p>
+
+                    <h4>Solution:</h4>
+                    <p><strong>Setup:</strong> <span class="katex"><math><mi>f</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>=</mo><mi>y</mi></math></span>, <span class="katex"><math><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></math></span>, <span class="katex"><math><msub><mi>y</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn></math></span>, <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.1</mn></math></span></p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Calculation</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mi>f</mi><mo>(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>)</mo><mo>=</mo><mn>1</mn></math></span></td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mi>f</mi><mo>(</mo><mn>0.05</mn><mo>,</mo><mn>1</mn><mo>+</mo><mn>0.05</mn><mo>)</mo><mo>=</mo><mi>f</mi><mo>(</mo><mn>0.05</mn><mo>,</mo><mn>1.05</mn><mo>)</mo><mo>=</mo><mn>1.05</mn></math></span></td>
+                                <td>1.05</td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mi>f</mi><mo>(</mo><mn>0.05</mn><mo>,</mo><mn>1</mn><mo>+</mo><mn>0.05</mn><mo>(</mo><mn>1.05</mn><mo>)</mo><mo>)</mo><mo>=</mo><mn>1.0525</mn></math></span></td>
+                                <td>1.0525</td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mi>f</mi><mo>(</mo><mn>0.1</mn><mo>,</mo><mn>1</mn><mo>+</mo><mn>0.1</mn><mo>(</mo><mn>1.0525</mn><mo>)</mo><mo>)</mo><mo>=</mo><mn>1.10525</mn></math></span></td>
+                                <td>1.10525</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 1.5rem;"><strong>RK4 Update:</strong></p>
+                    <div class="math-display">
+                        <div class="katex-display">$$y_1 = 1 + \frac{0.1}{6}(1 + 2(1.05) + 2(1.0525) + 1.10525)$$</div>
+                        <div class="katex-display">$$y_1 = 1 + \frac{0.1}{6}(6.31075) = 1 + 0.10517083... = 1.10517083...$$</div>
+                    </div>
+
+                    <p><strong>Exact solution:</strong> <span class="katex"><math><mi>y</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msup><mi>e</mi><mi>x</mi></msup></math></span>, so <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0.1</mn><mo>)</mo><mo>=</mo><msup><mi>e</mi><mn>0.1</mn></msup><mo>=</mo><mn>1.10517092...</mn></mo></math></span></p>
+
+                    <p><strong>Error:</strong> <span class="katex"><math><mo>|</mo><mn>1.10517083</mn><mo>−</mo><mn>1.10517092</mn><mo>|</mo><mo>≈</mo><mn>8.5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>8</mn></mrow></msup></math></span> (microscopic!)</p>
+
+                    <p><strong>Compare with Euler:</strong> Euler gives <span class="katex"><math><mi>y</mi><mn>_1 = 1 + 0.1(1) = 1.1</mn></math></span> with error <span class="katex"><math><mo>≈</mo><mn>0.005</mn></math></span> — about 59,000 times larger!</p>
+                </div>
+            </div>
+
+            <!-- Example 2 -->
+            <button class="toggle-btn" onclick="toggleContent(this)">Example 2: y' = x + y with 5 Steps</button>
+            <div class="toggle-content">
+                <div class="box-primary">
+                    <p><strong>Problem:</strong> Solve <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mi>x</mi><mo>+</mo><mi>y</mi></math></span>, <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mn>1</mn></math></span>, with <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.2</mn></math></span>. Find <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></span>.</p>
+
+                    <h4>Solution:</h4>
+                    <p>We compute 5 steps, each with the full RK4 formula. Here's a summary table:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><span class="katex"><math><mi>n</mi></math></span></th>
+                                <th><span class="katex"><math><msub><mi>x</mi><mi>n</mi></msub></math></span></th>
+                                <th><span class="katex"><math><msub><mi>y</mi><mi>n</mi></msub></math></span></th>
+                                <th><span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span></th>
+                                <th><span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span></th>
+                                <th><span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub></math></span></th>
+                                <th><span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub></math></span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>0.0</td>
+                                <td>1.0000</td>
+                                <td>1.0000</td>
+                                <td>1.2000</td>
+                                <td>1.2200</td>
+                                <td>1.4640</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>0.2</td>
+                                <td>1.2427</td>
+                                <td>1.4427</td>
+                                <td>1.6875</td>
+                                <td>1.7103</td>
+                                <td>2.0080</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>0.4</td>
+                                <td>1.5836</td>
+                                <td>1.9836</td>
+                                <td>2.2620</td>
+                                <td>2.2888</td>
+                                <td>2.6511</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>0.6</td>
+                                <td>2.0533</td>
+                                <td>2.6533</td>
+                                <td>2.9795</td>
+                                <td>3.0115</td>
+                                <td>3.4470</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>0.8</td>
+                                <td>2.6968</td>
+                                <td>3.4968</td>
+                                <td>3.8793</td>
+                                <td>3.9185</td>
+                                <td>4.4305</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>1.0</td>
+                                <td>3.5681</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 1.5rem;"><strong>RK4 Result:</strong> <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo><mo>≈</mo><mn>3.5681</mn></math></span></p>
+
+                    <p><strong>Exact solution:</strong> <span class="katex"><math><mi>y</mi><mo>=</mo><mn>2</mn><msup><mi>e</mi><mi>x</mi></msup><mo>−</mo><mi>x</mi><mo>−</mo><mn>1</mn></math></span>, so <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo><mo>=</mo><mn>2</mn><msup><mi>e</mi><mn>1</mn></msup><mo>−</mo><mn>1</mn><mo>−</mo><mn>1</mn><mo>=</mo><mn>2</mn><mi>e</mi><mo>−</mo><mn>2</mn><mo>≈</mo><mn>3.4366</mn></math></span></p>
+
+                    <p><strong>Error:</strong> <span class="katex"><math><mo>|</mo><mn>3.5681</mn><mo>−</mo><mn>3.4366</mn><mo>|</mo><mo>≈</mo><mn>0.1315</mn></math></span> (very good for 5 steps with <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.2</mn></math></span>)</p>
+                </div>
+            </div>
+
+            <!-- Example 3 -->
+            <button class="toggle-btn" onclick="toggleContent(this)">Example 3: y' = -2xy with Exact Comparison</button>
+            <div class="toggle-content">
+                <div class="box-primary">
+                    <p><strong>Problem:</strong> Solve <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mo>−</mo><mn>2</mn><mi>x</mi><mi>y</mi></math></span>, <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mn>1</mn></math></span>, with <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.25</mn></math></span>. Find <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></span>.</p>
+
+                    <h4>Solution:</h4>
+                    <p>This problem has an exact solution: <span class="katex"><math><mi>y</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></msup></math></span>, so <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>≈</mo><mn>0.36788</mn></math></span></p>
+
+                    <p>Using RK4 with only <strong>4 steps</strong> (<span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.25</mn></math></span>):</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th><span class="katex"><math><mi>x</mi></math></span></th>
+                                <th>RK4 <span class="katex"><math><mi>y</mi></math></span></th>
+                                <th>Exact <span class="katex"><math><mi>y</mi></math></span></th>
+                                <th>Error</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>0.0</td>
+                                <td>1.00000</td>
+                                <td>1.00000</td>
+                                <td>0.00000</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>0.25</td>
+                                <td>0.93941</td>
+                                <td>0.93941</td>
+                                <td>0.00000</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>0.50</td>
+                                <td>0.77848</td>
+                                <td>0.77880</td>
+                                <td>0.00032</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>0.75</td>
+                                <td>0.55383</td>
+                                <td>0.55432</td>
+                                <td>0.00049</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>1.0</td>
+                                <td>0.36779</td>
+                                <td>0.36788</td>
+                                <td>0.00009</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 1.5rem;"><strong>Result:</strong> RK4 with just 4 steps gives <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo><mo>≈</mo><mn>0.36779</mn></math></span>, accurate to 4 decimal places! The error is only <span class="katex"><math><mn>0.00009</mn></math></span>.</p>
+                </div>
+            </div>
+
+            <!-- Example 4 -->
+            <button class="toggle-btn" onclick="toggleContent(this)">Example 4: Method Comparison (Euler vs RK2 vs RK4)</button>
+            <div class="toggle-content">
+                <div class="box-primary">
+                    <p><strong>Problem:</strong> Solve <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mi>y</mi></math></span>, <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mn>1</mn></math></span> to <span class="katex"><math><mi>x</mi><mo>=</mo><mn>1</mn></math></span> with <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.5</mn></math></span>. Compare three methods.</p>
+
+                    <h4>Solution:</h4>
+                    <p><strong>Exact solution:</strong> <span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo><mo>=</mo><msup><mi>e</mi></msup><mo>≈</mo><mn>2.71828</mn></math></span></p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th><span class="katex"><math><mi>y</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></span></th>
+                                <th>Error</th>
+                                <th>Functions Called</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Euler</td>
+                                <td>2.2500</td>
+                                <td>0.4683</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Improved Euler (RK2)</td>
+                                <td>2.6875</td>
+                                <td>0.0308</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>RK4</td>
+                                <td>2.71735</td>
+                                <td>0.00093</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exact</strong></td>
+                                <td>2.71828</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 1.5rem;"><strong>Observation:</strong> RK4 with 8 function evaluations gives error <span class="katex"><math><mn>0.00093</mn></math></span>, while Euler with 2 evaluations gives error <span class="katex"><math><mn>0.4683</mn></math></span> — RK4 is <strong>500 times more accurate</strong> for the same computational work!</p>
+                </div>
+            </div>
+
+            <!-- Example 5 -->
+            <button class="toggle-btn" onclick="toggleContent(this)">Example 5: System of ODEs (Circular Motion)</button>
+            <div class="toggle-content">
+                <div class="box-primary">
+                    <p><strong>Problem:</strong> Solve the system:</p>
+                    <div class="math-display">
+                        <div class="katex-display">$$x' = -y, \quad y' = x, \quad x(0) = 1, \quad y(0) = 0$$</div>
+                    </div>
+                    <p>with <span class="katex"><math><mi>h</mi><mo>=</mo><mn>0.1</mn></math></span>. Compute one step.</p>
+
+                    <h4>Solution:</h4>
+                    <p>For systems, RK4 uses <em>vector slopes</em>. Let <span class="katex"><math><mi>f</mi><mn>_1</mn><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>=</mo><mo>−</mo><mi>y</mi></math></span> and <span class="katex"><math><mi>f</mi><mn>_2</mn><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>=</mo><mi>x</mi></math></span>.</p>
+
+                    <p><strong>At step 0:</strong> <span class="katex"><math><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn></math></span>, <span class="katex"><math><msub><mi>y</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></math></span></p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Slope</th>
+                                <th><span class="katex"><math><mi>k</mi></math></span> (for <span class="katex"><math><mi>x</mi></math></span>)</th>
+                                <th><span class="katex"><math><mi>l</mi></math></span> (for <span class="katex"><math><mi>y</mi></math></span>)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>l</mi><mn>1</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mo>−</mo><mn>0</mn><mo>=</mo><mn>0</mn></math></span></td>
+                                <td><span class="katex"><math><mn>1</mn></math></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub><mo>,</mo><msub><mi>l</mi><mn>2</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mo>−</mo><mo>(</mo><mn>0</mn><mo>+</mo><mn>0.05</mn><mo>)</mo><mo>=</mo><mo>−</mo><mn>0.05</mn></math></span></td>
+                                <td><span class="katex"><math><mn>1</mn></math></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>3</mn></msub><mo>,</mo><msub><mi>l</mi><mn>3</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mo>−</mo><mo>(</mo><mn>0</mn><mo>+</mo><mn>0.05</mn><mo>)</mo><mo>=</mo><mo>−</mo><mn>0.05</mn></math></span></td>
+                                <td><span class="katex"><math><mn>1</mn></math></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><math><msub><mi>k</mi><mn>4</mn></msub><mo>,</mo><msub><mi>l</mi><mn>4</mn></msub></math></span></td>
+                                <td><span class="katex"><math><mo>−</mo><mo>(</mo><mn>0</mn><mo>+</mo><mn>0.1</mn><mo>)</mo><mo>=</mo><mo>−</mo><mn>0.1</mn></math></span></td>
+                                <td><span class="katex"><math><mn>1</mn></math></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 1.5rem;"><strong>RK4 Updates:</strong></p>
+                    <div class="math-display">
+                        <div class="katex-display">$$x_1 = 1 + \frac{0.1}{6}(0 + 2(-0.05) + 2(-0.05) + (-0.1)) = 1 - 0.00833... \approx 0.99167$$</div>
+                        <div class="katex-display">$$y_1 = 0 + \frac{0.1}{6}(1 + 2(1) + 2(1) + 1) = 0.1$$</div>
+                    </div>
+
+                    <p><strong>Result:</strong> <span class="katex"><math><mo>(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>1</mn></msub><mo>)</mo><mo>≈</mo><mo>(</mo><mn>0.99167</mn><mo>,</mo><mn>0.1</mn><mo>)</mo></math></span></p>
+
+                    <p><strong>Exact solution:</strong> <span class="katex"><math><mi>x</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>cos</mi><mi>t</mi></math></span>, <span class="katex"><math><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>sin</mi><mi>t</mi></math></span> (unit circle)</p>
+                    <p>At <span class="katex"><math><mi>t</mi><mo>=</mo><mn>0.1</mn></math></span>: <span class="katex"><math><mo>(</mo><mn>0.99500</mn><mo>,</mo><mn>0.09983</mn><mo>)</mo></math></span></p>
+                    <p><strong>Error:</strong> Tiny! RK4 perfectly captures circular motion.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice">
+            <h2>Practice Problems</h2>
+            <p style="margin-bottom: 2rem;">Test your understanding with these multiple-choice questions. Click a choice to check your answer.</p>
+
+            <div style="margin-bottom: 1rem;">
+                <strong>Progress:</strong>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <p id="scoreDisplay" style="text-align: center; margin-top: 0.5rem; color: var(--text-muted);">0 / 6 correct</p>
+            </div>
+
+            <!-- Question 1 -->
+            <div class="quiz-problem">
+                <h4>Question 1: Computing k₁</h4>
+                <p>For <span class="katex"><math><mi>y</mi><mo>'</mo><mo>=</mo><mi>x</mi><mn>2</mn><mo>+</mo><mi>y</mi></math></span>, <span class="katex"><math><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mn>1</mn></math></span>, what is <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub></math></span>?</p>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">A) <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mn>0</mn></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">B) <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mn>0.5</mn></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 1)">C) <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">D) <span class="katex"><math><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mn>2</mn></math></span></button>
+                <div class="quiz-feedback" id="feedback-1"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="quiz-problem">
+                <h4>Question 2: Understanding k₂</h4>
+                <p>In RK4, <span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span> is evaluated at which point?</p>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">A) At <span class="katex"><math><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>)</mo></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 1)">B) At <span class="katex"><math><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><mo>/</mo><mn>2</mn><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><msub><mi>k</mi><mn>1</mn></msub><mo>/</mo><mn>2</mn><mo>)</mo></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">C) At <span class="katex"><math><mo>(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo>+</mo><mi>h</mi><msub><mi>k</mi><mn>1</mn></msub><mo>)</mo></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">D) At the endpoint only</button>
+                <div class="quiz-feedback" id="feedback-2"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="quiz-problem">
+                <h4>Question 3: The RK4 Weight</h4>
+                <p>The RK4 update formula uses the weight <span class="katex"><math><mi>h</mi><mo>/</mo><mn>6</mn></math></span>. What is the coefficient of <span class="katex"><math><msub><mi>k</mi><mn>2</mn></msub></math></span> in this formula?</p>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">A) <span class="katex"><math><mn>1</mn><mo>/</mo><mn>6</mn></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 1)">B) <span class="katex"><math><mn>2</mn><mo>/</mo><mn>6</mn></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">C) <span class="katex"><math><mn>3</mn><mo>/</mo><mn>6</mn></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">D) <span class="katex"><math><mn>4</mn><mo>/</mo><mn>6</mn></math></span></button>
+                <div class="quiz-feedback" id="feedback-3"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="quiz-problem">
+                <h4>Question 4: Error Order of RK4</h4>
+                <p>What is the global error order of the RK4 method?</p>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">A) <span class="katex"><math><mi>O</mi><mo>(</mo><mi>h</mi><mo>)</mo></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">B) <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>2</mn></msup><mo>)</mo></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">C) <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>3</mn></msup><mo>)</mo></math></span></button>
+                <button class="choice-btn" onclick="checkChoice(this, 1)">D) <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>4</mn></msup><mo>)</mo></math></span></button>
+                <div class="quiz-feedback" id="feedback-4"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="quiz-problem">
+                <h4>Question 5: Comparing Methods</h4>
+                <p>To reduce the global error by a factor of 256, by what factor should you decrease <span class="katex"><math><mi>h</mi></math></span> in RK4?</p>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">A) Factor of 2</button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">B) Factor of 4</button>
+                <button class="choice-btn" onclick="checkChoice(this, 1)">C) Factor of 4 (since <span class="katex"><math><mn>256</mn><mo>=</mo><mn>4</mn><mo>^</mo><mn>4</mn></math></span>)</button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">D) Factor of 256</button>
+                <div class="quiz-feedback" id="feedback-5"></div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="quiz-problem">
+                <h4>Question 6: RK4 Applications</h4>
+                <p>Which of the following is <strong>not</strong> a common application of RK4?</p>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">A) Orbital mechanics and satellite trajectories</button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">B) Climate and weather prediction</button>
+                <button class="choice-btn" onclick="checkChoice(this, 1)">C) Solving linear algebraic systems of equations</button>
+                <button class="choice-btn" onclick="checkChoice(this, 0)">D) Biological population dynamics</button>
+                <div class="quiz-feedback" id="feedback-6"></div>
+            </div>
+        </section>
+
+        <!-- Quick Reference Card -->
+        <section>
+            <h2>Quick Reference Card</h2>
+            <div class="definition-box">
+                <p class="box-label">RK4 Formula at a Glance</p>
+                <div class="math-display">
+                    <div class="katex-display">$$\begin{align}
+                    k_1 &= f(x_n, y_n)\\
+                    k_2 &= f\!\left(x_n + \tfrac{h}{2}, y_n + \tfrac{h}{2}k_1\right)\\
+                    k_3 &= f\!\left(x_n + \tfrac{h}{2}, y_n + \tfrac{h}{2}k_2\right)\\
+                    k_4 &= f(x_n + h, y_n + hk_3)\\
+                    y_{n+1} &= y_n + \tfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+                    \end{align}$$</div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <p class="box-label">Key Facts</p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Order:</strong> Fourth-order method, <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>4</mn></msup><mo>)</mo></math></span> global error</li>
+                    <li><strong>Function calls:</strong> 4 evaluations of <span class="katex"><math><mi>f</mi></math></span> per step</li>
+                    <li><strong>Local truncation error:</strong> <span class="katex"><math><mi>O</mi><mo>(</mo><msup><mi>h</mi><mn>5</mn></msup><mo>)</mo></math></span></li>
+                    <li><strong>Halve <span class="katex"><math><mi>h</mi></math></span>:</strong> Error is divided by <span class="katex"><math><mn>2</mn><mo>^</mo><mn>4</mn><mo>=</mo><mn>16</mn></math></span></li>
+                    <li><strong>Stability:</strong> Good stability for most problems; region depends on the problem</li>
+                    <li><strong>Best used when:</strong> You need high accuracy without adaptive step control</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Department of Mathematics and Statistics, Qatar University
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+    <script>
+        // Initialize KaTeX
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false }
+                ]
+            });
+        });
+
+        // Track answers
+        const answers = {
+            1: 2, // Question 1: C (index 2)
+            2: 1, // Question 2: B (index 1)
+            3: 1, // Question 3: B (index 1)
+            4: 3, // Question 4: D (index 3)
+            5: 2, // Question 5: C (index 2)
+            6: 2  // Question 6: C (index 2)
+        };
+
+        let score = 0;
+        const answered = new Set();
+
+        function checkChoice(btn, questionNum) {
+            const parent = btn.closest('.quiz-problem');
+            const questionIndex = Array.from(document.querySelectorAll('.quiz-problem')).indexOf(parent) + 1;
+
+            if (answered.has(questionIndex)) return;
+
+            const choices = parent.querySelectorAll('.choice-btn');
+            const correctIndex = answers[questionIndex];
+            const selectedIndex = Array.from(choices).indexOf(btn);
+            const feedback = parent.querySelector('.quiz-feedback');
+
+            choices.forEach((choice, idx) => {
+                choice.disabled = true;
+                if (idx === correctIndex) {
+                    choice.classList.add('correct');
+                } else if (idx === selectedIndex && selectedIndex !== correctIndex) {
+                    choice.classList.add('incorrect');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                feedback.textContent = '✓ Correct!';
+                feedback.classList.add('correct', 'show');
+                score++;
+            } else {
+                feedback.textContent = '✗ Incorrect. Review the RK4 formulas.';
+                feedback.classList.add('incorrect', 'show');
+            }
+
+            answered.add(questionIndex);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalQuestions = 6;
+            const percentage = (score / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('scoreDisplay').textContent = `${score} / ${totalQuestions} correct`;
+        }
+
+        function toggleContent(btn) {
+            const content = btn.nextElementSibling;
+            btn.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

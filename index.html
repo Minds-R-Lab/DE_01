@@ -653,18 +653,18 @@
     </a>
 
     <!-- Chapter 5 -->
-    <div class="chapter-card coming-soon">
-      <span class="status-badge soon">Coming Soon</span>
+    <a class="chapter-card active" href="#chapter5">
+      <span class="status-badge available">Available</span>
       <div class="chapter-num">05</div>
       <h3>Series Solutions &amp; Numerical Methods</h3>
       <p>Power series solutions, Frobenius method, Euler's method, Runge-Kutta, and error analysis.</p>
       <div class="topic-list">
-        <span class="topic-tag">Power Series</span>
-        <span class="topic-tag">Frobenius</span>
-        <span class="topic-tag">Euler's Method</span>
-        <span class="topic-tag">Runge-Kutta</span>
+        <span class="topic-tag done">Power Series</span>
+        <span class="topic-tag done">Frobenius</span>
+        <span class="topic-tag done">Euler's Method</span>
+        <span class="topic-tag done">Runge-Kutta</span>
       </div>
-    </div>
+    </a>
 
   </div>
 
@@ -907,6 +907,62 @@
           <h4>4.3 — Phase Portraits &amp; Stability</h4>
           <p>Classifying equilibria: nodes, saddles, spirals, centers. The trace-determinant plane, stability analysis, and interactive phase portrait exploration.</p>
           <div class="math-preview">\(\Delta = \text{tr}(A)^2 - 4\det(A)\)</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Chapter 5 Detail -->
+  <div class="ch1-detail" id="chapter5">
+    <h2>Chapter 5 — Series Solutions &amp; Numerical Methods</h2>
+    <p>When exact methods fail, two powerful approaches remain: represent solutions as infinite series near special points, or approximate solutions numerically step by step.</p>
+
+    <!-- Overview -->
+    <a class="topic-card" href="ch5-overview.html" style="margin-bottom:1.5rem; border:2px solid var(--primary); background:var(--primary-light);">
+      <div class="topic-icon" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">&#9733;</div>
+      <div>
+        <h4>Chapter 5 Overview — Start Here</h4>
+        <p>The big picture: why we need series solutions and numerical methods, how the topics connect, and a roadmap for the chapter.</p>
+        <div class="math-preview">\(y = \sum_{n=0}^{\infty} a_n (x - x_0)^n\)</div>
+      </div>
+    </a>
+
+    <div class="topic-grid">
+
+      <a class="topic-card" href="ch5-power-series.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">P</div>
+        <div>
+          <h4>5.1 — Power Series Solutions</h4>
+          <p>Finding solutions as power series around ordinary points. Recurrence relations, radius of convergence, and connections to special functions.</p>
+          <div class="math-preview">\(y = \sum_{n=0}^{\infty} a_n x^n\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch5-frobenius.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">F</div>
+        <div>
+          <h4>5.2 — Frobenius Method</h4>
+          <p>Extending series solutions to regular singular points. The indicial equation, three cases for the second solution, and Bessel functions.</p>
+          <div class="math-preview">\(y = \sum_{n=0}^{\infty} a_n x^{n+r}\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch5-euler-method.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">E</div>
+        <div>
+          <h4>5.3 — Euler's Method</h4>
+          <p>The simplest numerical method: follow the tangent line step by step. Error analysis, improved Euler (Heun's method), and stability.</p>
+          <div class="math-preview">\(y_{n+1} = y_n + h\,f(x_n, y_n)\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch5-runge-kutta.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">R</div>
+        <div>
+          <h4>5.4 — Runge-Kutta Methods</h4>
+          <p>The workhorse of numerical ODE solving: four slope evaluations for fourth-order accuracy. Comparison with Euler and applications to systems.</p>
+          <div class="math-preview">\(y_{n+1} = y_n + \tfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)\)</div>
         </div>
       </a>
 

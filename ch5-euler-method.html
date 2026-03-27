@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5.3 — Euler's Method & Improved Euler | Differential Equations</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    nav .logo a {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav .logo a:hover {
+      color: var(--accent);
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    nav .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    nav .nav-links a:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    nav .nav-links a.active {
+      color: var(--card);
+      background: var(--primary);
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 1.5rem 4rem;
+    }
+
+    section {
+      margin: 2rem 0;
+      scroll-margin-top: 80px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1rem 0 0.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--accent-light);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    .definition-box {
+      background: linear-gradient(135deg, var(--primary-light), #e0e7ff);
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .theorem-box {
+      background: linear-gradient(135deg, var(--accent-light), #f3e8ff);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .example-box {
+      background: linear-gradient(135deg, var(--success-light), #ecfdf5);
+      border-left: 4px solid var(--success);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .warning-box {
+      background: linear-gradient(135deg, var(--warning-light), #fffbeb);
+      border-left: 4px solid var(--warning);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, #e0e7ff, var(--primary-light));
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .box-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .math-display {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow-x: auto;
+    }
+
+    .step-list {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .step-list li {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-list li::before {
+      content: attr(data-step);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .toggle-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin: 1rem 0;
+      width: 100%;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-btn:hover {
+      background: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .toggle-btn::after {
+      content: '▼';
+      transition: transform 0.3s;
+      font-size: 0.8rem;
+    }
+
+    .toggle-btn.active::after {
+      transform: rotate(-180deg);
+    }
+
+    .toggle-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: var(--card);
+      padding: 0 1.25rem;
+    }
+
+    .toggle-content.active {
+      max-height: 3000px;
+      padding: 1.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    th {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .quiz-problem {
+      background: var(--card);
+      border: 2px solid var(--border);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-problem h4 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .choice-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .choice-btn.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--success-light);
+      color: var(--success);
+      border-left: 4px solid var(--success);
+    }
+
+    .quiz-feedback.incorrect {
+      background: var(--danger-light);
+      color: var(--danger);
+      border-left: 4px solid var(--danger);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .katex-display {
+      display: block;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 80px 1rem 2rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      nav .nav-links {
+        gap: 0.25rem;
+        font-size: 0.8rem;
+      }
+
+      nav .nav-links a {
+        padding: 0.4rem 0.5rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.4rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo"><a href="index.html">DE Course</a></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="ch5-overview.html">5.0 Overview</a>
+      <a href="ch5-power-series.html">5.1 Power Series</a>
+      <a href="ch5-frobenius.html">5.2 Frobenius</a>
+      <a href="ch5-euler-method.html" class="active">5.3 Euler's Method</a>
+      <a href="ch5-runge-kutta.html">5.4 Runge-Kutta</a>
+      <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+      <a href="#intro">Intro</a>
+      <a href="#theory">Theory</a>
+      <a href="#method">Method</a>
+      <a href="#examples">Examples</a>
+      <a href="#practice">Practice</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section id="intro">
+      <h1>5.3 — Euler's Method & Improved Euler</h1>
+      <p class="subtitle">Numerical approximation when exact solutions are impossible</p>
+
+      <h3>Learning Objectives</h3>
+      <p>After completing this section, you should be able to:</p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+        <li>Understand the geometric interpretation of Euler's method</li>
+        <li>Implement the Euler algorithm step by step</li>
+        <li>Compute local and global truncation errors</li>
+        <li>Apply improved Euler (Heun's method) for better accuracy</li>
+      </ul>
+
+      <h3>Motivation</h3>
+      <p>
+        Many differential equations lack closed-form analytical solutions. When we cannot solve
+        <span class="math">$y' = f(x, y)$</span> explicitly, we turn to <strong>numerical methods</strong>
+        that approximate the solution step by step, following the direction field at each point.
+        Euler's method is the simplest and most intuitive approach to this problem.
+      </p>
+    </section>
+
+    <hr>
+
+    <section id="theory">
+      <h2>Theory: The Foundation</h2>
+
+      <h3>The Basic Idea</h3>
+      <p>
+        Given the initial value problem
+      </p>
+      <div class="math-display">
+        $$\frac{dy}{dx} = f(x, y), \quad y(x_0) = y_0$$
+      </div>
+      <p>
+        we want to find approximate values of $y$ at points $x_1, x_2, \ldots$ ahead of $x_0$.
+      </p>
+
+      <p>
+        At each current point $(x_n, y_n)$, the slope of the solution curve is $f(x_n, y_n)$.
+        Instead of following the actual curve, Euler's method simply follows the tangent line for a small step of size $h$:
+      </p>
+      <div class="math-display">
+        $$y_{n+1} = y_n + h \cdot f(x_n, y_n)$$
+      </div>
+      <p>
+        where $x_{n+1} = x_n + h$ and $h$ is the step size (also called mesh width).
+      </p>
+
+      <div class="definition-box">
+        <div class="box-label">Euler's Method</div>
+        <p>
+          Starting from $(x_0, y_0)$, compute successive approximations via:
+          $$x_{n+1} = x_n + h$$
+          $$y_{n+1} = y_n + h \cdot f(x_n, y_n)$$
+          for $n = 0, 1, 2, \ldots$ until reaching the target $x$ value.
+        </p>
+      </div>
+
+      <h3>Geometric Interpretation</h3>
+      <p>
+        At each point $(x_n, y_n)$, we draw the tangent line to the solution curve (which has slope $f(x_n, y_n)$).
+        We then move horizontally a distance $h$, and vertically an amount $h \cdot f(x_n, y_n)$ to find the next approximation point.
+        This is like walking along the direction field with a fixed step size.
+      </p>
+
+      <h3>Error Analysis</h3>
+      <div class="definition-box">
+        <div class="box-label">Truncation Errors</div>
+        <p>
+          <strong>Local Truncation Error (LTE):</strong> The error introduced in a single step, assuming all previous steps are exact.
+          For Euler's method, LTE $= O(h^2)$.
+        </p>
+        <p>
+          <strong>Global Truncation Error (GTE):</strong> The total accumulated error over all steps from $x_0$ to $x_f$.
+          For Euler's method, GTE $= O(h)$.
+        </p>
+        <p>
+          This makes Euler a <strong>first-order method</strong>. Doubling the number of steps (halving $h$) roughly halves the global error,
+          but at the cost of doing twice the work.
+        </p>
+      </div>
+
+      <div class="warning-box">
+        <div class="box-label">Important Note</div>
+        <p>
+          Halving the step size $h$ improves accuracy significantly, but it doubles the computational cost.
+          In practice, we often need to balance accuracy against computational feasibility.
+        </p>
+      </div>
+
+      <h3>Improved Euler (Heun's Method)</h3>
+      <p>
+        A better strategy is to use a two-stage corrector method. First, we predict using Euler's method,
+        then we correct using the average slope between the current point and the predicted next point.
+      </p>
+
+      <div class="definition-box">
+        <div class="box-label">Improved Euler Algorithm</div>
+        <p>
+          <strong>Predictor step:</strong>
+          $$\tilde{y}_{n+1} = y_n + h \cdot f(x_n, y_n)$$
+        </p>
+        <p>
+          <strong>Corrector step:</strong>
+          $$y_{n+1} = y_n + \frac{h}{2} \left[ f(x_n, y_n) + f(x_{n+1}, \tilde{y}_{n+1}) \right]$$
+        </p>
+      </div>
+
+      <div class="theorem-box">
+        <div class="box-label">Improved Euler: A Second-Order Method</div>
+        <p>
+          The improved Euler method (also called <em>Heun's method</em>) has:
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>Local truncation error: $O(h^3)$</li>
+            <li>Global truncation error: $O(h^2)$</li>
+          </ul>
+          This is a <strong>second-order method</strong>, so halving $h$ reduces the global error by a factor of 4 — much better than Euler!
+        </p>
+      </div>
+
+      <h3>Stability Considerations</h3>
+      <p>
+        For certain differential equations (especially stiff equations), if the step size $h$ is too large,
+        the numerical solution can become unstable or diverge. Checking that your computed values remain reasonable
+        is an important sanity check. If in doubt, use a smaller step size.
+      </p>
+
+      <div class="tip-box">
+        <div class="box-label">Practical Tip</div>
+        <p>
+          To test stability, compute the solution with step sizes $h$ and $h/2$. If the two results agree to your desired precision,
+          you can trust the smaller-$h$ result. This is the basis of adaptive step-size control in modern codes.
+        </p>
+      </div>
+    </section>
+
+    <hr>
+
+    <section id="method">
+      <h2>Step-by-Step: How to Apply Euler's Method</h2>
+
+      <ol class="step-list">
+        <li data-step="1">
+          <strong>Set up the problem:</strong> Identify the function $f(x, y)$, the initial condition $(x_0, y_0)$,
+          the step size $h$, and the target $x$ value where you want to approximate the solution.
+        </li>
+        <li data-step="2">
+          <strong>Compute the slope:</strong> At the current point $(x_n, y_n)$, evaluate $m_n = f(x_n, y_n)$.
+        </li>
+        <li data-step="3">
+          <strong>Step forward:</strong> Move to the next point using $y_{n+1} = y_n + h \cdot m_n$.
+        </li>
+        <li data-step="4">
+          <strong>Update position:</strong> Increment the $x$-coordinate: $x_{n+1} = x_n + h$.
+        </li>
+        <li data-step="5">
+          <strong>Repeat:</strong> Continue steps 2–4 until $x_n$ reaches or exceeds your target $x$ value.
+        </li>
+        <li data-step="6">
+          <strong>For improved Euler:</strong> After step 3, use the corrector formula to refine $y_{n+1}$.
+        </li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="examples">
+      <h2>Worked Examples</h2>
+
+      <button class="toggle-btn" onclick="toggleContent(this)">
+        <span>Example 1: $y' = y$, $y(0) = 1$, $h = 0.1$, find $y(0.5)$ (Euler's Method)</span>
+      </button>
+      <div class="toggle-content">
+        <div class="example-box">
+          <div class="box-label">Solution</div>
+          <p>
+            This is the exponential growth equation. The exact solution is $y(x) = e^x$.
+            We'll take 5 steps with $h = 0.1$ to reach $x = 0.5$.
+          </p>
+
+          <p><strong>Setup:</strong> $f(x, y) = y$, $(x_0, y_0) = (0, 1)$, $h = 0.1$</p>
+
+          <p><strong>Computations:</strong></p>
+
+          <table>
+            <tr>
+              <th>$n$</th>
+              <th>$x_n$</th>
+              <th>$y_n$ (Euler)</th>
+              <th>$y_{\text{exact}}$</th>
+              <th>Error</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0.0</td>
+              <td>1.0000</td>
+              <td>1.0000</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>0.1</td>
+              <td>1.1000</td>
+              <td>1.1052</td>
+              <td>0.0052</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.2</td>
+              <td>1.2100</td>
+              <td>1.2214</td>
+              <td>0.0114</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.3</td>
+              <td>1.3310</td>
+              <td>1.3499</td>
+              <td>0.0189</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.4</td>
+              <td>1.4641</td>
+              <td>1.4918</td>
+              <td>0.0277</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>0.5</td>
+              <td>1.6105</td>
+              <td>1.6487</td>
+              <td>0.0382</td>
+            </tr>
+          </table>
+
+          <p>
+            <strong>Step-by-step:</strong>
+          </p>
+          <p>
+            Step 0 to 1: $m_0 = f(0, 1) = 1 \Rightarrow y_1 = 1 + 0.1(1) = 1.1$
+          </p>
+          <p>
+            Step 1 to 2: $m_1 = f(0.1, 1.1) = 1.1 \Rightarrow y_2 = 1.1 + 0.1(1.1) = 1.21$
+          </p>
+          <p>
+            Continue similarly for steps 3, 4, and 5.
+          </p>
+          <p>
+            <strong>Result:</strong> $y(0.5) \approx 1.6105$ (Euler) vs. $e^{0.5} \approx 1.6487$ (exact).
+            The error grows because we're accumulating local errors.
+          </p>
+        </div>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleContent(this)">
+        <span>Example 2: $y' = x + y$, $y(0) = 1$, $h = 0.2$, find $y(1)$ (Euler's Method)</span>
+      </button>
+      <div class="toggle-content">
+        <div class="example-box">
+          <div class="box-label">Solution</div>
+          <p>
+            This is a linear first-order ODE. The exact solution is $y(x) = 2e^x - x - 1$.
+            We'll take 5 steps with $h = 0.2$ from $x = 0$ to $x = 1$.
+          </p>
+
+          <p><strong>Setup:</strong> $f(x, y) = x + y$, $(x_0, y_0) = (0, 1)$, $h = 0.2$</p>
+
+          <table>
+            <tr>
+              <th>$n$</th>
+              <th>$x_n$</th>
+              <th>$f(x_n, y_n)$</th>
+              <th>$y_n$ (Euler)</th>
+              <th>$y_{\text{exact}}$</th>
+              <th>Error</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0.0</td>
+              <td>1.0</td>
+              <td>1.0000</td>
+              <td>1.0000</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>0.2</td>
+              <td>1.2</td>
+              <td>1.2000</td>
+              <td>1.2428</td>
+              <td>0.0428</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.4</td>
+              <td>1.6</td>
+              <td>1.4400</td>
+              <td>1.5595</td>
+              <td>0.1195</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.6</td>
+              <td>2.0400</td>
+              <td>1.7680</td>
+              <td>1.9739</td>
+              <td>0.2059</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.8</td>
+              <td>2.5680</td>
+              <td>2.1816</td>
+              <td>2.5526</td>
+              <td>0.3710</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>1.0</td>
+              <td>3.1816</td>
+              <td>2.7979</td>
+              <td>3.4366</td>
+              <td>0.6387</td>
+            </tr>
+          </table>
+
+          <p>
+            <strong>Result:</strong> $y(1) \approx 2.7979$ (Euler) vs. $2e - 1 - 1 \approx 3.4366$ (exact).
+            The error is substantial with this step size, showing why finer grids or better methods are needed.
+          </p>
+        </div>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleContent(this)">
+        <span>Example 3: $y' = y$, $y(0) = 1$, $h = 0.1$, find $y(0.5)$ (Improved Euler)</span>
+      </button>
+      <div class="toggle-content">
+        <div class="example-box">
+          <div class="box-label">Solution</div>
+          <p>
+            Same problem as Example 1, but now using the improved Euler (Heun's method) to show the dramatic improvement in accuracy.
+          </p>
+
+          <p><strong>Setup:</strong> $f(x, y) = y$, $(x_0, y_0) = (0, 1)$, $h = 0.1$</p>
+
+          <table>
+            <tr>
+              <th>$n$</th>
+              <th>$x_n$</th>
+              <th>$\tilde{y}_{n+1}$ (Pred.)</th>
+              <th>$y_n$ (Improved)</th>
+              <th>$y_{\text{exact}}$</th>
+              <th>Error</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0.0</td>
+              <td>—</td>
+              <td>1.0000</td>
+              <td>1.0000</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>0.1</td>
+              <td>1.1000</td>
+              <td>1.1050</td>
+              <td>1.1052</td>
+              <td>0.0002</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.2</td>
+              <td>1.2155</td>
+              <td>1.2214</td>
+              <td>1.2214</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.3</td>
+              <td>1.3436</td>
+              <td>1.3499</td>
+              <td>1.3499</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.4</td>
+              <td>1.4849</td>
+              <td>1.4918</td>
+              <td>1.4918</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>0.5</td>
+              <td>1.6410</td>
+              <td>1.6487</td>
+              <td>1.6487</td>
+              <td>0.0000</td>
+            </tr>
+          </table>
+
+          <p>
+            <strong>Detail for Step 1:</strong>
+          </p>
+          <p>
+            Predictor: $\tilde{y}_1 = 1 + 0.1 \cdot 1 = 1.1$
+          </p>
+          <p>
+            Corrector: $y_1 = 1 + \frac{0.1}{2}[1 + 1.1] = 1 + 0.05(2.1) = 1.105$
+          </p>
+
+          <p>
+            <strong>Observation:</strong> The improved Euler method is dramatically more accurate!
+            The errors are on the order of $10^{-4}$ or better, compared to $10^{-2}$ for basic Euler.
+            This is the power of second-order methods.
+          </p>
+        </div>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleContent(this)">
+        <span>Example 4: $y' = -2xy$, $y(0) = 1$, $h = 0.1$, find $y(0.5)$</span>
+      </button>
+      <div class="toggle-content">
+        <div class="example-box">
+          <div class="box-label">Solution</div>
+          <p>
+            This equation has the exact solution $y(x) = e^{-x^2}$ (a Gaussian curve).
+            We'll use Euler's method to see how it tracks this smooth, decaying function.
+          </p>
+
+          <p><strong>Setup:</strong> $f(x, y) = -2xy$, $(x_0, y_0) = (0, 1)$, $h = 0.1$</p>
+
+          <table>
+            <tr>
+              <th>$n$</th>
+              <th>$x_n$</th>
+              <th>$m_n = -2x_n y_n$</th>
+              <th>$y_n$ (Euler)</th>
+              <th>$y_{\text{exact}}$</th>
+              <th>Error</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0.0</td>
+              <td>0.0</td>
+              <td>1.0000</td>
+              <td>1.0000</td>
+              <td>0.0000</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>0.1</td>
+              <td>0.0</td>
+              <td>1.0000</td>
+              <td>0.9900</td>
+              <td>0.0100</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.2</td>
+              <td>-0.0200</td>
+              <td>0.9980</td>
+              <td>0.9608</td>
+              <td>0.0372</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.3</td>
+              <td>-0.0599</td>
+              <td>0.9920</td>
+              <td>0.9139</td>
+              <td>0.0781</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.4</td>
+              <td>-0.0794</td>
+              <td>0.9801</td>
+              <td>0.8521</td>
+              <td>0.1280</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>0.5</td>
+              <td>-0.0980</td>
+              <td>0.9603</td>
+              <td>0.7788</td>
+              <td>0.1815</td>
+            </tr>
+          </table>
+
+          <p>
+            <strong>Result:</strong> The method captures the general decay, but as $x$ increases, the slope becomes steeper
+            (in absolute value), and Euler's method underestimates the decay. Using a smaller step size would help.
+          </p>
+        </div>
+      </div>
+
+      <button class="toggle-btn" onclick="toggleContent(this)">
+        <span>Example 5: Step Size Comparison for $y' = y$, $y(0) = 1$, find $y(1)$</span>
+      </button>
+      <div class="toggle-content">
+        <div class="example-box">
+          <div class="box-label">Solution</div>
+          <p>
+            To illustrate the convergence of Euler's method as we decrease the step size,
+            we solve the same problem with different values of $h$. The exact answer is $e \approx 2.71828$.
+          </p>
+
+          <table>
+            <tr>
+              <th>Step Size $h$</th>
+              <th>Number of Steps</th>
+              <th>$y_{\text{approx}}(1)$</th>
+              <th>Error</th>
+              <th>Error Ratio</th>
+            </tr>
+            <tr>
+              <td>0.5</td>
+              <td>2</td>
+              <td>2.2500</td>
+              <td>0.4683</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>0.25</td>
+              <td>4</td>
+              <td>2.4414</td>
+              <td>0.2769</td>
+              <td>1.69</td>
+            </tr>
+            <tr>
+              <td>0.1</td>
+              <td>10</td>
+              <td>2.5937</td>
+              <td>0.1246</td>
+              <td>2.22</td>
+            </tr>
+            <tr>
+              <td>0.05</td>
+              <td>20</td>
+              <td>2.6533</td>
+              <td>0.0650</td>
+              <td>1.92</td>
+            </tr>
+          </table>
+
+          <p>
+            <strong>Observation:</strong> As $h$ decreases, the error roughly decreases proportionally to $h$
+            (the error ratio is close to $h_{\text{old}} / h_{\text{new}}$). This confirms that Euler's method is first-order:
+            error $\propto h$.
+          </p>
+
+          <p>
+            For example, from $h = 0.5$ to $h = 0.25$ (halving $h$), the error ratio is approximately $2$.
+            From $h = 0.25$ to $h = 0.1$, the ratio is about $2.2$. This linear convergence is characteristic of first-order methods.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section id="practice">
+      <h2>Practice Problems</h2>
+
+      <div class="quiz-problem">
+        <h4>Problem 1</h4>
+        <p>
+          Apply Euler's method to $y' = 2x$, $y(0) = 0$, with $h = 0.5$ for one step.
+          What is $y_1$ (the approximation at $x = 0.5$)?
+        </p>
+        <button class="choice-btn" onclick="checkChoice(this, 1, 'a')">A) $y_1 = 0$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 1, 'b')">B) $y_1 = 0.5$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 1, 'c')">C) $y_1 = 1$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 1, 'd')">D) $y_1 = 2$</button>
+        <div class="quiz-feedback" id="feedback-1"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-1"></div>
+        </div>
+      </div>
+
+      <div class="quiz-problem">
+        <h4>Problem 2</h4>
+        <p>
+          For the equation $y' = xy$ with $y(0) = 1$ and step size $h = 0.1$,
+          what is the Euler approximation $y_2$ (after two steps)?
+        </p>
+        <button class="choice-btn" onclick="checkChoice(this, 2, 'a')">A) $y_2 = 1.01$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 2, 'b')">B) $y_2 = 1.0201$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 2, 'c')">C) $y_2 = 1.02015$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 2, 'd')">D) $y_2 = 1.001$</button>
+        <div class="quiz-feedback" id="feedback-2"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-2"></div>
+        </div>
+      </div>
+
+      <div class="quiz-problem">
+        <h4>Problem 3</h4>
+        <p>
+          Which of the following best describes the global truncation error of Euler's method?
+        </p>
+        <button class="choice-btn" onclick="checkChoice(this, 3, 'a')">A) $O(h^2)$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 3, 'b')">B) $O(h)$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 3, 'c')">C) $O(h^3)$</button>
+        <button class="choice-btn" onclick="checkChoice(this, 3, 'd')">D) $O(h^{1/2})$</button>
+        <div class="quiz-feedback" id="feedback-3"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-3"></div>
+        </div>
+      </div>
+
+      <div class="quiz-problem">
+        <h4>Problem 4</h4>
+        <p>
+          In the improved Euler (Heun's) method, what is the purpose of the corrector step?
+        </p>
+        <button class="choice-btn" onclick="checkChoice(this, 4, 'a')">A) To compute the next x value</button>
+        <button class="choice-btn" onclick="checkChoice(this, 4, 'b')">B) To refine the y estimate using the average slope</button>
+        <button class="choice-btn" onclick="checkChoice(this, 4, 'c')">C) To verify that the solution is stable</button>
+        <button class="choice-btn" onclick="checkChoice(this, 4, 'd')">D) To compute the exact solution</button>
+        <div class="quiz-feedback" id="feedback-4"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-4"></div>
+        </div>
+      </div>
+
+      <div class="quiz-problem">
+        <h4>Problem 5</h4>
+        <p>
+          If you halve the step size $h$ in Euler's method, approximately how much does the global error improve?
+        </p>
+        <button class="choice-btn" onclick="checkChoice(this, 5, 'a')">A) Error is divided by 2</button>
+        <button class="choice-btn" onclick="checkChoice(this, 5, 'b')">B) Error is divided by 4</button>
+        <button class="choice-btn" onclick="checkChoice(this, 5, 'c')">C) Error is divided by 8</button>
+        <button class="choice-btn" onclick="checkChoice(this, 5, 'd')">D) No significant change</button>
+        <div class="quiz-feedback" id="feedback-5"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-5"></div>
+        </div>
+      </div>
+
+      <div class="quiz-problem">
+        <h4>Problem 6</h4>
+        <p>
+          For improved Euler, what order method is it (in terms of convergence)?
+        </p>
+        <button class="choice-btn" onclick="checkChoice(this, 6, 'a')">A) First-order</button>
+        <button class="choice-btn" onclick="checkChoice(this, 6, 'b')">B) Second-order</button>
+        <button class="choice-btn" onclick="checkChoice(this, 6, 'c')">C) Third-order</button>
+        <button class="choice-btn" onclick="checkChoice(this, 6, 'd')">D) Fourth-order</button>
+        <div class="quiz-feedback" id="feedback-6"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Quick Reference Card</h2>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="definition-box">
+          <div class="box-label">Euler's Method</div>
+          <p style="margin: 0;">
+            $$y_{n+1} = y_n + h \cdot f(x_n, y_n)$$
+            $$x_{n+1} = x_n + h$$
+          </p>
+          <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>Order:</strong> 1st (error $\propto h$)
+          </p>
+        </div>
+
+        <div class="theorem-box">
+          <div class="box-label">Improved Euler (Heun)</div>
+          <p style="margin: 0;">
+            $$\tilde{y}_{n+1} = y_n + h f(x_n, y_n)$$
+            $$y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, \tilde{y}_{n+1})]$$
+          </p>
+          <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>Order:</strong> 2nd (error $\propto h^2$)
+          </p>
+        </div>
+
+        <div class="tip-box">
+          <div class="box-label">Error Comparison</div>
+          <p style="margin: 0; font-size: 0.9rem;">
+            <strong>Euler:</strong> LTE $O(h^2)$, GTE $O(h)$ <br>
+            <strong>Improved:</strong> LTE $O(h^3)$, GTE $O(h^2)$ <br>
+            Better accuracy requires smaller $h$ or higher-order methods.
+          </p>
+        </div>
+
+        <div class="warning-box">
+          <div class="box-label">Practical Tips</div>
+          <p style="margin: 0; font-size: 0.9rem;">
+            • Smaller $h$ = more accurate but slower <br>
+            • Test with $h$ and $h/2$ to verify stability <br>
+            • Improved Euler gives $\approx 4\times$ better accuracy for same work
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Department of Mathematics and Statistics, Qatar University
+  </footer>
+
+  <script>
+    // Toggle collapsible content
+    function toggleContent(btn) {
+      btn.classList.toggle('active');
+      const content = btn.nextElementSibling;
+      content.classList.toggle('active');
+    }
+
+    // Quiz answers: problem_id -> correct answer letter
+    const answers = {
+      1: 'a',  // y' = 2x, y(0) = 0, h = 0.5: y_1 = 0 + 0.5*f(0,0) = 0 + 0.5*0 = 0
+      2: 'c',  // y' = xy, y(0) = 1, h = 0.1: y_1 = 1 + 0.1*0 = 1, y_2 = 1 + 0.1*0.1*1 = 1.01 + 0.1*0.1*1.01 = 1.02010...
+      3: 'b',  // Global error of Euler is O(h)
+      4: 'b',  // Corrector refines using average slope
+      5: 'a',  // Halving h in first-order method roughly halves error
+      6: 'b'   // Improved Euler is second-order
+    };
+
+    let score = 0;
+    let attempted = 0;
+
+    function checkChoice(btn, problemId, choice) {
+      const feedback = document.getElementById(`feedback-${problemId}`);
+      const isCorrect = choice === answers[problemId];
+
+      // Only count once per problem
+      if (!btn.parentElement.classList.contains('answered')) {
+        if (isCorrect) {
+          score++;
+        }
+        attempted++;
+        btn.parentElement.classList.add('answered');
+        updateProgress(problemId);
+      }
+
+      // Visual feedback
+      btn.classList.add('selected');
+      feedback.classList.add('show');
+
+      if (isCorrect) {
+        feedback.classList.add('correct');
+        feedback.classList.remove('incorrect');
+        feedback.textContent = '✓ Correct!';
+      } else {
+        feedback.classList.add('incorrect');
+        feedback.classList.remove('correct');
+        feedback.textContent = `✗ Incorrect. The correct answer is ${answers[problemId].toUpperCase()}.`;
+      }
+    }
+
+    function updateProgress(problemId) {
+      const progressFill = document.getElementById(`progress-${problemId}`);
+      const percent = (score / attempted) * 100;
+      progressFill.style.width = percent + '%';
+    }
+
+    // Render KaTeX
+    document.addEventListener('DOMContentLoaded', function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>
