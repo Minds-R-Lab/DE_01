@@ -692,7 +692,7 @@
             <span>Practice 1: Solve $y'' + 6y' + 9y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Write the characteristic equation.</strong> For $y'' + 6y' + 9y = 0$, the characteristic equation is:</p>
             <div class="math-display">$$r^2 + 6r + 9 = 0$$</div>
@@ -710,7 +710,7 @@
             <span>Practice 2: Solve $y'' - 2y' + 5y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Write the characteristic equation.</strong></p>
             <div class="math-display">$$r^2 - 2r + 5 = 0$$</div>
@@ -728,7 +728,7 @@
             <span>Practice 3: IVP — Solve $y'' - 5y' + 6y = 0$, $y(0)=2$, $y'(0)=3$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Write the characteristic equation.</strong></p>
             <div class="math-display">$$r^2 - 5r + 6 = 0$$</div>
@@ -1119,11 +1119,11 @@ document.querySelectorAll('nav a').forEach(a => {
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.classList.add('active');
+                content.classList.add('open');
                 if (icon) icon.textContent = '▲';
             }
         }

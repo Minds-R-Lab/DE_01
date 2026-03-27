@@ -640,7 +640,7 @@
             <span>Practice 1: Solve $3x^2 y'' + 5xy' - y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Set up indicial equation.</strong> Assume $y = x^r$. Then $y' = rx^{r-1}$ and $y'' = r(r-1)x^{r-2}$.</p>
             <p><strong>Step 2: Substitute into the equation.</strong></p>
@@ -661,7 +661,7 @@
             <span>Practice 2: Solve $x^2 y'' + 3xy' + y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Assume $y = x^r$.</strong> Then $y' = rx^{r-1}$ and $y'' = r(r-1)x^{r-2}$.</p>
             <p><strong>Step 2: Substitute and simplify.</strong></p>
@@ -681,7 +681,7 @@
             <span>Practice 3: Solve $x^2 y'' - 3xy' + 4y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Assume $y = x^r$.</strong> Derivatives: $y' = rx^{r-1}$, $y'' = r(r-1)x^{r-2}$.</p>
             <p><strong>Step 2: Substitute.</strong></p>
@@ -944,11 +944,11 @@ window.addEventListener('load', updateEulerPlot);
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.classList.add('active');
+                content.classList.add('open');
                 if (icon) icon.textContent = '▲';
             }
         }

@@ -626,7 +626,7 @@
       <span><strong>Practice 1:</strong> &nbsp; Solve $(1 + x^2)\dfrac{dy}{dx} + 2xy = \dfrac{3}{(1+x^2)^2}$</span>
       <span class="arrow">▶</span>
     </button>
-    <div class="collapsible-content" style="display:none">
+    <div class="collapsible-content">
       <p><strong>Step 1: Write in standard form.</strong> Divide by $(1+x^2)$:</p>
       <div class="math-display">$$\frac{dy}{dx} + \frac{2x}{1+x^2}y = \frac{3}{(1+x^2)^2}$$</div>
       <p>So $P(x) = \dfrac{2x}{1+x^2}$ and $Q(x) = \dfrac{3}{(1+x^2)^2}$.</p>
@@ -658,7 +658,7 @@
       <span><strong>Practice 2 (IVP):</strong> &nbsp; Solve $xy' - 3y = x^4\cos(x)$, &nbsp; $y(\pi) = 0$</span>
       <span class="arrow">▶</span>
     </button>
-    <div class="collapsible-content" style="display:none">
+    <div class="collapsible-content">
       <p><strong>Step 1: Write in standard form.</strong> Divide by $x$:</p>
       <div class="math-display">$$\frac{dy}{dx} - \frac{3}{x}y = x^3\cos(x)$$</div>
       <p>So $P(x) = -\dfrac{3}{x}$ and $Q(x) = x^3\cos(x)$ (for $x > 0$).</p>
@@ -1274,15 +1274,8 @@ document.querySelectorAll('nav a').forEach(a => {
     <script>
         // Toggle for Practice Problems
         function togglePractice(header) {
-            var content = header.nextElementSibling;
-            var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
-                if (icon) icon.textContent = '▼';
-            } else {
-                content.classList.add('active');
-                if (icon) icon.textContent = '▲';
-            }
+            header.classList.toggle('open');
+            header.nextElementSibling.classList.toggle('open');
         }
 
     </script>

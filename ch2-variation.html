@@ -736,7 +736,7 @@
             <span>Practice 1: Variation of parameters for $y'' - 2y' + y = \dfrac{e^t}{t^2}$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $(r-1)^2 = 0 \Rightarrow r = 1$ (repeated).</p>
             <div class="math-display">$$y_c = c_1 e^t + c_2 te^t, \quad y_1 = e^t, \quad y_2 = te^t$$</div>
@@ -760,7 +760,7 @@
             <span>Practice 2: Variation of parameters for $y'' + 4y = \sec(2t)$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $r^2 + 4 = 0 \Rightarrow r = \pm 2i$.</p>
             <div class="math-display">$$y_c = c_1\cos(2t) + c_2\sin(2t), \quad y_1 = \cos(2t), \quad y_2 = \sin(2t)$$</div>
@@ -1048,11 +1048,11 @@ function checkChoice(problemNum, btn, isCorrect) {
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.classList.add('active');
+                content.classList.add('open');
                 if (icon) icon.textContent = '▲';
             }
         }

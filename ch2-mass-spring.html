@@ -500,7 +500,7 @@
             <span>Practice 1: Free system with $m=2, c=8, k=8$ — classify and solve</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Form the characteristic equation.</strong> For $mx(t)'' + cx'(t) + kx(t) = 0$:</p>
             <div class="math-display">$$2r^2 + 8r + 8 = 0 \quad \Rightarrow \quad r^2 + 4r + 4 = 0$$</div>
@@ -519,7 +519,7 @@
             <span>Practice 2: Underdamped IVP with $m=1, c=2, k=5$; $x(0)=1, x'(0)=0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content">
             <h4>Solution</h4>
             <p><strong>Step 1: Form the characteristic equation.</strong></p>
             <div class="math-display">$$r^2 + 2r + 5 = 0$$</div>
@@ -1404,14 +1404,8 @@ function toggleCollapsible(header) {
         // Toggle for Practice Problems
         function togglePractice(header) {
             var content = header.nextElementSibling;
-            var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
-                if (icon) icon.textContent = '▼';
-            } else {
-                content.classList.add('active');
-                if (icon) icon.textContent = '▲';
-            }
+            header.classList.toggle('open');
+            content.classList.toggle('open');
         }
 
     </script>
