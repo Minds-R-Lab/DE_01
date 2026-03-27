@@ -249,6 +249,7 @@
     <a href="#theory">Theory</a>
     <a href="#method">Method</a>
     <a href="#examples">Examples</a>
+    <a href="#conversion">Conversion</a>
     <a href="#visualizer">Visualizer</a>
     <a href="#practice">Practice</a>
   </div>
@@ -732,6 +733,241 @@
       </div>
       <div class="math-display">
         $$x_2(t) = \frac{12}{7}e^{6t} + \frac{2}{7}e^{-t}$$
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- =================== CONVERSION EXAMPLES =================== -->
+<section id="conversion">
+  <h2>Converting Higher-Order DEs to Systems</h2>
+  <p>
+    Any $n$th-order ODE can be rewritten as a system of $n$ first-order equations by introducing new variables for each derivative. This lets us apply the eigenvalue method to equations that are not originally written as systems.
+  </p>
+
+  <div class="tip-box">
+    <div class="box-label">The Conversion Recipe</div>
+    <p>
+      Given an $n$th-order ODE in $y$, define new state variables:
+    </p>
+    <div class="math-display">
+      $$x_1 = y, \quad x_2 = y', \quad x_3 = y'', \quad \ldots, \quad x_n = y^{(n-1)}$$
+    </div>
+    <p>
+      Then the system becomes $x_1' = x_2$, $x_2' = x_3$, $\ldots$, and the last equation comes from the original ODE solved for the highest derivative.
+    </p>
+  </div>
+
+  <!-- CONVERSION EXAMPLE 1 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 5: Second-Order ODE — Distinct Real Eigenvalues</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Convert the following to a first-order system and solve:</p>
+        <div class="math-display">
+          $$y'' + y' - 6y = 0$$
+        </div>
+      </div>
+
+      <h4>Step 1: Convert to a System</h4>
+      <p>Let $x_1 = y$ and $x_2 = y'$. Then:</p>
+      <div class="math-display">
+        $$x_1' = y' = x_2$$
+      </div>
+      <p>From the original ODE: $y'' = -y' + 6y = -x_2 + 6x_1$, so:</p>
+      <div class="math-display">
+        $$x_2' = 6x_1 - x_2$$
+      </div>
+      <p>In matrix form:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} x_1 \\ x_2 \end{pmatrix}' = \begin{pmatrix} 0 & 1 \\ 6 & -1 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}$$
+      </div>
+
+      <h4>Step 2: Find Eigenvalues</h4>
+      <div class="math-display">
+        $$\det(A - \lambda I) = \det\begin{pmatrix} -\lambda & 1 \\ 6 & -1-\lambda \end{pmatrix} = 0$$
+      </div>
+      <div class="math-display">
+        $$-\lambda(-1-\lambda) - 6 = \lambda^2 + \lambda - 6 = 0$$
+      </div>
+      <div class="math-display">
+        $$(\lambda + 3)(\lambda - 2) = 0 \quad \Longrightarrow \quad \lambda_1 = 2, \quad \lambda_2 = -3$$
+      </div>
+
+      <h4>Step 3: Find Eigenvectors</h4>
+      <p>For $\lambda_1 = 2$: solve $(A - 2I)\mathbf{v} = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} -2 & 1 \\ 6 & -3 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \quad \Longrightarrow \quad -2v_1 + v_2 = 0 \quad \Longrightarrow \quad v_2 = 2v_1$$
+      </div>
+      <p>Choose $v_1 = 1$: $\quad \mathbf{v}_1 = \begin{pmatrix} 1 \\ 2 \end{pmatrix}$</p>
+
+      <p>For $\lambda_2 = -3$: solve $(A + 3I)\mathbf{v} = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 3 & 1 \\ 6 & 2 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \quad \Longrightarrow \quad 3v_1 + v_2 = 0 \quad \Longrightarrow \quad v_2 = -3v_1$$
+      </div>
+      <p>Choose $v_1 = 1$: $\quad \mathbf{v}_2 = \begin{pmatrix} 1 \\ -3 \end{pmatrix}$</p>
+
+      <h4>Step 4: Write the General Solution</h4>
+      <p>The system solution is:</p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = C_1 e^{2t}\begin{pmatrix} 1 \\ 2 \end{pmatrix} + C_2 e^{-3t}\begin{pmatrix} 1 \\ -3 \end{pmatrix}$$
+      </div>
+      <p>Since $y = x_1$, the solution to the original ODE is:</p>
+      <div class="math-display">
+        $$\boxed{y(t) = C_1 e^{2t} + C_2 e^{-3t}}$$
+      </div>
+
+      <div class="tip-box" style="margin-top:1rem;">
+        <div class="box-label">Verification</div>
+        <p>The characteristic equation of $y'' + y' - 6y = 0$ is $r^2 + r - 6 = (r+3)(r-2) = 0$, giving $r = 2, -3$. This matches our eigenvalues exactly — the eigenvalues of the companion matrix are always the roots of the characteristic equation!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSION EXAMPLE 2 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 6: Second-Order ODE — Complex Eigenvalues (Oscillation)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Convert to a first-order system and solve:</p>
+        <div class="math-display">
+          $$y'' + 2y' + 5y = 0, \qquad y(0) = 1, \quad y'(0) = -1$$
+        </div>
+      </div>
+
+      <h4>Step 1: Convert to a System</h4>
+      <p>Let $x_1 = y$ and $x_2 = y'$. Then $x_1' = x_2$ and from the ODE: $y'' = -2y' - 5y$, so $x_2' = -5x_1 - 2x_2$.</p>
+      <div class="math-display">
+        $$\mathbf{x}' = \begin{pmatrix} 0 & 1 \\ -5 & -2 \end{pmatrix}\mathbf{x}, \qquad \mathbf{x}(0) = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+      </div>
+
+      <h4>Step 2: Find Eigenvalues</h4>
+      <div class="math-display">
+        $$\det(A - \lambda I) = \lambda^2 + 2\lambda + 5 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda = \frac{-2 \pm \sqrt{4 - 20}}{2} = \frac{-2 \pm 4i}{2} = -1 \pm 2i$$
+      </div>
+      <p>We have complex eigenvalues with $\alpha = -1$ and $\beta = 2$.</p>
+
+      <h4>Step 3: Find an Eigenvector</h4>
+      <p>For $\lambda = -1 + 2i$: solve $(A - (-1+2i)I)\mathbf{v} = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 1-2i & 1 \\ -5 & -1-2i \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $(1-2i)v_1 + v_2 = 0$, so $v_2 = -(1-2i)v_1 = (-1+2i)v_1$.</p>
+      <p>Choose $v_1 = 1$:</p>
+      <div class="math-display">
+        $$\mathbf{v} = \begin{pmatrix} 1 \\ -1 + 2i \end{pmatrix} = \underbrace{\begin{pmatrix} 1 \\ -1 \end{pmatrix}}_{\mathbf{a}} + i\underbrace{\begin{pmatrix} 0 \\ 2 \end{pmatrix}}_{\mathbf{b}}$$
+      </div>
+
+      <h4>Step 4: Write the General Solution</h4>
+      <p>Using the formula $\mathbf{x}(t) = e^{\alpha t}\big[C_1(\mathbf{a}\cos\beta t - \mathbf{b}\sin\beta t) + C_2(\mathbf{a}\sin\beta t + \mathbf{b}\cos\beta t)\big]$:</p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = e^{-t}\left[C_1\left(\begin{pmatrix}1\\-1\end{pmatrix}\cos 2t - \begin{pmatrix}0\\2\end{pmatrix}\sin 2t\right) + C_2\left(\begin{pmatrix}1\\-1\end{pmatrix}\sin 2t + \begin{pmatrix}0\\2\end{pmatrix}\cos 2t\right)\right]$$
+      </div>
+      <p>So $x_1(t) = y(t) = e^{-t}(C_1 \cos 2t + C_2 \sin 2t)$.</p>
+
+      <h4>Step 5: Apply Initial Conditions</h4>
+      <p>$y(0) = 1$: $\quad C_1 \cdot 1 + C_2 \cdot 0 = 1 \quad \Longrightarrow \quad C_1 = 1$</p>
+      <p>For $y'(0) = -1$, compute $y' = e^{-t}[(-C_1 + 2C_2)\cos 2t + (-C_2 - 2C_1)\sin 2t]$:</p>
+      <p>$y'(0) = -C_1 + 2C_2 = -1 + 2C_2 = -1 \quad \Longrightarrow \quad C_2 = 0$</p>
+      <div class="math-display">
+        $$\boxed{y(t) = e^{-t}\cos 2t}$$
+      </div>
+
+      <div class="tip-box" style="margin-top:1rem;">
+        <div class="box-label">Physical Interpretation</div>
+        <p>This describes a <strong>damped oscillation</strong>: the $\cos 2t$ factor produces oscillation with frequency $\omega = 2$, while the $e^{-t}$ envelope causes the amplitude to decay over time. The negative real part $\alpha = -1$ guarantees stability — the system spirals toward the origin.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSION EXAMPLE 3 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 7: Third-Order ODE — 3×3 System</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Convert the following third-order ODE to a first-order system and solve:</p>
+        <div class="math-display">
+          $$y''' - 6y'' + 11y' - 6y = 0$$
+        </div>
+      </div>
+
+      <h4>Step 1: Convert to a System</h4>
+      <p>A third-order ODE needs three state variables:</p>
+      <div class="math-display">
+        $$x_1 = y, \qquad x_2 = y', \qquad x_3 = y''$$
+      </div>
+      <p>Then:</p>
+      <ul style="padding-left:1.5rem; margin-bottom:1rem;">
+        <li>$x_1' = x_2$</li>
+        <li>$x_2' = x_3$</li>
+        <li>$x_3' = y''' = 6y'' - 11y' + 6y = 6x_3 - 11x_2 + 6x_1$ (from the original ODE)</li>
+      </ul>
+      <p>In matrix form:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix}' = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 6 & -11 & 6 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix}$$
+      </div>
+
+      <div class="definition-box" style="margin:1rem 0;">
+        <div class="box-label">Companion Matrix</div>
+        <p>This $3 \times 3$ matrix is called a <strong>companion matrix</strong>. It always has 1's on the superdiagonal, and the coefficients of the ODE (with appropriate signs) in the last row. The eigenvalues of this matrix are exactly the roots of the characteristic equation of the original ODE.</p>
+      </div>
+
+      <h4>Step 2: Find Eigenvalues</h4>
+      <p>The characteristic equation of the companion matrix equals the characteristic equation of the ODE:</p>
+      <div class="math-display">
+        $$r^3 - 6r^2 + 11r - 6 = 0$$
+      </div>
+      <p>Try $r = 1$: $1 - 6 + 11 - 6 = 0$ ✓. So $(r-1)$ is a factor. Divide:</p>
+      <div class="math-display">
+        $$r^3 - 6r^2 + 11r - 6 = (r-1)(r^2 - 5r + 6) = (r-1)(r-2)(r-3)$$
+      </div>
+      <p>Eigenvalues: $\lambda_1 = 1, \quad \lambda_2 = 2, \quad \lambda_3 = 3$.</p>
+
+      <h4>Step 3: Find Eigenvectors</h4>
+      <p>For a companion matrix, the eigenvector for eigenvalue $\lambda$ is always:</p>
+      <div class="math-display">
+        $$\mathbf{v}_\lambda = \begin{pmatrix} 1 \\ \lambda \\ \lambda^2 \end{pmatrix}$$
+      </div>
+
+      <p>This gives us:</p>
+      <div class="math-display">
+        $$\mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix}, \qquad \mathbf{v}_2 = \begin{pmatrix} 1 \\ 2 \\ 4 \end{pmatrix}, \qquad \mathbf{v}_3 = \begin{pmatrix} 1 \\ 3 \\ 9 \end{pmatrix}$$
+      </div>
+
+      <div class="tip-box" style="margin:1rem 0;">
+        <div class="box-label">Why This Pattern?</div>
+        <p>Since $x_1 = y$, $x_2 = y'$, and $x_3 = y''$, and if $y = e^{\lambda t}$, then $y' = \lambda e^{\lambda t}$ and $y'' = \lambda^2 e^{\lambda t}$. The ratios $1 : \lambda : \lambda^2$ form the eigenvector — each component is one more derivative of $e^{\lambda t}$.</p>
+      </div>
+
+      <h4>Step 4: Write the General Solution</h4>
+      <div class="math-display">
+        $$\mathbf{x}(t) = C_1 e^{t}\begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix} + C_2 e^{2t}\begin{pmatrix} 1 \\ 2 \\ 4 \end{pmatrix} + C_3 e^{3t}\begin{pmatrix} 1 \\ 3 \\ 9 \end{pmatrix}$$
+      </div>
+      <p>Since $y = x_1$:</p>
+      <div class="math-display">
+        $$\boxed{y(t) = C_1 e^{t} + C_2 e^{2t} + C_3 e^{3t}}$$
+      </div>
+      <p>And we can verify: $y' = x_2 = C_1 e^t + 2C_2 e^{2t} + 3C_3 e^{3t}$ and $y'' = x_3 = C_1 e^t + 4C_2 e^{2t} + 9C_3 e^{3t}$, which are consistent with differentiating $y(t)$.</p>
+
+      <div class="warning-box" style="margin-top:1rem;">
+        <div class="box-label">Key Takeaway</div>
+        <p>Converting a higher-order ODE to a system is not just an exercise — it reveals deeper structure. The eigenvalues of the companion matrix are exactly the roots of the characteristic equation, and the eigenvector structure encodes the derivative relationships. For numerical computation, the system form is essential since all ODE solvers (like MATLAB's <code>ode45</code>) work with first-order systems.</p>
       </div>
     </div>
   </div>
