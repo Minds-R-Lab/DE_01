@@ -563,11 +563,11 @@
         <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="ch3-overview.html">3.0 Overview</a>
-            <a href="ch3-definition.html">3.1 Definition &amp; Properties</a>
-            <a href="ch3-inverse.html">3.2 Inverse Transform</a>
-            <a href="ch3-solving-odes.html" class="active">3.3 Solving IVPs</a>
-            <a href="ch3-step-convolution.html">3.4 Step &amp; Convolution</a>
+            <a href="ch4-overview.html">4.0 Overview</a>
+            <a href="ch4-definition.html">4.1 Definition &amp; Properties</a>
+            <a href="ch4-inverse.html">4.2 Inverse Transform</a>
+            <a href="ch4-solving-odes.html" class="active">4.3 Solving IVPs</a>
+            <a href="ch4-step-convolution.html">4.4 Step &amp; Convolution</a>
             <span style="color:var(--border);margin:0 0.25rem;">|</span>
             <a href="#intro">Intro</a>
             <a href="#theory">Theory</a>
@@ -882,74 +882,6 @@
             </div>
         </section>
 
-        <!-- Section 5: Exam-Style Practice Problems -->
-        <section id="exam-practice">
-            <h2>📝 Exam-Style Practice Problems</h2>
-            <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
-
-            <div class="example-item">
-                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
-                    <span>Practice 1: Solve $y'' + 4y = 8$ with $y(0)=0$, $y'(0)=2$</span>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="example-content">
-                    <h4>Solution</h4>
-                    <p><strong>Step 1:</strong> Apply the Laplace transform to both sides. Recall: $\mathcal{L}\{y''\} = s^2Y - sy(0) - y'(0)$ and $\mathcal{L}\{8\} = \dfrac{8}{s}$</p>
-                    <div class="math-display">$$s^2Y - 0 - 2 + 4Y = \frac{8}{s}$$</div>
-                    <p><strong>Step 2:</strong> Collect terms with $Y$:</p>
-                    <div class="math-display">$$(s^2+4)Y = \frac{8}{s} + 2$$</div>
-                    <p><strong>Step 3:</strong> Solve for $Y(s)$:</p>
-                    <div class="math-display">$$(s^2+4)Y = \frac{8 + 2s}{s}$$</div>
-                    <div class="math-display">$$Y = \frac{8 + 2s}{s(s^2+4)} = \frac{8}{s(s^2+4)} + \frac{2s}{s(s^2+4)} = \frac{8}{s(s^2+4)} + \frac{2}{s^2+4}$$</div>
-                    <p><strong>Step 4:</strong> Use partial fractions on $\dfrac{8}{s(s^2+4)}$:</p>
-                    <div class="math-display">$$\frac{8}{s(s^2+4)} = \frac{A}{s} + \frac{Bs+C}{s^2+4}$$</div>
-                    <p>Multiplying by $s(s^2+4)$: $8 = A(s^2+4) + (Bs+C)s$</p>
-                    <ul style="margin-left: 1.5rem;">
-                        <li>At $s=0$: $8 = 4A$, so $A = 2$</li>
-                        <li>Comparing coefficients: $B = -2$, $C = 0$</li>
-                    </ul>
-                    <div class="math-display">$$\frac{8}{s(s^2+4)} = \frac{2}{s} - \frac{2s}{s^2+4}$$</div>
-                    <p><strong>Step 5:</strong> Combine:</p>
-                    <div class="math-display">$$Y = \frac{2}{s} - \frac{2s}{s^2+4} + \frac{2}{s^2+4}$$</div>
-                    <p><strong>Step 6:</strong> Apply inverse Laplace transform:</p>
-                    <div class="math-display">$$\mathcal{L}^{-1}\left\{\frac{2}{s}\right\} = 2$$</div>
-                    <div class="math-display">$$\mathcal{L}^{-1}\left\{-\frac{2s}{s^2+4}\right\} = -2\cos(2t)$$</div>
-                    <div class="math-display">$$\mathcal{L}^{-1}\left\{\frac{2}{s^2+4}\right\} = \sin(2t)$$</div>
-                    <p><strong>Answer:</strong> $\boxed{y(t) = 2 - 2\cos(2t) + \sin(2t)}$</p>
-                </div>
-            </div>
-
-            <div class="example-item">
-                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
-                    <span>Practice 2: Solve $y'' - 3y' + 2y = e^{3t}$ with $y(0)=1$, $y'(0)=0$</span>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="example-content">
-                    <h4>Solution</h4>
-                    <p><strong>Step 1:</strong> Apply Laplace transform. $\mathcal{L}\{y''\} = s^2Y - s(1) - 0 = s^2Y - s$, $\mathcal{L}\{-3y'\} = -3(sY - 1) = -3sY + 3$</p>
-                    <div class="math-display">$$s^2Y - s - 3sY + 3 + 2Y = \frac{1}{s-3}$$</div>
-                    <p><strong>Step 2:</strong> Factor the left side:</p>
-                    <div class="math-display">$$(s^2-3s+2)Y = \frac{1}{s-3} + s - 3$$</div>
-                    <p><strong>Step 3:</strong> Factor $s^2-3s+2 = (s-1)(s-2)$ and simplify RHS:</p>
-                    <div class="math-display">$$(s-1)(s-2)Y = \frac{1 + (s-3)^2}{s-3} = \frac{1 + s^2 - 6s + 9}{s-3} = \frac{s^2 - 6s + 10}{s-3}$$</div>
-                    <p><strong>Step 4:</strong> Solve for $Y$:</p>
-                    <div class="math-display">$$Y = \frac{s^2-6s+10}{(s-1)(s-2)(s-3)}$$</div>
-                    <p><strong>Step 5:</strong> Use partial fractions: $\dfrac{A}{s-1} + \dfrac{B}{s-2} + \dfrac{C}{s-3}$</p>
-                    <ul style="margin-left: 1.5rem;">
-                        <li>At $s=1$: $\dfrac{1-6+10}{(-1)(-2)} = \dfrac{5}{2}$, so $A = \dfrac{5}{2}$</li>
-                        <li>At $s=2$: $\dfrac{4-12+10}{(1)(-1)} = \dfrac{2}{-1} = -2$, so $B = -2$</li>
-                        <li>At $s=3$: $\dfrac{9-18+10}{(2)(1)} = \dfrac{1}{2}$, so $C = \dfrac{1}{2}$</li>
-                    </ul>
-                    <p><strong>Step 6:</strong> Apply inverse transform:</p>
-                    <div class="math-display">$$\mathcal{L}^{-1}\left\{\frac{5/2}{s-1}\right\} = \frac{5}{2}e^{t}$$</div>
-                    <div class="math-display">$$\mathcal{L}^{-1}\left\{\frac{-2}{s-2}\right\} = -2e^{2t}$$</div>
-                    <div class="math-display">$$\mathcal{L}^{-1}\left\{\frac{1/2}{s-3}\right\} = \frac{1}{2}e^{3t}$$</div>
-                    <p><strong>Answer:</strong> $\boxed{y(t) = \dfrac{5}{2}e^{t} - 2e^{2t} + \dfrac{1}{2}e^{3t}}$</p>
-                </div>
-            </div>
-
-        </section>
-
         <!-- Section 5: Interactive Visualizer -->
         <section id="visualizer">
             <h2>Interactive ODE Solver & Transfer Function Visualizer</h2>
@@ -1075,7 +1007,7 @@
 
         <!-- Footer -->
         <footer>
-            <p>Mathematics 4: Differential Equations — Chapter 3: Laplace Transforms</p>
+            <p>Mathematics 4: Differential Equations — Chapter 4: Laplace Transforms</p>
             <p>Instructor: Dr. Mohamed Mabrok | Last Updated: 2026</p>
             <p style="margin-top: 1rem; font-size: 0.9rem;">All content is original and designed for educational purposes.</p>
         </footer>

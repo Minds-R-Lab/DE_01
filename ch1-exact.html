@@ -785,6 +785,86 @@
             </div>
         </section>
 
+        <!-- Practice Problems Section -->
+        <section id="exam-practice">
+            <h2>📝 Exam-Style Practice Problems</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                    <span>Practice 1: $(2xy + e^x)\,dx + (x^2 + \cos y)\,dy = 0$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1: Verify exactness</strong></p>
+                    <p>$M = 2xy + e^x$, $N = x^2 + \cos y$</p>
+                    $$\frac{\partial M}{\partial y} = 2x, \quad \frac{\partial N}{\partial x} = 2x \quad \checkmark$$
+                    <p>The equation is exact.</p>
+
+                    <p><strong>Step 2: Find the potential function $F(x,y)$</strong></p>
+                    <p>Integrate $M$ with respect to $x$:</p>
+                    $$F(x,y) = \int (2xy + e^x)\,dx = x^2y + e^x + g(y)$$
+
+                    <p><strong>Step 3: Differentiate with respect to $y$ and match</strong></p>
+                    $$\frac{\partial F}{\partial y} = x^2 + g'(y) = N = x^2 + \cos y$$
+                    <p>Therefore, $g'(y) = \cos y$, so $g(y) = \sin y$.</p>
+
+                    <p><strong>Step 4: Write the general solution</strong></p>
+                    $$\boxed{x^2y + e^x + \sin y = C}$$
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                    <span>Practice 2: $(3x^2 + y\cos(x))\,dx + (\sin(x) - 4y^3)\,dy = 0$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1: Verify exactness</strong></p>
+                    <p>$M = 3x^2 + y\cos(x)$, $N = \sin(x) - 4y^3$</p>
+                    $$\frac{\partial M}{\partial y} = \cos x, \quad \frac{\partial N}{\partial x} = \cos x \quad \checkmark$$
+                    <p>The equation is exact.</p>
+
+                    <p><strong>Step 2: Find $F(x,y)$ by integrating $M$ with respect to $x$</strong></p>
+                    $$F(x,y) = \int (3x^2 + y\cos(x))\,dx = x^3 + y\sin(x) + g(y)$$
+
+                    <p><strong>Step 3: Differentiate with respect to $y$ and find $g(y)$</strong></p>
+                    $$\frac{\partial F}{\partial y} = \sin x + g'(y) = N = \sin(x) - 4y^3$$
+                    <p>Thus, $g'(y) = -4y^3$, so $g(y) = -y^4$.</p>
+
+                    <p><strong>Step 4: Write the general solution</strong></p>
+                    $$\boxed{x^3 + y\sin x - y^4 = C}$$
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                    <span>Practice 3: $(y^2 + \ln x)\,dx + (2xy - 3)\,dy = 0$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1: Verify exactness</strong></p>
+                    <p>$M = y^2 + \ln x$, $N = 2xy - 3$</p>
+                    $$\frac{\partial M}{\partial y} = 2y, \quad \frac{\partial N}{\partial x} = 2y \quad \checkmark$$
+                    <p>The equation is exact.</p>
+
+                    <p><strong>Step 2: Integrate $M$ with respect to $x$</strong></p>
+                    $$F(x,y) = \int (y^2 + \ln x)\,dx = xy^2 + x\ln x - x + g(y)$$
+                    <p>(Note: $\int \ln x\,dx = x\ln x - x$ by integration by parts)</p>
+
+                    <p><strong>Step 3: Differentiate with respect to $y$ and find $g(y)$</strong></p>
+                    $$\frac{\partial F}{\partial y} = 2xy + g'(y) = N = 2xy - 3$$
+                    <p>Thus, $g'(y) = -3$, so $g(y) = -3y$.</p>
+
+                    <p><strong>Step 4: Write the general solution</strong></p>
+                    $$\boxed{xy^2 + x\ln x - x - 3y = C}$$
+                </div>
+            </div>
+        </section>
+
         <!-- Interactive Visualizer -->
         <section id="visualizer">
             <h2>Interactive Exactness Checker & Visualizer</h2>

@@ -726,6 +726,60 @@
   </div>
 </section>
 
+<!-- =================== EXAM-STYLE PRACTICE PROBLEMS =================== -->
+<section id="exam-practice">
+    <h2>📝 Exam-Style Practice Problems</h2>
+    <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
+
+    <div class="example-item">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 1: Variation of parameters for $y'' - 2y' + y = \dfrac{e^t}{t^2}$</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $(r-1)^2 = 0 \Rightarrow r = 1$ (repeated).</p>
+            <div class="math-display">$$y_c = c_1 e^t + c_2 te^t, \quad y_1 = e^t, \quad y_2 = te^t$$</div>
+            <p><strong>Step 2: Compute the Wronskian.</strong></p>
+            <div class="math-display">$$W = \begin{vmatrix} e^t & te^t \\ e^t & e^t + te^t \end{vmatrix} = e^t(e^t + te^t) - te^t \cdot e^t = e^{2t} + te^{2t} - te^{2t} = e^{2t}$$</div>
+            <p><strong>Step 3: Compute $u_1'$ and $u_2'$.</strong> With $g(t) = \dfrac{e^t}{t^2}$:</p>
+            <div class="math-display">$$u_1' = \frac{-y_2 g}{W} = \frac{-te^t \cdot \frac{e^t}{t^2}}{e^{2t}} = \frac{-\frac{e^{2t}}{t}}{e^{2t}} = -\frac{1}{t}$$</div>
+            <div class="math-display">$$u_2' = \frac{y_1 g}{W} = \frac{e^t \cdot \frac{e^t}{t^2}}{e^{2t}} = \frac{\frac{e^{2t}}{t^2}}{e^{2t}} = \frac{1}{t^2}$$</div>
+            <p><strong>Step 4: Integrate to find $u_1$ and $u_2$.</strong></p>
+            <div class="math-display">$$u_1 = \int -\frac{1}{t}\,dt = -\ln|t|$$</div>
+            <div class="math-display">$$u_2 = \int \frac{1}{t^2}\,dt = -\frac{1}{t}$$</div>
+            <p><strong>Step 5: Particular solution.</strong></p>
+            <div class="math-display">$$y_p = u_1 y_1 + u_2 y_2 = -\ln|t| \cdot e^t + \left(-\frac{1}{t}\right) \cdot te^t = -e^t\ln|t| - e^t$$</div>
+            <p><strong>Step 6: General solution.</strong> (The $-e^t$ can be absorbed into $c_1 e^t$)</p>
+            <div class="math-display">$$\boxed{y = c_1 e^t + c_2 te^t - e^t\ln|t|}$$</div>
+        </div>
+    </div>
+
+    <div class="example-item" style="margin-top: 1.5rem;">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 2: Variation of parameters for $y'' + 4y = \sec(2t)$</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $r^2 + 4 = 0 \Rightarrow r = \pm 2i$.</p>
+            <div class="math-display">$$y_c = c_1\cos(2t) + c_2\sin(2t), \quad y_1 = \cos(2t), \quad y_2 = \sin(2t)$$</div>
+            <p><strong>Step 2: Compute the Wronskian.</strong></p>
+            <div class="math-display">$$W = \begin{vmatrix} \cos(2t) & \sin(2t) \\ -2\sin(2t) & 2\cos(2t) \end{vmatrix} = 2\cos^2(2t) + 2\sin^2(2t) = 2$$</div>
+            <p><strong>Step 3: Compute $u_1'$ and $u_2'$.</strong> With $g(t) = \sec(2t)$:</p>
+            <div class="math-display">$$u_1' = \frac{-\sin(2t) \cdot \sec(2t)}{2} = \frac{-\tan(2t)}{2}$$</div>
+            <div class="math-display">$$u_2' = \frac{\cos(2t) \cdot \sec(2t)}{2} = \frac{1}{2}$$</div>
+            <p><strong>Step 4: Integrate.</strong></p>
+            <div class="math-display">$$u_1 = \int \frac{-\tan(2t)}{2}\,dt = \frac{1}{4}\ln|\cos(2t)|$$</div>
+            <div class="math-display">$$u_2 = \int \frac{1}{2}\,dt = \frac{t}{2}$$</div>
+            <p><strong>Step 5: Particular solution.</strong></p>
+            <div class="math-display">$$y_p = \frac{1}{4}\ln|\cos(2t)| \cdot \cos(2t) + \frac{t}{2} \cdot \sin(2t)$$</div>
+            <p><strong>Step 6: General solution.</strong></p>
+            <div class="math-display">$$\boxed{y = c_1\cos(2t) + c_2\sin(2t) + \frac{1}{4}\cos(2t)\ln|\cos(2t)| + \frac{t}{2}\sin(2t)}$$</div>
+        </div>
+    </div>
+</section>
+
 <!-- =================== INTERACTIVE VISUALIZER =================== -->
 <section id="visualizer">
   <h2>Interactive Variation of Parameters Calculator</h2>

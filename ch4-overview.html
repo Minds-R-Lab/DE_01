@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 4: Chapter 4 Overview — Laplace Transforms | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  .choice-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 0.75rem 1rem; margin: 0.5rem 0;
+    border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; font-size: 0.95rem; cursor: pointer;
+    transition: all 0.2s; color: #1e293b;
+  }
+  .choice-btn .katex { color: #1e293b; }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
+  .choice-btn.selected-correct .katex { color: white; }
+  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
+  .choice-btn.selected-wrong .katex { color: white; }
+
+  /* ---- PROGRESS ---- */
+  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---- QUOTE STYLES ---- */
+  .quote-box {
+    padding: 2rem; border-radius: var(--radius);
+    border-left: 6px solid; margin: 2rem 0;
+    font-style: italic; font-size: 1.05rem; line-height: 1.8;
+  }
+  .quote-historical {
+    background: linear-gradient(135deg, #fed7aa 0%, #fecaca 100%);
+    border-color: #d97706;
+    color: #92400e;
+  }
+  .quote-islamic {
+    background: linear-gradient(135deg, #a7f3d0 0%, #86efac 100%);
+    border-color: #059669;
+    color: #065f46;
+  }
+  .quote-attribution {
+    margin-top: 1rem; font-weight: 600; font-size: 0.95rem;
+  }
+
+  /* ---- ROADMAP CARDS ---- */
+  .roadmap-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem; margin: 1.5rem 0;
+  }
+  .roadmap-card {
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
+    border: 2px solid var(--primary); border-radius: var(--radius);
+    padding: 2rem; text-align: center; cursor: pointer;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .roadmap-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed);
+  }
+  .roadmap-card:hover {
+    transform: translateY(-6px); box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
+  }
+  .roadmap-card h3 {
+    margin-top: 0; color: var(--primary); font-size: 1.1rem;
+  }
+  .roadmap-card p {
+    color: var(--text-muted); font-size: 0.9rem; margin: 0.75rem 0;
+  }
+  .roadmap-card a {
+    display: inline-block; margin-top: 1rem; padding: 0.5rem 1.2rem;
+    background: var(--primary); color: #fff; text-decoration: none;
+    border-radius: 6px; font-weight: 600; font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .roadmap-card a:hover {
+    background: #1d4ed8; transform: scale(1.05);
+  }
+
+  /* ---- COMPARISON TABLE ---- */
+  .comparison-table {
+    width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+    background: #fff; border-radius: 8px; overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .comparison-table th {
+    background: linear-gradient(90deg, #2563eb, #1e40af);
+    color: #fff; padding: 1rem; text-align: left; font-weight: 600;
+  }
+  .comparison-table td {
+    padding: 1rem; border-bottom: 1px solid var(--border);
+  }
+  .comparison-table tr:hover {
+    background: #f0f9ff;
+  }
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ---- PLOTS SIDE-BY-SIDE ---- */
+  .plot-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+    .roadmap-grid { grid-template-columns: 1fr; }
+    .plot-grid { grid-template-columns: 1fr; }
+    .comparison-table { font-size: 0.9rem; }
+    .comparison-table th, .comparison-table td { padding: 0.75rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch4-overview.html" class="active">4.0 Overview</a>
+    <a href="ch4-definition.html">4.1 Definition &amp; Properties</a>
+    <a href="ch4-inverse.html">4.2 Inverse Transform</a>
+    <a href="ch4-solving-odes.html">4.3 Solving IVPs</a>
+    <a href="ch4-step-convolution.html">4.4 Step &amp; Convolution</a>
+    <span style="color:var(--border);margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a>
+    <a href="#why">Why Laplace?</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#visualizer">Visualizer</a>
+  </div>
+</nav>
+
+<!-- =================== MAIN CONTENT =================== -->
+<div class="container">
+
+<!-- =================== SECTION: INTRO =================== -->
+<section id="intro">
+  <h1>Chapter 4: Laplace Transforms</h1>
+  <p class="subtitle">From Calculus to Algebra — The Engineer's Power Tool</p>
+
+  <div class="definition-box">
+    <div class="box-label">Learning Objectives</div>
+    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+      <li>Understand why engineers prefer Laplace transforms over direct ODE methods</li>
+      <li>Map between time domain and s-domain (frequency domain)</li>
+      <li>Use transfer functions to analyze system behavior</li>
+      <li>Solve complex IVPs using algebraic manipulation</li>
+    </ul>
+  </div>
+
+  <h3>The Big Idea</h3>
+  <p>Laplace transforms convert <span class="highlight">differential equations into algebraic equations</span>. Instead of solving a messy ODE like</p>
+  <div class="math-display">\( y'' + 3y' + 2y = \sin(t) \)</div>
+  <p>with all the guesswork of finding particular solutions and worrying about initial conditions, we:</p>
+  <ol style="margin-left: 1.5rem; margin-top: 0.75rem;">
+    <li><strong>Transform</strong> the entire equation into the <em>s-domain</em> (frequency domain)</li>
+    <li><strong>Solve</strong> simple algebra instead of calculus</li>
+    <li><strong>Transform back</strong> to get your answer in the time domain</li>
+  </ol>
+  <p style="margin-top: 1rem;">This approach scales beautifully: same method works for first-order, second-order, tenth-order, or systems of ODEs. Piecewise forcing functions? Step functions? Impulses? All handled automatically. This is why every engineer, physicist, and control systems specialist relies on Laplace transforms.</p>
+</section>
+
+<!-- =================== QUOTES =================== -->
+<div class="quote-box quote-historical">
+  <p>"Mathematics is an experimental science, and definitions do not come first, but later on."</p>
+  <div class="quote-attribution">— Oliver Heaviside (1850–1925), Pioneer of Operational Calculus</div>
+</div>
+
+<div class="quote-box quote-islamic">
+  <p lang="ar">إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٌ لِّأُولِي الْأَلْبَابِ</p>
+  <p style="margin-top: 0.75rem; font-style: italic; font-size: 0.95rem;">"Indeed, in the creation of the heavens and the earth and the alternation of night and day are signs for those of understanding."</p>
+  <div class="quote-attribution">— Quran, Surah Aal-E-Imran 3:190</div>
+</div>
+
+<!-- =================== SECTION: WHY LAPLACE =================== -->
+<section id="why">
+  <h2>Why Laplace? — The Engineering Perspective</h2>
+
+  <div class="tip-box">
+    <div class="box-label">The Problem with Direct Methods</div>
+    <p style="margin: 0;">In Chapters 1–2, we learned to solve differential equations directly using characteristic equations, undetermined coefficients, and variation of parameters. But real engineering systems face:</p>
+    <ul style="margin: 0.75rem 0 0 1.5rem;">
+      <li><strong>Complex forcing functions</strong> (piecewise, step inputs, impulses)</li>
+      <li><strong>Awkward initial conditions</strong> (zero, non-zero, or discontinuous)</li>
+      <li><strong>Higher-order systems</strong> (5th, 10th order, or higher)</li>
+      <li><strong>Coupled systems</strong> of differential equations</li>
+    </ul>
+    <p style="margin: 0.75rem 0 0;">Laplace transforms handle <em>all of these elegantly</em> with a single unified approach.</p>
+  </div>
+
+  <h3>The Laplace Transform as a Lens</h3>
+  <p>Think of the Laplace transform as a special lens. When you look at a signal through this lens:</p>
+  <ul style="margin-left: 1.5rem;">
+    <li><strong>Differential equations</strong> → <strong>Polynomials</strong> (algebra!)</li>
+    <li><strong>Initial conditions</strong> → <strong>Constants in the algebra</strong> (no extra steps needed)</li>
+    <li><strong>Convolution</strong> (hard to compute) → <strong>Multiplication</strong> (trivial)</li>
+    <li><strong>Piecewise functions</strong> → <strong>Exponential factors</strong> (unified treatment)</li>
+  </ul>
+
+  <h3>The Comparison: Time Domain vs s-Domain</h3>
+  <table class="comparison-table">
+    <tr>
+      <th style="background: linear-gradient(90deg, #2563eb, #1e40af);">Time Domain (\(t\))</th>
+      <th style="background: linear-gradient(90deg, #7c3aed, #6d28d9);">s-Domain (\(s\))</th>
+      <th style="background: linear-gradient(90deg, #059669, #047857);">Benefit</th>
+    </tr>
+    <tr>
+      <td>Differentiation \(\frac{d}{dt}\)</td>
+      <td>Multiplication by \(s\)</td>
+      <td>Calculus → Algebra</td>
+    </tr>
+    <tr>
+      <td>Integration \(\int dt\)</td>
+      <td>Division by \(s\)</td>
+      <td>Simplification</td>
+    </tr>
+    <tr>
+      <td>Convolution \(f*g\)</td>
+      <td>Multiplication \(F \cdot G\)</td>
+      <td>Complex → Simple</td>
+    </tr>
+    <tr>
+      <td>Initial conditions</td>
+      <td>Built into algebra</td>
+      <td>No extra steps</td>
+    </tr>
+    <tr>
+      <td>Piecewise functions</td>
+      <td>Exponential factors \(e^{-as}\)</td>
+      <td>Unified approach</td>
+    </tr>
+    <tr>
+      <td>System analysis (hard)</td>
+      <td>Transfer functions \(G(s)\)</td>
+      <td>Poles → stability, behavior</td>
+    </tr>
+  </table>
+
+  <h3>Transfer Function — The System's DNA</h3>
+  <div class="definition-box">
+    <div class="box-label">Definition: Transfer Function</div>
+    <p style="margin: 0 0 0.75rem;">For a linear system with differential equation</p>
+    <div class="math-display">\( ay'' + by' + cy = f(t) \)</div>
+    <p style="margin: 0.75rem 0;">the <strong>transfer function</strong> is:</p>
+    <div class="math-display">\( G(s) = \frac{1}{as^2 + bs + c} \)</div>
+    <p style="margin: 0.75rem 0 0;">This single expression encodes <em>everything</em> about how the system responds to any input. The poles (roots of the denominator) determine stability, oscillation, and decay rates.</p>
+  </div>
+
+  <h3>Why Engineers Love This</h3>
+  <p><strong>Circuit impedance:</strong> A circuit's response to AC signals is encoded in \(Z(s) = R + sL + \frac{1}{sC}\). Change the frequency \(s = j\omega\), and you see exactly how the circuit responds at that frequency.</p>
+  <p><strong>Mechanical systems:</strong> A mass-spring-damper has transfer function \(G(s) = \frac{1}{ms^2 + cs + k}\). The poles tell you if the system oscillates, how fast it decays, and whether it's stable.</p>
+  <p><strong>Control systems:</strong> To stabilize an aircraft, robot, or chemical reactor, engineers design controllers using pole placement. Laplace transforms make this calculation straightforward.</p>
+</section>
+
+<!-- =================== SECTION: ROADMAP =================== -->
+<section id="roadmap">
+  <h2>Chapter Roadmap</h2>
+  <p>Laplace transforms are built in layers. Master each section, and you'll have a complete toolkit:</p>
+
+  <div class="roadmap-grid">
+    <div class="roadmap-card">
+      <h3>4.1 Definition &amp; Properties</h3>
+      <p>Learn the transform, build your toolbox</p>
+      <p style="font-size: 0.85rem; color: var(--text);">The integral definition, transform table, linearity, first shifting theorem, and essential properties.</p>
+      <a href="ch4-definition.html">Go to 4.1</a>
+    </div>
+
+    <div class="roadmap-card">
+      <h3>4.2 Inverse Transform</h3>
+      <p>Coming back from s-domain</p>
+      <p style="font-size: 0.85rem; color: var(--text);">Partial fractions decomposition (3 cases), Heaviside's method, and techniques for inverting complex rational functions.</p>
+      <a href="ch4-inverse.html">Go to 4.2</a>
+    </div>
+
+    <div class="roadmap-card">
+      <h3>4.3 Solving IVPs</h3>
+      <p>The main event: solve any ODE</p>
+      <p style="font-size: 0.85rem; color: var(--text);">Derivative transforms, second-order IVPs, transfer functions, and system analysis.</p>
+      <a href="ch4-solving-odes.html">Go to 4.3</a>
+    </div>
+
+    <div class="roadmap-card">
+      <h3>4.4 Step &amp; Convolution</h3>
+      <p>Handling real-world signals</p>
+      <p style="font-size: 0.85rem; color: var(--text);">Unit step, piecewise forcing, second shifting theorem, convolution theorem, and applications.</p>
+      <a href="ch4-step-convolution.html">Go to 4.4</a>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top: 2rem;">
+    <div class="box-label">Tips for Success</div>
+    <ul style="margin: 0.75rem 0 0 1.5rem;">
+      <li><strong>Build a transform table:</strong> Memorize the basic transforms. They're your toolbox.</li>
+      <li><strong>Practice partial fractions:</strong> This is the bottleneck. The more you practice, the faster you work.</li>
+      <li><strong>Understand the big picture:</strong> Each section builds on the previous. Don't skip details.</li>
+      <li><strong>Use software:</strong> For complex inversions, tools like MATLAB, Python, or Wolfram Alpha can verify your work.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =================== SECTION: VISUALIZER =================== -->
+<section id="visualizer">
+  <h2>Interactive Visualizer: Time Domain vs s-Domain</h2>
+  <p>Adjust the sliders below to see how a time-domain signal changes in the frequency domain. The uncertainty principle is at work: you can't be narrow in both domains simultaneously!</p>
+
+  <div class="controls">
+    <div class="slider-group">
+      <label for="sliderA">Damping (a)</label>
+      <input type="range" id="sliderA" min="0.1" max="5" step="0.1" value="1.5">
+      <div class="slider-value"><span id="valueA">1.5</span></div>
+    </div>
+
+    <div class="slider-group">
+      <label for="sliderB">Frequency (b)</label>
+      <input type="range" id="sliderB" min="0.5" max="10" step="0.5" value="3">
+      <div class="slider-value"><span id="valueB">3</span></div>
+    </div>
+
+    <button class="btn btn-primary" onclick="updatePlots()">Update Plots</button>
+  </div>
+
+  <div class="plot-grid">
+    <div>
+      <h4 style="text-align: center; margin-bottom: 1rem; color: var(--primary);">Time Domain: \(f(t) = e^{-at}\sin(bt)\)</h4>
+      <div id="plotTime" class="plot-container"></div>
+    </div>
+    <div>
+      <h4 style="text-align: center; margin-bottom: 1rem; color: var(--accent);">Frequency Domain: \(|F(s)| = \left|\frac{b}{(s+a)^2 + b^2}\right|\)</h4>
+      <div id="plotFreq" class="plot-container"></div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <div class="box-label">What You're Seeing</div>
+    <p><strong>Left plot (Time Domain):</strong> The signal \(f(t) = e^{-at}\sin(bt)\) is a damped oscillation. As \(a\) increases, the decay is faster (the envelope shrinks). As \(b\) increases, the oscillation is faster (more wiggles).</p>
+    <p><strong>Right plot (Frequency Domain):</strong> The magnitude \(|F(s)|\) along the imaginary axis \(s = j\omega\) shows the frequency content. As damping \(a\) increases, the peak becomes broader and shorter—the signal is "spreading out" in frequency. This is the <strong>uncertainty principle</strong>: narrow signals in time are broad in frequency, and vice versa.</p>
+    <p style="margin-bottom: 0;"><strong>Key insight:</strong> Try \(a = 0.1\) (low damping) and see the sharp, tall peak. Then try \(a = 5\) (high damping) and see the broad, flat peak. This is exactly what's happening in real circuits and mechanical systems!</p>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem;border-top:1px solid var(--border);margin-top:3rem;">
+  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+</footer>
+
+</div><!-- /.container -->
+
+<!-- =================== SCRIPTS =================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Render all math
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$", right: "$", display: false}
+    ],
+    throwOnError: false
+  });
+
+  // Initialize plots on page load
+  updatePlots();
+
+  // Update slider values when changed
+  document.getElementById('sliderA').addEventListener('input', function() {
+    document.getElementById('valueA').innerText = this.value;
+  });
+  document.getElementById('sliderB').addEventListener('input', function() {
+    document.getElementById('valueB').innerText = this.value;
+  });
+});
+
+function updatePlots() {
+  const a = parseFloat(document.getElementById('sliderA').value);
+  const b = parseFloat(document.getElementById('sliderB').value);
+
+  // Time domain: f(t) = e^(-at) * sin(bt)
+  const t = [];
+  const timeDomainSignal = [];
+  for (let i = 0; i <= 50; i += 0.1) {
+    t.push(i);
+    timeDomainSignal.push(Math.exp(-a * i) * Math.sin(b * i));
+  }
+
+  const traceTime = {
+    x: t,
+    y: timeDomainSignal,
+    type: 'scatter',
+    mode: 'lines',
+    line: { color: '#2563eb', width: 3 },
+    fill: 'tozeroy',
+    fillcolor: 'rgba(37, 99, 235, 0.15)',
+  };
+
+  const layoutTime = {
+    title: { text: '', font: { size: 14 } },
+    xaxis: { title: 'Time (t)', gridcolor: '#e2e8f0' },
+    yaxis: { title: 'f(t)', gridcolor: '#e2e8f0' },
+    plot_bgcolor: '#f8fafc',
+    paper_bgcolor: '#ffffff',
+    margin: { l: 60, r: 20, t: 40, b: 50 },
+    responsive: true,
+  };
+
+  Plotly.newPlot('plotTime', [traceTime], layoutTime, { responsive: true });
+
+  // Frequency domain: |F(s)| along s = a + j*omega
+  // F(s) = b / ((s+a)^2 + b^2)
+  // At s = a + j*omega: |F(jω)| = |b / ((jω)^2 + b^2)| = b / sqrt(ω^4 + b^4)
+  // Actually at the vertical line Re(s) = -a:
+  // F(-a + jω) = b / ((jω)^2 + b^2) = b / (-ω^2 + b^2)
+  // |F(-a + jω)| = b / sqrt((ω^2 - b^2)^2) = b / |ω^2 - b^2|
+  // Better: use actual formula
+  // F(s) = b / ((s+a)^2 + b^2)
+  // Plot along s = jω (imaginary axis, a=0 for view):
+  const omega = [];
+  const magFreq = [];
+  for (let w = -15; w <= 15; w += 0.2) {
+    omega.push(w);
+    // |F(jω)| = |b / ((jω+a)^2 + b^2)| = b / sqrt((a^2 - ω^2 + b^2)^2 + (2aω)^2)
+    // Simpler: |b / ((-ω^2 + b^2) + 2ajω)| = b / sqrt((-ω^2 + b^2 + a^2)^2 + (2aω)^2)
+    // Or even simpler at ω (treating as transfer function evaluated at jω):
+    const denom = Math.sqrt(Math.pow(a*a + b*b - w*w, 2) + Math.pow(2*a*w, 2));
+    magFreq.push(b / denom);
+  }
+
+  const traceFreq = {
+    x: omega,
+    y: magFreq,
+    type: 'scatter',
+    mode: 'lines',
+    line: { color: '#7c3aed', width: 3 },
+    fill: 'tozeroy',
+    fillcolor: 'rgba(124, 58, 237, 0.15)',
+  };
+
+  const layoutFreq = {
+    title: { text: '', font: { size: 14 } },
+    xaxis: { title: 'Frequency (ω)', gridcolor: '#e2e8f0' },
+    yaxis: { title: '|F(jω)|', gridcolor: '#e2e8f0' },
+    plot_bgcolor: '#f8fafc',
+    paper_bgcolor: '#ffffff',
+    margin: { l: 60, r: 20, t: 40, b: 50 },
+    responsive: true,
+  };
+
+  Plotly.newPlot('plotFreq', [traceFreq], layoutFreq, { responsive: true });
+}
+</script>
+
+</body>
+</html>

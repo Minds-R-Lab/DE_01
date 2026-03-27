@@ -377,6 +377,58 @@
   </div>
 </section>
 
+<!-- =================== EXAM-STYLE PRACTICE PROBLEMS =================== -->
+<section id="exam-practice">
+    <h2>📝 Exam-Style Practice Problems</h2>
+    <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
+
+    <div class="example-item">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 1: Free system with $m=2, c=8, k=8$ — classify and solve</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Form the characteristic equation.</strong> For $mx(t)'' + cx'(t) + kx(t) = 0$:</p>
+            <div class="math-display">$$2r^2 + 8r + 8 = 0 \quad \Rightarrow \quad r^2 + 4r + 4 = 0$$</div>
+            <p><strong>Step 2: Factor and find roots.</strong></p>
+            <div class="math-display">$$(r+2)^2 = 0 \quad \Rightarrow \quad r = -2 \text{ (repeated)}$$</div>
+            <p><strong>Step 3: Classify the damping.</strong> Check the discriminant: $D = c^2 - 4mk = 64 - 64 = 0$. Since $D = 0$, this is <strong>critically damped</strong>.</p>
+            <p><strong>Step 4: Interpret the classification.</strong> The damping coefficient $\zeta = \dfrac{c}{2\sqrt{mk}} = \dfrac{8}{2\sqrt{2 \cdot 8}} = \dfrac{8}{8} = 1$. When $\zeta = 1$, the system is critically damped — it returns to equilibrium as quickly as possible without oscillating.</p>
+            <p><strong>Step 5: General solution.</strong> For a repeated root $r_0 = -2$:</p>
+            <div class="math-display">$$\boxed{x(t) = (c_1 + c_2 t)e^{-2t}}$$</div>
+            <p style="margin-top: 1rem; font-size: 0.95rem; color: #666;"><em>The term $(c_1 + c_2 t)$ decays exponentially as $e^{-2t}$, ensuring the system settles without bouncing.</em></p>
+        </div>
+    </div>
+
+    <div class="example-item" style="margin-top: 1.5rem;">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 2: Underdamped IVP with $m=1, c=2, k=5$; $x(0)=1, x'(0)=0$</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Form the characteristic equation.</strong></p>
+            <div class="math-display">$$r^2 + 2r + 5 = 0$$</div>
+            <p><strong>Step 2: Use the quadratic formula.</strong></p>
+            <div class="math-display">$$r = \frac{-2 \pm \sqrt{4-20}}{2} = \frac{-2 \pm \sqrt{-16}}{2} = \frac{-2 \pm 4i}{2} = -1 \pm 2i$$</div>
+            <p><strong>Step 3: Classify the damping.</strong> The discriminant is $D = c^2 - 4mk = 4 - 20 = -16 < 0$. This is <strong>underdamped</strong> ($\zeta = \dfrac{2}{2\sqrt{5}} \approx 0.447 < 1$). The system oscillates with decreasing amplitude.</p>
+            <p><strong>Step 4: General solution.</strong> From $r = -1 \pm 2i$, we have $\alpha = -1$ and $\beta = 2$:</p>
+            <div class="math-display">$$x(t) = e^{-t}(c_1\cos(2t) + c_2\sin(2t))$$</div>
+            <p><strong>Step 5: Apply initial condition $x(0) = 1$.</strong></p>
+            <div class="math-display">$$1 = e^0(c_1\cos 0 + c_2\sin 0) = c_1 \quad \Rightarrow \quad c_1 = 1$$</div>
+            <p><strong>Step 6: Find the derivative.</strong></p>
+            <div class="math-display">$$x'(t) = -e^{-t}(c_1\cos(2t) + c_2\sin(2t)) + e^{-t}(-2c_1\sin(2t) + 2c_2\cos(2t))$$</div>
+            <p><strong>Step 7: Apply initial condition $x'(0) = 0$.</strong></p>
+            <div class="math-display">$$0 = -e^0(c_1 + 0) + e^0(0 + 2c_2) = -c_1 + 2c_2 = -1 + 2c_2$$</div>
+            <div class="math-display">$$c_2 = \frac{1}{2}$$</div>
+            <p><strong>Step 8: Particular solution.</strong></p>
+            <div class="math-display">$$\boxed{x(t) = e^{-t}\left(\cos(2t) + \frac{1}{2}\sin(2t)\right)}$$</div>
+            <p style="margin-top: 1rem; font-size: 0.95rem; color: #666;"><em>The exponential envelope $e^{-t}$ damps the oscillation at frequency $\beta = 2$ rad/s. As $t \to \infty$, $x(t) \to 0$.</em></p>
+        </div>
+    </div>
+</section>
+
 <!-- =================== REAL-WORLD EXAMPLES =================== -->
 <section id="examples">
   <h2>Real-World Examples</h2>

@@ -929,6 +929,84 @@
             </div>
         </section>
 
+        <!-- Practice Problems Section -->
+        <section id="exam-practice">
+            <h2>📝 Exam-Style Practice Problems</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                    <span>Practice 1: Find $\mu(x) = x^\alpha$ for $3y\,dx + 2x\,dy = 0$, then solve</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1: Check for non-exactness</strong></p>
+                    <p>$M = 3y$, $N = 2x$</p>
+                    $$\frac{\partial M}{\partial y} = 3, \quad \frac{\partial N}{\partial x} = 2$$
+                    <p>Since $3 \neq 2$, the equation is not exact.</p>
+
+                    <p><strong>Step 2: Test Case 1 for integrating factor $\mu(x)$</strong></p>
+                    $$h(x) = \frac{1}{N}\left(\frac{\partial M}{\partial y} - \frac{\partial N}{\partial x}\right) = \frac{3-2}{2x} = \frac{1}{2x}$$
+                    <p>Since $h(x)$ depends only on $x$, an integrating factor $\mu(x) = e^{\int h(x)\,dx}$ exists.</p>
+
+                    <p><strong>Step 3: Find $\mu(x) = x^\alpha$</strong></p>
+                    <p>Multiplying by $x^\alpha$: $3yx^\alpha\,dx + 2x^{1+\alpha}\,dy = 0$</p>
+                    <p>For exactness, we need:</p>
+                    $$\frac{\partial(3yx^\alpha)}{\partial y} = \frac{\partial(2x^{1+\alpha})}{\partial x}$$
+                    $$3x^\alpha = 2(1+\alpha)x^\alpha$$
+                    $$3 = 2(1+\alpha)$$
+                    $$\alpha = \frac{1}{2}$$
+
+                    <p><strong>Step 4: Multiply by $\mu = x^{1/2}$ and solve as exact equation</strong></p>
+                    $$3yx^{1/2}\,dx + 2x^{3/2}\,dy = 0$$
+                    <p>Integrate $N$ with respect to $y$:</p>
+                    $$F(x,y) = \int 2x^{3/2}\,dy = 2x^{3/2}y + h(x)$$
+                    <p>Check: $\dfrac{\partial F}{\partial x} = 3x^{1/2}y + h'(x) = 3yx^{1/2}$ implies $h'(x) = 0$.</p>
+
+                    <p><strong>Step 5: Write the general solution</strong></p>
+                    $$\boxed{2x^{3/2}y = C} \quad \text{or} \quad \boxed{y = \frac{C}{2x^{3/2}}}$$
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                    <span>Practice 2: Find integrating factor $\mu = x^a y^b$ for $(3xy + y^2)\,dx + (x^2 + xy)\,dy = 0$</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="example-content">
+                    <h4>Solution</h4>
+                    <p><strong>Step 1: Check for non-exactness</strong></p>
+                    <p>$M = 3xy + y^2$, $N = x^2 + xy$</p>
+                    $$\frac{\partial M}{\partial y} = 3x + 2y, \quad \frac{\partial N}{\partial x} = 2x + y$$
+                    <p>Not exact since $3x + 2y \neq 2x + y$.</p>
+
+                    <p><strong>Step 2: Try $\mu = x^a y^b$</strong></p>
+                    <p>After multiplying by $x^a y^b$:</p>
+                    $$\tilde{M} = 3x^{a+1}y^{b+1} + x^a y^{b+2}$$
+                    $$\tilde{N} = x^{a+2}y^b + x^{a+1}y^{b+1}$$
+
+                    <p><strong>Step 3: Apply exactness condition</strong></p>
+                    $$\frac{\partial \tilde{M}}{\partial y} = 3(b+1)x^{a+1}y^b + (b+2)x^a y^{b+1}$$
+                    $$\frac{\partial \tilde{N}}{\partial x} = (a+2)x^{a+1}y^b + (a+1)x^a y^{b+1}$$
+                    <p>Matching coefficients:</p>
+                    <p>Coefficient of $x^{a+1}y^b$: $3(b+1) = a+2$</p>
+                    <p>Coefficient of $x^a y^{b+1}$: $b+2 = a+1$</p>
+                    <p>From the second equation: $a = b+1$. Substituting into the first:</p>
+                    $$3(b+1) = (b+1) + 2 \implies 2(b+1) = 2 \implies b = 0, \, a = 1$$
+
+                    <p><strong>Step 4: Multiply by $\mu = x$ and solve</strong></p>
+                    $$(3x^2y + xy^2)\,dx + (x^3 + x^2y)\,dy = 0$$
+                    <p>Verify: $\dfrac{\partial}{\partial y}(3x^2y + xy^2) = 3x^2 + 2xy = \dfrac{\partial}{\partial x}(x^3 + x^2y)$ ✓</p>
+                    <p>Integrate: $F = \int (x^3 + x^2y)\,dy = x^3 y + \dfrac{x^2 y^2}{2} + h(x)$</p>
+                    <p>Check: $\dfrac{\partial F}{\partial x} = 3x^2y + xy^2 + h'(x)$ implies $h'(x) = 0$.</p>
+
+                    <p><strong>Step 5: Write the general solution</strong></p>
+                    $$\boxed{x^3y + \frac{x^2y^2}{2} = C}$$
+                </div>
+            </div>
+        </section>
+
         <!-- Interactive Visualizer -->
         <section class="section" id="visualizer">
             <h2>Interactive Non-Exactness Checker</h2>

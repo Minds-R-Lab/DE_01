@@ -630,6 +630,73 @@
   </div>
 </section>
 
+<!-- =================== EXAM-STYLE PRACTICE PROBLEMS =================== -->
+<section id="exam-practice">
+    <h2>📝 Exam-Style Practice Problems</h2>
+    <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
+
+    <div class="example-item">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 1: Solve $3x^2 y'' + 5xy' - y = 0$</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Set up indicial equation.</strong> Assume $y = x^r$. Then $y' = rx^{r-1}$ and $y'' = r(r-1)x^{r-2}$.</p>
+            <p><strong>Step 2: Substitute into the equation.</strong></p>
+            <div class="math-display">$$3x^2 \cdot r(r-1)x^{r-2} + 5x \cdot rx^{r-1} - x^r = 0$$</div>
+            <div class="math-display">$$3r(r-1)x^r + 5rx^r - x^r = 0$$</div>
+            <p><strong>Step 3: Factor out $x^r$.</strong> (Valid for $x \neq 0$)</p>
+            <div class="math-display">$$x^r[3r(r-1) + 5r - 1] = 0$$</div>
+            <p><strong>Step 4: Indicial equation.</strong></p>
+            <div class="math-display">$$3r^2 - 3r + 5r - 1 = 0 \Rightarrow 3r^2 + 2r - 1 = 0$$</div>
+            <p><strong>Step 5: Factor.</strong> $(3r - 1)(r + 1) = 0$, so $r = \frac{1}{3}$ or $r = -1$.</p>
+            <p><strong>Step 6: General solution.</strong> Two distinct real roots give:</p>
+            <div class="math-display">$$\boxed{y = c_1 x^{1/3} + c_2 x^{-1}}$$</div>
+        </div>
+    </div>
+
+    <div class="example-item" style="margin-top: 1.5rem;">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 2: Solve $x^2 y'' + 3xy' + y = 0$</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Assume $y = x^r$.</strong> Then $y' = rx^{r-1}$ and $y'' = r(r-1)x^{r-2}$.</p>
+            <p><strong>Step 2: Substitute and simplify.</strong></p>
+            <div class="math-display">$$x^2 \cdot r(r-1)x^{r-2} + 3x \cdot rx^{r-1} + x^r = 0$$</div>
+            <div class="math-display">$$r(r-1)x^r + 3rx^r + x^r = 0$$</div>
+            <div class="math-display">$$x^r[r(r-1) + 3r + 1] = 0$$</div>
+            <p><strong>Step 3: Indicial equation.</strong></p>
+            <div class="math-display">$$r^2 - r + 3r + 1 = 0 \Rightarrow r^2 + 2r + 1 = 0$$</div>
+            <p><strong>Step 4: Factor.</strong> $(r+1)^2 = 0$, so $r = -1$ (repeated root).</p>
+            <p><strong>Step 5: General solution.</strong> For a repeated root $r_0$, the formula is $y = x^{r_0}(c_1 + c_2 \ln x)$:</p>
+            <div class="math-display">$$\boxed{y = c_1 x^{-1} + c_2 x^{-1}\ln x = \frac{c_1 + c_2\ln x}{x}}$$</div>
+        </div>
+    </div>
+
+    <div class="example-item" style="margin-top: 1.5rem;">
+        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+            <span>Practice 3: Solve $x^2 y'' - 3xy' + 4y = 0$</span>
+            <span class="arrow">▶</span>
+        </div>
+        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+            <h4>Solution</h4>
+            <p><strong>Step 1: Assume $y = x^r$.</strong> Derivatives: $y' = rx^{r-1}$, $y'' = r(r-1)x^{r-2}$.</p>
+            <p><strong>Step 2: Substitute.</strong></p>
+            <div class="math-display">$$x^2 \cdot r(r-1)x^{r-2} - 3x \cdot rx^{r-1} + 4x^r = 0$$</div>
+            <div class="math-display">$$r(r-1)x^r - 3rx^r + 4x^r = 0$$</div>
+            <div class="math-display">$$x^r[r(r-1) - 3r + 4] = 0$$</div>
+            <p><strong>Step 3: Indicial equation.</strong></p>
+            <div class="math-display">$$r^2 - r - 3r + 4 = 0 \Rightarrow r^2 - 4r + 4 = 0$$</div>
+            <p><strong>Step 4: Factor.</strong> $(r-2)^2 = 0$, so $r = 2$ (repeated root).</p>
+            <p><strong>Step 5: General solution.</strong> Using the repeated root formula:</p>
+            <div class="math-display">$$\boxed{y = c_1 x^2 + c_2 x^2 \ln x = x^2(c_1 + c_2\ln x)}$$</div>
+        </div>
+    </div>
+</section>
+
 <!-- =================== INTERACTIVE VISUALIZER =================== -->
 <section id="visualizer">
   <h2>Interactive Visualizer: Euler Equation Explorer</h2>
