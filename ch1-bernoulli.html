@@ -1486,5 +1486,20 @@
     <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
         Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
     </footer>
+    <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
+    </script>
 </body>
 </html>

@@ -636,11 +636,11 @@
     <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
     <div class="example-item">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 1: Solve $3x^2 y'' + 5xy' - y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Set up indicial equation.</strong> Assume $y = x^r$. Then $y' = rx^{r-1}$ and $y'' = r(r-1)x^{r-2}$.</p>
             <p><strong>Step 2: Substitute into the equation.</strong></p>
@@ -657,11 +657,11 @@
     </div>
 
     <div class="example-item" style="margin-top: 1.5rem;">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 2: Solve $x^2 y'' + 3xy' + y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Assume $y = x^r$.</strong> Then $y' = rx^{r-1}$ and $y'' = r(r-1)x^{r-2}$.</p>
             <p><strong>Step 2: Substitute and simplify.</strong></p>
@@ -677,11 +677,11 @@
     </div>
 
     <div class="example-item" style="margin-top: 1.5rem;">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 3: Solve $x^2 y'' - 3xy' + 4y = 0$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Assume $y = x^r$.</strong> Derivatives: $y' = rx^{r-1}$, $y'' = r(r-1)x^{r-2}$.</p>
             <p><strong>Step 2: Substitute.</strong></p>
@@ -939,5 +939,20 @@ function updateProgress() {
 window.addEventListener('load', updateEulerPlot);
 </script>
 
+    <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
+    </script>
 </body>
 </html>

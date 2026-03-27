@@ -935,11 +935,11 @@
             <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
             <div class="example-item">
-                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 1: Find $\mu(x) = x^\alpha$ for $3y\,dx + 2x\,dy = 0$, then solve</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content">
+                <div class="example-content" style="display:none">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Check for non-exactness</strong></p>
                     <p>$M = 3y$, $N = 2x$</p>
@@ -970,11 +970,11 @@
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 2: Find integrating factor $\mu = x^a y^b$ for $(3xy + y^2)\,dx + (x^2 + xy)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content">
+                <div class="example-content" style="display:none">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Check for non-exactness</strong></p>
                     <p>$M = 3xy + y^2$, $N = x^2 + xy$</p>
@@ -1513,6 +1513,34 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderMath();
         });
+    </script>
+<script>
+function toggleCollapsible(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+        if (icon) icon.textContent = '▼';
+    } else {
+        content.style.display = 'block';
+        if (icon) icon.textContent = '▲';
+    }
+}
+</script>
+    <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
     </script>
 </body>
 </html>

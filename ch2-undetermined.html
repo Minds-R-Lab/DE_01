@@ -799,11 +799,11 @@
     <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
     <div class="example-item">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 1: Find the general solution of $y'' - 4y' + 3y = 5e^{2t}$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Find $y_c$ (homogeneous solution).</strong> Characteristic equation: $r^2 - 4r + 3 = 0$.</p>
             <div class="math-display">$$(r-1)(r-3) = 0 \Rightarrow r = 1, 3$$</div>
@@ -821,11 +821,11 @@
     </div>
 
     <div class="example-item" style="margin-top: 1.5rem;">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 2: Find the general solution of $y'' + y = 3\cos(t)$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $r^2 + 1 = 0 \Rightarrow r = \pm i$.</p>
             <div class="math-display">$$y_c = c_1\cos(t) + c_2\sin(t)$$</div>
@@ -1118,5 +1118,20 @@
   }
 </script>
 
+    <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
+    </script>
 </body>
 </html>

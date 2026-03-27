@@ -732,11 +732,11 @@
     <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
     <div class="example-item">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 1: Variation of parameters for $y'' - 2y' + y = \dfrac{e^t}{t^2}$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $(r-1)^2 = 0 \Rightarrow r = 1$ (repeated).</p>
             <div class="math-display">$$y_c = c_1 e^t + c_2 te^t, \quad y_1 = e^t, \quad y_2 = te^t$$</div>
@@ -756,11 +756,11 @@
     </div>
 
     <div class="example-item" style="margin-top: 1.5rem;">
-        <div class="example-header collapsible-toggle" onclick="toggleCollapsible(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <div class="example-header collapsible-toggle" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
             <span>Practice 2: Variation of parameters for $y'' + 4y = \sec(2t)$</span>
             <span class="arrow">▶</span>
         </div>
-        <div class="example-content collapsible-content" style="padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
+        <div class="example-content collapsible-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 8px; margin-top: 0.5rem;">
             <h4>Solution</h4>
             <p><strong>Step 1: Find $y_c$.</strong> Characteristic equation: $r^2 + 4 = 0 \Rightarrow r = \pm 2i$.</p>
             <div class="math-display">$$y_c = c_1\cos(2t) + c_2\sin(2t), \quad y_1 = \cos(2t), \quad y_2 = \sin(2t)$$</div>
@@ -1043,5 +1043,20 @@ function checkChoice(problemNum, btn, isCorrect) {
 }
 </script>
 
+    <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
+    </script>
 </body>
 </html>
