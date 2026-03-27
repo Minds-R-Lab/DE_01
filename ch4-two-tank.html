@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two-Tank System Simulator | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+    --tank1: #3b82f6;
+    --tank1-light: #93c5fd;
+    --tank2: #8b5cf6;
+    --tank2-light: #c4b5fd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 1060px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box       { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label       { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 170px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+  }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .example-item { margin: 1rem 0; }
+  .example-header {
+    width: 100%; padding: 1rem 1.25rem;
+    border: none; border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    color: #fff; transition: all 0.2s;
+  }
+  .example-header:hover { opacity: 0.92; }
+  .example-content {
+    padding: 0; max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .example-content.active {
+    max-height: 3000px; padding: 1.5rem;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    #anim-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+
+  /* ---- COUPLING HIGHLIGHT ---- */
+  .coupling-highlight {
+    background: linear-gradient(135deg, #ede9fe, #dbeafe);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  .coupling-highlight::before {
+    content: '🔗 COUPLING';
+    position: absolute;
+    top: -12px; left: 16px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch4-overview.html">Ch4 Overview</a>
+    <a href="ch4-matrices.html">4.1 Matrices</a>
+    <a href="ch4-homogeneous.html">4.2 Homogeneous</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#system" class="active">Two-Tank System</a>
+    <a href="#animation">Animation</a>
+    <a href="#coupling">Coupling</a>
+    <a href="#examples">Worked Examples</a>
+    <a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== INTRO =================== -->
+<section id="system">
+  <h1>Interactive Two-Tank System</h1>
+  <p class="subtitle">See how coupled differential equations emerge from interconnected physical systems</p>
+
+  <h2>The Physical System</h2>
+  <p>
+    Two tanks are connected by pipes. Liquid flows <strong>into Tank 1</strong> from an external source, <strong>from Tank 1 to Tank 2</strong> through a connecting pipe, and <strong>out of Tank 2</strong> through a drain. The flow rates depend on the liquid levels, creating a <em>coupled</em> system of differential equations.
+  </p>
+
+  <div class="definition-box">
+    <div class="box-label">Governing Equations</div>
+    <p>Let $h_1(t)$ and $h_2(t)$ be the liquid levels (in meters) in Tank 1 and Tank 2 respectively:</p>
+    <div class="math-display">
+      $$A_1 \frac{dh_1}{dt} = Q_{\text{in}} - k_1\,h_1$$
+    </div>
+    <div class="math-display">
+      $$A_2 \frac{dh_2}{dt} = k_1\,h_1 - k_2\,h_2$$
+    </div>
+    <p style="margin-top:0.75rem;">where:</p>
+    <ul>
+      <li>$A_1, A_2$ = cross-sectional areas of the tanks (m²)</li>
+      <li>$k_1$ = valve coefficient from Tank 1 → Tank 2 (m²/s)</li>
+      <li>$k_2$ = valve coefficient from Tank 2 → drain (m²/s)</li>
+      <li>$Q_{\text{in}}$ = external inflow rate into Tank 1 (m³/s)</li>
+    </ul>
+  </div>
+
+  <div class="coupling-highlight" style="margin-top:2rem;">
+    <p style="margin-top:0.5rem;"><strong>The key insight:</strong> The term $k_1 h_1$ appears in <em>both</em> equations — it is the <strong>outflow</strong> of Tank 1 and the <strong>inflow</strong> of Tank 2. This shared term is what <strong>couples</strong> the two equations. You cannot solve for $h_2(t)$ without knowing $h_1(t)$ first, because Tank 2's inflow depends on Tank 1's level.</p>
+  </div>
+
+  <h3>Matrix Form — A System of First-Order ODEs</h3>
+  <p>Dividing both equations by their respective areas and writing in matrix form:</p>
+  <div class="math-display">
+    $$\frac{d}{dt}\begin{pmatrix} h_1 \\ h_2 \end{pmatrix} = \underbrace{\begin{pmatrix} -k_1/A_1 & 0 \\ k_1/A_2 & -k_2/A_2 \end{pmatrix}}_{\mathbf{A}} \begin{pmatrix} h_1 \\ h_2 \end{pmatrix} + \begin{pmatrix} Q_{\text{in}}/A_1 \\ 0 \end{pmatrix}$$
+  </div>
+  <p>This is exactly the form $\mathbf{x}' = \mathbf{A}\mathbf{x} + \mathbf{b}$ studied in Chapter 4. The eigenvalues of $\mathbf{A}$ determine the system's behavior.</p>
+
+  <div class="theorem-box">
+    <div class="box-label">Eigenvalue Analysis</div>
+    <p>Since $\mathbf{A}$ is lower-triangular, the eigenvalues are the diagonal entries:</p>
+    <div class="math-display">
+      $$\lambda_1 = -\frac{k_1}{A_1}, \qquad \lambda_2 = -\frac{k_2}{A_2}$$
+    </div>
+    <p style="margin-top:0.5rem;">Both eigenvalues are always <strong>negative</strong> (since $k_1, k_2, A_1, A_2 > 0$), so the system is always <strong>stable</strong> — both tank levels eventually reach steady state.</p>
+  </div>
+
+  <h3>Steady-State Solution</h3>
+  <p>Setting $dh_1/dt = 0$ and $dh_2/dt = 0$:</p>
+  <div class="math-display">
+    $$h_1^* = \frac{Q_{\text{in}}}{k_1}, \qquad h_2^* = \frac{Q_{\text{in}}}{k_2}$$
+  </div>
+  <p>Notice: the steady-state levels depend only on the inflow rate and the respective valve coefficients — not on the tank areas (areas only affect <em>how fast</em> steady state is reached).</p>
+</section>
+
+<!-- =================== LIVE ANIMATION =================== -->
+<section id="animation" style="padding-bottom:1.5rem;">
+  <h2>Live Two-Tank Animation</h2>
+  <p style="margin-bottom:0.5rem;">Watch both tanks fill and drain in real time. Adjust parameters, then press <strong>Play</strong> to see the coupled dynamics unfold — notice how Tank 2 responds to Tank 1's level.</p>
+
+  <!-- Controls Row 1: Tank Parameters -->
+  <div class="controls">
+    <div class="slider-group">
+      <label>Tank 1 Area A₁ (m²)</label>
+      <input type="range" id="a1" min="0.5" max="5" step="0.1" value="2">
+      <div class="slider-value"><span id="a1-val">2.0</span> m²</div>
+    </div>
+    <div class="slider-group">
+      <label>Tank 2 Area A₂ (m²)</label>
+      <input type="range" id="a2" min="0.5" max="5" step="0.1" value="2">
+      <div class="slider-value"><span id="a2-val">2.0</span> m²</div>
+    </div>
+    <div class="slider-group">
+      <label>Valve k₁ (m²/s)</label>
+      <input type="range" id="k1" min="0.1" max="3" step="0.05" value="0.5">
+      <div class="slider-value"><span id="k1-val">0.50</span></div>
+    </div>
+    <div class="slider-group">
+      <label>Valve k₂ (m²/s)</label>
+      <input type="range" id="k2" min="0.1" max="3" step="0.05" value="0.5">
+      <div class="slider-value"><span id="k2-val">0.50</span></div>
+    </div>
+  </div>
+
+  <!-- Controls Row 2: Inflow & ICs -->
+  <div class="controls">
+    <div class="slider-group">
+      <label>Inflow Q_in (m³/s)</label>
+      <input type="range" id="qin" min="0" max="3" step="0.05" value="1">
+      <div class="slider-value"><span id="qin-val">1.00</span></div>
+    </div>
+    <div class="slider-group">
+      <label>h₁(0) — Initial Level Tank 1</label>
+      <input type="range" id="h10" min="0" max="5" step="0.1" value="0">
+      <div class="slider-value"><span id="h10-val">0.0</span> m</div>
+    </div>
+    <div class="slider-group">
+      <label>h₂(0) — Initial Level Tank 2</label>
+      <input type="range" id="h20" min="0" max="5" step="0.1" value="0">
+      <div class="slider-value"><span id="h20-val">0.0</span> m</div>
+    </div>
+    <div class="control-group">
+      <label for="scenario">Scenario</label>
+      <select id="scenario">
+        <option value="custom">Custom (sliders)</option>
+        <option value="fill">Fill from empty</option>
+        <option value="drain">Drain (no inflow)</option>
+        <option value="transfer">Transfer: Tank 1 full → Tank 2</option>
+        <option value="resonance">Mismatched valves</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Play / Pause / Reset -->
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;margin:0.75rem 0 1rem;">
+    <button class="btn btn-primary" id="anim-play" onclick="animPlay()" style="min-width:100px;">▶ Play</button>
+    <button class="btn btn-accent" onclick="animReset()">↺ Reset</button>
+    <div class="slider-group" style="min-width:130px;">
+      <label>Speed</label>
+      <input type="range" id="anim-speed" min="0.5" max="5" step="0.5" value="1">
+      <div class="slider-value"><span id="anim-speed-val">1.0</span>x</div>
+    </div>
+    <div id="eigenvalue-badge" style="margin-left:auto;padding:0.5rem 1rem;border-radius:8px;font-size:0.88rem;font-weight:600;background:#ede9fe;color:#5b21b6;border:1.5px solid #c4b5fd;">
+      λ₁ = -0.25 &nbsp; λ₂ = -0.25
+    </div>
+  </div>
+
+  <!-- Main Animation Grid -->
+  <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:1rem;min-height:420px;" id="anim-grid">
+    <!-- Left: Physical Tank Visualization -->
+    <div style="background:#f8fafc;border-radius:12px;border:1px solid var(--border);overflow:hidden;position:relative;">
+      <div style="position:absolute;top:8px;left:12px;font-size:0.8rem;font-weight:600;color:var(--text-muted);">Physical System</div>
+      <div style="position:absolute;top:8px;right:12px;font-size:0.85rem;font-weight:700;color:var(--primary);" id="anim-time-label">t = 0.00 s</div>
+      <canvas id="anim-canvas" width="600" height="420" style="width:100%;height:100%;"></canvas>
+    </div>
+    <!-- Right: Live Level Chart -->
+    <div style="background:#f8fafc;border-radius:12px;border:1px solid var(--border);overflow:hidden;position:relative;">
+      <div style="position:absolute;top:8px;left:12px;font-size:0.8rem;font-weight:600;color:var(--text-muted);">Tank Levels vs Time</div>
+      <canvas id="anim-chart" width="500" height="420" style="width:100%;height:100%;"></canvas>
+    </div>
+  </div>
+
+  <!-- Flow Rates Panel -->
+  <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+    <div style="background:#dbeafe;border-radius:10px;padding:1rem;text-align:center;border:1.5px solid #93c5fd;">
+      <div style="font-size:0.78rem;font-weight:600;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.03em;">Inflow → Tank 1</div>
+      <div id="flow-in" style="font-size:1.6rem;font-weight:800;color:#1d4ed8;margin-top:0.25rem;">1.00</div>
+      <div style="font-size:0.78rem;color:#64748b;">m³/s</div>
+    </div>
+    <div style="background:#ede9fe;border-radius:10px;padding:1rem;text-align:center;border:1.5px solid #c4b5fd;">
+      <div style="font-size:0.78rem;font-weight:600;color:#6d28d9;text-transform:uppercase;letter-spacing:0.03em;">Tank 1 → Tank 2</div>
+      <div id="flow-12" style="font-size:1.6rem;font-weight:800;color:#6d28d9;margin-top:0.25rem;">0.00</div>
+      <div style="font-size:0.78rem;color:#64748b;">m³/s = k₁·h₁</div>
+    </div>
+    <div style="background:#d1fae5;border-radius:10px;padding:1rem;text-align:center;border:1.5px solid #6ee7b7;">
+      <div style="font-size:0.78rem;font-weight:600;color:#047857;text-transform:uppercase;letter-spacing:0.03em;">Tank 2 → Drain</div>
+      <div id="flow-out" style="font-size:1.6rem;font-weight:800;color:#047857;margin-top:0.25rem;">0.00</div>
+      <div style="font-size:0.78rem;color:#64748b;">m³/s = k₂·h₂</div>
+    </div>
+  </div>
+
+  <!-- Tank Level Readout -->
+  <div style="margin-top:0.75rem;display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+    <div style="background:#fff;border-radius:10px;padding:1rem;border:2px solid var(--tank1);display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--tank1);text-transform:uppercase;">Tank 1 Level</div>
+        <div style="font-size:0.82rem;color:#64748b;">Steady state: h₁* = <span id="ss-h1">2.00</span> m</div>
+      </div>
+      <div id="h1-readout" style="font-size:2rem;font-weight:800;color:var(--tank1);">0.00 m</div>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:1rem;border:2px solid var(--tank2);display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--tank2);text-transform:uppercase;">Tank 2 Level</div>
+        <div style="font-size:0.82rem;color:#64748b;">Steady state: h₂* = <span id="ss-h2">2.00</span> m</div>
+      </div>
+      <div id="h2-readout" style="font-size:2rem;font-weight:800;color:var(--tank2);">0.00 m</div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== COUPLING EXPLANATION =================== -->
+<section id="coupling">
+  <h2>Understanding the Coupling</h2>
+
+  <p>The beauty of this system is that the two tanks are <strong>not independent</strong>. Let's trace the chain of cause and effect:</p>
+
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:0.75rem 1rem;align-items:start;margin:1.5rem 0;">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--tank1);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;">1</div>
+    <div>
+      <strong>External inflow $Q_{\text{in}}$ enters Tank 1</strong> — this drives the entire system. If $Q_{\text{in}}$ changes, <em>both</em> tank levels eventually change.
+    </div>
+
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;">2</div>
+    <div>
+      <strong>Tank 1's level $h_1$ rises</strong>, increasing the outflow $k_1 h_1$ through the connecting valve. The higher the level, the greater the pressure driving fluid out.
+    </div>
+
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--tank2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;">3</div>
+    <div>
+      <strong>This outflow becomes Tank 2's inflow</strong> — the coupling term $k_1 h_1$ appears in Tank 2's equation. Tank 2 cannot "know" its future without knowing Tank 1's state.
+    </div>
+
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;">4</div>
+    <div>
+      <strong>Tank 2 drains at rate $k_2 h_2$</strong>. Eventually, both tanks reach steady state when inflow = outflow for each tank simultaneously.
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Why You Need Systems of DEs</div>
+    <p>If you tried to solve Tank 2's equation $A_2 h_2' = k_1 h_1 - k_2 h_2$ by itself, you'd be stuck: the right side contains $h_1(t)$, which is <em>unknown</em>. You must solve the system simultaneously — this is exactly the problem Chapter 4 addresses using matrix methods, eigenvalues, and eigenvectors.</p>
+  </div>
+
+  <h3>One-Way vs Two-Way Coupling</h3>
+  <p>
+    This two-tank system has <strong>one-way (cascade) coupling</strong>: Tank 1 affects Tank 2, but Tank 2 does <em>not</em> affect Tank 1. Mathematically, the matrix $\mathbf{A}$ is lower-triangular, meaning Tank 1's equation is independent. In more complex systems (e.g., tanks connected by bidirectional pipes), you get <strong>two-way coupling</strong> where every equation depends on every variable.
+  </p>
+</section>
+
+<!-- =================== WORKED EXAMPLES =================== -->
+<section id="examples">
+  <h2>Worked Examples</h2>
+
+  <div class="example-item">
+    <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg, #3b82f6, #2563eb);">
+      <span>Example 1: Fill from empty — $A_1 = A_2 = 2$, $k_1 = k_2 = 0.5$, $Q_{\text{in}} = 1$</span>
+      <span class="toggle-icon" style="font-size:0.8rem;">▼</span>
+    </div>
+    <div class="example-content" style="background:#f8fafc;border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;">
+      <h4>Setting up the system</h4>
+      <div class="math-display">
+        $$\frac{dh_1}{dt} = \frac{1 - 0.5\,h_1}{2} = 0.5 - 0.25\,h_1$$
+      </div>
+      <div class="math-display">
+        $$\frac{dh_2}{dt} = \frac{0.5\,h_1 - 0.5\,h_2}{2} = 0.25\,h_1 - 0.25\,h_2$$
+      </div>
+
+      <h4 style="margin-top:1rem;">Solving Tank 1 (independent equation)</h4>
+      <p>Tank 1's equation is a first-order linear ODE with constant coefficients:</p>
+      <div class="math-display">
+        $$h_1' + 0.25\,h_1 = 0.5$$
+      </div>
+      <p>With $h_1(0) = 0$, the solution is:</p>
+      <div class="math-display">
+        $$h_1(t) = 2(1 - e^{-0.25t})$$
+      </div>
+
+      <h4 style="margin-top:1rem;">Solving Tank 2 (uses $h_1$)</h4>
+      <p>Substituting $h_1(t)$ into Tank 2's equation:</p>
+      <div class="math-display">
+        $$h_2' + 0.25\,h_2 = 0.25 \cdot 2(1 - e^{-0.25t}) = 0.5 - 0.5\,e^{-0.25t}$$
+      </div>
+      <p>This has a repeated eigenvalue $\lambda = -0.25$. Using integrating factors or the matrix exponential with $h_2(0) = 0$:</p>
+      <div class="math-display">
+        $$h_2(t) = 2 - 2e^{-0.25t} - 0.5\,t\,e^{-0.25t}$$
+      </div>
+
+      <h4 style="margin-top:1rem;">Steady state</h4>
+      <p>As $t \to \infty$: $h_1^* = Q_{\text{in}}/k_1 = 1/0.5 = 2$ m and $h_2^* = Q_{\text{in}}/k_2 = 1/0.5 = 2$ m.</p>
+      <p><strong>Key observation:</strong> Tank 1 reaches steady state <em>before</em> Tank 2 — try it in the simulator above!</p>
+    </div>
+  </div>
+
+  <div class="example-item" style="margin-top:1rem;">
+    <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg, #8b5cf6, #6d28d9);">
+      <span>Example 2: Drain from full — $Q_{\text{in}} = 0$, $h_1(0) = 4$, $h_2(0) = 3$</span>
+      <span class="toggle-icon" style="font-size:0.8rem;">▼</span>
+    </div>
+    <div class="example-content" style="background:#f8fafc;border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;">
+      <h4>The homogeneous system</h4>
+      <p>With $Q_{\text{in}} = 0$, the system becomes $\mathbf{x}' = \mathbf{A}\mathbf{x}$ (no forcing term):</p>
+      <div class="math-display">
+        $$\frac{d}{dt}\begin{pmatrix} h_1 \\ h_2 \end{pmatrix} = \begin{pmatrix} -0.25 & 0 \\ 0.25 & -0.25 \end{pmatrix} \begin{pmatrix} h_1 \\ h_2 \end{pmatrix}$$
+      </div>
+
+      <h4 style="margin-top:1rem;">Eigenvalues and eigenvectors</h4>
+      <p>Repeated eigenvalue $\lambda = -0.25$. Eigenvector for $\lambda$: $\mathbf{v}_1 = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$. Generalized eigenvector: $\mathbf{v}_2 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$.</p>
+
+      <h4 style="margin-top:1rem;">General solution</h4>
+      <div class="math-display">
+        $$\begin{pmatrix} h_1 \\ h_2 \end{pmatrix} = c_1 e^{-0.25t}\begin{pmatrix} 0 \\ 1 \end{pmatrix} + c_2 e^{-0.25t}\left[\begin{pmatrix} 1 \\ 1 \end{pmatrix} + t\begin{pmatrix} 0 \\ 1 \end{pmatrix}\right]$$
+      </div>
+
+      <p>Applying $h_1(0) = 4, h_2(0) = 3$: $c_2 = 4$ and $c_1 = -1$.</p>
+      <div class="math-display">
+        $$h_1(t) = 4e^{-0.25t}, \qquad h_2(t) = (3 + 4t)e^{-0.25t}$$
+      </div>
+
+      <p style="margin-top:1rem;"><strong>Fascinating behavior:</strong> Tank 2's level initially <em>rises</em> (because fluid pours in from Tank 1) before eventually draining. The term $4t \cdot e^{-0.25t}$ creates a transient "bump." Try this scenario in the simulator!</p>
+    </div>
+  </div>
+
+  <div class="example-item" style="margin-top:1rem;">
+    <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg, #059669, #047857);">
+      <span>Example 3: Different valve sizes — $k_1 = 1$, $k_2 = 0.25$</span>
+      <span class="toggle-icon" style="font-size:0.8rem;">▼</span>
+    </div>
+    <div class="example-content" style="background:#f8fafc;border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;">
+      <h4>Setup</h4>
+      <p>With $A_1 = A_2 = 2$, $Q_{\text{in}} = 1$, filling from empty:</p>
+      <div class="math-display">
+        $$\mathbf{A} = \begin{pmatrix} -0.5 & 0 \\ 0.5 & -0.125 \end{pmatrix}, \qquad \lambda_1 = -0.5, \quad \lambda_2 = -0.125$$
+      </div>
+
+      <h4 style="margin-top:1rem;">Distinct eigenvalues — different timescales!</h4>
+      <p>The eigenvalue ratio $|\lambda_1/\lambda_2| = 4$ tells us Tank 1 responds <strong>4 times faster</strong> than Tank 2. This separation of timescales is common in coupled systems.</p>
+
+      <h4 style="margin-top:1rem;">Steady state</h4>
+      <div class="math-display">
+        $$h_1^* = \frac{Q_{\text{in}}}{k_1} = \frac{1}{1} = 1 \text{ m}, \qquad h_2^* = \frac{Q_{\text{in}}}{k_2} = \frac{1}{0.25} = 4 \text{ m}$$
+      </div>
+      <p>The smaller drain valve ($k_2 = 0.25$) causes Tank 2 to fill much higher! This demonstrates how valve sizing directly determines the operating levels.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PRACTICE =================== -->
+<section id="practice">
+  <h2>📝 Exam-Style Practice Problems</h2>
+  <p style="color: #64748b; margin-bottom: 1.5rem;">Click each problem to reveal the step-by-step solution.</p>
+
+  <div class="example-item">
+    <div class="example-header" onclick="toggleExample(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+      <span>Practice 1: Find eigenvalues for $A_1=1, A_2=3, k_1=2, k_2=1$</span>
+      <span class="toggle-icon" style="font-size:0.8rem;">▼</span>
+    </div>
+    <div class="example-content" style="background:#f8fafc;border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;">
+      <h4>Solution</h4>
+      <p><strong>Step 1:</strong> Form the system matrix:</p>
+      <div class="math-display">$$\mathbf{A} = \begin{pmatrix} -k_1/A_1 & 0 \\ k_1/A_2 & -k_2/A_2 \end{pmatrix} = \begin{pmatrix} -2 & 0 \\ 2/3 & -1/3 \end{pmatrix}$$</div>
+      <p><strong>Step 2:</strong> Since $\mathbf{A}$ is lower-triangular, the eigenvalues are the diagonal entries:</p>
+      <div class="math-display">$$\boxed{\lambda_1 = -2, \qquad \lambda_2 = -\frac{1}{3}}$$</div>
+      <p><strong>Step 3:</strong> Interpret: Both negative → stable. Tank 1 responds 6× faster than Tank 2 ($|\lambda_1/\lambda_2| = 6$).</p>
+    </div>
+  </div>
+
+  <div class="example-item" style="margin-top:1rem;">
+    <div class="example-header" onclick="toggleExample(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+      <span>Practice 2: Solve the drain problem $h_1(0)=3, h_2(0)=0, Q_{\text{in}}=0$ with $A_1=A_2=1, k_1=k_2=1$</span>
+      <span class="toggle-icon" style="font-size:0.8rem;">▼</span>
+    </div>
+    <div class="example-content" style="background:#f8fafc;border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;">
+      <h4>Solution</h4>
+      <p><strong>Step 1:</strong> The system matrix and repeated eigenvalue:</p>
+      <div class="math-display">$$\mathbf{A} = \begin{pmatrix} -1 & 0 \\ 1 & -1 \end{pmatrix}, \qquad \lambda = -1 \text{ (repeated)}$$</div>
+      <p><strong>Step 2:</strong> Tank 1 is independent: $h_1' = -h_1$, so $h_1(t) = 3e^{-t}$.</p>
+      <p><strong>Step 3:</strong> Tank 2: $h_2' = h_1 - h_2 = 3e^{-t} - h_2$. This is a first-order linear ODE.</p>
+      <p><strong>Step 4:</strong> Using an integrating factor $e^t$:</p>
+      <div class="math-display">$$(e^t h_2)' = 3e^{-t} \cdot e^t = 3$$</div>
+      <div class="math-display">$$e^t h_2 = 3t + C$$</div>
+      <p>With $h_2(0)=0$: $C=0$. Therefore:</p>
+      <div class="math-display">$$\boxed{h_1(t) = 3e^{-t}, \qquad h_2(t) = 3t\,e^{-t}}$$</div>
+      <p><strong>Step 5:</strong> Tank 2 peaks at $t=1$ where $h_2(1) = 3/e \approx 1.10$ m, then decays.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== CONNECTION =================== -->
+<section>
+  <h2>Connection to Chapter 4</h2>
+  <div class="tip-box">
+    <div class="box-label">How It All Fits Together</div>
+    <p style="margin-top:0.5rem;">
+      <strong>Section 4.1 (Matrices):</strong> The system matrix $\mathbf{A}$ encodes all the physics — tank areas, valve coefficients, and connectivity. Reading the matrix tells you the system's structure.
+    </p>
+    <p style="margin-top:1rem;">
+      <strong>Section 4.2 (Homogeneous Systems):</strong> The drain scenario ($Q_{\text{in}}=0$) gives $\mathbf{x}' = \mathbf{A}\mathbf{x}$. Eigenvalues determine decay rates; eigenvectors determine the independent modes. Repeated eigenvalues (equal valve ratios) produce the $te^{\lambda t}$ terms.
+    </p>
+    <p style="margin-top:1rem;">
+      <strong>This simulator:</strong> Lets you see the abstract mathematics come to life. The eigenvalues control how fast the levels change. The coupling term connects one equation to the other. The steady state is found by setting derivatives to zero.
+    </p>
+  </div>
+</section>
+
+</div>
+
+<footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University, Department of Mathematics and Statistics
+</footer>
+
+<!-- =================== ANIMATION ENGINE =================== -->
+<script>
+(function() {
+  // ---- STATE ----
+  const S = {
+    running: false,
+    t: 0,
+    h1: 0,
+    h2: 0,
+    dt: 0.005,
+    history: [],
+    maxT: 30,
+    rafId: null,
+    lastFrameTime: null
+  };
+
+  function P() {
+    return {
+      A1: parseFloat(document.getElementById('a1').value),
+      A2: parseFloat(document.getElementById('a2').value),
+      k1: parseFloat(document.getElementById('k1').value),
+      k2: parseFloat(document.getElementById('k2').value),
+      Qin: parseFloat(document.getElementById('qin').value),
+      h10: parseFloat(document.getElementById('h10').value),
+      h20: parseFloat(document.getElementById('h20').value),
+      speed: parseFloat(document.getElementById('anim-speed').value)
+    };
+  }
+
+  // ---- RK4 ----
+  function step(p) {
+    const { A1, A2, k1, k2, Qin } = p;
+    const dt = S.dt;
+    const f1 = (hh1) => (Qin - k1 * hh1) / A1;
+    const f2 = (hh1, hh2) => (k1 * hh1 - k2 * hh2) / A2;
+
+    const h1 = S.h1, h2 = S.h2;
+
+    const k1a = f1(h1);
+    const k1b = f2(h1, h2);
+
+    const k2a = f1(h1 + 0.5*dt*k1a);
+    const k2b = f2(h1 + 0.5*dt*k1a, h2 + 0.5*dt*k1b);
+
+    const k3a = f1(h1 + 0.5*dt*k2a);
+    const k3b = f2(h1 + 0.5*dt*k2a, h2 + 0.5*dt*k2b);
+
+    const k4a = f1(h1 + dt*k3a);
+    const k4b = f2(h1 + dt*k3a, h2 + dt*k3b);
+
+    S.h1 = Math.max(0, h1 + (dt/6)*(k1a + 2*k2a + 2*k3a + k4a));
+    S.h2 = Math.max(0, h2 + (dt/6)*(k1b + 2*k2b + 2*k3b + k4b));
+    S.t += dt;
+  }
+
+  // ---- DRAW TANKS ----
+  function drawSystem(canvas) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const p = P();
+    const maxLevel = 5.5;
+    const tankMaxH = 230;
+    const tankW1 = Math.min(120, 60 + p.A1 * 15);
+    const tankW2 = Math.min(120, 60 + p.A2 * 15);
+    const tankBottom = H - 60;
+
+    // Tank 1 position
+    const t1x = 100;
+    const t1y = tankBottom;
+
+    // Tank 2 position
+    const t2x = W - 100 - tankW2;
+    const t2y = tankBottom;
+
+    // Liquid heights in pixels
+    const liq1 = Math.min(tankMaxH, (S.h1 / maxLevel) * tankMaxH);
+    const liq2 = Math.min(tankMaxH, (S.h2 / maxLevel) * tankMaxH);
+
+    // ---- GROUND ----
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillRect(0, tankBottom, W, H - tankBottom);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, tankBottom);
+    ctx.lineTo(W, tankBottom);
+    ctx.stroke();
+
+    // ---- DRAW A TANK ----
+    function drawTank(x, y, w, liqH, color, lightColor, label, level, ssLevel) {
+      const th = tankMaxH;
+
+      // Tank body (outline)
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(x, y - th, w, th);
+
+      // Liquid fill
+      if (liqH > 0) {
+        // Gradient for liquid
+        const grad = ctx.createLinearGradient(x, y - liqH, x + w, y);
+        grad.addColorStop(0, lightColor);
+        grad.addColorStop(0.5, color);
+        grad.addColorStop(1, lightColor);
+        ctx.fillStyle = grad;
+        ctx.fillRect(x + 2, y - liqH, w - 4, liqH - 1);
+
+        // Surface wave effect
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        const surfY = y - liqH;
+        for (let wx = x + 2; wx < x + w - 2; wx += 1) {
+          const wave = Math.sin((wx - x) * 0.15 + S.t * 3) * 2;
+          if (wx === x + 2) ctx.moveTo(wx, surfY + wave);
+          else ctx.lineTo(wx, surfY + wave);
+        }
+        ctx.stroke();
+      }
+
+      // Tank label
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 16px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, x + w/2, y - th - 12);
+
+      // Level text inside tank
+      ctx.fillStyle = liqH > 30 ? '#fff' : '#1e293b';
+      ctx.font = 'bold 14px system-ui';
+      ctx.fillText(level.toFixed(2) + ' m', x + w/2, y - Math.max(liqH/2, 15));
+
+      // Steady-state dashed line
+      if (ssLevel > 0 && ssLevel < maxLevel) {
+        const ssH = (ssLevel / maxLevel) * th;
+        ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, y - ssH);
+        ctx.lineTo(x + w, y - ssH);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px system-ui';
+        ctx.textAlign = 'left';
+        ctx.fillText('h*=' + ssLevel.toFixed(1), x + w + 3, y - ssH + 4);
+      }
+    }
+
+    const ssH1 = p.Qin > 0 ? p.Qin / p.k1 : 0;
+    const ssH2 = p.Qin > 0 ? p.Qin / p.k2 : 0;
+
+    drawTank(t1x, t1y, tankW1, liq1, '#3b82f6', '#93c5fd', 'Tank 1', S.h1, ssH1);
+    drawTank(t2x, t2y, tankW2, liq2, '#8b5cf6', '#c4b5fd', 'Tank 2', S.h2, ssH2);
+
+    // ---- INFLOW ARROW (into Tank 1) ----
+    const inX = t1x + tankW1/2;
+    const inY = t1y - tankMaxH - 30;
+    ctx.strokeStyle = '#2563eb';
+    ctx.fillStyle = '#2563eb';
+    ctx.lineWidth = Math.max(2, Math.min(6, p.Qin * 3));
+    if (p.Qin > 0) {
+      ctx.beginPath();
+      ctx.moveTo(inX, inY - 30);
+      ctx.lineTo(inX, inY + 10);
+      ctx.stroke();
+      // arrowhead
+      ctx.beginPath();
+      ctx.moveTo(inX, inY + 16);
+      ctx.lineTo(inX - 6, inY + 4);
+      ctx.lineTo(inX + 6, inY + 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 12px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('Qin=' + p.Qin.toFixed(2), inX, inY - 36);
+    }
+
+    // ---- CONNECTING PIPE (Tank 1 → Tank 2) ----
+    const pipeY = t1y - 30;
+    const pipe1x = t1x + tankW1;
+    const pipe2x = t2x;
+    const flow12 = p.k1 * S.h1;
+    ctx.strokeStyle = '#6d28d9';
+    ctx.lineWidth = Math.max(2, Math.min(6, flow12 * 2));
+    ctx.beginPath();
+    ctx.moveTo(pipe1x, pipeY);
+    ctx.lineTo(pipe2x, pipeY);
+    ctx.stroke();
+    // Flow arrow
+    if (flow12 > 0.01) {
+      const midX = (pipe1x + pipe2x) / 2;
+      ctx.fillStyle = '#6d28d9';
+      ctx.beginPath();
+      ctx.moveTo(midX + 10, pipeY);
+      ctx.lineTo(midX - 4, pipeY - 6);
+      ctx.lineTo(midX - 4, pipeY + 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 11px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('k₁h₁=' + flow12.toFixed(2), midX, pipeY - 12);
+    }
+    // Valve symbol
+    const valveMid = (pipe1x + pipe2x) / 2;
+    ctx.strokeStyle = '#6d28d9';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(valveMid - 10, pipeY - 8);
+    ctx.lineTo(valveMid, pipeY);
+    ctx.lineTo(valveMid - 10, pipeY + 8);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(valveMid + 10, pipeY - 8);
+    ctx.lineTo(valveMid, pipeY);
+    ctx.lineTo(valveMid + 10, pipeY + 8);
+    ctx.closePath();
+    ctx.stroke();
+
+    // ---- DRAIN ARROW (out of Tank 2) ----
+    const drainX = t2x + tankW2/2;
+    const drainY = t1y;
+    const flowOut = p.k2 * S.h2;
+    if (flowOut > 0.01) {
+      ctx.strokeStyle = '#047857';
+      ctx.fillStyle = '#047857';
+      ctx.lineWidth = Math.max(2, Math.min(6, flowOut * 2));
+      ctx.beginPath();
+      ctx.moveTo(drainX, drainY);
+      ctx.lineTo(drainX, drainY + 28);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(drainX, drainY + 34);
+      ctx.lineTo(drainX - 6, drainY + 22);
+      ctx.lineTo(drainX + 6, drainY + 22);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 11px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('k₂h₂=' + flowOut.toFixed(2), drainX, drainY + 48);
+    }
+
+    // ---- Animated droplets (cosmetic) ----
+    if (S.running) {
+      ctx.fillStyle = 'rgba(59,130,246,0.5)';
+      if (p.Qin > 0) {
+        const dropy = (inY - 30) + ((S.t * 80) % 40);
+        ctx.beginPath();
+        ctx.ellipse(inX, dropy, 3, 4, 0, 0, Math.PI*2);
+        ctx.fill();
+      }
+      if (flow12 > 0.05) {
+        ctx.fillStyle = 'rgba(109,40,217,0.5)';
+        const dropx = pipe1x + ((S.t * 60) % (pipe2x - pipe1x));
+        ctx.beginPath();
+        ctx.ellipse(dropx, pipeY, 3, 3, 0, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    // ---- COUPLING LABEL ----
+    ctx.fillStyle = '#6d28d9';
+    ctx.font = 'bold 11px system-ui';
+    ctx.textAlign = 'center';
+    const coupY = pipeY + 18;
+    ctx.fillText('← coupling term: k₁·h₁ →', (pipe1x + pipe2x)/2, coupY);
+  }
+
+  // ---- DRAW CHART ----
+  function drawChart(canvas) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const padL = 50, padR = 15, padT = 40, padB = 42;
+    const cW = W - padL - padR;
+    const cH = H - padT - padB;
+
+    const tEnd = Math.max(S.t, 8);
+    const tStart = Math.max(0, tEnd - S.maxT);
+
+    let yMax = 3;
+    for (const h of S.history) {
+      if (h.t >= tStart) {
+        yMax = Math.max(yMax, h.h1 + 0.5, h.h2 + 0.5);
+      }
+    }
+    const yMin = 0;
+    const yRange = yMax - yMin || 1;
+
+    const toX = (t) => padL + ((t - tStart) / (tEnd - tStart)) * cW;
+    const toY = (y) => padT + (1 - (y - yMin) / yRange) * cH;
+
+    // Grid
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 6; i++) {
+      const yy = padT + (i/6)*cH;
+      ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W-padR, yy); ctx.stroke();
+      const xx = padL + (i/6)*cW;
+      ctx.beginPath(); ctx.moveTo(xx, padT); ctx.lineTo(xx, padT+cH); ctx.stroke();
+    }
+
+    // Zero line
+    ctx.strokeStyle = '#94a3b8';
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(padL, toY(0)); ctx.lineTo(W-padR, toY(0)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Steady-state dashed lines
+    const p = P();
+    if (p.Qin > 0) {
+      const ssH1 = p.Qin / p.k1;
+      const ssH2 = p.Qin / p.k2;
+      ctx.setLineDash([6, 4]);
+      ctx.lineWidth = 1.5;
+      if (ssH1 <= yMax) {
+        ctx.strokeStyle = 'rgba(59,130,246,0.4)';
+        ctx.beginPath(); ctx.moveTo(padL, toY(ssH1)); ctx.lineTo(W-padR, toY(ssH1)); ctx.stroke();
+      }
+      if (ssH2 <= yMax) {
+        ctx.strokeStyle = 'rgba(139,92,246,0.4)';
+        ctx.beginPath(); ctx.moveTo(padL, toY(ssH2)); ctx.lineTo(W-padR, toY(ssH2)); ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
+
+    const visible = S.history.filter(h => h.t >= tStart);
+
+    // h1 line
+    if (visible.length > 1) {
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(visible[0].t), toY(visible[0].h1));
+      for (let i = 1; i < visible.length; i += 2) ctx.lineTo(toX(visible[i].t), toY(visible[i].h1));
+      ctx.stroke();
+    }
+
+    // h2 line
+    if (visible.length > 1) {
+      ctx.strokeStyle = '#8b5cf6';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(visible[0].t), toY(visible[0].h2));
+      for (let i = 1; i < visible.length; i += 2) ctx.lineTo(toX(visible[i].t), toY(visible[i].h2));
+      ctx.stroke();
+    }
+
+    // Current dots
+    if (visible.length > 0) {
+      const last = visible[visible.length - 1];
+      ctx.fillStyle = '#3b82f6';
+      ctx.beginPath(); ctx.arc(toX(last.t), toY(last.h1), 5, 0, 2*Math.PI); ctx.fill();
+      ctx.fillStyle = '#8b5cf6';
+      ctx.beginPath(); ctx.arc(toX(last.t), toY(last.h2), 5, 0, 2*Math.PI); ctx.fill();
+    }
+
+    // Axes labels
+    ctx.fillStyle = '#64748b';
+    ctx.font = '12px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('Time (s)', padL + cW/2, H - 6);
+    ctx.save();
+    ctx.translate(14, padT + cH/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('Level (m)', 0, 0);
+    ctx.restore();
+
+    // Tick labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 6; i++) {
+      const tv = tStart + (i/6)*(tEnd - tStart);
+      ctx.fillText(tv.toFixed(1), padL + (i/6)*cW, padT + cH + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 6; i++) {
+      const yv = yMax - (i/6)*yRange;
+      ctx.fillText(yv.toFixed(1), padL - 6, padT + (i/6)*cH + 4);
+    }
+
+    // Legend
+    ctx.textAlign = 'left';
+    const ly = padT + 6;
+    ctx.fillStyle = '#3b82f6'; ctx.fillRect(padL + 8, ly, 14, 3);
+    ctx.font = 'bold 11px system-ui'; ctx.fillText('h₁(t)', padL + 26, ly + 4);
+    ctx.fillStyle = '#8b5cf6'; ctx.fillRect(padL + 70, ly, 14, 3);
+    ctx.fillText('h₂(t)', padL + 88, ly + 4);
+  }
+
+  // ---- UPDATE PANELS ----
+  function updatePanels() {
+    const p = P();
+    const flow12 = p.k1 * S.h1;
+    const flowOut = p.k2 * S.h2;
+
+    document.getElementById('flow-in').textContent = p.Qin.toFixed(2);
+    document.getElementById('flow-12').textContent = flow12.toFixed(2);
+    document.getElementById('flow-out').textContent = flowOut.toFixed(2);
+    document.getElementById('h1-readout').textContent = S.h1.toFixed(2) + ' m';
+    document.getElementById('h2-readout').textContent = S.h2.toFixed(2) + ' m';
+    document.getElementById('anim-time-label').textContent = 't = ' + S.t.toFixed(2) + ' s';
+
+    // Eigenvalues
+    const lam1 = -p.k1 / p.A1;
+    const lam2 = -p.k2 / p.A2;
+    document.getElementById('eigenvalue-badge').innerHTML = 'λ₁ = ' + lam1.toFixed(3) + ' &nbsp; λ₂ = ' + lam2.toFixed(3);
+
+    // Steady state
+    const ssH1 = p.Qin > 0 ? (p.Qin / p.k1) : 0;
+    const ssH2 = p.Qin > 0 ? (p.Qin / p.k2) : 0;
+    document.getElementById('ss-h1').textContent = ssH1.toFixed(2);
+    document.getElementById('ss-h2').textContent = ssH2.toFixed(2);
+  }
+
+  // ---- ANIMATION LOOP ----
+  function animLoop(timestamp) {
+    if (!S.running) return;
+    if (!S.lastFrameTime) S.lastFrameTime = timestamp;
+
+    const elapsed = (timestamp - S.lastFrameTime) / 1000;
+    S.lastFrameTime = timestamp;
+
+    const p = P();
+    const stepsPerFrame = Math.max(1, Math.round(elapsed * p.speed / S.dt));
+
+    for (let i = 0; i < stepsPerFrame && i < 300; i++) {
+      step(p);
+      if (S.history.length === 0 || S.t - S.history[S.history.length-1].t > 0.03) {
+        S.history.push({ t: S.t, h1: S.h1, h2: S.h2 });
+      }
+    }
+
+    drawSystem(document.getElementById('anim-canvas'));
+    drawChart(document.getElementById('anim-chart'));
+    updatePanels();
+
+    S.rafId = requestAnimationFrame(animLoop);
+  }
+
+  // ---- PUBLIC API ----
+  window.animPlay = function() {
+    if (S.running) {
+      S.running = false;
+      S.lastFrameTime = null;
+      document.getElementById('anim-play').innerHTML = '▶ Play';
+      document.getElementById('anim-play').className = 'btn btn-primary';
+    } else {
+      S.running = true;
+      document.getElementById('anim-play').innerHTML = '⏸ Pause';
+      document.getElementById('anim-play').className = 'btn btn-success';
+      S.rafId = requestAnimationFrame(animLoop);
+    }
+  };
+
+  window.animReset = function() {
+    S.running = false;
+    S.lastFrameTime = null;
+    cancelAnimationFrame(S.rafId);
+    const p = P();
+    S.t = 0;
+    S.h1 = p.h10;
+    S.h2 = p.h20;
+    S.history = [{ t: 0, h1: p.h10, h2: p.h20 }];
+    document.getElementById('anim-play').innerHTML = '▶ Play';
+    document.getElementById('anim-play').className = 'btn btn-primary';
+    drawSystem(document.getElementById('anim-canvas'));
+    drawChart(document.getElementById('anim-chart'));
+    updatePanels();
+  };
+
+  // ---- SLIDER WIRING ----
+  ['a1','a2','k1','k2','qin','h10','h20','anim-speed'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', function() {
+      const valEl = document.getElementById(id + '-val');
+      if (valEl) valEl.textContent = parseFloat(this.value).toFixed(id === 'anim-speed' ? 1 : (id === 'k1' || id === 'k2' || id === 'qin' ? 2 : 1));
+      updatePanels();
+    });
+  });
+
+  // ---- SCENARIO PRESETS ----
+  document.getElementById('scenario').addEventListener('change', function() {
+    const presets = {
+      fill:     { a1:2, a2:2, k1:0.5, k2:0.5, qin:1, h10:0, h20:0 },
+      drain:    { a1:2, a2:2, k1:0.5, k2:0.5, qin:0, h10:4, h20:3 },
+      transfer: { a1:2, a2:2, k1:0.8, k2:0.3, qin:0, h10:5, h20:0 },
+      resonance:{ a1:1, a2:3, k1:1.5, k2:0.25, qin:1, h10:0, h20:0 }
+    };
+    const pre = presets[this.value];
+    if (!pre) return;
+    Object.keys(pre).forEach(k => {
+      const el = document.getElementById(k);
+      if (el) {
+        el.value = pre[k];
+        const valEl = document.getElementById(k + '-val');
+        if (valEl) valEl.textContent = pre[k].toFixed(k === 'k1' || k === 'k2' || k === 'qin' ? 2 : 1);
+      }
+    });
+    animReset();
+  });
+
+  // ---- TOGGLE EXAMPLES ----
+  window.toggleExample = function(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    content.classList.toggle('active');
+    if (content.classList.contains('active')) {
+      if (icon) icon.textContent = '▲';
+    } else {
+      if (icon) icon.textContent = '▼';
+    }
+  };
+
+  // ---- INIT ----
+  function initCanvases() {
+    ['anim-canvas','anim-chart'].forEach(id => {
+      const c = document.getElementById(id);
+      const ctx = c.getContext('2d');
+      ctx.setTransform(1,0,0,1,0,0);
+      const rect = c.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      c.width = rect.width * dpr;
+      c.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    });
+  }
+
+  window.addEventListener('load', function() {
+    initCanvases();
+    animReset();
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false }
+      ]
+    });
+  });
+
+  window.addEventListener('resize', function() {
+    initCanvases();
+    drawSystem(document.getElementById('anim-canvas'));
+    drawChart(document.getElementById('anim-chart'));
+  });
+})();
+</script>
+
+</body>
+</html>
