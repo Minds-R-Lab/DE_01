@@ -821,7 +821,7 @@
                         <span>Practice 1: Find $\mathcal{L}^{-1}\left\{\dfrac{2s+7}{s^2+4s+13}\right\}$</span>
                         <span class="toggle-icon">▼</span>
                     </div>
-                    <div class="example-content" style="display:none">
+                    <div class="example-content">
                         <h4>Solution</h4>
                         <p><strong>Step 1:</strong> Complete the square in the denominator:</p>
                         <div class="math-display">$$s^2+4s+13 = (s+2)^2 + 9$$</div>
@@ -841,7 +841,7 @@
                         <span>Practice 2: Find $\mathcal{L}^{-1}\left\{\dfrac{5s - 1}{s^2 - 6s + 10}\right\}$</span>
                         <span class="toggle-icon">▼</span>
                     </div>
-                    <div class="example-content" style="display:none">
+                    <div class="example-content">
                         <h4>Solution</h4>
                         <p><strong>Step 1:</strong> Complete the square:</p>
                         <div class="math-display">$$s^2 - 6s + 10 = (s-3)^2 + 1$$</div>
@@ -859,7 +859,7 @@
                         <span>Practice 3: Find $\mathcal{L}^{-1}\left\{\dfrac{s+3}{(s+1)(s^2+4)}\right\}$ using partial fractions</span>
                         <span class="toggle-icon">▼</span>
                     </div>
-                    <div class="example-content" style="display:none">
+                    <div class="example-content">
                         <h4>Solution</h4>
                         <p><strong>Step 1:</strong> Set up partial fractions:</p>
                         <div class="math-display">$$\frac{s+3}{(s+1)(s^2+4)} = \frac{A}{s+1} + \frac{Bs+C}{s^2+4}$$</div>
@@ -1174,11 +1174,11 @@
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.style.display = 'block';
+                content.classList.add('active');
                 if (icon) icon.textContent = '▲';
             }
         }

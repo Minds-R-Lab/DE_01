@@ -795,7 +795,7 @@
                     <span>Practice 1: $(2xy + e^x)\,dx + (x^2 + \cos y)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Verify exactness</strong></p>
                     <p>$M = 2xy + e^x$, $N = x^2 + \cos y$</p>
@@ -820,7 +820,7 @@
                     <span>Practice 2: $(3x^2 + y\cos(x))\,dx + (\sin(x) - 4y^3)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Verify exactness</strong></p>
                     <p>$M = 3x^2 + y\cos(x)$, $N = \sin(x) - 4y^3$</p>
@@ -844,7 +844,7 @@
                     <span>Practice 3: $(y^2 + \ln x)\,dx + (2xy - 3)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Verify exactness</strong></p>
                     <p>$M = y^2 + \ln x$, $N = 2xy - 3$</p>
@@ -1318,11 +1318,11 @@
 function toggleCollapsible(header) {
     const content = header.nextElementSibling;
     const icon = header.querySelector('.toggle-icon');
-    if (content.style.display === 'block') {
-        content.style.display = 'none';
+    if (content.classList.contains('active')) {
+        content.classList.remove('active');
         if (icon) icon.textContent = '▼';
     } else {
-        content.style.display = 'block';
+        content.classList.add('active');
         if (icon) icon.textContent = '▲';
     }
 }
@@ -1332,11 +1332,11 @@ function toggleCollapsible(header) {
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.style.display = 'block';
+                content.classList.add('active');
                 if (icon) icon.textContent = '▲';
             }
         }

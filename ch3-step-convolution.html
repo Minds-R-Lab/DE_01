@@ -861,7 +861,7 @@
                     <span>Practice 1: Find $\mathcal{L}^{-1}\left\{\dfrac{3e^{-2s}}{s^2+9}\right\}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1:</strong> Identify the base transform (without the delay $e^{-2s}$):</p>
                     <div class="math-display">$$\mathcal{L}^{-1}\left\{\frac{3}{s^2+9}\right\} = \mathcal{L}^{-1}\left\{3 \cdot \frac{1}{s^2+3^2}\right\} = \sin(3t)$$</div>
@@ -878,7 +878,7 @@
                     <span>Practice 2: Find $\mathcal{L}^{-1}\left\{\dfrac{se^{-\pi s}}{s^2+2s+5}\right\}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1:</strong> Complete the square in the denominator:</p>
                     <div class="math-display">$$s^2+2s+5 = (s+1)^2 + 4$$</div>
@@ -900,7 +900,7 @@
                     <span>Practice 3: Use convolution to find $\mathcal{L}^{-1}\left\{\dfrac{1}{s^2(s^2+1)}\right\}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1:</strong> Write the product as a product of two transforms:</p>
                     <div class="math-display">$$\frac{1}{s^2(s^2+1)} = \frac{1}{s^2} \cdot \frac{1}{s^2+1}$$</div>
@@ -1215,11 +1215,11 @@
 function toggleCollapsible(header) {
     const content = header.nextElementSibling;
     const icon = header.querySelector('.toggle-icon');
-    if (content.style.display === 'block') {
-        content.style.display = 'none';
+    if (content.classList.contains('active')) {
+        content.classList.remove('active');
         if (icon) icon.textContent = '▼';
     } else {
-        content.style.display = 'block';
+        content.classList.add('active');
         if (icon) icon.textContent = '▲';
     }
 }
@@ -1229,11 +1229,11 @@ function toggleCollapsible(header) {
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.style.display = 'block';
+                content.classList.add('active');
                 if (icon) icon.textContent = '▲';
             }
         }

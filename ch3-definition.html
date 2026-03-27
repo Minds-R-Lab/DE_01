@@ -939,7 +939,7 @@
         <span>Practice 1: Compute $\mathcal{L}\{t^3 e^{-2t}\}$</span>
         <span class="toggle-icon">▼</span>
       </div>
-      <div class="example-content" style="display:none">
+      <div class="example-content">
         <h4>Solution</h4>
         <p><strong>Step 1:</strong> Identify the form. We have a polynomial multiplied by an exponential: $\mathcal{L}\{t^n e^{at}\}$.</p>
         <p><strong>Step 2:</strong> Use the first shifting theorem (multiplication by exponential):</p>
@@ -956,7 +956,7 @@
         <span>Practice 2: Compute $\mathcal{L}\{e^{3t}\cos(4t)\}$</span>
         <span class="toggle-icon">▼</span>
       </div>
-      <div class="example-content" style="display:none">
+      <div class="example-content">
         <h4>Solution</h4>
         <p><strong>Step 1:</strong> Identify the form: exponential times cosine, $\mathcal{L}\{e^{at}\cos(bt)\}$.</p>
         <p><strong>Step 2:</strong> Use the first shifting theorem for cosine:</p>
@@ -975,7 +975,7 @@
         <span>Practice 3: Compute $\mathcal{L}\{f(t)\}$ for a piecewise function</span>
         <span class="toggle-icon">▼</span>
       </div>
-      <div class="example-content" style="display:none">
+      <div class="example-content">
         <h4>Solution</h4>
         <p>Find $\mathcal{L}\{f(t)\}$ where $f(t) = \begin{cases} 2t & t < 3 \\ t^2 - 3 & t \geq 3 \end{cases}$</p>
         <p><strong>Step 1:</strong> Rewrite the piecewise function using the unit step function $u_3(t)$:</p>
@@ -1294,11 +1294,11 @@
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.style.display = 'block';
+                content.classList.add('active');
                 if (icon) icon.textContent = '▲';
             }
         }

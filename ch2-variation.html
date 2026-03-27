@@ -1048,11 +1048,11 @@ function checkChoice(problemNum, btn, isCorrect) {
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.style.display = 'block';
+                content.classList.add('active');
                 if (icon) icon.textContent = '▲';
             }
         }

@@ -1101,7 +1101,7 @@
                     <span>Practice 1: $\dfrac{dy}{dx} = y^2\cos(x) + y^2 + \cos(x) + 1$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Factor the right side</strong></p>
                     <p>Group terms strategically:</p>
@@ -1125,7 +1125,7 @@
                     <span>Practice 2: $\dfrac{dy}{dx} = \dfrac{x e^x}{y^2 + 1}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Separate variables</strong></p>
                     $$\frac{dy}{dx} = \frac{xe^x}{y^2+1}$$
@@ -1148,7 +1148,7 @@
                     <span>Practice 3 (IVP): $\dfrac{dy}{dx} = \dfrac{2x}{3y^2 - 4}, \quad y(0) = 1$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1: Separate variables</strong></p>
                     $$(3y^2 - 4)\,dy = 2x\,dx$$
@@ -1434,12 +1434,11 @@
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                if (icon) icon.textContent = '▼';
-            } else {
-                content.style.display = 'block';
+            content.classList.toggle('active');
+            if (content.classList.contains('active')) {
                 if (icon) icon.textContent = '▲';
+            } else {
+                if (icon) icon.textContent = '▼';
             }
         }
 

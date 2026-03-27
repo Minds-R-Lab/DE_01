@@ -892,7 +892,7 @@
                     <span>Practice 1: Solve $y'' + 4y = 8$ with $y(0)=0$, $y'(0)=2$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1:</strong> Apply the Laplace transform to both sides. Recall: $\mathcal{L}\{y''\} = s^2Y - sy(0) - y'(0)$ and $\mathcal{L}\{8\} = \dfrac{8}{s}$</p>
                     <div class="math-display">$$s^2Y - 0 - 2 + 4Y = \frac{8}{s}$$</div>
@@ -924,7 +924,7 @@
                     <span>Practice 2: Solve $y'' - 3y' + 2y = e^{3t}$ with $y(0)=1$, $y'(0)=0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
-                <div class="example-content" style="display:none">
+                <div class="example-content">
                     <h4>Solution</h4>
                     <p><strong>Step 1:</strong> Apply Laplace transform. $\mathcal{L}\{y''\} = s^2Y - s(1) - 0 = s^2Y - s$, $\mathcal{L}\{-3y'\} = -3(sY - 1) = -3sY + 3$</p>
                     <div class="math-display">$$s^2Y - s - 3sY + 3 + 2Y = \frac{1}{s-3}$$</div>
@@ -1310,11 +1310,11 @@
         function togglePractice(header) {
             var content = header.nextElementSibling;
             var icon = header.querySelector('.toggle-icon');
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
                 if (icon) icon.textContent = '▼';
             } else {
-                content.style.display = 'block';
+                content.classList.add('active');
                 if (icon) icon.textContent = '▲';
             }
         }
