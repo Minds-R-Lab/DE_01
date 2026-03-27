@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lectures | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --primary:#2563eb;--primary-light:#dbeafe;--primary-dark:#1e40af;
+  --accent:#7c3aed;--accent-light:#ede9fe;
+  --success:#059669;--success-light:#d1fae5;
+  --warning:#d97706;--warning-light:#fef3c7;
+  --bg:#f8fafc;--card:#ffffff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;
+  --radius:14px;--shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg:0 10px 25px rgba(0,0,0,0.08);
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:1000;padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;}
+nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+nav a:hover{color:var(--primary);}
+nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+nav .active{color:var(--accent);font-weight:700;}
+
+/* Hero */
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 35%,#3b82f6 65%,#7c3aed 100%);
+  color:#fff;padding:3.5rem 2rem 3rem;text-align:center;margin-top:48px;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 400px at 20% 50%,rgba(59,130,246,0.15) 0%,transparent 70%),radial-gradient(ellipse 500px 350px at 80% 40%,rgba(124,58,237,0.15) 0%,transparent 70%);}
+.hero-inner{position:relative;z-index:2;max-width:800px;margin:0 auto;}
+.hero h1{font-size:2.6rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em;}
+.hero .subtitle{font-size:1.1rem;opacity:0.85;max-width:600px;margin:0 auto;}
+.hero .icon-row{font-size:2.5rem;margin-bottom:1rem;}
+
+/* Container */
+.container{max-width:1000px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* Section header */
+.section-header{text-align:center;margin-bottom:2rem;}
+.section-header h2{font-size:1.6rem;font-weight:800;color:var(--text);margin-bottom:0.3rem;}
+.section-header p{color:var(--text-muted);font-size:0.95rem;}
+
+/* Video card */
+.video-card{
+  background:var(--card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:2rem;
+  transition:box-shadow 0.3s,transform 0.3s;
+}
+.video-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+
+.video-wrapper{
+  position:relative;width:100%;background:#000;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;
+}
+.video-wrapper video{
+  width:100%;display:block;max-height:500px;object-fit:contain;background:#000;
+}
+
+.video-info{padding:1.5rem 2rem;}
+.video-info .video-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.75rem;}
+.video-tag{
+  padding:0.2rem 0.7rem;border-radius:6px;font-size:0.75rem;font-weight:600;
+}
+.video-tag.intro{background:var(--accent-light);color:var(--accent);}
+.video-tag.chapter{background:var(--primary-light);color:var(--primary);}
+.video-tag.new{background:var(--success-light);color:var(--success);}
+
+.video-info h3{font-size:1.25rem;font-weight:700;margin-bottom:0.4rem;}
+.video-info .video-desc{color:var(--text-muted);font-size:0.95rem;line-height:1.6;margin-bottom:0.75rem;}
+.video-info .video-meta{display:flex;gap:1.5rem;font-size:0.82rem;color:var(--text-muted);}
+.video-info .video-meta span{display:flex;align-items:center;gap:0.3rem;}
+
+/* Coming soon grid */
+.coming-soon-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-top:1.5rem;
+}
+.coming-soon-card{
+  background:var(--card);border:2px dashed var(--border);border-radius:var(--radius);
+  padding:1.5rem;text-align:center;opacity:0.65;
+}
+.coming-soon-card .cs-icon{font-size:2rem;margin-bottom:0.5rem;}
+.coming-soon-card h4{font-size:1rem;margin-bottom:0.3rem;}
+.coming-soon-card p{font-size:0.82rem;color:var(--text-muted);}
+.coming-soon-badge{
+  display:inline-block;padding:0.15rem 0.6rem;border-radius:6px;font-size:0.7rem;
+  font-weight:700;background:var(--warning-light);color:var(--warning);margin-top:0.5rem;
+}
+
+/* Footer */
+footer{
+  text-align:center;padding:2rem;color:var(--text-muted);font-size:0.85rem;
+  border-top:1px solid var(--border);margin-top:2rem;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html">Home</a>
+  <a href="exam-generator.html">Exam Generator</a>
+  <a href="videos.html" class="active">Videos</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="icon-row">🎬</div>
+    <h1>Video Lectures</h1>
+    <p class="subtitle">Watch video lectures that complement the course material. Visual explanations to deepen your understanding of differential equations.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section-header">
+    <h2>Course Introduction</h2>
+    <p>Start here to understand what differential equations are all about</p>
+  </div>
+
+  <!-- Introductory Video -->
+  <div class="video-card">
+    <div class="video-wrapper">
+      <video controls preload="metadata" poster="">
+        <source src="videos/The_Language_of_Change.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="video-info">
+      <div class="video-tags">
+        <span class="video-tag intro">Introduction</span>
+        <span class="video-tag new">Start Here</span>
+      </div>
+      <h3>The Language of Change</h3>
+      <p class="video-desc">An introductory video that sets the stage for the entire course. Discover why differential equations are the mathematical language used to describe change in nature, engineering, and science — from population growth to electrical circuits to mechanical vibrations.</p>
+      <div class="video-meta">
+        <span>📚 Course Introduction</span>
+        <span>🎯 Recommended for all students</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coming Soon -->
+  <div class="section-header" style="margin-top:3rem;">
+    <h2>More Videos Coming Soon</h2>
+    <p>Additional video lectures will be added throughout the semester</p>
+  </div>
+
+  <div class="coming-soon-grid">
+    <div class="coming-soon-card">
+      <div class="cs-icon">📗</div>
+      <h4>Chapter 1: First-Order ODEs</h4>
+      <p>Separable, Linear, Bernoulli, Exact equations — worked examples and techniques</p>
+      <span class="coming-soon-badge">Coming Soon</span>
+    </div>
+    <div class="coming-soon-card">
+      <div class="cs-icon">📘</div>
+      <h4>Chapter 2: Second-Order ODEs</h4>
+      <p>Homogeneous equations, undetermined coefficients, variation of parameters</p>
+      <span class="coming-soon-badge">Coming Soon</span>
+    </div>
+    <div class="coming-soon-card">
+      <div class="cs-icon">📙</div>
+      <h4>Chapter 3: Laplace Transforms</h4>
+      <p>Transform techniques, inverse transforms, solving IVPs, convolution</p>
+      <span class="coming-soon-badge">Coming Soon</span>
+    </div>
+    <div class="coming-soon-card">
+      <div class="cs-icon">📕</div>
+      <h4>Chapter 4: Systems of ODEs</h4>
+      <p>Eigenvalue methods, phase portraits, stability analysis</p>
+      <span class="coming-soon-badge">Coming Soon</span>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Math 4: Mathematics for Engineering &nbsp;|&nbsp; Dr. Mohamed Mabrok &nbsp;|&nbsp; Department of Mathematics and Statistics, Qatar University
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+});
+</script>
+
+</body>
+</html>
