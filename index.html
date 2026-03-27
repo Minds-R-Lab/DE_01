@@ -261,10 +261,10 @@
       </div>
     </a>
 
-    <!-- Chapter 4 -->
-    <a class="chapter-card active" href="#chapter4">
+    <!-- Chapter 3 -->
+    <a class="chapter-card active" href="#chapter3">
       <span class="status-badge available">Available</span>
-      <div class="chapter-num">04</div>
+      <div class="chapter-num">03</div>
       <h3>Laplace Transforms</h3>
       <p>Transform methods for solving IVPs: from calculus to algebra, transfer functions, convolution, step functions, and engineering applications.</p>
       <div class="topic-list">
@@ -275,10 +275,10 @@
       </div>
     </a>
 
-    <!-- Chapter 5 -->
+    <!-- Chapter 4 -->
     <div class="chapter-card coming-soon">
       <span class="status-badge soon">Coming Soon</span>
-      <div class="chapter-num">05</div>
+      <div class="chapter-num">04</div>
       <h3>Systems of Differential Equations</h3>
       <p>Matrix methods, eigenvalue analysis, phase portraits, stability of equilibria, and coupled systems.</p>
       <div class="topic-list">
@@ -289,10 +289,10 @@
       </div>
     </div>
 
-    <!-- Chapter 6 -->
+    <!-- Chapter 5 -->
     <div class="chapter-card coming-soon">
       <span class="status-badge soon">Coming Soon</span>
-      <div class="chapter-num">06</div>
+      <div class="chapter-num">05</div>
       <h3>Series Solutions &amp; Numerical Methods</h3>
       <p>Power series solutions, Frobenius method, Euler's method, Runge-Kutta, and error analysis.</p>
       <div class="topic-list">
@@ -438,16 +438,16 @@
     </div>
   </div>
 
-  <!-- Chapter 4 Detail -->
-  <div class="ch1-detail" id="chapter4">
-    <h2>Chapter 4 — Laplace Transforms</h2>
+  <!-- Chapter 3 Detail -->
+  <div class="ch1-detail" id="chapter3">
+    <h2>Chapter 3 — Laplace Transforms</h2>
     <p>The engineer's power tool: convert differential equations into algebraic equations, solve in the s-domain, and transform back. Covers transfer functions, frequency response, and real-world signal handling.</p>
 
     <!-- Overview -->
-    <a class="topic-card" href="ch4-overview.html" style="margin-bottom:1.5rem; border:2px solid var(--primary); background:var(--primary-light);">
+    <a class="topic-card" href="ch3-overview.html" style="margin-bottom:1.5rem; border:2px solid var(--primary); background:var(--primary-light);">
       <div class="topic-icon" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">&#9733;</div>
       <div>
-        <h4>Chapter 4 Overview — Start Here</h4>
+        <h4>Chapter 3 Overview — Start Here</h4>
         <p>The big picture: why Laplace transforms turn calculus into algebra, transfer functions as a system's DNA, and the time-domain ↔ s-domain connection.</p>
         <div class="math-preview">\(\mathcal{L}\{f(t)\} = F(s) = \int_0^{\infty} e^{-st} f(t)\,dt\)</div>
       </div>
@@ -455,37 +455,37 @@
 
     <div class="topic-grid">
 
-      <a class="topic-card" href="ch4-definition.html">
+      <a class="topic-card" href="ch3-definition.html">
         <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">D</div>
         <div>
-          <h4>4.1 — Definition &amp; Properties</h4>
+          <h4>3.1 — Definition &amp; Properties</h4>
           <p>The integral definition, complete transform table, linearity property, and first shifting theorem (s-shifting).</p>
           <div class="math-preview">\(F(s) = \int_0^{\infty} e^{-st} f(t)\,dt\)</div>
         </div>
       </a>
 
-      <a class="topic-card" href="ch4-inverse.html">
+      <a class="topic-card" href="ch3-inverse.html">
         <div class="topic-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">I</div>
         <div>
-          <h4>4.2 — Inverse Transform</h4>
+          <h4>3.2 — Inverse Transform</h4>
           <p>Partial fractions for 3 cases (distinct, repeated, complex roots), Heaviside's cover-up method, pole-zero interpretation.</p>
           <div class="math-preview">\(f(t) = \mathcal{L}^{-1}\{F(s)\}\)</div>
         </div>
       </a>
 
-      <a class="topic-card" href="ch4-solving-odes.html">
+      <a class="topic-card" href="ch3-solving-odes.html">
         <div class="topic-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">S</div>
         <div>
-          <h4>4.3 — Solving IVPs</h4>
+          <h4>3.3 — Solving IVPs</h4>
           <p>The complete pipeline: transform, algebra, inverse. Transfer functions, natural vs forced response, RLC circuit applications.</p>
           <div class="math-preview">\(Y(s) = G(s) \cdot F(s)\)</div>
         </div>
       </a>
 
-      <a class="topic-card" href="ch4-step-convolution.html">
+      <a class="topic-card" href="ch3-step-convolution.html">
         <div class="topic-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">C</div>
         <div>
-          <h4>4.4 — Step Functions &amp; Convolution</h4>
+          <h4>3.4 — Step Functions &amp; Convolution</h4>
           <p>Unit step functions, piecewise inputs, second shifting theorem (t-shifting), convolution theorem, and impulse response.</p>
           <div class="math-preview">\((f * g)(t) = \int_0^t f(\tau)g(t-\tau)\,d\tau\)</div>
         </div>
