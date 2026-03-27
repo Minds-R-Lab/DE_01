@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.2 Solving Homogeneous Linear Systems | Differential Equations | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 8000px; border-color: var(--border); padding: 1.5rem;
+    background: #fafbfc;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  /* ---- PROGRESS ---- */
+  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 450px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+
+  .matrix-box {
+    background: #f1f5f9; padding: 1rem; border-radius: 8px;
+    text-align: center; margin: 1rem 0; font-size: 1.05em;
+  }
+
+  .info-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin: 1rem 0;
+  }
+  .info-item {
+    background: #f1f5f9; padding: 1rem; border-radius: 8px;
+    border-left: 4px solid var(--primary);
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch4-overview.html">4.0 Overview</a>
+    <a href="ch4-matrices.html">4.1 Matrices</a>
+    <a href="ch4-homogeneous.html" class="active">4.2 Systems</a>
+    <a href="ch4-phase-portraits.html">4.3 Phase Portraits</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a>
+    <a href="#theory">Theory</a>
+    <a href="#method">Method</a>
+    <a href="#examples">Examples</a>
+    <a href="#visualizer">Visualizer</a>
+    <a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== INTRO =================== -->
+<section id="intro">
+  <h1>4.2 Solving Homogeneous Linear Systems $\mathbf{x}' = A\mathbf{x}$</h1>
+  <p class="subtitle">Eigenvalues, eigenvectors, and complete solution methods</p>
+
+  <div class="definition-box">
+    <div class="box-label">Learning Objectives</div>
+    <p>By the end of this section, you will be able to:</p>
+    <ol style="padding-left:1.5rem; margin-top:0.5rem;">
+      <li>Find eigenvalues and eigenvectors of a matrix</li>
+      <li>Classify solutions based on eigenvalue types (real distinct, complex, repeated)</li>
+      <li>Write the general solution for all three cases</li>
+      <li>Solve initial value problems for linear systems</li>
+      <li>Visualize solution behavior in the phase plane</li>
+    </ol>
+  </div>
+
+  <h3>The Homogeneous Linear System</h3>
+  <p>
+    We focus on systems of the form:
+  </p>
+  <div class="math-display">
+    $$\mathbf{x}' = A\mathbf{x}$$
+  </div>
+  <p>
+    where $\mathbf{x}(t) = \begin{pmatrix} x_1(t) \\ x_2(t) \end{pmatrix}$ is a vector of unknown functions and $A$ is a constant $2 \times 2$ matrix. The solution method depends entirely on the <strong>eigenvalues and eigenvectors</strong> of $A$.
+  </p>
+
+  <div class="tip-box">
+    <div class="box-label">Key Insight</div>
+    <p>
+      The exponential matrix function $e^{At}$ forms the fundamental matrix, and eigenvalues tell us the growth rate along eigenvector directions. This is one of the most elegant connections between linear algebra and differential equations.
+    </p>
+  </div>
+
+</section>
+
+<!-- =================== THEORY =================== -->
+<section id="theory">
+  <h2>Theory: The Eigenvalue Method</h2>
+
+  <h3>Fundamental Theorem</h3>
+  <div class="theorem-box">
+    <div class="box-label">Theorem</div>
+    <p>
+      If $\lambda$ is an eigenvalue of $A$ and $\mathbf{v}$ is a corresponding eigenvector (so $A\mathbf{v} = \lambda\mathbf{v}$), then
+    </p>
+    <div class="math-display">
+      $$\mathbf{x}(t) = e^{\lambda t}\mathbf{v}$$
+    </div>
+    <p>
+      is a solution to $\mathbf{x}' = A\mathbf{x}$.
+    </p>
+  </div>
+
+  <h3>Proof</h3>
+  <p>
+    Compute the derivative:
+  </p>
+  <div class="math-display">
+    $$\mathbf{x}'(t) = \lambda e^{\lambda t}\mathbf{v}$$
+  </div>
+  <p>
+    Since $A\mathbf{v} = \lambda\mathbf{v}$, we have:
+  </p>
+  <div class="math-display">
+    $$A\mathbf{x}(t) = A(e^{\lambda t}\mathbf{v}) = e^{\lambda t}(A\mathbf{v}) = e^{\lambda t}(\lambda\mathbf{v}) = \lambda e^{\lambda t}\mathbf{v}$$
+  </div>
+  <p>
+    Therefore $\mathbf{x}' = A\mathbf{x}$. ✓
+  </p>
+
+  <hr>
+
+  <h3>Case 1: Distinct Real Eigenvalues</h3>
+  <p>
+    When $A$ has two distinct real eigenvalues $\lambda_1 \neq \lambda_2$ with corresponding eigenvectors $\mathbf{v}_1$ and $\mathbf{v}_2$, both $e^{\lambda_1 t}\mathbf{v}_1$ and $e^{\lambda_2 t}\mathbf{v}_2$ are solutions.
+  </p>
+
+  <div class="definition-box">
+    <div class="box-label">General Solution (Case 1)</div>
+    <div class="math-display">
+      $$\mathbf{x}(t) = C_1 e^{\lambda_1 t}\mathbf{v}_1 + C_2 e^{\lambda_2 t}\mathbf{v}_2$$
+    </div>
+    <p>
+      where $C_1, C_2$ are arbitrary constants determined by initial conditions.
+    </p>
+  </div>
+
+  <p>
+    <strong>Superposition Principle:</strong> Any linear combination of solutions is also a solution. This follows from the linearity of the system.
+  </p>
+
+  <h3>Case 2: Complex Eigenvalues</h3>
+  <p>
+    When $A$ has complex eigenvalues $\lambda = \alpha \pm \beta i$ (with $\beta \neq 0$) and corresponding eigenvector $\mathbf{v} = \mathbf{a} + i\mathbf{b}$ (where $\mathbf{a}, \mathbf{b}$ are real vectors), the complex exponential $e^{(\alpha + \beta i)t}\mathbf{v}$ is a solution. However, we need real-valued solutions.
+  </p>
+
+  <p>
+    Using Euler's formula $e^{i\theta} = \cos\theta + i\sin\theta$:
+  </p>
+  <div class="math-display">
+    $$e^{(\alpha+\beta i)t}(\mathbf{a}+i\mathbf{b}) = e^{\alpha t}(\cos(\beta t) + i\sin(\beta t))(\mathbf{a}+i\mathbf{b})$$
+  </div>
+
+  <p>
+    Separating real and imaginary parts:
+  </p>
+  <div class="math-display">
+    $$\mathbf{x}_1(t) = e^{\alpha t}[\mathbf{a}\cos(\beta t) - \mathbf{b}\sin(\beta t)]$$
+  </div>
+  <div class="math-display">
+    $$\mathbf{x}_2(t) = e^{\alpha t}[\mathbf{a}\sin(\beta t) + \mathbf{b}\cos(\beta t)]$$
+  </div>
+
+  <div class="definition-box">
+    <div class="box-label">General Solution (Case 2: Complex)</div>
+    <div class="math-display">
+      $$\mathbf{x}(t) = C_1\mathbf{x}_1(t) + C_2\mathbf{x}_2(t)$$
+    </div>
+    <p>
+      where $\mathbf{x}_1(t)$ and $\mathbf{x}_2(t)$ are the real and imaginary parts as shown above.
+    </p>
+  </div>
+
+  <p>
+    <strong>Interpretation:</strong> The factor $e^{\alpha t}$ controls exponential growth/decay. If $\alpha > 0$, solutions spiral outward (unstable); if $\alpha < 0$, they spiral inward (stable). The frequency $\beta$ determines the rotation speed.
+  </p>
+
+  <h3>Case 3: Repeated Eigenvalue</h3>
+  <p>
+    When the characteristic polynomial has a repeated eigenvalue $\lambda$ (eigenvalue of multiplicity 2), there are two subcases:
+  </p>
+
+  <h4>Case 3a: Two Independent Eigenvectors</h4>
+  <p>
+    If there are two linearly independent eigenvectors $\mathbf{v}_1, \mathbf{v}_2$, then:
+  </p>
+  <div class="math-display">
+    $$\mathbf{x}(t) = C_1 e^{\lambda t}\mathbf{v}_1 + C_2 e^{\lambda t}\mathbf{v}_2$$
+  </div>
+
+  <h4>Case 3b: One Eigenvector (Defective Matrix)</h4>
+  <p>
+    If there is only one linearly independent eigenvector $\mathbf{v}$, we need a <strong>generalized eigenvector</strong> $\mathbf{w}$ satisfying:
+  </p>
+  <div class="math-display">
+    $$(A - \lambda I)\mathbf{w} = \mathbf{v}$$
+  </div>
+
+  <p>
+    Then the two linearly independent solutions are:
+  </p>
+  <div class="math-display">
+    $$\mathbf{x}_1(t) = e^{\lambda t}\mathbf{v}, \quad \mathbf{x}_2(t) = e^{\lambda t}(t\mathbf{v} + \mathbf{w})$$
+  </div>
+
+  <div class="definition-box">
+    <div class="box-label">General Solution (Case 3: Repeated, Defective)</div>
+    <div class="math-display">
+      $$\mathbf{x}(t) = C_1 e^{\lambda t}\mathbf{v} + C_2 e^{\lambda t}(t\mathbf{v} + \mathbf{w})$$
+    </div>
+    <p>
+      where $\mathbf{v}$ is the eigenvector and $\mathbf{w}$ is the generalized eigenvector.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Important Note</div>
+    <p>
+      A repeated eigenvalue does not always require a generalized eigenvector. If the eigenspace has dimension 2 (two independent eigenvectors exist), use Case 3a. Always check the rank of $(A - \lambda I)$ to determine the number of independent eigenvectors.
+    </p>
+  </div>
+
+</section>
+
+<!-- =================== METHOD =================== -->
+<section id="method">
+  <h2>Step-by-Step Solution Method</h2>
+
+  <ol class="step-list">
+    <li>
+      <strong>Find the characteristic equation:</strong> Compute $\det(A - \lambda I) = 0$ to find eigenvalues.
+      <div style="margin-top:0.5rem; padding:0.75rem; background:#fff; border-radius:6px; border-left:3px solid var(--primary);">
+        For $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$, the characteristic equation is $\lambda^2 - (a+d)\lambda + (ad-bc) = 0$.
+      </div>
+    </li>
+    <li>
+      <strong>Find eigenvectors:</strong> For each eigenvalue $\lambda$, solve $(A - \lambda I)\mathbf{v} = \mathbf{0}$ to find the eigenvector(s).
+    </li>
+    <li>
+      <strong>Determine the case:</strong> Check if eigenvalues are real/distinct, real/repeated, or complex.
+    </li>
+    <li>
+      <strong>Write the general solution:</strong> Apply the appropriate formula from the three cases above.
+    </li>
+    <li>
+      <strong>Apply initial conditions:</strong> If $\mathbf{x}(0) = \mathbf{x}_0$ is given, solve for constants $C_1, C_2$.
+    </li>
+  </ol>
+
+</section>
+
+<!-- =================== EXAMPLES =================== -->
+<section id="examples">
+  <h2>Worked Examples</h2>
+
+  <!-- EXAMPLE 1: Distinct Real -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 1: Distinct Real Eigenvalues</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Solve the system:</p>
+        <div class="math-display">
+          $$\mathbf{x}' = \begin{pmatrix} 1 & 3 \\ 5 & 3 \end{pmatrix}\mathbf{x}$$
+        </div>
+      </div>
+
+      <h4>Solution</h4>
+      <p><strong>Step 1: Find eigenvalues</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = \det\begin{pmatrix} 1-\lambda & 3 \\ 5 & 3-\lambda \end{pmatrix} = 0$$
+      </div>
+      <p>Expand:</p>
+      <div class="math-display">
+        $$(1-\lambda)(3-\lambda) - 15 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 - 4\lambda + 3 - 15 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 - 4\lambda - 12 = 0$$
+      </div>
+      <p>Factor or use the quadratic formula:</p>
+      <div class="math-display">
+        $$(\lambda - 6)(\lambda + 2) = 0$$
+      </div>
+      <p>So $\lambda_1 = 6$ and $\lambda_2 = -2$ (distinct real eigenvalues).</p>
+
+      <p><strong>Step 2: Find eigenvectors</strong></p>
+      <p>For $\lambda_1 = 6$: Solve $(A - 6I)\mathbf{v}_1 = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} -5 & 3 \\ 5 & -3 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $-5v_1 + 3v_2 = 0 \Rightarrow v_2 = \frac{5}{3}v_1$. Choose $v_1 = 3$: $\mathbf{v}_1 = \begin{pmatrix} 3 \\ 5 \end{pmatrix}$</p>
+
+      <p>For $\lambda_2 = -2$: Solve $(A + 2I)\mathbf{v}_2 = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 3 & 3 \\ 5 & 5 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $3v_1 + 3v_2 = 0 \Rightarrow v_1 = -v_2$. Choose $v_2 = -1$: $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$</p>
+
+      <p><strong>Step 3: Write the general solution</strong></p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = C_1 e^{6t}\begin{pmatrix} 3 \\ 5 \end{pmatrix} + C_2 e^{-2t}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+      </div>
+
+      <p>In component form:</p>
+      <div class="math-display">
+        $$x_1(t) = 3C_1 e^{6t} + C_2 e^{-2t}$$
+      </div>
+      <div class="math-display">
+        $$x_2(t) = 5C_1 e^{6t} - C_2 e^{-2t}$$
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 2: Complex Eigenvalues -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 2: Complex Eigenvalues</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Solve the system:</p>
+        <div class="math-display">
+          $$\mathbf{x}' = \begin{pmatrix} -1 & 2 \\ -2 & -1 \end{pmatrix}\mathbf{x}$$
+        </div>
+      </div>
+
+      <h4>Solution</h4>
+      <p><strong>Step 1: Find eigenvalues</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = \det\begin{pmatrix} -1-\lambda & 2 \\ -2 & -1-\lambda \end{pmatrix} = 0$$
+      </div>
+      <p>Expand:</p>
+      <div class="math-display">
+        $$(-1-\lambda)^2 + 4 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 + 2\lambda + 1 + 4 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 + 2\lambda + 5 = 0$$
+      </div>
+      <p>By the quadratic formula:</p>
+      <div class="math-display">
+        $$\lambda = \frac{-2 \pm \sqrt{4-20}}{2} = \frac{-2 \pm \sqrt{-16}}{2} = \frac{-2 \pm 4i}{2} = -1 \pm 2i$$
+      </div>
+      <p>So $\alpha = -1$ and $\beta = 2$.</p>
+
+      <p><strong>Step 2: Find the eigenvector for $\lambda = -1 + 2i$</strong></p>
+      <p>Solve $(A - (-1+2i)I)\mathbf{v} = \mathbf{0}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} -2i & 2 \\ -2 & -2i \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $-2iv_1 + 2v_2 = 0 \Rightarrow v_2 = iv_1$. Choose $v_1 = 1$: $\mathbf{v} = \begin{pmatrix} 1 \\ i \end{pmatrix}$</p>
+
+      <p>So $\mathbf{a} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$ and $\mathbf{b} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$</p>
+
+      <p><strong>Step 3: Write the real-valued solutions</strong></p>
+      <div class="math-display">
+        $$\mathbf{x}_1(t) = e^{-t}\left[\begin{pmatrix} 1 \\ 0 \end{pmatrix}\cos(2t) - \begin{pmatrix} 0 \\ 1 \end{pmatrix}\sin(2t)\right] = e^{-t}\begin{pmatrix} \cos(2t) \\ -\sin(2t) \end{pmatrix}$$
+      </div>
+
+      <div class="math-display">
+        $$\mathbf{x}_2(t) = e^{-t}\left[\begin{pmatrix} 1 \\ 0 \end{pmatrix}\sin(2t) + \begin{pmatrix} 0 \\ 1 \end{pmatrix}\cos(2t)\right] = e^{-t}\begin{pmatrix} \sin(2t) \\ \cos(2t) \end{pmatrix}$$
+      </div>
+
+      <p><strong>Step 4: General solution</strong></p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = C_1 e^{-t}\begin{pmatrix} \cos(2t) \\ -\sin(2t) \end{pmatrix} + C_2 e^{-t}\begin{pmatrix} \sin(2t) \\ \cos(2t) \end{pmatrix}$$
+      </div>
+
+      <p>This represents a spiral converging to the origin (stable focus) because $\alpha = -1 < 0$.</p>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 3: Repeated Eigenvalue -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 3: Repeated Eigenvalue (Defective)</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Solve the system:</p>
+        <div class="math-display">
+          $$\mathbf{x}' = \begin{pmatrix} 3 & -1 \\ 1 & 1 \end{pmatrix}\mathbf{x}$$
+        </div>
+      </div>
+
+      <h4>Solution</h4>
+      <p><strong>Step 1: Find eigenvalues</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = \det\begin{pmatrix} 3-\lambda & -1 \\ 1 & 1-\lambda \end{pmatrix} = 0$$
+      </div>
+      <p>Expand:</p>
+      <div class="math-display">
+        $$(3-\lambda)(1-\lambda) + 1 = 0$$
+      </div>
+      <div class="math-display">
+        $$3 - 3\lambda - \lambda + \lambda^2 + 1 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 - 4\lambda + 4 = 0$$
+      </div>
+      <div class="math-display">
+        $$(\lambda - 2)^2 = 0$$
+      </div>
+      <p>So $\lambda = 2$ (repeated, multiplicity 2).</p>
+
+      <p><strong>Step 2: Find eigenvector(s)</strong></p>
+      <p>Solve $(A - 2I)\mathbf{v} = \mathbf{0}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 1 & -1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $v_1 - v_2 = 0 \Rightarrow v_1 = v_2$. Choose $v_1 = 1$: $\mathbf{v} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$</p>
+
+      <p>Only one eigenvector exists (rank is 1), so this is a defective matrix. We need a generalized eigenvector.</p>
+
+      <p><strong>Step 3: Find generalized eigenvector</strong></p>
+      <p>Solve $(A - 2I)\mathbf{w} = \mathbf{v}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 1 & -1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} w_1 \\ w_2 \end{pmatrix} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+      </div>
+      <p>This gives $w_1 - w_2 = 1$. Choose $w_1 = 1$: $w_2 = 0$, so $\mathbf{w} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$</p>
+
+      <p><strong>Step 4: General solution</strong></p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = C_1 e^{2t}\begin{pmatrix} 1 \\ 1 \end{pmatrix} + C_2 e^{2t}\left(t\begin{pmatrix} 1 \\ 1 \end{pmatrix} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}\right)$$
+      </div>
+
+      <p>Simplifying:</p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = e^{2t}\begin{pmatrix} C_1 + C_2(t+1) \\ C_1 + C_2 t \end{pmatrix}$$
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 4: IVP -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span>Example 4: Initial Value Problem</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div class="example-box">
+        <div class="box-label">Problem</div>
+        <p>Solve the IVP:</p>
+        <div class="math-display">
+          $$\mathbf{x}' = \begin{pmatrix} 2 & 3 \\ 4 & 3 \end{pmatrix}\mathbf{x}, \quad \mathbf{x}(0) = \begin{pmatrix} 1 \\ 2 \end{pmatrix}$$
+        </div>
+      </div>
+
+      <h4>Solution</h4>
+      <p><strong>Step 1: Find eigenvalues</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = \det\begin{pmatrix} 2-\lambda & 3 \\ 4 & 3-\lambda \end{pmatrix} = 0$$
+      </div>
+      <p>Expand:</p>
+      <div class="math-display">
+        $$(2-\lambda)(3-\lambda) - 12 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 - 5\lambda + 6 - 12 = 0$$
+      </div>
+      <div class="math-display">
+        $$\lambda^2 - 5\lambda - 6 = 0$$
+      </div>
+      <div class="math-display">
+        $$(\lambda - 6)(\lambda + 1) = 0$$
+      </div>
+      <p>So $\lambda_1 = 6$ and $\lambda_2 = -1$.</p>
+
+      <p><strong>Step 2: Find eigenvectors</strong></p>
+      <p>For $\lambda_1 = 6$: $(A - 6I)\mathbf{v}_1 = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} -4 & 3 \\ 4 & -3 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $-4v_1 + 3v_2 = 0 \Rightarrow v_2 = \frac{4}{3}v_1$. Choose $v_1 = 3$: $\mathbf{v}_1 = \begin{pmatrix} 3 \\ 4 \end{pmatrix}$</p>
+
+      <p>For $\lambda_2 = -1$: $(A + I)\mathbf{v}_2 = \mathbf{0}$</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 3 & 3 \\ 4 & 4 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>From the first row: $3v_1 + 3v_2 = 0 \Rightarrow v_1 = -v_2$. Choose $v_2 = -1$: $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$</p>
+
+      <p><strong>Step 3: General solution</strong></p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = C_1 e^{6t}\begin{pmatrix} 3 \\ 4 \end{pmatrix} + C_2 e^{-t}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+      </div>
+
+      <p><strong>Step 4: Apply initial conditions</strong></p>
+      <p>At $t=0$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 1 \\ 2 \end{pmatrix} = C_1\begin{pmatrix} 3 \\ 4 \end{pmatrix} + C_2\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+      </div>
+      <p>This gives the system:</p>
+      <div class="math-display">
+        $$3C_1 + C_2 = 1$$
+      </div>
+      <div class="math-display">
+        $$4C_1 - C_2 = 2$$
+      </div>
+      <p>Adding the equations: $7C_1 = 3 \Rightarrow C_1 = \frac{3}{7}$</p>
+      <p>From the first: $C_2 = 1 - 3C_1 = 1 - \frac{9}{7} = -\frac{2}{7}$</p>
+
+      <p><strong>Particular solution:</strong></p>
+      <div class="math-display">
+        $$\mathbf{x}(t) = \frac{3}{7}e^{6t}\begin{pmatrix} 3 \\ 4 \end{pmatrix} - \frac{2}{7}e^{-t}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+      </div>
+
+      <p>Or in component form:</p>
+      <div class="math-display">
+        $$x_1(t) = \frac{9}{7}e^{6t} - \frac{2}{7}e^{-t}$$
+      </div>
+      <div class="math-display">
+        $$x_2(t) = \frac{12}{7}e^{6t} + \frac{2}{7}e^{-t}$$
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- =================== VISUALIZER =================== -->
+<section id="visualizer">
+  <h2>Interactive System Solver</h2>
+  <p>Enter a 2×2 matrix and visualize the solution trajectories in the phase plane.</p>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>a₁₁</label>
+      <input type="number" id="a11" value="1" step="0.5">
+    </div>
+    <div class="control-group">
+      <label>a₁₂</label>
+      <input type="number" id="a12" value="3" step="0.5">
+    </div>
+    <div class="control-group">
+      <label>a₂₁</label>
+      <input type="number" id="a21" value="5" step="0.5">
+    </div>
+    <div class="control-group">
+      <label>a₂₂</label>
+      <input type="number" id="a22" value="3" step="0.5">
+    </div>
+    <button class="btn-primary" onclick="solveAndPlot()">Analyze System</button>
+  </div>
+
+  <div id="systemInfo" style="display:none; margin:1.5rem 0;">
+    <h4>System Analysis</h4>
+    <div class="info-grid">
+      <div class="info-item">
+        <strong>Eigenvalue 1:</strong> <span id="eig1">—</span>
+      </div>
+      <div class="info-item">
+        <strong>Eigenvalue 2:</strong> <span id="eig2">—</span>
+      </div>
+      <div class="info-item">
+        <strong>Classification:</strong> <span id="classification">—</span>
+      </div>
+      <div class="info-item">
+        <strong>Stability:</strong> <span id="stability">—</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="phasePlane" class="plot-container"></div>
+
+</section>
+
+<!-- =================== PRACTICE =================== -->
+<section id="practice">
+  <h2>Exam-Style Practice Problems</h2>
+  <p>Work through these problems to test your understanding. Click to reveal solutions.</p>
+
+  <!-- Problem 1 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="togglePractice(this)">
+      <span><strong>Problem 1:</strong> Solve $\mathbf{x}' = \begin{pmatrix} 4 & -2 \\ 5 & -3 \end{pmatrix}\mathbf{x}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div style="background:#fafbfc; padding:1.5rem; border-radius:8px;">
+        <h4>Solution</h4>
+        <p><strong>Characteristic equation:</strong></p>
+        <div class="math-display">
+          $$\det\begin{pmatrix} 4-\lambda & -2 \\ 5 & -3-\lambda \end{pmatrix} = (4-\lambda)(-3-\lambda) + 10 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda^2 - \lambda - 12 + 10 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda^2 - \lambda - 2 = 0$$
+        </div>
+        <div class="math-display">
+          $$(\lambda - 2)(\lambda + 1) = 0$$
+        </div>
+        <p>Eigenvalues: $\lambda_1 = 2, \lambda_2 = -1$ (distinct real)</p>
+
+        <p><strong>Eigenvectors:</strong></p>
+        <p>For $\lambda_1 = 2$: $(A-2I)\mathbf{v}_1 = \mathbf{0}$ gives $2v_1 - 2v_2 = 0$, so $\mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$</p>
+        <p>For $\lambda_2 = -1$: $(A+I)\mathbf{v}_2 = \mathbf{0}$ gives $5v_1 - 2v_2 = 0$, so $\mathbf{v}_2 = \begin{pmatrix} 2 \\ 5 \end{pmatrix}$</p>
+
+        <p><strong>General solution:</strong></p>
+        <div class="math-display">
+          $$\mathbf{x}(t) = C_1 e^{2t}\begin{pmatrix} 1 \\ 1 \end{pmatrix} + C_2 e^{-t}\begin{pmatrix} 2 \\ 5 \end{pmatrix}$$
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Problem 2 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="togglePractice(this)">
+      <span><strong>Problem 2:</strong> Solve $\mathbf{x}' = \begin{pmatrix} 3 & -4 \\ 2 & -1 \end{pmatrix}\mathbf{x}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div style="background:#fafbfc; padding:1.5rem; border-radius:8px;">
+        <h4>Solution</h4>
+        <p><strong>Characteristic equation:</strong></p>
+        <div class="math-display">
+          $$\det\begin{pmatrix} 3-\lambda & -4 \\ 2 & -1-\lambda \end{pmatrix} = (3-\lambda)(-1-\lambda) + 8 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda^2 - 2\lambda - 3 + 8 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda^2 - 2\lambda + 5 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda = \frac{2 \pm \sqrt{4-20}}{2} = \frac{2 \pm 4i}{2} = 1 \pm 2i$$
+        </div>
+        <p>Eigenvalues: $\lambda = 1 \pm 2i$ (complex with $\alpha = 1, \beta = 2$)</p>
+
+        <p><strong>Eigenvector for $\lambda = 1 + 2i$:</strong></p>
+        <p>Solve $(A - (1+2i)I)\mathbf{v} = \mathbf{0}$:</p>
+        <div class="math-display">
+          $$\begin{pmatrix} 2-2i & -4 \\ 2 & -2-2i \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+        </div>
+        <p>From the first row: $(2-2i)v_1 - 4v_2 = 0 \Rightarrow v_1 = \frac{4v_2}{2-2i} = \frac{4v_2(2+2i)}{8} = v_2(1+i)$</p>
+        <p>Choose $v_2 = 1$: $\mathbf{v} = \begin{pmatrix} 1+i \\ 1 \end{pmatrix}$, so $\mathbf{a} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$, $\mathbf{b} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$</p>
+
+        <p><strong>Real-valued solutions:</strong></p>
+        <div class="math-display">
+          $$\mathbf{x}_1(t) = e^{t}\begin{pmatrix} \cos(2t) - \sin(2t) \\ \cos(2t) \end{pmatrix}$$
+        </div>
+        <div class="math-display">
+          $$\mathbf{x}_2(t) = e^{t}\begin{pmatrix} \sin(2t) + \cos(2t) \\ \sin(2t) \end{pmatrix}$$
+        </div>
+
+        <p><strong>General solution:</strong></p>
+        <div class="math-display">
+          $$\mathbf{x}(t) = C_1 e^{t}\begin{pmatrix} \cos(2t) - \sin(2t) \\ \cos(2t) \end{pmatrix} + C_2 e^{t}\begin{pmatrix} \sin(2t) + \cos(2t) \\ \sin(2t) \end{pmatrix}$$
+        </div>
+        <p><em>Note: System is unstable (spiraling outward) since $\alpha = 1 > 0$.</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Problem 3 -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="togglePractice(this)">
+      <span><strong>Problem 3:</strong> Solve the IVP: $\mathbf{x}' = \begin{pmatrix} 5 & -4 \\ 4 & -3 \end{pmatrix}\mathbf{x}$, $\mathbf{x}(0) = \begin{pmatrix} 3 \\ 4 \end{pmatrix}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <div style="background:#fafbfc; padding:1.5rem; border-radius:8px;">
+        <h4>Solution</h4>
+        <p><strong>Characteristic equation:</strong></p>
+        <div class="math-display">
+          $$\det\begin{pmatrix} 5-\lambda & -4 \\ 4 & -3-\lambda \end{pmatrix} = (5-\lambda)(-3-\lambda) + 16 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda^2 - 2\lambda - 15 + 16 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda^2 - 2\lambda + 1 = 0$$
+        </div>
+        <div class="math-display">
+          $$(\lambda - 1)^2 = 0$$
+        </div>
+        <p>Repeated eigenvalue: $\lambda = 1$ (multiplicity 2)</p>
+
+        <p><strong>Eigenspace:</strong> $(A - I)\mathbf{v} = \mathbf{0}$ gives</p>
+        <div class="math-display">
+          $$\begin{pmatrix} 4 & -4 \\ 4 & -4 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+        </div>
+        <p>So $v_1 = v_2$, giving one eigenvector $\mathbf{v} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$</p>
+
+        <p><strong>Generalized eigenvector:</strong> Solve $(A-I)\mathbf{w} = \mathbf{v}$:</p>
+        <div class="math-display">
+          $$\begin{pmatrix} 4 & -4 \\ 4 & -4 \end{pmatrix}\begin{pmatrix} w_1 \\ w_2 \end{pmatrix} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+        </div>
+        <p>From the first row: $4w_1 - 4w_2 = 1 \Rightarrow w_1 = w_2 + \frac{1}{4}$. Choose $w_2 = 0$: $\mathbf{w} = \begin{pmatrix} 1/4 \\ 0 \end{pmatrix}$</p>
+
+        <p><strong>General solution:</strong></p>
+        <div class="math-display">
+          $$\mathbf{x}(t) = C_1 e^{t}\begin{pmatrix} 1 \\ 1 \end{pmatrix} + C_2 e^{t}\left(t\begin{pmatrix} 1 \\ 1 \end{pmatrix} + \begin{pmatrix} 1/4 \\ 0 \end{pmatrix}\right)$$
+        </div>
+
+        <p><strong>Apply initial conditions:</strong> At $t=0$:</p>
+        <div class="math-display">
+          $$\begin{pmatrix} 3 \\ 4 \end{pmatrix} = C_1\begin{pmatrix} 1 \\ 1 \end{pmatrix} + C_2\begin{pmatrix} 1/4 \\ 0 \end{pmatrix}$$
+        </div>
+        <p>This gives: $C_1 + \frac{C_2}{4} = 3$ and $C_1 = 4$</p>
+        <p>From the second: $C_1 = 4$, so $4 + \frac{C_2}{4} = 3 \Rightarrow C_2 = -4$</p>
+
+        <p><strong>Particular solution:</strong></p>
+        <div class="math-display">
+          $$\mathbf{x}(t) = 4e^{t}\begin{pmatrix} 1 \\ 1 \end{pmatrix} - 4e^{t}\left(t\begin{pmatrix} 1 \\ 1 \end{pmatrix} + \begin{pmatrix} 1/4 \\ 0 \end{pmatrix}\right)$$
+        </div>
+        <div class="math-display">
+          $$= e^{t}\begin{pmatrix} 4 - 4t - 1 \\ 4 - 4t \end{pmatrix} = e^{t}\begin{pmatrix} 3 - 4t \\ 4 - 4t \end{pmatrix}$$
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- END CONTAINER -->
+
+<script>
+// Utility: Toggle collapsible sections
+function toggleCollapsible(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+// Utility: Toggle practice problem solutions
+function togglePractice(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+
+// Complex number operations (for eigenvalue/eigenvector computation)
+function complexAdd(a, b) {
+  return {re: a.re + b.re, im: a.im + b.im};
+}
+
+function complexSub(a, b) {
+  return {re: a.re - b.re, im: a.im - b.im};
+}
+
+function complexMult(a, b) {
+  return {re: a.re*b.re - a.im*b.im, im: a.re*b.im + a.im*b.re};
+}
+
+function complexDiv(a, b) {
+  let denom = b.re*b.re + b.im*b.im;
+  return {re: (a.re*b.re + a.im*b.im)/denom, im: (a.im*b.re - a.re*b.im)/denom};
+}
+
+function complexMag(a) {
+  return Math.sqrt(a.re*a.re + a.im*a.im);
+}
+
+function complexArg(a) {
+  return Math.atan2(a.im, a.re);
+}
+
+// Compute eigenvalues of 2x2 matrix
+function eigenvalues2x2(a11, a12, a21, a22) {
+  // char poly: λ² - (a11+a22)λ + (a11*a22 - a12*a21) = 0
+  let trace = a11 + a22;
+  let det = a11*a22 - a12*a21;
+  let disc = trace*trace - 4*det;
+
+  if (Math.abs(disc) < 1e-10) {
+    // repeated
+    let lambda = trace / 2;
+    return [{val: lambda, type: 'real-repeated'}, {val: lambda, type: 'real-repeated'}];
+  } else if (disc > 0) {
+    // distinct real
+    let sqrt_disc = Math.sqrt(disc);
+    let l1 = (trace + sqrt_disc) / 2;
+    let l2 = (trace - sqrt_disc) / 2;
+    return [{val: l1, type: 'real'}, {val: l2, type: 'real'}];
+  } else {
+    // complex
+    let alpha = trace / 2;
+    let beta = Math.sqrt(-disc) / 2;
+    return [{val: {re: alpha, im: beta}, type: 'complex'}, {val: {re: alpha, im: -beta}, type: 'complex'}];
+  }
+}
+
+// Compute eigenvector for real eigenvalue
+function realEigenvector2x2(a11, a12, a21, a22, lambda) {
+  let m11 = a11 - lambda;
+  let m12 = a12;
+  let m21 = a21;
+  let m22 = a22 - lambda;
+
+  if (Math.abs(m11) > Math.abs(m21)) {
+    // use first row: m11*v1 + m12*v2 = 0
+    if (Math.abs(m12) > 1e-10) {
+      return {x: 1, y: -m11/m12};
+    } else {
+      return {x: 1, y: 0};
+    }
+  } else {
+    // use second row: m21*v1 + m22*v2 = 0
+    if (Math.abs(m22) > 1e-10) {
+      return {x: 1, y: -m21/m22};
+    } else {
+      return {x: 0, y: 1};
+    }
+  }
+}
+
+// Solve 2x2 system
+function solve2x2(a11, a12, a21, a22, b1, b2) {
+  let det = a11*a22 - a12*a21;
+  if (Math.abs(det) < 1e-10) return null;
+  return {
+    x: (b1*a22 - b2*a12) / det,
+    y: (a11*b2 - a21*b1) / det
+  };
+}
+
+// Main solver and visualizer
+function solveAndPlot() {
+  let a11 = parseFloat(document.getElementById('a11').value);
+  let a12 = parseFloat(document.getElementById('a12').value);
+  let a21 = parseFloat(document.getElementById('a21').value);
+  let a22 = parseFloat(document.getElementById('a22').value);
+
+  // Get eigenvalues
+  let eigs = eigenvalues2x2(a11, a12, a21, a22);
+  let eig1 = eigs[0];
+  let eig2 = eigs[1];
+
+  // Display system info
+  let eig1Str = '';
+  let eig2Str = '';
+  let classification = '';
+  let stability = '';
+
+  if (eig1.type === 'real') {
+    eig1Str = eig1.val.toFixed(3);
+    eig2Str = eig2.val.toFixed(3);
+    classification = 'Distinct Real Eigenvalues';
+    if (eig1.val > 0 && eig2.val > 0) stability = 'Unstable (Source)';
+    else if (eig1.val < 0 && eig2.val < 0) stability = 'Stable (Sink)';
+    else stability = 'Saddle';
+  } else if (eig1.type === 'real-repeated') {
+    eig1Str = eig1.val.toFixed(3) + ' (repeated)';
+    eig2Str = eig2.val.toFixed(3) + ' (repeated)';
+    classification = 'Repeated Real Eigenvalue';
+    if (eig1.val > 0) stability = 'Unstable';
+    else if (eig1.val < 0) stability = 'Stable';
+    else stability = 'Marginally Stable';
+  } else {
+    eig1Str = eig1.val.re.toFixed(3) + ' + ' + eig1.val.im.toFixed(3) + 'i';
+    eig2Str = eig2.val.re.toFixed(3) + ' - ' + Math.abs(eig2.val.im).toFixed(3) + 'i';
+    classification = 'Complex Conjugate Eigenvalues';
+    if (eig1.val.re > 0) stability = 'Unstable Spiral';
+    else if (eig1.val.re < 0) stability = 'Stable Spiral (Focus)';
+    else stability = 'Marginally Stable (Center)';
+  }
+
+  document.getElementById('eig1').textContent = eig1Str;
+  document.getElementById('eig2').textContent = eig2Str;
+  document.getElementById('classification').textContent = classification;
+  document.getElementById('stability').textContent = stability;
+  document.getElementById('systemInfo').style.display = 'block';
+
+  // Generate phase plane trajectory
+  let initialConditions = [
+    {x0: 1, y0: 0, color: 'rgb(37, 99, 235)'},
+    {x0: 0, y0: 1, color: 'rgb(34, 197, 94)'},
+    {x0: 1, y0: 1, color: 'rgb(168, 85, 247)'},
+    {x0: -1, y0: 0, color: 'rgb(249, 115, 22)'},
+    {x0: 0, y0: -1, color: 'rgb(244, 63, 94)'},
+    {x0: -1, y0: -1, color: 'rgb(99, 102, 241)'},
+  ];
+
+  let traces = [];
+  let tMax = 3;
+  if (eig1.type === 'real') {
+    let maxEig = Math.max(Math.abs(eig1.val), Math.abs(eig2.val));
+    if (maxEig > 0) tMax = 2 / maxEig;
+    else tMax = 5;
+  }
+
+  for (let ic of initialConditions) {
+    let xs = [], ys = [];
+    let n = 200;
+    for (let i = 0; i <= n; i++) {
+      let t = (i / n) * tMax;
+      let x = ic.x0, y = ic.y0;
+
+      if (eig1.type === 'real') {
+        let v1 = realEigenvector2x2(a11, a12, a21, a22, eig1.val);
+        let v2 = realEigenvector2x2(a11, a12, a21, a22, eig2.val);
+        let norm1 = Math.sqrt(v1.x*v1.x + v1.y*v1.y);
+        let norm2 = Math.sqrt(v2.x*v2.x + v2.y*v2.y);
+        v1.x /= norm1; v1.y /= norm1;
+        v2.x /= norm2; v2.y /= norm2;
+
+        // initial conditions in eigenbasis
+        let c1 = ic.x0 * v1.x + ic.y0 * v1.y;
+        let c2 = ic.x0 * v2.x + ic.y0 * v2.y;
+
+        x = c1 * Math.exp(eig1.val * t) * v1.x + c2 * Math.exp(eig2.val * t) * v2.x;
+        y = c1 * Math.exp(eig1.val * t) * v1.y + c2 * Math.exp(eig2.val * t) * v2.y;
+      } else if (eig1.type === 'real-repeated') {
+        let v = realEigenvector2x2(a11, a12, a21, a22, eig1.val);
+        let norm = Math.sqrt(v.x*v.x + v.y*v.y);
+        v.x /= norm; v.y /= norm;
+
+        // For repeated eigenvalue, need second solution
+        let w = solve2x2(a11 - eig1.val, a12, a21, a22 - eig1.val, v.x, v.y);
+        if (!w) w = {x: 0, y: 0};
+
+        let c1 = ic.x0 * v.x + ic.y0 * v.y;
+        let c2 = ic.x0 * (t * v.x + w.x) + ic.y0 * (t * v.y + w.y);
+
+        let exp_t = Math.exp(eig1.val * t);
+        x = exp_t * (c1 * v.x + c2 * (t * v.x + w.x));
+        y = exp_t * (c1 * v.y + c2 * (t * v.y + w.y));
+      } else {
+        // complex eigenvalues
+        let alpha = eig1.val.re;
+        let beta = eig1.val.im;
+
+        let exp_alpha_t = Math.exp(alpha * t);
+        let cos_bt = Math.cos(beta * t);
+        let sin_bt = Math.sin(beta * t);
+
+        x = exp_alpha_t * (ic.x0 * cos_bt - ic.y0 * sin_bt);
+        y = exp_alpha_t * (ic.x0 * sin_bt + ic.y0 * cos_bt);
+      }
+
+      xs.push(x);
+      ys.push(y);
+    }
+
+    traces.push({
+      x: xs,
+      y: ys,
+      mode: 'lines',
+      name: `(${ic.x0}, ${ic.y0})`,
+      line: {color: ic.color, width: 2}
+    });
+  }
+
+  // Add direction field (quiver)
+  let gridSize = 8;
+  let quiverX = [], quiverY = [], quiverU = [], quiverV = [];
+  for (let i = -gridSize; i <= gridSize; i++) {
+    for (let j = -gridSize; j <= gridSize; j++) {
+      let x = i * 0.5;
+      let y = j * 0.5;
+      let dx = a11 * x + a12 * y;
+      let dy = a21 * x + a22 * y;
+      let mag = Math.sqrt(dx*dx + dy*dy);
+      if (mag > 1e-6) {
+        dx /= mag; dy /= mag;
+        dx *= 0.3; dy *= 0.3;
+      }
+      quiverX.push(x);
+      quiverY.push(y);
+      quiverU.push(dx);
+      quiverV.push(dy);
+    }
+  }
+
+  // Arrows for direction field
+  for (let k = 0; k < quiverX.length; k++) {
+    traces.push({
+      x: [quiverX[k], quiverX[k] + quiverU[k]],
+      y: [quiverY[k], quiverY[k] + quiverV[k]],
+      mode: 'lines',
+      line: {color: '#d1d5db', width: 0.5},
+      showlegend: false,
+      hoverinfo: 'none'
+    });
+  }
+
+  let layout = {
+    title: 'Phase Plane: Solutions to x\' = Ax',
+    xaxis: {title: 'x₁', zeroline: true, gridcolor: '#e2e8f0'},
+    yaxis: {title: 'x₂', zeroline: true, gridcolor: '#e2e8f0'},
+    hovermode: 'closest',
+    plot_bgcolor: '#f8fafc',
+    paper_bgcolor: '#ffffff',
+    margin: {l: 60, r: 60, t: 80, b: 60}
+  };
+
+  Plotly.newPlot('phasePlane', traces, layout, {responsive: true});
+}
+
+// Auto-render KaTeX
+document.addEventListener('DOMContentLoaded', function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });
+});
+</script>
+
+</body>
+</html>

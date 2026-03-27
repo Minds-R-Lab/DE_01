@@ -1,666 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Math 4: Chapter 4 Overview — Laplace Transforms | Dr. Mohamed Mabrok</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<style>
-  :root {
-    --primary: #2563eb;
-    --primary-light: #dbeafe;
-    --accent: #7c3aed;
-    --accent-light: #ede9fe;
-    --success: #059669;
-    --success-light: #d1fae5;
-    --warning: #d97706;
-    --warning-light: #fef3c7;
-    --danger: #dc2626;
-    --danger-light: #fee2e2;
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --radius: 12px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Systems of Differential Equations - Overview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/auto-render.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb; --primary-light: #dbeafe;
+            --accent: #7c3aed; --accent-light: #ede9fe;
+            --success: #059669; --success-light: #d1fae5;
+            --warning: #d97706; --warning-light: #fef3c7;
+            --danger: #dc2626; --danger-light: #fee2e2;
+            --bg: #f8fafc; --card: #ffffff;
+            --text: #1e293b; --text-muted: #64748b;
+            --border: #e2e8f0; --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; }
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; height: 60px; box-shadow: var(--shadow); }
+        nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+        nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+        nav .nav-links a { text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap; transition: all 0.2s; }
+        nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+        .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+        section { background: var(--card); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+        h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+        p { margin-bottom: 1rem; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box { border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; border-left: 5px solid; }
+        .definition-box { background: var(--primary-light); border-color: var(--primary); }
+        .theorem-box { background: var(--accent-light); border-color: var(--accent); }
+        .example-box { background: var(--success-light); border-color: var(--success); }
+        .warning-box { background: var(--warning-light); border-color: var(--warning); }
+        .tip-box { background: #f0f9ff; border-color: #0ea5e9; }
+        .box-label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .definition-box .box-label { color: var(--primary); }
+        .theorem-box .box-label { color: var(--accent); }
+        .example-box .box-label { color: var(--success); }
+        .warning-box .box-label { color: var(--warning); }
+        .tip-box .box-label { color: #0ea5e9; }
+        .math-display { background: #f1f5f9; border-radius: 8px; padding: 1.2rem; text-align: center; margin: 1rem 0; font-size: 1.15em; overflow-x: auto; }
+        .step-list { counter-reset: step; list-style: none; padding: 0; }
+        .step-list li { counter-increment: step; position: relative; padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border); }
+        .step-list li::before { content: counter(step); position: absolute; left: 0.75rem; top: 1rem; width: 2rem; height: 2rem; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
+        .controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px; }
+        .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        .control-group select { padding: 0.5rem 0.75rem; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; background: #fff; }
+        button, .btn { padding: 0.55rem 1.2rem; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+        .katex-display { margin: 0.5rem 0; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Learning objectives box */
+        .objectives-box { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border-radius: var(--radius); padding: 2rem; margin: 1.5rem 0; border-left: 5px solid var(--primary); }
+        .objectives-box h3 { color: var(--primary); margin-top: 0; }
+        .objectives-box ul { list-style: none; padding: 0; }
+        .objectives-box li { padding: 0.5rem 0 0.5rem 1.8rem; position: relative; }
+        .objectives-box li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
 
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    font-size: 17px;
-  }
+        /* Islamic verse box */
+        .islamic-box { background: linear-gradient(135deg, #fef3c7, #fcd34d); border-radius: var(--radius); padding: 2rem; margin: 2rem 0; border: 2px solid #f59e0b; text-align: center; }
+        .islamic-box .arabic-text { font-size: 1.3rem; line-height: 2; color: #b45309; margin-bottom: 1rem; font-weight: 500; }
+        .islamic-box .translation { font-size: 0.95rem; color: #92400e; font-style: italic; margin-bottom: 0.5rem; }
+        .islamic-box .source { font-size: 0.85rem; color: #b45309; }
 
-  /* ---- NAV ---- */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex; align-items: center; height: 60px;
-    box-shadow: var(--shadow);
-  }
-  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
-  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
-  nav .nav-links a {
-    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
-    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
-    transition: all 0.2s;
-  }
-  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+        /* Quote box */
+        .quote-box { background: #f0f9ff; border-left: 5px solid #0ea5e9; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 8px; font-size: 1rem; font-style: italic; color: #0c4a6e; }
+        .quote-author { text-align: right; font-weight: 600; margin-top: 1rem; color: #0369a1; }
 
-  /* ---- LAYOUT ---- */
-  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+        /* Roadmap cards */
+        .roadmap-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .roadmap-card { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.3s; cursor: pointer; text-decoration: none; }
+        .roadmap-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+        .roadmap-card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .roadmap-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0; }
 
-  section {
-    background: var(--card); border-radius: var(--radius);
-    padding: 2.5rem; margin-bottom: 2rem;
-    border: 1px solid var(--border); box-shadow: var(--shadow);
-  }
+        /* System diagram */
+        .system-diagram { background: #f8fafc; padding: 2rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; }
+        .spring-mass-diagram { width: 100%; max-width: 500px; margin: 0 auto; }
+        svg { max-width: 100%; height: auto; }
 
-  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
-  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
-  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+        /* Example conversion box */
+        .conversion-box { background: var(--success-light); border: 2px solid var(--success); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; }
+        .conversion-box .box-label { color: var(--success); }
 
-  p { margin-bottom: 1rem; }
-
-  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
-
-  /* ---- BOXES ---- */
-  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
-    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
-    border-left: 5px solid;
-  }
-  .definition-box { background: var(--primary-light); border-color: var(--primary); }
-  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
-  .example-box   { background: var(--success-light); border-color: var(--success); }
-  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
-  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
-
-  .box-label {
-    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
-    letter-spacing: 0.05em; margin-bottom: 0.5rem;
-  }
-  .definition-box .box-label { color: var(--primary); }
-  .theorem-box .box-label   { color: var(--accent); }
-  .example-box .box-label   { color: var(--success); }
-  .warning-box .box-label   { color: var(--warning); }
-  .tip-box .box-label        { color: #0ea5e9; }
-
-  /* ---- MATH ---- */
-  .math-display {
-    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
-    text-align: center; margin: 1rem 0; font-size: 1.15em;
-    overflow-x: auto;
-  }
-
-  /* ---- STEPS ---- */
-  .step-list { counter-reset: step; list-style: none; padding: 0; }
-  .step-list li {
-    counter-increment: step; position: relative;
-    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
-    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
-  }
-  .step-list li::before {
-    content: counter(step);
-    position: absolute; left: 0.75rem; top: 1rem;
-    width: 2rem; height: 2rem; border-radius: 50%;
-    background: var(--primary); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.9rem;
-  }
-
-  /* ---- INTERACTIVE CONTROLS ---- */
-  .controls {
-    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
-    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
-  }
-  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
-  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-  .control-group input[type="text"],
-  .control-group input[type="number"],
-  .control-group select {
-    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
-    border-radius: 8px; font-size: 0.95rem; background: #fff;
-    transition: border-color 0.2s;
-  }
-  .control-group input:focus, .control-group select:focus {
-    outline: none; border-color: var(--primary);
-  }
-
-  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
-  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
-  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
-
-  button, .btn {
-    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
-    font-size: 0.95rem; font-weight: 600; cursor: pointer;
-    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
-  }
-  .btn-primary { background: var(--primary); color: #fff; }
-  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
-  .btn-success { background: var(--success); color: #fff; }
-  .btn-success:hover { background: #047857; }
-  .btn-accent { background: var(--accent); color: #fff; }
-  .btn-accent:hover { background: #6d28d9; }
-
-  /* ---- COLLAPSIBLE ---- */
-  .collapsible { margin: 1rem 0; }
-  .collapsible-toggle {
-    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
-    border: 1.5px solid var(--border); border-radius: 8px;
-    text-align: left; font-size: 1rem; font-weight: 600;
-    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-    transition: all 0.2s;
-  }
-  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
-  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
-  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
-  .collapsible-content {
-    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
-    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
-  }
-  .collapsible-content.open {
-    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
-  }
-
-  /* ---- QUIZ ---- */
-  .quiz-problem {
-    background: #f8fafc; border: 1.5px solid var(--border);
-    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
-  }
-  .quiz-problem .problem-num {
-    font-weight: 700; color: var(--primary); font-size: 0.9rem;
-    text-transform: uppercase; letter-spacing: 0.05em;
-  }
-  .quiz-input {
-    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
-    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
-    transition: border-color 0.2s;
-  }
-  .quiz-input:focus { outline: none; border-color: var(--primary); }
-  .quiz-feedback {
-    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
-    font-weight: 600; display: none;
-  }
-  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
-  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
-  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
-
-  .choice-btn {
-    display: block; width: 100%; text-align: left;
-    padding: 0.75rem 1rem; margin: 0.5rem 0;
-    border: 2px solid var(--border); border-radius: 8px;
-    background: #fff; font-size: 0.95rem; cursor: pointer;
-    transition: all 0.2s; color: #1e293b;
-  }
-  .choice-btn .katex { color: #1e293b; }
-  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
-  .choice-btn.selected-correct .katex { color: white; }
-  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
-  .choice-btn.selected-wrong .katex { color: white; }
-
-  /* ---- PROGRESS ---- */
-  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
-  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
-
-  /* ---- PLOT ---- */
-  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
-
-  /* ---- QUOTE STYLES ---- */
-  .quote-box {
-    padding: 2rem; border-radius: var(--radius);
-    border-left: 6px solid; margin: 2rem 0;
-    font-style: italic; font-size: 1.05rem; line-height: 1.8;
-  }
-  .quote-historical {
-    background: linear-gradient(135deg, #fed7aa 0%, #fecaca 100%);
-    border-color: #d97706;
-    color: #92400e;
-  }
-  .quote-islamic {
-    background: linear-gradient(135deg, #a7f3d0 0%, #86efac 100%);
-    border-color: #059669;
-    color: #065f46;
-  }
-  .quote-attribution {
-    margin-top: 1rem; font-weight: 600; font-size: 0.95rem;
-  }
-
-  /* ---- ROADMAP CARDS ---- */
-  .roadmap-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem; margin: 1.5rem 0;
-  }
-  .roadmap-card {
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
-    border: 2px solid var(--primary); border-radius: var(--radius);
-    padding: 2rem; text-align: center; cursor: pointer;
-    transition: all 0.3s; position: relative; overflow: hidden;
-  }
-  .roadmap-card::before {
-    content: ''; position: absolute; top: 0; left: 0;
-    width: 100%; height: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed);
-  }
-  .roadmap-card:hover {
-    transform: translateY(-6px); box-shadow: var(--shadow-lg);
-    background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
-  }
-  .roadmap-card h3 {
-    margin-top: 0; color: var(--primary); font-size: 1.1rem;
-  }
-  .roadmap-card p {
-    color: var(--text-muted); font-size: 0.9rem; margin: 0.75rem 0;
-  }
-  .roadmap-card a {
-    display: inline-block; margin-top: 1rem; padding: 0.5rem 1.2rem;
-    background: var(--primary); color: #fff; text-decoration: none;
-    border-radius: 6px; font-weight: 600; font-size: 0.85rem;
-    transition: all 0.2s;
-  }
-  .roadmap-card a:hover {
-    background: #1d4ed8; transform: scale(1.05);
-  }
-
-  /* ---- COMPARISON TABLE ---- */
-  .comparison-table {
-    width: 100%; border-collapse: collapse; margin: 1.5rem 0;
-    background: #fff; border-radius: 8px; overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .comparison-table th {
-    background: linear-gradient(90deg, #2563eb, #1e40af);
-    color: #fff; padding: 1rem; text-align: left; font-weight: 600;
-  }
-  .comparison-table td {
-    padding: 1rem; border-bottom: 1px solid var(--border);
-  }
-  .comparison-table tr:hover {
-    background: #f0f9ff;
-  }
-  .comparison-table tr:last-child td {
-    border-bottom: none;
-  }
-
-  /* ---- PLOTS SIDE-BY-SIDE ---- */
-  .plot-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;
-  }
-
-  /* ---- RESPONSIVE ---- */
-  @media (max-width: 640px) {
-    section { padding: 1.5rem; }
-    h1 { font-size: 1.6rem; }
-    .controls { flex-direction: column; }
-    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
-    .roadmap-grid { grid-template-columns: 1fr; }
-    .plot-grid { grid-template-columns: 1fr; }
-    .comparison-table { font-size: 0.9rem; }
-    .comparison-table th, .comparison-table td { padding: 0.75rem; }
-  }
-
-  /* ---- MISC ---- */
-  .katex-display { margin: 0.5rem 0; }
-  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
-  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-  a { color: var(--primary); }
-  .text-center { text-align: center; }
-  .mt-1 { margin-top: 1rem; }
-  .mb-1 { margin-bottom: 1rem; }
-</style>
+        @media (max-width: 640px) {
+            section { padding: 1.5rem; }
+            h1 { font-size: 1.6rem; }
+            .roadmap-container { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
+    <nav>
+        <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ch4-overview.html" class="active">4.0 Overview</a>
+            <a href="ch4-matrices.html">4.1 Matrices</a>
+            <a href="ch4-homogeneous.html">4.2 Systems</a>
+            <a href="ch4-phase-portraits.html">4.3 Phase Portraits</a>
+        </div>
+    </nav>
 
-<!-- =================== NAVIGATION =================== -->
-<nav>
-  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="ch4-overview.html" class="active">4.0 Overview</a>
-    <a href="ch4-definition.html">4.1 Definition &amp; Properties</a>
-    <a href="ch4-inverse.html">4.2 Inverse Transform</a>
-    <a href="ch4-solving-odes.html">4.3 Solving IVPs</a>
-    <a href="ch4-step-convolution.html">4.4 Step &amp; Convolution</a>
-    <span style="color:var(--border);margin:0 0.25rem;">|</span>
-    <a href="#intro">Intro</a>
-    <a href="#why">Why Laplace?</a>
-    <a href="#roadmap">Roadmap</a>
-    <a href="#visualizer">Visualizer</a>
-  </div>
-</nav>
+    <div class="container">
+        <!-- Introduction Section -->
+        <section>
+            <h1>Chapter 4: Systems of Differential Equations</h1>
+            <p class="subtitle">Understanding coupled differential equations and their behavior in engineering applications</p>
 
-<!-- =================== MAIN CONTENT =================== -->
-<div class="container">
+            <div class="objectives-box">
+                <h3>Learning Objectives</h3>
+                <ul>
+                    <li>Understand the fundamental concept of systems of linear differential equations</li>
+                    <li>Convert higher-order differential equations into first-order systems</li>
+                    <li>Recognize and solve homogeneous linear systems using matrix methods</li>
+                    <li>Analyze stability and long-term behavior of solutions using phase portraits</li>
+                    <li>Apply systems of differential equations to model real-world engineering problems</li>
+                    <li>Interpret eigenvalues and eigenvectors in the context of system dynamics</li>
+                </ul>
+            </div>
 
-<!-- =================== SECTION: INTRO =================== -->
-<section id="intro">
-  <h1>Chapter 4: Laplace Transforms</h1>
-  <p class="subtitle">From Calculus to Algebra — The Engineer's Power Tool</p>
+            <div class="quote-box">
+                "The trajectory of a system does not reveal the forces acting upon the system." — Henri Poincaré
+            </div>
 
-  <div class="definition-box">
-    <div class="box-label">Learning Objectives</div>
-    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-      <li>Understand why engineers prefer Laplace transforms over direct ODE methods</li>
-      <li>Map between time domain and s-domain (frequency domain)</li>
-      <li>Use transfer functions to analyze system behavior</li>
-      <li>Solve complex IVPs using algebraic manipulation</li>
-    </ul>
-  </div>
+            <div class="islamic-box">
+                <div class="arabic-text">مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ</div>
+                <div class="translation">"Whoever treads a path seeking knowledge therein, Allah will ease a path to Paradise for him."</div>
+                <div class="source">— Prophet Muhammad (PBUH), Sahih Muslim 2699</div>
+            </div>
+        </section>
 
-  <h3>The Big Idea</h3>
-  <p>Laplace transforms convert <span class="highlight">differential equations into algebraic equations</span>. Instead of solving a messy ODE like</p>
-  <div class="math-display">\( y'' + 3y' + 2y = \sin(t) \)</div>
-  <p>with all the guesswork of finding particular solutions and worrying about initial conditions, we:</p>
-  <ol style="margin-left: 1.5rem; margin-top: 0.75rem;">
-    <li><strong>Transform</strong> the entire equation into the <em>s-domain</em> (frequency domain)</li>
-    <li><strong>Solve</strong> simple algebra instead of calculus</li>
-    <li><strong>Transform back</strong> to get your answer in the time domain</li>
-  </ol>
-  <p style="margin-top: 1rem;">This approach scales beautifully: same method works for first-order, second-order, tenth-order, or systems of ODEs. Piecewise forcing functions? Step functions? Impulses? All handled automatically. This is why every engineer, physicist, and control systems specialist relies on Laplace transforms.</p>
-</section>
+        <!-- What is a System of DEs -->
+        <section>
+            <h2>What is a System of Differential Equations?</h2>
 
-<!-- =================== QUOTES =================== -->
-<div class="quote-box quote-historical">
-  <p>"Mathematics is an experimental science, and definitions do not come first, but later on."</p>
-  <div class="quote-attribution">— Oliver Heaviside (1850–1925), Pioneer of Operational Calculus</div>
-</div>
+            <p>
+                A <strong>system of differential equations</strong> is a set of two or more differential equations involving multiple unknown functions and their derivatives. Rather than studying how a single quantity changes over time, systems allow us to model how multiple interrelated quantities evolve together.
+            </p>
 
-<div class="quote-box quote-islamic">
-  <p lang="ar">إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٌ لِّأُولِي الْأَلْبَابِ</p>
-  <p style="margin-top: 0.75rem; font-style: italic; font-size: 0.95rem;">"Indeed, in the creation of the heavens and the earth and the alternation of night and day are signs for those of understanding."</p>
-  <div class="quote-attribution">— Quran, Surah Aal-E-Imran 3:190</div>
-</div>
+            <h3>General Matrix Form</h3>
+            <p>
+                A system of $n$ first-order linear differential equations can be written in compact matrix form as:
+            </p>
+            <div class="math-display">
+                $$\mathbf{x}' = A\mathbf{x}$$
+            </div>
+            <p>
+                where:
+            </p>
+            <ul style="margin-bottom: 1rem; margin-left: 2rem;">
+                <li>$\mathbf{x} = \begin{pmatrix} x_1(t) \\ x_2(t) \\ \vdots \\ x_n(t) \end{pmatrix}$ is the state vector</li>
+                <li>$\mathbf{x}' = \begin{pmatrix} x_1'(t) \\ x_2'(t) \\ \vdots \\ x_n'(t) \end{pmatrix}$ is its derivative</li>
+                <li>$A = \begin{pmatrix} a_{11} & a_{12} & \cdots & a_{1n} \\ a_{21} & a_{22} & \cdots & a_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{n1} & a_{n2} & \cdots & a_{nn} \end{pmatrix}$ is an $n \times n$ constant coefficient matrix</li>
+            </ul>
 
-<!-- =================== SECTION: WHY LAPLACE =================== -->
-<section id="why">
-  <h2>Why Laplace? — The Engineering Perspective</h2>
+            <h3>A Concrete 2×2 Example</h3>
+            <p>
+                The simplest non-trivial case is a system of two first-order equations:
+            </p>
+            <div class="math-display">
+                $$\frac{dx_1}{dt} = a_{11}x_1 + a_{12}x_2$$
+            </div>
+            <div class="math-display">
+                $$\frac{dx_2}{dt} = a_{21}x_1 + a_{22}x_2$$
+            </div>
+            <p>
+                In matrix form, this becomes:
+            </p>
+            <div class="math-display">
+                $$\begin{pmatrix} x_1' \\ x_2' \end{pmatrix} = \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}$$
+            </div>
+            <p>
+                or simply $\mathbf{x}' = A\mathbf{x}$.
+            </p>
 
-  <div class="tip-box">
-    <div class="box-label">The Problem with Direct Methods</div>
-    <p style="margin: 0;">In Chapters 1–2, we learned to solve differential equations directly using characteristic equations, undetermined coefficients, and variation of parameters. But real engineering systems face:</p>
-    <ul style="margin: 0.75rem 0 0 1.5rem;">
-      <li><strong>Complex forcing functions</strong> (piecewise, step inputs, impulses)</li>
-      <li><strong>Awkward initial conditions</strong> (zero, non-zero, or discontinuous)</li>
-      <li><strong>Higher-order systems</strong> (5th, 10th order, or higher)</li>
-      <li><strong>Coupled systems</strong> of differential equations</li>
-    </ul>
-    <p style="margin: 0.75rem 0 0;">Laplace transforms handle <em>all of these elegantly</em> with a single unified approach.</p>
-  </div>
+            <div class="tip-box">
+                <div class="box-label">Key Insight</div>
+                <p style="margin-bottom: 0;">
+                    The coupling between equations is encoded in the off-diagonal elements of matrix $A$. If all off-diagonal elements are zero, the system decouples into independent equations that can be solved separately.
+                </p>
+            </div>
+        </section>
 
-  <h3>The Laplace Transform as a Lens</h3>
-  <p>Think of the Laplace transform as a special lens. When you look at a signal through this lens:</p>
-  <ul style="margin-left: 1.5rem;">
-    <li><strong>Differential equations</strong> → <strong>Polynomials</strong> (algebra!)</li>
-    <li><strong>Initial conditions</strong> → <strong>Constants in the algebra</strong> (no extra steps needed)</li>
-    <li><strong>Convolution</strong> (hard to compute) → <strong>Multiplication</strong> (trivial)</li>
-    <li><strong>Piecewise functions</strong> → <strong>Exponential factors</strong> (unified treatment)</li>
-  </ul>
+        <!-- Why Systems? -->
+        <section>
+            <h2>Why Study Systems of Differential Equations?</h2>
 
-  <h3>The Comparison: Time Domain vs s-Domain</h3>
-  <table class="comparison-table">
-    <tr>
-      <th style="background: linear-gradient(90deg, #2563eb, #1e40af);">Time Domain (\(t\))</th>
-      <th style="background: linear-gradient(90deg, #7c3aed, #6d28d9);">s-Domain (\(s\))</th>
-      <th style="background: linear-gradient(90deg, #059669, #047857);">Benefit</th>
-    </tr>
-    <tr>
-      <td>Differentiation \(\frac{d}{dt}\)</td>
-      <td>Multiplication by \(s\)</td>
-      <td>Calculus → Algebra</td>
-    </tr>
-    <tr>
-      <td>Integration \(\int dt\)</td>
-      <td>Division by \(s\)</td>
-      <td>Simplification</td>
-    </tr>
-    <tr>
-      <td>Convolution \(f*g\)</td>
-      <td>Multiplication \(F \cdot G\)</td>
-      <td>Complex → Simple</td>
-    </tr>
-    <tr>
-      <td>Initial conditions</td>
-      <td>Built into algebra</td>
-      <td>No extra steps</td>
-    </tr>
-    <tr>
-      <td>Piecewise functions</td>
-      <td>Exponential factors \(e^{-as}\)</td>
-      <td>Unified approach</td>
-    </tr>
-    <tr>
-      <td>System analysis (hard)</td>
-      <td>Transfer functions \(G(s)\)</td>
-      <td>Poles → stability, behavior</td>
-    </tr>
-  </table>
+            <p>
+                Systems of differential equations arise naturally in engineering and physics. They allow us to model complex phenomena where multiple variables influence each other. Let's explore several key motivations and applications.
+            </p>
 
-  <h3>Transfer Function — The System's DNA</h3>
-  <div class="definition-box">
-    <div class="box-label">Definition: Transfer Function</div>
-    <p style="margin: 0 0 0.75rem;">For a linear system with differential equation</p>
-    <div class="math-display">\( ay'' + by' + cy = f(t) \)</div>
-    <p style="margin: 0.75rem 0;">the <strong>transfer function</strong> is:</p>
-    <div class="math-display">\( G(s) = \frac{1}{as^2 + bs + c} \)</div>
-    <p style="margin: 0.75rem 0 0;">This single expression encodes <em>everything</em> about how the system responds to any input. The poles (roots of the denominator) determine stability, oscillation, and decay rates.</p>
-  </div>
+            <h3>Converting Higher-Order ODEs to Systems</h3>
+            <p>
+                Any higher-order differential equation can be rewritten as a system of first-order equations. This is crucial because our analytical and computational methods are often designed for first-order systems.
+            </p>
 
-  <h3>Why Engineers Love This</h3>
-  <p><strong>Circuit impedance:</strong> A circuit's response to AC signals is encoded in \(Z(s) = R + sL + \frac{1}{sC}\). Change the frequency \(s = j\omega\), and you see exactly how the circuit responds at that frequency.</p>
-  <p><strong>Mechanical systems:</strong> A mass-spring-damper has transfer function \(G(s) = \frac{1}{ms^2 + cs + k}\). The poles tell you if the system oscillates, how fast it decays, and whether it's stable.</p>
-  <p><strong>Control systems:</strong> To stabilize an aircraft, robot, or chemical reactor, engineers design controllers using pole placement. Laplace transforms make this calculation straightforward.</p>
-</section>
+            <div class="conversion-box">
+                <div class="box-label">Example Conversion</div>
+                <p>
+                    Consider the second-order equation:
+                </p>
+                <div class="math-display">
+                    $$y'' + 3y' + 2y = 0$$
+                </div>
+                <p>
+                    We introduce a new variable $x_2 = y'$, so $x_1 = y$. Then:
+                </p>
+                <div class="math-display">
+                    $$x_1' = x_2$$
+                </div>
+                <div class="math-display">
+                    $$x_2' = y'' = -3y' - 2y = -3x_2 - 2x_1$$
+                </div>
+                <p>
+                    In matrix form:
+                </p>
+                <div class="math-display">
+                    $$\begin{pmatrix} x_1' \\ x_2' \end{pmatrix} = \begin{pmatrix} 0 & 1 \\ -2 & -3 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}$$
+                </p>
+            </div>
 
-<!-- =================== SECTION: ROADMAP =================== -->
-<section id="roadmap">
-  <h2>Chapter Roadmap</h2>
-  <p>Laplace transforms are built in layers. Master each section, and you'll have a complete toolkit:</p>
+            <h3>Coupled Spring-Mass Systems</h3>
+            <p>
+                In mechanical engineering, we frequently encounter multiple masses connected by springs. Consider two masses $m_1$ and $m_2$ connected to each other and to fixed walls by springs with constants $k_1$, $k_2$, and $k_3$.
+            </p>
 
-  <div class="roadmap-grid">
-    <div class="roadmap-card">
-      <h3>4.1 Definition &amp; Properties</h3>
-      <p>Learn the transform, build your toolbox</p>
-      <p style="font-size: 0.85rem; color: var(--text);">The integral definition, transform table, linearity, first shifting theorem, and essential properties.</p>
-      <a href="ch4-definition.html">Go to 4.1</a>
+            <div class="system-diagram">
+                <svg class="spring-mass-diagram" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Wall left -->
+                    <rect x="10" y="40" width="15" height="70" fill="#666" stroke="#333" stroke-width="2"/>
+                    <line x1="10" y1="45" x2="25" y2="55" stroke="#333" stroke-width="1"/>
+                    <line x1="10" y1="55" x2="25" y2="65" stroke="#333" stroke-width="1"/>
+                    <line x1="10" y1="65" x2="25" y2="75" stroke="#333" stroke-width="1"/>
+                    <line x1="10" y1="75" x2="25" y2="85" stroke="#333" stroke-width="1"/>
+                    <line x1="10" y1="85" x2="25" y2="95" stroke="#333" stroke-width="1"/>
+                    <line x1="10" y1="95" x2="25" y2="105" stroke="#333" stroke-width="1"/>
+
+                    <!-- Spring 1 (k1) -->
+                    <line x1="25" y1="75" x2="50" y2="75" stroke="#2563eb" stroke-width="3" stroke-dasharray="5,5"/>
+                    <text x="35" y="65" font-size="12" fill="#2563eb" font-weight="bold">k₁</text>
+
+                    <!-- Mass 1 -->
+                    <circle cx="80" cy="75" r="20" fill="#7c3aed" stroke="#333" stroke-width="2"/>
+                    <text x="75" y="80" font-size="14" font-weight="bold" fill="white">m₁</text>
+
+                    <!-- Spring 2 (k2) -->
+                    <line x1="100" y1="75" x2="150" y2="75" stroke="#2563eb" stroke-width="3" stroke-dasharray="5,5"/>
+                    <text x="120" y="65" font-size="12" fill="#2563eb" font-weight="bold">k₂</text>
+
+                    <!-- Mass 2 -->
+                    <circle cx="180" cy="75" r="20" fill="#7c3aed" stroke="#333" stroke-width="2"/>
+                    <text x="175" y="80" font-size="14" font-weight="bold" fill="white">m₂</text>
+
+                    <!-- Spring 3 (k3) -->
+                    <line x1="200" y1="75" x2="250" y2="75" stroke="#2563eb" stroke-width="3" stroke-dasharray="5,5"/>
+                    <text x="220" y="65" font-size="12" fill="#2563eb" font-weight="bold">k₃</text>
+
+                    <!-- Wall right -->
+                    <rect x="250" y="40" width="15" height="70" fill="#666" stroke="#333" stroke-width="2"/>
+                    <line x1="265" y1="45" x2="250" y2="55" stroke="#333" stroke-width="1"/>
+                    <line x1="265" y1="55" x2="250" y2="65" stroke="#333" stroke-width="1"/>
+                    <line x1="265" y1="65" x2="250" y2="75" stroke="#333" stroke-width="1"/>
+                    <line x1="265" y1="75" x2="250" y2="85" stroke="#333" stroke-width="1"/>
+                    <line x1="265" y1="85" x2="250" y2="95" stroke="#333" stroke-width="1"/>
+                    <line x1="265" y1="95" x2="250" y2="105" stroke="#333" stroke-width="1"/>
+
+                    <!-- Displacement arrows -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#dc2626" />
+                        </marker>
+                    </defs>
+                    <line x1="80" y1="110" x2="60" y2="110" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="50" y="128" font-size="12" fill="#dc2626">x₁</text>
+
+                    <line x1="180" y1="110" x2="200" y2="110" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <text x="205" y="128" font-size="12" fill="#dc2626">x₂</text>
+                </svg>
+            </div>
+
+            <p>
+                The equations of motion are derived from Newton's second law. The acceleration of each mass depends on the forces from springs attached to it:
+            </p>
+            <div class="math-display">
+                $$m_1\frac{d^2x_1}{dt^2} = -k_1 x_1 + k_2(x_2 - x_1)$$
+            </div>
+            <div class="math-display">
+                $$m_2\frac{d^2x_2}{dt^2} = -k_2(x_2 - x_1) - k_3 x_2$$
+            </div>
+            <p>
+                This is a <strong>coupled system</strong>: each mass's motion depends on the position of the other mass through the middle spring. We cannot solve for $x_1$ without knowing $x_2$, and vice versa.
+            </p>
+
+            <h3>Electrical Circuits with Multiple Loops</h3>
+            <p>
+                In circuit analysis, when we have multiple loops with resistors, capacitors, and inductors, Kirchhoff's voltage law applied to each loop yields a system of differential equations. The currents and voltages in one loop influence the others through shared components.
+            </p>
+
+            <h3>Population Dynamics: Predator-Prey Models</h3>
+            <p>
+                The Lotka-Volterra predator-prey model describes how predator and prey populations interact:
+            </p>
+            <div class="math-display">
+                $$\frac{dx}{dt} = \alpha x - \beta xy$$
+            </div>
+            <div class="math-display">
+                $$\frac{dy}{dt} = \delta xy - \gamma y$$
+            </div>
+            <p>
+                where $x$ is prey population and $y$ is predator population. The coupled nonlinear terms show how the growth of predators depends on encounters with prey, and how prey decline when predators are abundant.
+            </p>
+
+            <div class="theorem-box">
+                <div class="box-label">Why Linear Systems Matter</div>
+                <p style="margin-bottom: 0;">
+                    While many real-world systems are nonlinear, understanding linear systems is essential because:
+                    <ul style="margin: 1rem 0 0 2rem;">
+                        <li><strong>Exact solutions:</strong> We can find closed-form solutions using eigenvalues and eigenvectors</li>
+                        <li><strong>Local behavior:</strong> Nonlinear systems can be approximated by linear systems near equilibrium points</li>
+                        <li><strong>Stability analysis:</strong> Linear theory provides powerful tools for understanding long-term behavior</li>
+                        <li><strong>Computational efficiency:</strong> Linear systems are much faster to simulate and analyze numerically</li>
+                    </ul>
+                </p>
+            </div>
+        </section>
+
+        <!-- Chapter Roadmap -->
+        <section>
+            <h2>Chapter Roadmap</h2>
+            <p>
+                This chapter is organized into three main topics, each building on the previous:
+            </p>
+            <div class="roadmap-container">
+                <a href="ch4-matrices.html" class="roadmap-card">
+                    <h4>4.1 Matrices & Eigenvalues</h4>
+                    <p>Review of linear algebra concepts and their role in solving systems</p>
+                </a>
+                <a href="ch4-homogeneous.html" class="roadmap-card">
+                    <h4>4.2 Solving Homogeneous Systems</h4>
+                    <p>Finding the general solution using eigenvalues and eigenvectors</p>
+                </a>
+                <a href="ch4-phase-portraits.html" class="roadmap-card">
+                    <h4>4.3 Phase Portraits & Stability</h4>
+                    <p>Visualizing and analyzing system behavior without solving explicitly</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Interactive Visualization -->
+        <section>
+            <h2>Interactive Phase Plane Visualization</h2>
+            <p>
+                Explore how different coefficient matrices produce different system behaviors. Select a system type below and observe the trajectories. Each curve represents the evolution of the system from a different initial condition.
+            </p>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="systemSelect">System Type:</label>
+                    <select id="systemSelect">
+                        <option value="stable-node">Stable Node (Convergence)</option>
+                        <option value="unstable-node">Unstable Node (Divergence)</option>
+                        <option value="saddle">Saddle Point (Mixed Behavior)</option>
+                        <option value="stable-spiral">Stable Spiral (Damped Oscillation)</option>
+                        <option value="unstable-spiral">Unstable Spiral (Growing Oscillation)</option>
+                        <option value="center">Center (Pure Oscillation)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="updatePlot()">Update Plot</button>
+            </div>
+
+            <div id="plotContainer" class="plot-container"></div>
+
+            <div class="tip-box" style="margin-top: 1rem;">
+                <div class="box-label">How to Interpret the Plot</div>
+                <p style="margin-bottom: 0;">
+                    <strong>Axes:</strong> $x_1$ and $x_2$ are the two state variables.<br>
+                    <strong>Curves:</strong> Each trajectory shows how the system evolves over time from different starting points.<br>
+                    <strong>Arrows:</strong> Direction of flow (how time progresses).<br>
+                    <strong>Behavior:</strong> Spiraling inward indicates stability; spiraling outward indicates instability; saddle points show attraction in one direction and repulsion in another.
+                </p>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section>
+            <h2>Moving Forward</h2>
+            <p>
+                In the sections to come, you will learn how to:
+            </p>
+            <ol style="margin-left: 2rem; margin-bottom: 1rem;">
+                <li><strong>4.1:</strong> Extract eigenvalues and eigenvectors from the coefficient matrix $A$</li>
+                <li><strong>4.2:</strong> Construct the general solution from eigenvalues and eigenvectors</li>
+                <li><strong>4.3:</strong> Use the eigenvalues to classify the long-term behavior of solutions without finding them explicitly</li>
+            </ol>
+            <p>
+                These tools will enable you to understand, predict, and control the behavior of coupled systems in your engineering practice.
+            </p>
+        </section>
     </div>
 
-    <div class="roadmap-card">
-      <h3>4.2 Inverse Transform</h3>
-      <p>Coming back from s-domain</p>
-      <p style="font-size: 0.85rem; color: var(--text);">Partial fractions decomposition (3 cases), Heaviside's method, and techniques for inverting complex rational functions.</p>
-      <a href="ch4-inverse.html">Go to 4.2</a>
-    </div>
+    <footer style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.9rem; border-top:1px solid var(--border); margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
 
-    <div class="roadmap-card">
-      <h3>4.3 Solving IVPs</h3>
-      <p>The main event: solve any ODE</p>
-      <p style="font-size: 0.85rem; color: var(--text);">Derivative transforms, second-order IVPs, transfer functions, and system analysis.</p>
-      <a href="ch4-solving-odes.html">Go to 4.3</a>
-    </div>
+    <script>
+        // System definitions with preset coefficient matrices
+        const systems = {
+            'stable-node': {
+                A: [[-2, 0], [0, -3]],
+                title: 'Stable Node: All trajectories converge to origin'
+            },
+            'unstable-node': {
+                A: [[2, 0], [0, 1]],
+                title: 'Unstable Node: All trajectories diverge from origin'
+            },
+            'saddle': {
+                A: [[1, 0], [0, -2]],
+                title: 'Saddle Point: Attraction in one direction, repulsion in another'
+            },
+            'stable-spiral': {
+                A: [[-0.5, 2], [-2, -0.5]],
+                title: 'Stable Spiral: Trajectories spiral inward (damped oscillation)'
+            },
+            'unstable-spiral': {
+                A: [[0.3, 2], [-2, 0.3]],
+                title: 'Unstable Spiral: Trajectories spiral outward (growing oscillation)'
+            },
+            'center': {
+                A: [[0, 2], [-2, 0]],
+                title: 'Center: Closed orbits (pure oscillation, neither stable nor unstable)'
+            }
+        };
 
-    <div class="roadmap-card">
-      <h3>4.4 Step &amp; Convolution</h3>
-      <p>Handling real-world signals</p>
-      <p style="font-size: 0.85rem; color: var(--text);">Unit step, piecewise forcing, second shifting theorem, convolution theorem, and applications.</p>
-      <a href="ch4-step-convolution.html">Go to 4.4</a>
-    </div>
-  </div>
+        // Euler method for numerical integration
+        function solveSystem(A, x0, t_span, dt) {
+            const [t_start, t_end] = t_span;
+            let t = t_start;
+            let x = [...x0];
+            const trajectory = [x.slice()];
 
-  <div class="tip-box" style="margin-top: 2rem;">
-    <div class="box-label">Tips for Success</div>
-    <ul style="margin: 0.75rem 0 0 1.5rem;">
-      <li><strong>Build a transform table:</strong> Memorize the basic transforms. They're your toolbox.</li>
-      <li><strong>Practice partial fractions:</strong> This is the bottleneck. The more you practice, the faster you work.</li>
-      <li><strong>Understand the big picture:</strong> Each section builds on the previous. Don't skip details.</li>
-      <li><strong>Use software:</strong> For complex inversions, tools like MATLAB, Python, or Wolfram Alpha can verify your work.</li>
-    </ul>
-  </div>
-</section>
+            while (t < t_end) {
+                // x' = Ax
+                const dx = [A[0][0]*x[0] + A[0][1]*x[1], A[1][0]*x[0] + A[1][1]*x[1]];
+                x[0] += dx[0] * dt;
+                x[1] += dx[1] * dt;
+                t += dt;
+                trajectory.push(x.slice());
+            }
+            return trajectory;
+        }
 
-<!-- =================== SECTION: VISUALIZER =================== -->
-<section id="visualizer">
-  <h2>Interactive Visualizer: Time Domain vs s-Domain</h2>
-  <p>Adjust the sliders below to see how a time-domain signal changes in the frequency domain. The uncertainty principle is at work: you can't be narrow in both domains simultaneously!</p>
+        // Generate initial conditions on a circle
+        function generateInitialConditions(numPoints = 10) {
+            const conditions = [];
+            for (let i = 0; i < numPoints; i++) {
+                const angle = (2 * Math.PI * i) / numPoints;
+                const radius = 2;
+                conditions.push([radius * Math.cos(angle), radius * Math.sin(angle)]);
+            }
+            return conditions;
+        }
 
-  <div class="controls">
-    <div class="slider-group">
-      <label for="sliderA">Damping (a)</label>
-      <input type="range" id="sliderA" min="0.1" max="5" step="0.1" value="1.5">
-      <div class="slider-value"><span id="valueA">1.5</span></div>
-    </div>
+        function updatePlot() {
+            const systemType = document.getElementById('systemSelect').value;
+            const system = systems[systemType];
+            const A = system.A;
 
-    <div class="slider-group">
-      <label for="sliderB">Frequency (b)</label>
-      <input type="range" id="sliderB" min="0.5" max="10" step="0.5" value="3">
-      <div class="slider-value"><span id="valueB">3</span></div>
-    </div>
+            const initialConditions = generateInitialConditions(10);
+            const traceData = [];
 
-    <button class="btn btn-primary" onclick="updatePlots()">Update Plots</button>
-  </div>
+            // Solve from each initial condition
+            initialConditions.forEach((x0, idx) => {
+                const trajectory = solveSystem(A, x0, [0, 5], 0.05);
+                const x1_vals = trajectory.map(p => p[0]);
+                const x2_vals = trajectory.map(p => p[1]);
 
-  <div class="plot-grid">
-    <div>
-      <h4 style="text-align: center; margin-bottom: 1rem; color: var(--primary);">Time Domain: \(f(t) = e^{-at}\sin(bt)\)</h4>
-      <div id="plotTime" class="plot-container"></div>
-    </div>
-    <div>
-      <h4 style="text-align: center; margin-bottom: 1rem; color: var(--accent);">Frequency Domain: \(|F(s)| = \left|\frac{b}{(s+a)^2 + b^2}\right|\)</h4>
-      <div id="plotFreq" class="plot-container"></div>
-    </div>
-  </div>
+                traceData.push({
+                    x: x1_vals,
+                    y: x2_vals,
+                    mode: 'lines',
+                    name: `Trajectory ${idx + 1}`,
+                    line: { width: 2, color: `hsl(${(idx * 360) / 10}, 70%, 50%)` }
+                });
+            });
 
-  <div class="tip-box">
-    <div class="box-label">What You're Seeing</div>
-    <p><strong>Left plot (Time Domain):</strong> The signal \(f(t) = e^{-at}\sin(bt)\) is a damped oscillation. As \(a\) increases, the decay is faster (the envelope shrinks). As \(b\) increases, the oscillation is faster (more wiggles).</p>
-    <p><strong>Right plot (Frequency Domain):</strong> The magnitude \(|F(s)|\) along the imaginary axis \(s = j\omega\) shows the frequency content. As damping \(a\) increases, the peak becomes broader and shorter—the signal is "spreading out" in frequency. This is the <strong>uncertainty principle</strong>: narrow signals in time are broad in frequency, and vice versa.</p>
-    <p style="margin-bottom: 0;"><strong>Key insight:</strong> Try \(a = 0.1\) (low damping) and see the sharp, tall peak. Then try \(a = 5\) (high damping) and see the broad, flat peak. This is exactly what's happening in real circuits and mechanical systems!</p>
-  </div>
-</section>
+            // Add origin point
+            traceData.push({
+                x: [0],
+                y: [0],
+                mode: 'markers',
+                name: 'Equilibrium',
+                marker: { size: 10, color: '#dc2626', symbol: 'star' }
+            });
 
-<!-- =================== FOOTER =================== -->
-<footer style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem;border-top:1px solid var(--border);margin-top:3rem;">
-  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
-</footer>
+            const layout = {
+                title: system.title,
+                xaxis: { title: '$x_1$', zeroline: true, gridcolor: '#e2e8f0' },
+                yaxis: { title: '$x_2$', zeroline: true, gridcolor: '#e2e8f0' },
+                hovermode: 'closest',
+                plot_bgcolor: '#f8fafc',
+                paper_bgcolor: '#ffffff',
+                margin: { l: 60, r: 60, t: 80, b: 60 },
+                height: 500
+            };
 
-</div><!-- /.container -->
+            Plotly.newPlot('plotContainer', traceData, layout, { responsive: true });
 
-<!-- =================== SCRIPTS =================== -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+            // Render math in the layout after plot is created
+            if (window.renderMathInElement) {
+                window.renderMathInElement(document.getElementById('plotContainer'), {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }
+        }
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  // Render all math
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\(", right: "\\)", display: false},
-      {left: "$", right: "$", display: false}
-    ],
-    throwOnError: false
-  });
-
-  // Initialize plots on page load
-  updatePlots();
-
-  // Update slider values when changed
-  document.getElementById('sliderA').addEventListener('input', function() {
-    document.getElementById('valueA').innerText = this.value;
-  });
-  document.getElementById('sliderB').addEventListener('input', function() {
-    document.getElementById('valueB').innerText = this.value;
-  });
-});
-
-function updatePlots() {
-  const a = parseFloat(document.getElementById('sliderA').value);
-  const b = parseFloat(document.getElementById('sliderB').value);
-
-  // Time domain: f(t) = e^(-at) * sin(bt)
-  const t = [];
-  const timeDomainSignal = [];
-  for (let i = 0; i <= 50; i += 0.1) {
-    t.push(i);
-    timeDomainSignal.push(Math.exp(-a * i) * Math.sin(b * i));
-  }
-
-  const traceTime = {
-    x: t,
-    y: timeDomainSignal,
-    type: 'scatter',
-    mode: 'lines',
-    line: { color: '#2563eb', width: 3 },
-    fill: 'tozeroy',
-    fillcolor: 'rgba(37, 99, 235, 0.15)',
-  };
-
-  const layoutTime = {
-    title: { text: '', font: { size: 14 } },
-    xaxis: { title: 'Time (t)', gridcolor: '#e2e8f0' },
-    yaxis: { title: 'f(t)', gridcolor: '#e2e8f0' },
-    plot_bgcolor: '#f8fafc',
-    paper_bgcolor: '#ffffff',
-    margin: { l: 60, r: 20, t: 40, b: 50 },
-    responsive: true,
-  };
-
-  Plotly.newPlot('plotTime', [traceTime], layoutTime, { responsive: true });
-
-  // Frequency domain: |F(s)| along s = a + j*omega
-  // F(s) = b / ((s+a)^2 + b^2)
-  // At s = a + j*omega: |F(jω)| = |b / ((jω)^2 + b^2)| = b / sqrt(ω^4 + b^4)
-  // Actually at the vertical line Re(s) = -a:
-  // F(-a + jω) = b / ((jω)^2 + b^2) = b / (-ω^2 + b^2)
-  // |F(-a + jω)| = b / sqrt((ω^2 - b^2)^2) = b / |ω^2 - b^2|
-  // Better: use actual formula
-  // F(s) = b / ((s+a)^2 + b^2)
-  // Plot along s = jω (imaginary axis, a=0 for view):
-  const omega = [];
-  const magFreq = [];
-  for (let w = -15; w <= 15; w += 0.2) {
-    omega.push(w);
-    // |F(jω)| = |b / ((jω+a)^2 + b^2)| = b / sqrt((a^2 - ω^2 + b^2)^2 + (2aω)^2)
-    // Simpler: |b / ((-ω^2 + b^2) + 2ajω)| = b / sqrt((-ω^2 + b^2 + a^2)^2 + (2aω)^2)
-    // Or even simpler at ω (treating as transfer function evaluated at jω):
-    const denom = Math.sqrt(Math.pow(a*a + b*b - w*w, 2) + Math.pow(2*a*w, 2));
-    magFreq.push(b / denom);
-  }
-
-  const traceFreq = {
-    x: omega,
-    y: magFreq,
-    type: 'scatter',
-    mode: 'lines',
-    line: { color: '#7c3aed', width: 3 },
-    fill: 'tozeroy',
-    fillcolor: 'rgba(124, 58, 237, 0.15)',
-  };
-
-  const layoutFreq = {
-    title: { text: '', font: { size: 14 } },
-    xaxis: { title: 'Frequency (ω)', gridcolor: '#e2e8f0' },
-    yaxis: { title: '|F(jω)|', gridcolor: '#e2e8f0' },
-    plot_bgcolor: '#f8fafc',
-    paper_bgcolor: '#ffffff',
-    margin: { l: 60, r: 20, t: 40, b: 50 },
-    responsive: true,
-  };
-
-  Plotly.newPlot('plotFreq', [traceFreq], layoutFreq, { responsive: true });
-}
-</script>
-
+        // Initialize plot on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePlot();
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
 </body>
 </html>

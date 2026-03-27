@@ -337,14 +337,14 @@
         <text x="755" y="377" text-anchor="middle" font-size="9" fill="#7c3aed" font-style="italic">Calculus → Algebra (s-domain)</text>
       </g>
 
-      <!-- Ch4: Systems (right, upper) — coming soon -->
-      <g class="mm-node" style="cursor:default; opacity:0.45;">
-        <rect x="630" y="85" rx="14" ry="14" width="250" height="80" fill="#fff" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4"/>
-        <rect x="630" y="85" rx="14" ry="14" width="250" height="24" fill="url(#grad-ch4)" style="clip-path:inset(0 0 56px 0 round 14px);" opacity="0.6"/>
+      <!-- Ch4: Systems (right, upper) -->
+      <g class="mm-node" style="cursor:pointer;" onclick="window.location.href='#chapter4'">
+        <rect x="630" y="85" rx="14" ry="14" width="250" height="80" fill="#fff" stroke="#d97706" stroke-width="2"/>
+        <rect x="630" y="85" rx="14" ry="14" width="250" height="24" fill="url(#grad-ch4)" style="clip-path:inset(0 0 56px 0 round 14px);"/>
         <text x="755" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">CH 04 · Systems of DEs</text>
-        <text x="755" y="125" text-anchor="middle" font-size="10" fill="#6b7280">Matrix Methods · Eigenvalues</text>
-        <text x="755" y="141" text-anchor="middle" font-size="10" fill="#6b7280">Phase Portraits · Stability</text>
-        <text x="755" y="157" text-anchor="middle" font-size="9" fill="#d97706" font-style="italic">Coming Soon</text>
+        <text x="755" y="125" text-anchor="middle" font-size="10" fill="#374151">Matrix Methods · Eigenvalues</text>
+        <text x="755" y="141" text-anchor="middle" font-size="10" fill="#374151">Phase Portraits · Stability</text>
+        <text x="755" y="157" text-anchor="middle" font-size="9" fill="#d97706" font-style="italic">Coupled Systems · Equilibria</text>
       </g>
 
       <!-- Flow labels on key connections -->
@@ -419,18 +419,18 @@
     </a>
 
     <!-- Chapter 4 -->
-    <div class="chapter-card coming-soon">
-      <span class="status-badge soon">Coming Soon</span>
+    <a class="chapter-card active" href="#chapter4">
+      <span class="status-badge available">Available</span>
       <div class="chapter-num">04</div>
       <h3>Systems of Differential Equations</h3>
       <p>Matrix methods, eigenvalue analysis, phase portraits, stability of equilibria, and coupled systems.</p>
       <div class="topic-list">
-        <span class="topic-tag">Matrix Methods</span>
-        <span class="topic-tag">Eigenvalues</span>
-        <span class="topic-tag">Phase Portraits</span>
-        <span class="topic-tag">Stability</span>
+        <span class="topic-tag done">Overview &amp; Motivation</span>
+        <span class="topic-tag done">Matrices &amp; Eigenvalues</span>
+        <span class="topic-tag done">Solving Systems</span>
+        <span class="topic-tag done">Phase Portraits</span>
       </div>
-    </div>
+    </a>
 
     <!-- Chapter 5 -->
     <div class="chapter-card coming-soon">
@@ -631,6 +631,53 @@
           <h4>3.4 — Step Functions &amp; Convolution</h4>
           <p>Unit step functions, piecewise inputs, second shifting theorem (t-shifting), convolution theorem, and impulse response.</p>
           <div class="math-preview">\((f * g)(t) = \int_0^t f(\tau)g(t-\tau)\,d\tau\)</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Chapter 4 Detail -->
+  <div class="ch1-detail" id="chapter4">
+    <h2>Chapter 4 — Systems of Differential Equations</h2>
+    <p>From coupled equations to matrix methods: learn to solve systems using eigenvalues and eigenvectors, classify equilibrium points, and visualize dynamics through phase portraits.</p>
+
+    <!-- Overview -->
+    <a class="topic-card" href="ch4-overview.html" style="margin-bottom:1.5rem; border:2px solid var(--primary); background:var(--primary-light);">
+      <div class="topic-icon" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">&#9733;</div>
+      <div>
+        <h4>Chapter 4 Overview — Start Here</h4>
+        <p>Why systems of DEs matter: converting higher-order equations to first-order systems, motivation from engineering and biology, and the matrix formulation \(\mathbf{x}' = A\mathbf{x}\).</p>
+        <div class="math-preview">\(\mathbf{x}' = A\mathbf{x}\)</div>
+      </div>
+    </a>
+
+    <div class="topic-grid">
+
+      <a class="topic-card" href="ch4-matrices.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">M</div>
+        <div>
+          <h4>4.1 — Matrices, Eigenvalues &amp; Eigenvectors</h4>
+          <p>Matrix operations, determinants, characteristic equation, finding eigenvalues and eigenvectors — the tools you need for solving systems.</p>
+          <div class="math-preview">\(\det(A - \lambda I) = 0\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch4-homogeneous.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">H</div>
+        <div>
+          <h4>4.2 — Solving Homogeneous Systems</h4>
+          <p>General solutions for \(\mathbf{x}' = A\mathbf{x}\): distinct real eigenvalues, complex eigenvalues, and repeated eigenvalues with generalized eigenvectors.</p>
+          <div class="math-preview">\(\mathbf{x}(t) = c_1 e^{\lambda_1 t}\mathbf{v}_1 + c_2 e^{\lambda_2 t}\mathbf{v}_2\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch4-phase-portraits.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">P</div>
+        <div>
+          <h4>4.3 — Phase Portraits &amp; Stability</h4>
+          <p>Classifying equilibria: nodes, saddles, spirals, centers. The trace-determinant plane, stability analysis, and interactive phase portrait exploration.</p>
+          <div class="math-preview">\(\Delta = \text{tr}(A)^2 - 4\det(A)\)</div>
         </div>
       </a>
 

@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 4: Chapter 4.3 Phase Portraits & Stability | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; flex-wrap: wrap; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- CLASSIFICATION CARDS ---- */
+  .classification-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 2rem; margin: 2rem 0;
+  }
+
+  .classification-card {
+    background: white; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+  }
+
+  .classification-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .classification-card h4 {
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--primary); margin-bottom: 0.75rem;
+  }
+
+  .eigen-condition {
+    background: #f1f5f9; border-radius: 8px;
+    padding: 0.75rem; margin: 0.75rem 0;
+    font-family: 'Monaco', monospace; font-size: 0.9rem;
+    color: var(--text);
+    text-align: center;
+  }
+
+  .behavior-text {
+    color: var(--text); margin: 0.75rem 0;
+    font-size: 0.95rem;
+  }
+
+  .stability-badge {
+    display: inline-block; padding: 0.4rem 0.8rem;
+    border-radius: 20px; font-weight: 600; font-size: 0.8rem;
+    margin: 0.75rem 0; text-transform: uppercase;
+  }
+
+  .stability-badge.stable {
+    background: var(--success-light); color: var(--success);
+  }
+
+  .stability-badge.asymptotically-stable {
+    background: #dcfce7; color: #16a34a;
+  }
+
+  .stability-badge.unstable {
+    background: var(--danger-light); color: var(--danger);
+  }
+
+  .stability-badge.stable-not-asymptotic {
+    background: #fef08a; color: #b45309;
+  }
+
+  .phase-plot {
+    height: 300px; margin: 1rem 0; border-radius: 8px;
+    background: #f8fafc; border: 1px solid var(--border);
+  }
+
+  /* ---- SUMMARY TABLE ---- */
+  .table-wrapper {
+    overflow-x: auto; margin: 1.5rem 0;
+  }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  table th {
+    background: var(--primary); color: white;
+    padding: 0.75rem; text-align: left; font-weight: 700;
+  }
+
+  table td {
+    padding: 0.75rem; border-bottom: 1px solid var(--border);
+  }
+
+  table tr:nth-child(even) {
+    background: #f8fafc;
+  }
+
+  table tr:hover {
+    background: var(--primary-light);
+  }
+
+  /* ---- TRACE-DETERMINANT DIAGRAM ---- */
+  .td-diagram {
+    height: 500px; margin: 2rem 0; border-radius: var(--radius);
+    background: white; border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1.5rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 120px; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s; width: 100%;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .btn-group {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+  }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 100%);
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+    background: #fafbfc;
+  }
+
+  /* ---- PRESET BUTTONS ---- */
+  .preset-buttons {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem; margin: 1rem 0;
+  }
+
+  .preset-btn {
+    padding: 0.6rem 1rem; font-size: 0.85rem; font-weight: 600;
+    border: 2px solid var(--border); background: white;
+    border-radius: 8px; cursor: pointer; transition: all 0.2s;
+  }
+
+  .preset-btn:hover {
+    border-color: var(--primary); color: var(--primary);
+  }
+
+  /* ---- ANALYSIS BOX ---- */
+  .analysis-box {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;
+  }
+
+  .analysis-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    margin: 1rem 0;
+  }
+
+  .analysis-row > div {
+    padding: 0.75rem 0;
+  }
+
+  .analysis-label {
+    font-weight: 700; color: var(--accent); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  .analysis-value {
+    font-size: 1.1rem; color: var(--text); margin-top: 0.3rem;
+    font-family: 'Monaco', monospace;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  /* ---- OBJECTIVES ---- */
+  .objectives {
+    background: var(--primary-light); border-radius: 8px;
+    padding: 1.5rem; margin-bottom: 1.5rem;
+    border-left: 5px solid var(--primary);
+  }
+
+  .objectives h4 {
+    font-size: 1rem; font-weight: 700; color: var(--primary);
+    margin-bottom: 1rem;
+  }
+
+  .objective-item {
+    padding: 0.5rem 0; color: var(--text);
+    display: flex; align-items: start; gap: 0.5rem;
+  }
+
+  .objective-item::before {
+    content: "✓"; color: var(--success); font-weight: bold; flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .classification-grid {
+      grid-template-columns: 1fr;
+    }
+    .analysis-row {
+      grid-template-columns: 1fr;
+    }
+    .preset-buttons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch4-overview.html">4.0 Overview</a>
+    <a href="ch4-matrices.html">4.1 Matrices</a>
+    <a href="ch4-homogeneous.html">4.2 Systems</a>
+    <a href="ch4-phase-portraits.html" class="active">4.3 Phase Portraits</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a><a href="#classification">Classification</a><a href="#examples">Examples</a><a href="#visualizer">Visualizer</a><a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- INTRODUCTION SECTION -->
+  <section id="intro">
+    <h1>4.3 Phase Portraits and Stability Analysis</h1>
+    <p class="subtitle">Understanding the qualitative behavior of 2D linear systems through geometric visualization</p>
+
+    <div class="objectives">
+      <h4>Learning Objectives</h4>
+      <div class="objective-item">Understand phase portraits as geometric representations of system trajectories</div>
+      <div class="objective-item">Classify equilibrium points based on eigenvalue analysis</div>
+      <div class="objective-item">Determine stability of the origin as an equilibrium point</div>
+      <div class="objective-item">Use the trace-determinant plane to classify linear systems</div>
+      <div class="objective-item">Interpret and sketch phase portraits for 2×2 systems</div>
+    </div>
+
+    <h3>What is a Phase Portrait?</h3>
+    <p>A <strong>phase portrait</strong> is a plot of trajectories in the $x_1$-$x_2$ phase plane for a dynamical system. For a 2×2 linear system</p>
+    <div class="math-display">$$\mathbf{x}' = A\mathbf{x}$$</div>
+    <p>each solution $\mathbf{x}(t) = [x_1(t), x_2(t)]^T$ traces a curve (trajectory) in the phase plane as $t$ varies. The arrows on these curves indicate the direction of motion as time increases.</p>
+
+    <p>A phase portrait captures the <strong>qualitative behavior</strong> of the system:</p>
+    <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+      <li style="margin-bottom: 0.5rem;"><strong>Do trajectories spiral inward or outward?</strong></li>
+      <li style="margin-bottom: 0.5rem;"><strong>Are there stable or unstable directions?</strong></li>
+      <li style="margin-bottom: 0.5rem;"><strong>What is the long-term behavior as $t \to \infty$?</strong></li>
+    </ul>
+
+    <h3>What is Stability?</h3>
+    <p>An equilibrium point is a point where $\mathbf{x}' = \mathbf{0}$. For the linear system $\mathbf{x}' = A\mathbf{x}$, the origin $\mathbf{x} = \mathbf{0}$ is always an equilibrium.</p>
+
+    <div class="definition-box">
+      <div class="box-label">Stability Definitions</div>
+      <p>The origin is:</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>Stable</strong> if for any $\epsilon > 0$, there exists $\delta > 0$ such that $\|\mathbf{x}_0\| < \delta$ implies $\|\mathbf{x}(t)\| < \epsilon$ for all $t \geq 0$.</li>
+        <li><strong>Asymptotically stable</strong> if it is stable AND $\lim_{t \to \infty} \mathbf{x}(t) = \mathbf{0}$ for all nearby initial conditions.</li>
+        <li><strong>Unstable</strong> if it is not stable.</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 1rem;"><strong>Key insight:</strong> For 2×2linear systems, the stability of the origin is completely determined by the eigenvalues of $A$.</p>
+  </section>
+
+  <!-- CLASSIFICATION SECTION -->
+  <section id="classification">
+    <h2>Classification of Equilibrium Points</h2>
+    <p style="margin-bottom: 1.5rem;">The behavior of a 2×2 linear system is determined entirely by the eigenvalues $\lambda_1, \lambda_2$ of the coefficient matrix $A$. Below is a comprehensive classification:</p>
+
+    <div class="classification-grid">
+      <!-- STABLE NODE -->
+      <div class="classification-card">
+        <h4>Stable Node</h4>
+        <div class="eigen-condition">
+          $\lambda_1, \lambda_2 \in \mathbb{R}$, $\lambda_1 < \lambda_2 < 0$
+        </div>
+        <div class="behavior-text">
+          All trajectories approach the origin along straight line directions (eigenvectors). Motion is exponential decay with rate $\max(|\lambda_1|, |\lambda_2|)$.
+        </div>
+        <div class="stability-badge asymptotically-stable">
+          Asymptotically Stable
+        </div>
+        <div class="phase-plot" id="plot-stable-node"></div>
+      </div>
+
+      <!-- UNSTABLE NODE -->
+      <div class="classification-card">
+        <h4>Unstable Node</h4>
+        <div class="eigen-condition">
+          $\lambda_1, \lambda_2 \in \mathbb{R}$, $0 < \lambda_1 < \lambda_2$
+        </div>
+        <div class="behavior-text">
+          All trajectories diverge from the origin along eigenvector directions. Exponential growth away from origin.
+        </div>
+        <div class="stability-badge unstable">
+          Unstable
+        </div>
+        <div class="phase-plot" id="plot-unstable-node"></div>
+      </div>
+
+      <!-- SADDLE POINT -->
+      <div class="classification-card">
+        <h4>Saddle Point</h4>
+        <div class="eigen-condition">
+          $\lambda_1, \lambda_2 \in \mathbb{R}$, $\lambda_1 < 0 < \lambda_2$
+        </div>
+        <div class="behavior-text">
+          The stable manifold (along $\mathbf{v}_1$) attracts trajectories; the unstable manifold (along $\mathbf{v}_2$) repels them. Most trajectories diverge.
+        </div>
+        <div class="stability-badge unstable">
+          Unstable
+        </div>
+        <div class="phase-plot" id="plot-saddle"></div>
+      </div>
+
+      <!-- STABLE SPIRAL -->
+      <div class="classification-card">
+        <h4>Stable Spiral (Sink)</h4>
+        <div class="eigen-condition">
+          $\lambda = \alpha \pm \beta i$, $\alpha < 0, \beta \neq 0$
+        </div>
+        <div class="behavior-text">
+          Trajectories spiral inward toward the origin. The rotation rate is $\beta$ (rad/s), the decay rate is $e^{\alpha t}$.
+        </div>
+        <div class="stability-badge asymptotically-stable">
+          Asymptotically Stable
+        </div>
+        <div class="phase-plot" id="plot-stable-spiral"></div>
+      </div>
+
+      <!-- UNSTABLE SPIRAL -->
+      <div class="classification-card">
+        <h4>Unstable Spiral (Source)</h4>
+        <div class="eigen-condition">
+          $\lambda = \alpha \pm \beta i$, $\alpha > 0, \beta \neq 0$
+        </div>
+        <div class="behavior-text">
+          Trajectories spiral outward from the origin. Exponential growth with oscillatory behavior.
+        </div>
+        <div class="stability-badge unstable">
+          Unstable
+        </div>
+        <div class="phase-plot" id="plot-unstable-spiral"></div>
+      </div>
+
+      <!-- CENTER -->
+      <div class="classification-card">
+        <h4>Center (Elliptic)</h4>
+        <div class="eigen-condition">
+          $\lambda = \pm \beta i$, $\beta > 0$ (purely imaginary)
+        </div>
+        <div class="behavior-text">
+          All trajectories form closed ellipses around the origin. The system oscillates with constant period $T = 2\pi/\beta$.
+        </div>
+        <div class="stability-badge stable-not-asymptotic">
+          Stable (but NOT asymptotically)
+        </div>
+        <div class="phase-plot" id="plot-center"></div>
+      </div>
+
+      <!-- STAR NODE (DEGENERATE) -->
+      <div class="classification-card">
+        <h4>Star Node (Degenerate)</h4>
+        <div class="eigen-condition">
+          Repeated eigenvalue: $\lambda$ with 2 independent eigenvectors ($A = \lambda I$)
+        </div>
+        <div class="behavior-text">
+          All trajectories are straight lines through the origin. Either all converge (if $\lambda < 0$) or diverge (if $\lambda > 0$).
+        </div>
+        <div class="stability-badge asymptotically-stable">
+          Stable if $\lambda < 0$
+        </div>
+        <div class="phase-plot" id="plot-star-node"></div>
+      </div>
+
+      <!-- IMPROPER NODE -->
+      <div class="classification-card">
+        <h4>Improper Node</h4>
+        <div class="eigen-condition">
+          Repeated eigenvalue: $\lambda$ with only 1 independent eigenvector
+        </div>
+        <div class="behavior-text">
+          Trajectories approach the origin along the eigenvector direction, but not straight lines. One "fast" and one "slow" mode.
+        </div>
+        <div class="stability-badge asymptotically-stable">
+          Asymptotically Stable if $\lambda < 0$
+        </div>
+        <div class="phase-plot" id="plot-improper-node"></div>
+      </div>
+    </div>
+
+    <!-- SUMMARY TABLE -->
+    <h3>Summary Table</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Eigenvalues</th>
+            <th>Condition</th>
+            <th>Stability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Stable Node</strong></td>
+            <td>$\lambda_1, \lambda_2 \in \mathbb{R}$</td>
+            <td>$\lambda_1 < \lambda_2 < 0$</td>
+            <td>Asymptotically Stable</td>
+          </tr>
+          <tr>
+            <td><strong>Unstable Node</strong></td>
+            <td>$\lambda_1, \lambda_2 \in \mathbb{R}$</td>
+            <td>$0 < \lambda_1 < \lambda_2$</td>
+            <td>Unstable</td>
+          </tr>
+          <tr>
+            <td><strong>Saddle Point</strong></td>
+            <td>$\lambda_1, \lambda_2 \in \mathbb{R}$</td>
+            <td>$\lambda_1 < 0 < \lambda_2$</td>
+            <td>Unstable</td>
+          </tr>
+          <tr>
+            <td><strong>Stable Spiral</strong></td>
+            <td>$\lambda = \alpha \pm \beta i$</td>
+            <td>$\alpha < 0, \beta \neq 0$</td>
+            <td>Asymptotically Stable</td>
+          </tr>
+          <tr>
+            <td><strong>Unstable Spiral</strong></td>
+            <td>$\lambda = \alpha \pm \beta i$</td>
+            <td>$\alpha > 0, \beta \neq 0$</td>
+            <td>Unstable</td>
+          </tr>
+          <tr>
+            <td><strong>Center</strong></td>
+            <td>$\lambda = \pm \beta i$</td>
+            <td>$\beta > 0$</td>
+            <td>Stable</td>
+          </tr>
+          <tr>
+            <td><strong>Star Node</strong></td>
+            <td>Repeated $\lambda$</td>
+            <td>2 independent eigenvectors</td>
+            <td>Stable if $\lambda < 0$</td>
+          </tr>
+          <tr>
+            <td><strong>Improper Node</strong></td>
+            <td>Repeated $\lambda$</td>
+            <td>1 independent eigenvector</td>
+            <td>Stable if $\lambda < 0$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TRACE-DETERMINANT DIAGRAM -->
+    <h3>The Trace-Determinant Plane</h3>
+    <p>For a 2×2 matrix $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$, define:</p>
+    <div class="math-display">
+      $$\tau = \text{tr}(A) = a + d \quad \text{and} \quad \Delta = \det(A) = ad - bc$$
+    </div>
+    <p>The characteristic polynomial is $\lambda^2 - \tau\lambda + \Delta = 0$, with discriminant $D = \tau^2 - 4\Delta$.</p>
+    <p>The $(\tau, \Delta)$ plane is divided into regions corresponding to different equilibrium types:</p>
+
+    <div class="td-diagram" id="td-diagram"></div>
+
+    <p style="margin-top: 1.5rem;"><strong>How to use the diagram:</strong> Compute $\tau$ and $\Delta$ for your system, plot the point $(\tau, \Delta)$. The region containing that point determines the equilibrium type.</p>
+  </section>
+
+  <!-- EXAMPLES SECTION -->
+  <section id="examples">
+    <h2>Worked Examples</h2>
+
+    <!-- EXAMPLE 1 -->
+    <div class="collapsible">
+      <button class="collapsible-toggle" onclick="toggleExample(this)">
+        <span><strong>Example 1:</strong> Stable Node &mdash; $A = \begin{pmatrix} -3 & 1 \\ 0 & -2 \end{pmatrix}$</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="collapsible-content">
+        <h4>Solution</h4>
+        <p><strong>Step 1: Find eigenvalues</strong></p>
+        <div class="math-display">
+          $$\det(A - \lambda I) = \det\begin{pmatrix} -3-\lambda & 1 \\ 0 & -2-\lambda \end{pmatrix} = (-3-\lambda)(-2-\lambda) = \lambda^2 + 5\lambda + 6 = 0$$
+        </div>
+        <p>Factoring: $(\lambda + 2)(\lambda + 3) = 0$, so $\lambda_1 = -3, \lambda_2 = -2$.</p>
+
+        <p><strong>Step 2: Check trace and determinant</strong></p>
+        <div class="math-display">
+          $$\tau = -3 + (-2) = -5, \quad \Delta = (-3)(-2) - (1)(0) = 6$$
+        </div>
+        <p>Point $(-5, 6)$ in the $(\tau, \Delta)$ plane: $\tau < 0$ and $\Delta > 0$ with $\tau^2 - 4\Delta = 25 - 24 = 1 > 0$ (real eigenvalues) → <strong>Stable Node</strong></p>
+
+        <p><strong>Step 3: Find eigenvectors</strong></p>
+        <p>For $\lambda_1 = -3$: $(A + 3I)\mathbf{v} = \begin{pmatrix} 0 & 1 \\ 0 & 1 \end{pmatrix}\mathbf{v} = \mathbf{0}$ gives $\mathbf{v}_1 = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$</p>
+        <p>For $\lambda_2 = -2$: $(A + 2I)\mathbf{v} = \begin{pmatrix} -1 & 1 \\ 0 & 0 \end{pmatrix}\mathbf{v} = \mathbf{0}$ gives $\mathbf{v}_2 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$</p>
+
+        <p><strong>Step 4: Sketch phase portrait</strong></p>
+        <div id="plot-example1"></div>
+        <p><strong>Interpretation:</strong> Both eigenvalues are negative, so all trajectories decay exponentially to the origin. The decay is faster along the $v_1$ direction (rate $e^{-3t}$) than along the $v_2$ direction (rate $e^{-2t}$). The origin is <strong>asymptotically stable</strong>.</p>
+      </div>
+    </div>
+
+    <!-- EXAMPLE 2 -->
+    <div class="collapsible">
+      <button class="collapsible-toggle" onclick="toggleExample(this)">
+        <span><strong>Example 2:</strong> Center &mdash; $A = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$ (Harmonic Oscillator)</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="collapsible-content">
+        <h4>Solution</h4>
+        <p><strong>Step 1: Find eigenvalues</strong></p>
+        <div class="math-display">
+          $$\det(A - \lambda I) = \det\begin{pmatrix} -\lambda & 1 \\ -1 & -\lambda \end{pmatrix} = \lambda^2 + 1 = 0$$
+        </div>
+        <p>So $\lambda = \pm i$, purely imaginary with $\beta = 1$.</p>
+
+        <p><strong>Step 2: Check trace and determinant</strong></p>
+        <div class="math-display">
+          $$\tau = 0 + 0 = 0, \quad \Delta = (0)(0) - (1)(-1) = 1$$
+        </div>
+        <p>Point $(0, 1)$ on the boundary $\tau = 0$, $\Delta > 0$ → <strong>Center</strong></p>
+
+        <p><strong>Step 3: Solution structure</strong></p>
+        <div class="math-display">
+          $$\mathbf{x}(t) = c_1 \begin{pmatrix} \cos t \\ -\sin t \end{pmatrix} + c_2 \begin{pmatrix} \sin t \\ \cos t \end{pmatrix}$$
+        </div>
+
+        <p><strong>Step 4: Phase portrait</strong></p>
+        <div id="plot-example2"></div>
+        <p><strong>Interpretation:</strong> All trajectories are circles centered at the origin. The period is $T = 2\pi/1 = 2\pi$. The origin is <strong>stable but not asymptotically stable</strong> — nearby solutions stay near the origin but don't converge to it.</p>
+      </div>
+    </div>
+
+    <!-- EXAMPLE 3 -->
+    <div class="collapsible">
+      <button class="collapsible-toggle" onclick="toggleExample(this)">
+        <span><strong>Example 3:</strong> Stable Spiral &mdash; $A = \begin{pmatrix} -1 & -4 \\ 1 & -1 \end{pmatrix}$ (Underdamped Oscillator)</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="collapsible-content">
+        <h4>Solution</h4>
+        <p><strong>Step 1: Find eigenvalues</strong></p>
+        <div class="math-display">
+          $$\det(A - \lambda I) = \det\begin{pmatrix} -1-\lambda & -4 \\ 1 & -1-\lambda \end{pmatrix} = (-1-\lambda)^2 + 4 = \lambda^2 + 2\lambda + 5 = 0$$
+        </div>
+        <div class="math-display">
+          $$\lambda = \frac{-2 \pm \sqrt{4-20}}{2} = \frac{-2 \pm \sqrt{-16}}{2} = -1 \pm 2i$$
+        </div>
+        <p>So $\alpha = -1 < 0$ and $\beta = 2 \neq 0$.</p>
+
+        <p><strong>Step 2: Check trace and determinant</strong></p>
+        <div class="math-display">
+          $$\tau = -1 + (-1) = -2, \quad \Delta = (-1)(-1) - (-4)(1) = 1 + 4 = 5$$
+        </div>
+        <p>$\tau < 0$, $\Delta > 0$, $\tau^2 - 4\Delta = 4 - 20 = -16 < 0$ (complex eigenvalues with negative real part) → <strong>Stable Spiral</strong></p>
+
+        <p><strong>Step 3: Phase portrait</strong></p>
+        <div id="plot-example3"></div>
+        <p><strong>Interpretation:</strong> Trajectories spiral inward toward the origin. The decay rate is $e^{-t}$ and the rotation rate is $2$ rad/s. The origin is <strong>asymptotically stable</strong>. This is the underdamped case in oscillator problems.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE VISUALIZER -->
+  <section id="visualizer">
+    <h2>Interactive Phase Portrait Explorer</h2>
+    <p>Enter the elements of a 2×2 matrix $A$ to visualize its phase portrait. The system will automatically compute eigenvalues and classify the equilibrium type.</p>
+
+    <div class="controls">
+      <div style="width: 100%; margin-bottom: 1rem;">
+        <label style="font-weight: 600; margin-bottom: 0.75rem; display: block; color: var(--accent);">Matrix $A = \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix}$</label>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; max-width: 300px;">
+          <div class="control-group">
+            <label>$a_{11}$</label>
+            <input type="number" id="a11" value="-1" step="0.1">
+          </div>
+          <div class="control-group">
+            <label>$a_{12}$</label>
+            <input type="number" id="a12" value="1" step="0.1">
+          </div>
+          <div class="control-group">
+            <label>$a_{21}$</label>
+            <input type="number" id="a21" value="0" step="0.1">
+          </div>
+          <div class="control-group">
+            <label>$a_{22}$</label>
+            <input type="number" id="a22" value="-2" step="0.1">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="plotPhasePortrait()">Plot Phase Portrait</button>
+
+      <div style="width: 100%; margin-top: 1rem;">
+        <label style="font-weight: 600; margin-bottom: 0.75rem; display: block; color: var(--accent);">Preset Examples</label>
+        <div class="preset-buttons">
+          <button class="preset-btn" onclick="setPreset('stable-node')">Stable Node</button>
+          <button class="preset-btn" onclick="setPreset('unstable-node')">Unstable Node</button>
+          <button class="preset-btn" onclick="setPreset('saddle')">Saddle Point</button>
+          <button class="preset-btn" onclick="setPreset('stable-spiral')">Stable Spiral</button>
+          <button class="preset-btn" onclick="setPreset('unstable-spiral')">Unstable Spiral</button>
+          <button class="preset-btn" onclick="setPreset('center')">Center</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-box">
+      <div class="analysis-row">
+        <div>
+          <div class="analysis-label">Trace (τ)</div>
+          <div class="analysis-value" id="trace-value">—</div>
+        </div>
+        <div>
+          <div class="analysis-label">Determinant (Δ)</div>
+          <div class="analysis-value" id="det-value">—</div>
+        </div>
+      </div>
+      <div class="analysis-row">
+        <div>
+          <div class="analysis-label">Eigenvalue 1</div>
+          <div class="analysis-value" id="eig1-value">—</div>
+        </div>
+        <div>
+          <div class="analysis-label">Eigenvalue 2</div>
+          <div class="analysis-value" id="eig2-value">—</div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem;">
+        <div class="analysis-label">Classification</div>
+        <div class="analysis-value" id="classification-value" style="font-size: 1.2rem; color: var(--primary);">—</div>
+      </div>
+    </div>
+
+    <div id="phase-portrait-main" style="height: 600px; border-radius: var(--radius); background: white; border: 1.5px solid var(--border); box-shadow: var(--shadow);"></div>
+  </section>
+
+  <!-- PRACTICE PROBLEMS -->
+  <section id="practice">
+    <h2>Exam-Style Practice Problems</h2>
+
+    <!-- PROBLEM 1 -->
+    <div class="quiz-problem">
+      <div class="problem-num">Problem 1</div>
+      <p>Classify the equilibrium of the system $\mathbf{x}' = \begin{pmatrix} 1 & -3 \\ 3 & 1 \end{pmatrix}\mathbf{x}$ and describe the phase portrait behavior.</p>
+      <button class="btn-accent" onclick="toggleProblemHint(1)">Show Hint</button>
+      <button class="btn-accent" onclick="toggleProblemSolution(1)">Show Solution</button>
+      <div id="hint-1" class="quiz-feedback hint" style="display:none;">
+        <strong>Hint:</strong> Compute the trace and determinant. $\tau = 1 + 1 = 2 > 0$ and $\Delta = 1 + 9 = 10 > 0$. What does $\tau > 0$ and $\Delta > 0$ tell you about the nature of the eigenvalues?
+      </div>
+      <div id="solution-1" class="quiz-feedback" style="display:none;">
+        <strong>Solution:</strong>
+        <p style="margin-top: 0.5rem;">Compute $\tau = 1 + 1 = 2$ and $\Delta = (1)(1) - (-3)(3) = 1 + 9 = 10$.</p>
+        <p>Eigenvalues from $\lambda^2 - 2\lambda + 10 = 0$:</p>
+        <div class="math-display" style="font-size: 0.95em;">$$\lambda = \frac{2 \pm \sqrt{4-40}}{2} = \frac{2 \pm \sqrt{-36}}{2} = 1 \pm 3i$$</div>
+        <p><strong>Classification:</strong> Complex eigenvalues with $\alpha = 1 > 0$ → <strong>Unstable Spiral</strong></p>
+        <p><strong>Behavior:</strong> Trajectories spiral outward from the origin with angular frequency $3$ rad/s and exponential growth rate $e^t$.</p>
+      </div>
+    </div>
+
+    <!-- PROBLEM 2 -->
+    <div class="quiz-problem">
+      <div class="problem-num">Problem 2</div>
+      <p>A mass-spring-damper system is described by $y'' + 4y' + 5y = 0$. Convert this to a first-order system, find its eigenvalues, and classify the equilibrium.</p>
+      <button class="btn-accent" onclick="toggleProblemHint(2)">Show Hint</button>
+      <button class="btn-accent" onclick="toggleProblemSolution(2)">Show Solution</button>
+      <div id="hint-2" class="quiz-feedback hint" style="display:none;">
+        <strong>Hint:</strong> Let $x_1 = y$ and $x_2 = y'$. Then $x_1' = x_2$ and $x_2' = -5x_1 - 4x_2$. Build the matrix and compute eigenvalues.
+      </div>
+      <div id="solution-2" class="quiz-feedback" style="display:none;">
+        <strong>Solution:</strong>
+        <p style="margin-top: 0.5rem;"><strong>Step 1: Convert to system</strong></p>
+        <div class="math-display" style="font-size: 0.95em;">$$\mathbf{x}' = \begin{pmatrix} 0 & 1 \\ -5 & -4 \end{pmatrix}\mathbf{x}$$</div>
+        <p><strong>Step 2: Compute trace and determinant</strong></p>
+        <p>$\tau = 0 + (-4) = -4$, $\Delta = (0)(-4) - (1)(-5) = 5$</p>
+        <p><strong>Step 3: Find eigenvalues</strong></p>
+        <div class="math-display" style="font-size: 0.95em;">$$\lambda^2 + 4\lambda + 5 = 0 \Rightarrow \lambda = \frac{-4 \pm \sqrt{16-20}}{2} = -2 \pm i$$</div>
+        <p><strong>Classification:</strong> Complex with $\alpha = -2 < 0$ → <strong>Stable Spiral (Underdamped)</strong></p>
+        <p><strong>Physical meaning:</strong> The mass oscillates with decaying amplitude, returning to equilibrium.</p>
+      </div>
+    </div>
+
+    <!-- PROBLEM 3 -->
+    <div class="quiz-problem">
+      <div class="problem-num">Problem 3 — True/False with Explanation</div>
+      <p><strong>Statement:</strong> "A system with $\text{tr}(A) = 0$ and $\det(A) > 0$ must have a center at the origin."</p>
+      <button class="btn-accent" onclick="toggleProblemHint(3)">Show Hint</button>
+      <button class="btn-accent" onclick="toggleProblemSolution(3)">Show Solution</button>
+      <div id="hint-3" class="quiz-feedback hint" style="display:none;">
+        <strong>Hint:</strong> With $\tau = 0$, the eigenvalues satisfy $\lambda^2 + \Delta = 0$. If $\Delta > 0$, what are the eigenvalues?
+      </div>
+      <div id="solution-3" class="quiz-feedback" style="display:none;">
+        <strong>Solution:</strong>
+        <p style="margin-top: 0.5rem;"><strong>Answer: TRUE</strong></p>
+        <p><strong>Explanation:</strong> If $\tau = 0$, the characteristic equation becomes $\lambda^2 + \Delta = 0$. If $\Delta > 0$, then $\lambda^2 = -\Delta < 0$, giving $\lambda = \pm i\sqrt{\Delta}$ (purely imaginary with $\beta = \sqrt{\Delta} > 0$). This is exactly the definition of a <strong>center</strong>.</p>
+        <p>The trajectories are closed ellipses, and the equilibrium is stable but not asymptotically stable.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Eigenvalue calculator using quadratic formula
+function computeEigenvalues(a, b, c, d) {
+  const tau = a + d;
+  const delta = a*d - b*c;
+  const disc = tau*tau - 4*delta;
+
+  if (Math.abs(disc) < 1e-10) { // Repeated eigenvalue
+    const lambda = tau / 2;
+    return { lambda1: lambda, lambda2: lambda, type: 'repeated', disc: 0 };
+  } else if (disc > 0) { // Real eigenvalues
+    const sqrt_disc = Math.sqrt(disc);
+    const lambda1 = (tau + sqrt_disc) / 2;
+    const lambda2 = (tau - sqrt_disc) / 2;
+    return { lambda1, lambda2, type: 'real', disc };
+  } else { // Complex eigenvalues
+    const alpha = tau / 2;
+    const beta = Math.sqrt(-disc) / 2;
+    return { alpha, beta, type: 'complex', disc };
+  }
+}
+
+// Classify equilibrium based on eigenvalues
+function classifyEquilibrium(eigs) {
+  if (eigs.type === 'real') {
+    const l1 = eigs.lambda1;
+    const l2 = eigs.lambda2;
+    if (l1 < l2 && l2 < 0) return 'Stable Node';
+    if (0 < l1 && l1 < l2) return 'Unstable Node';
+    if (l1 < 0 && 0 < l2) return 'Saddle Point';
+    return 'Degenerate Case';
+  } else if (eigs.type === 'complex') {
+    if (eigs.alpha < 0) return 'Stable Spiral';
+    if (eigs.alpha > 0) return 'Unstable Spiral';
+    return 'Center (Degenerate)';
+  } else { // repeated
+    return eigs.lambda1 < 0 ? 'Star Node or Improper Node (Stable)' : 'Star Node or Improper Node (Unstable)';
+  }
+}
+
+// Format number for display
+function formatNumber(n) {
+  if (Math.abs(n) < 1e-10) return '0';
+  if (Math.abs(n - Math.round(n)) < 1e-10) return Math.round(n).toString();
+  return n.toFixed(3);
+}
+
+// Format eigenvalue for display
+function formatEigenvalue(real, imag) {
+  if (imag === undefined) {
+    return formatNumber(real);
+  }
+  const r = formatNumber(real);
+  const i = formatNumber(Math.abs(imag));
+  const sign = imag >= 0 ? '+' : '−';
+  return `${r} ${sign} ${i}i`;
+}
+
+// Create phase portrait with Euler method
+function createPhasePortrait(a, b, c, d, container, numTrajec = 12, tmax = 5) {
+  const eigs = computeEigenvalues(a, b, c, d);
+  const tau = a + d;
+  const delta = a*d - b*c;
+
+  // Create initial conditions on circle
+  const traces = [];
+  const radii = [0.5, 1.5, 2.5];
+
+  for (let r of radii) {
+    for (let i = 0; i < numTrajec; i++) {
+      const angle = (2 * Math.PI * i) / numTrajec;
+      const x0 = r * Math.cos(angle);
+      const y0 = r * Math.sin(angle);
+
+      // Integrate using Euler method
+      const traj = { x: [x0], y: [y0], t: [0] };
+      let x = x0, y = y0;
+      const dt = 0.02;
+
+      for (let t = 0; t <= tmax; t += dt) {
+        const xp = a*x + b*y;
+        const yp = c*x + d*y;
+        x += xp * dt;
+        y += yp * dt;
+        traj.x.push(x);
+        traj.y.push(y);
+        traj.t.push(t);
+      }
+      traces.push(traj);
+    }
+  }
+
+  // Build Plotly trace
+  const plotTraces = [];
+  for (let traj of traces) {
+    plotTraces.push({
+      x: traj.x,
+      y: traj.y,
+      mode: 'lines',
+      line: { color: 'rgba(37, 99, 235, 0.6)', width: 1.5 },
+      hoverinfo: 'skip',
+      showlegend: false
+    });
+  }
+
+  // Add arrow markers (simplified)
+  const arrowTraces = [];
+  for (let traj of traces) {
+    const step = Math.floor(traj.x.length / 2);
+    if (step > 0 && step < traj.x.length - 1) {
+      const x0 = traj.x[step-1], y0 = traj.y[step-1];
+      const x1 = traj.x[step], y1 = traj.y[step];
+      arrowTraces.push({
+        x: [x0, x1],
+        y: [y0, y1],
+        mode: 'lines+markers',
+        line: { color: 'rgba(37, 99, 235, 0.8)', width: 2 },
+        marker: { symbol: 'arrow', size: 8, angleref: 'previous' },
+        hoverinfo: 'skip',
+        showlegend: false
+      });
+    }
+  }
+
+  const layout = {
+    xaxis: { title: 'x₁', zeroline: true, showgrid: true },
+    yaxis: { title: 'x₂', zeroline: true, showgrid: true },
+    margin: { l: 50, r: 50, t: 30, b: 50 },
+    hovermode: false,
+    plot_bgcolor: '#fafbfc',
+    paper_bgcolor: 'white'
+  };
+
+  Plotly.newPlot(container, plotTraces.concat(arrowTraces), layout, { responsive: true, displayModeBar: false });
+}
+
+// Set preset matrices
+function setPreset(preset) {
+  const presets = {
+    'stable-node': [-3, 1, 0, -2],
+    'unstable-node': [1, 0, 0, 2],
+    'saddle': [-1, 0, 0, 1],
+    'stable-spiral': [-1, -4, 1, -1],
+    'unstable-spiral': [1, 3, -3, 1],
+    'center': [0, 1, -1, 0]
+  };
+
+  const [a11, a12, a21, a22] = presets[preset];
+  document.getElementById('a11').value = a11;
+  document.getElementById('a12').value = a12;
+  document.getElementById('a21').value = a21;
+  document.getElementById('a22').value = a22;
+
+  plotPhasePortrait();
+}
+
+// Main plotting function
+function plotPhasePortrait() {
+  const a11 = parseFloat(document.getElementById('a11').value);
+  const a12 = parseFloat(document.getElementById('a12').value);
+  const a21 = parseFloat(document.getElementById('a21').value);
+  const a22 = parseFloat(document.getElementById('a22').value);
+
+  if (isNaN(a11) || isNaN(a12) || isNaN(a21) || isNaN(a22)) {
+    alert('Please enter valid numbers');
+    return;
+  }
+
+  const tau = a11 + a22;
+  const delta = a11*a22 - a12*a21;
+
+  document.getElementById('trace-value').textContent = formatNumber(tau);
+  document.getElementById('det-value').textContent = formatNumber(delta);
+
+  const eigs = computeEigenvalues(a11, a12, a21, a22);
+
+  let eigDisplay1, eigDisplay2;
+  if (eigs.type === 'real') {
+    eigDisplay1 = formatNumber(eigs.lambda1);
+    eigDisplay2 = formatNumber(eigs.lambda2);
+  } else if (eigs.type === 'complex') {
+    eigDisplay1 = formatEigenvalue(eigs.alpha, eigs.beta);
+    eigDisplay2 = formatEigenvalue(eigs.alpha, -eigs.beta);
+  } else {
+    eigDisplay1 = eigDisplay2 = formatNumber(eigs.lambda1);
+  }
+
+  document.getElementById('eig1-value').textContent = eigDisplay1;
+  document.getElementById('eig2-value').textContent = eigDisplay2;
+
+  const classification = classifyEquilibrium(eigs);
+  document.getElementById('classification-value').textContent = classification;
+
+  createPhasePortrait(a11, a12, a21, a22, 'phase-portrait-main');
+}
+
+// Toggle functions for collapsibles
+function toggleExample(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+function toggleProblemHint(num) {
+  document.getElementById(`hint-${num}`).style.display =
+    document.getElementById(`hint-${num}`).style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleProblemSolution(num) {
+  document.getElementById(`solution-${num}`).classList.toggle('correct');
+  document.getElementById(`solution-${num}`).style.display =
+    document.getElementById(`solution-${num}`).style.display === 'none' ? 'block' : 'none';
+}
+
+// Initialize classification card plots
+window.addEventListener('DOMContentLoaded', function() {
+  // Stable node
+  createPhasePortrait(-3, 1, 0, -2, 'plot-stable-node', 10, 3);
+
+  // Unstable node
+  createPhasePortrait(1, 0, 0, 2, 'plot-unstable-node', 10, 2);
+
+  // Saddle
+  createPhasePortrait(-1, 0, 0, 1, 'plot-saddle', 10, 3);
+
+  // Stable spiral
+  createPhasePortrait(-1, -4, 1, -1, 'plot-stable-spiral', 10, 4);
+
+  // Unstable spiral
+  createPhasePortrait(1, -3, 3, 1, 'plot-unstable-spiral', 10, 2);
+
+  // Center
+  createPhasePortrait(0, 1, -1, 0, 'plot-center', 12, 8);
+
+  // Star node (diagonal)
+  createPhasePortrait(-1, 0, 0, -1, 'plot-star-node', 10, 3);
+
+  // Improper node
+  createPhasePortrait(-1, 1, 0, -1, 'plot-improper-node', 10, 3);
+
+  // Example plots
+  createPhasePortrait(-3, 1, 0, -2, 'plot-example1', 10, 3);
+  createPhasePortrait(0, 1, -1, 0, 'plot-example2', 12, 10);
+  createPhasePortrait(-1, -4, 1, -1, 'plot-example3', 10, 4);
+
+  // Trace-Determinant diagram
+  createTDDiagram();
+
+  // Initial plot
+  plotPhasePortrait();
+});
+
+// Create Trace-Determinant diagram
+function createTDDiagram() {
+  // Define regions
+  const tau_vals = [];
+  const delta_vals = [];
+  const classification = [];
+
+  for (let tau = -5; tau <= 5; tau += 0.2) {
+    for (let delta = -2; delta <= 8; delta += 0.2) {
+      const disc = tau*tau - 4*delta;
+      let type = '';
+      let color = '';
+
+      if (delta < 0) {
+        type = 'Saddle';
+        color = 'rgba(220, 38, 38, 0.3)'; // Red
+      } else if (disc > 0.1) { // Real eigenvalues
+        if (tau < 0) {
+          type = 'Stable Node';
+          color = 'rgba(16, 185, 129, 0.3)'; // Green
+        } else if (tau > 0) {
+          type = 'Unstable Node';
+          color = 'rgba(220, 38, 38, 0.3)'; // Red
+        } else {
+          type = 'Degenerate';
+          color = 'rgba(156, 163, 175, 0.2)';
+        }
+      } else if (disc < -0.1) { // Complex
+        if (tau < 0) {
+          type = 'Stable Spiral';
+          color = 'rgba(59, 130, 246, 0.3)'; // Blue
+        } else if (tau > 0) {
+          type = 'Unstable Spiral';
+          color = 'rgba(220, 38, 38, 0.3)'; // Red
+        } else {
+          type = 'Center';
+          color = 'rgba(245, 158, 11, 0.3)'; // Amber
+        }
+      } else {
+        type = 'Boundary';
+        color = 'rgba(156, 163, 175, 0.1)';
+      }
+
+      tau_vals.push(tau);
+      delta_vals.push(delta);
+      classification.push(color);
+    }
+  }
+
+  const scatter = {
+    x: tau_vals,
+    y: delta_vals,
+    mode: 'markers',
+    marker: {
+      size: 5,
+      color: classification,
+      opacity: 0.6
+    },
+    hoverinfo: 'text',
+    text: tau_vals.map((t, i) => `τ=${t.toFixed(2)}, Δ=${delta_vals[i].toFixed(2)}`),
+    showlegend: false
+  };
+
+  // Add parabola boundary (D = tau^2 - 4*delta = 0 => delta = tau^2/4)
+  const tau_boundary = [];
+  const delta_boundary = [];
+  for (let tau = -5; tau <= 5; tau += 0.1) {
+    tau_boundary.push(tau);
+    delta_boundary.push(tau*tau / 4);
+  }
+
+  const boundary = {
+    x: tau_boundary,
+    y: delta_boundary,
+    mode: 'lines',
+    line: { color: 'black', width: 2, dash: 'dash' },
+    name: 'Discriminant boundary',
+    hoverinfo: 'skip'
+  };
+
+  // Add axes
+  const hline = {
+    x: [-5, 5],
+    y: [0, 0],
+    mode: 'lines',
+    line: { color: 'gray', width: 1 },
+    hoverinfo: 'skip',
+    showlegend: false
+  };
+
+  const vline = {
+    x: [0, 0],
+    y: [-2, 8],
+    mode: 'lines',
+    line: { color: 'gray', width: 1 },
+    hoverinfo: 'skip',
+    showlegend: false
+  };
+
+  const layout = {
+    title: 'Trace-Determinant Plane',
+    xaxis: { title: 'Trace (τ)', zeroline: true },
+    yaxis: { title: 'Determinant (Δ)', zeroline: true },
+    margin: { l: 60, r: 50, t: 50, b: 60 },
+    plot_bgcolor: 'white',
+    paper_bgcolor: 'white',
+    hovermode: 'closest',
+    width: null,
+    height: 500
+  };
+
+  Plotly.newPlot('td-diagram', [scatter, boundary, hline, vline], layout, { responsive: true, displayModeBar: false });
+}
+
+// Render KaTeX
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$', right: '$', display: false}
+  ]
+});
+</script>
+
+</body>
+</html>

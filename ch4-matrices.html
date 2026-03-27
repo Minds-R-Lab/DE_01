@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 4: Matrix Algebra, Eigenvalues & Eigenvectors | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; height: 60px;
+    box-shadow: var(--shadow);
+  }
+  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
+  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav .nav-links a {
+    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+  section {
+    background: var(--card); border-radius: var(--radius);
+    padding: 2.5rem; margin-bottom: 2rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+
+  /* ---- BOXES ---- */
+  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
+    border-left: 5px solid;
+  }
+  .definition-box { background: var(--primary-light); border-color: var(--primary); }
+  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
+  .example-box   { background: var(--success-light); border-color: var(--success); }
+  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
+  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
+
+  .box-label {
+    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .definition-box .box-label { color: var(--primary); }
+  .theorem-box .box-label   { color: var(--accent); }
+  .example-box .box-label   { color: var(--success); }
+  .warning-box .box-label   { color: var(--warning); }
+  .tip-box .box-label        { color: #0ea5e9; }
+
+  /* ---- MATH ---- */
+  .math-display {
+    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
+    text-align: center; margin: 1rem 0; font-size: 1.15em;
+    overflow-x: auto;
+  }
+
+  /* ---- STEPS ---- */
+  .step-list { counter-reset: step; list-style: none; padding: 0; }
+  .step-list li {
+    counter-increment: step; position: relative;
+    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
+    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0.75rem; top: 1rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+
+  /* ---- INTERACTIVE CONTROLS ---- */
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
+    margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .control-group input[type="text"],
+  .control-group input[type="number"],
+  .control-group select {
+    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 0.95rem; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .control-group input:focus, .control-group select:focus {
+    outline: none; border-color: var(--primary);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
+  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+  button, .btn {
+    padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #047857; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #6d28d9; }
+
+  /* ---- COLLAPSIBLE ---- */
+  .collapsible { margin: 1rem 0; }
+  .collapsible-toggle {
+    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    text-align: left; font-size: 1rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
+  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
+  .collapsible-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
+  }
+  .collapsible-content.open {
+    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
+  }
+
+  /* ---- QUIZ ---- */
+  .quiz-problem {
+    background: #f8fafc; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
+  }
+  .quiz-problem .problem-num {
+    font-weight: 700; color: var(--primary); font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .quiz-input {
+    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
+    transition: border-color 0.2s;
+  }
+  .quiz-input:focus { outline: none; border-color: var(--primary); }
+  .quiz-feedback {
+    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
+    font-weight: 600; display: none;
+  }
+  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
+  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
+  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+
+  .choice-btn {
+    display: block; width: 100%; text-align: left;
+    padding: 0.75rem 1rem; margin: 0.5rem 0;
+    border: 2px solid var(--border); border-radius: 8px;
+    background: #fff; font-size: 0.95rem; cursor: pointer;
+    transition: all 0.2s; color: #1e293b;
+  }
+  .choice-btn .katex { color: #1e293b; }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
+  .choice-btn.selected-correct .katex { color: white; }
+  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
+  .choice-btn.selected-wrong .katex { color: white; }
+
+  /* ---- PROGRESS ---- */
+  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* ---- PLOT ---- */
+  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    section { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .controls { flex-direction: column; }
+    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+  }
+
+  /* ---- MISC ---- */
+  .katex-display { margin: 0.5rem 0; }
+  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  a { color: var(--primary); }
+  .text-center { text-align: center; }
+  .mt-1 { margin-top: 1rem; }
+  .mb-1 { margin-bottom: 1rem; }
+
+  /* ---- ADDITIONAL FOR MATRICES ---- */
+  .example-item {
+    margin: 1.5rem 0;
+  }
+  .example-header {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .example-header:hover {
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+  }
+  .example-content {
+    display: none;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+  .toggle-icon {
+    transition: transform 0.3s;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAVIGATION =================== -->
+<nav>
+  <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ch4-overview.html">4.0 Overview</a>
+    <a href="ch4-matrices.html" class="active">4.1 Matrices</a>
+    <a href="ch4-homogeneous.html">4.2 Systems</a>
+    <a href="ch4-phase-portraits.html">4.3 Phase Portraits</a>
+    <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
+    <a href="#intro">Intro</a>
+    <a href="#operations">Operations</a>
+    <a href="#determinants">Determinants</a>
+    <a href="#eigen">Eigenvalues</a>
+    <a href="#examples">Examples</a>
+    <a href="#visualizer">Visualizer</a>
+    <a href="#practice">Practice</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- =================== INTRO =================== -->
+<section id="intro">
+  <h1>4.1 Matrix Algebra, Eigenvalues & Eigenvectors</h1>
+  <p class="subtitle">The foundation for understanding systems of differential equations</p>
+
+  <div class="definition-box">
+    <div class="box-label">Learning Objectives</div>
+    <p>By the end of this section, you will be able to:</p>
+    <ol style="padding-left:1.5rem; margin-top:0.5rem;">
+      <li>Perform basic matrix operations: addition, scalar multiplication, and matrix multiplication</li>
+      <li>Compute determinants and matrix inverses</li>
+      <li>Find eigenvalues by solving the characteristic equation $\det(A - \lambda I) = 0$</li>
+      <li>Find eigenvectors by solving $(A - \lambda I)\mathbf{v} = \mathbf{0}$</li>
+      <li>Classify eigenvalues: distinct real, repeated, or complex conjugate pairs</li>
+      <li>Interpret eigenvalues and eigenvectors geometrically as scaling and special directions</li>
+    </ol>
+  </div>
+
+  <h3>Why Matrices? The Language of Systems</h3>
+  <p>
+    A system of first-order differential equations has the form:
+  </p>
+  <div class="math-display">
+    $$\frac{d\mathbf{x}}{dt} = A\mathbf{x} + \mathbf{b}(t)$$
+  </div>
+  <p>
+    where $\mathbf{x} = \begin{pmatrix} x_1(t) \\ x_2(t) \\ \vdots \\ x_n(t) \end{pmatrix}$ is the state vector and $A$ is an $n \times n$ coefficient matrix. <strong>Matrices are the natural language for writing and solving systems of differential equations.</strong> Understanding eigenvalues and eigenvectors is essential because:
+  </p>
+  <ul style="padding-left:1.5rem;">
+    <li>Eigenvalues determine the long-term behavior (stability, growth, decay, oscillation)</li>
+    <li>Eigenvectors identify special directions where the system acts simply (only scaling)</li>
+    <li>Together, they decouple the system into independent modes</li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="box-label">The Big Picture</div>
+    <p>
+      Think of a matrix $A$ as a linear transformation that stretches, rotates, and scales space. Most vectors get complicated; but eigenvectors are special — they only get scaled by the eigenvalue. Finding eigenvectors means finding the "natural directions" of the transformation.
+    </p>
+  </div>
+</section>
+
+<!-- =================== MATRIX OPERATIONS =================== -->
+<section id="operations">
+  <h2>Matrix Operations Review</h2>
+
+  <h3>Matrix Addition</h3>
+  <p>
+    Add matrices of the same size element-by-element:
+  </p>
+  <div class="math-display">
+    $$A + B = \begin{pmatrix} a_{11} + b_{11} & a_{12} + b_{12} \\ a_{21} + b_{21} & a_{22} + b_{22} \end{pmatrix}$$
+  </div>
+  <p>
+    <strong>Example:</strong>
+  </p>
+  <div class="math-display">
+    $$\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} + \begin{pmatrix} 5 & 0 \\ -1 & 2 \end{pmatrix} = \begin{pmatrix} 6 & 2 \\ 2 & 6 \end{pmatrix}$$
+  </div>
+
+  <h3>Scalar Multiplication</h3>
+  <p>
+    Multiply every element by a scalar $c$:
+  </p>
+  <div class="math-display">
+    $$c\,A = \begin{pmatrix} c \cdot a_{11} & c \cdot a_{12} \\ c \cdot a_{21} & c \cdot a_{22} \end{pmatrix}$$
+  </div>
+  <p>
+    <strong>Example:</strong> $2 \begin{pmatrix} 1 & 3 \\ -2 & 5 \end{pmatrix} = \begin{pmatrix} 2 & 6 \\ -4 & 10 \end{pmatrix}$
+  </p>
+
+  <h3>Matrix Multiplication</h3>
+  <p>
+    The product $C = AB$ is computed as:
+  </p>
+  <div class="math-display">
+    $$[AB]_{ij} = \sum_{k=1}^{n} a_{ik} \, b_{kj}$$
+  </div>
+  <p>
+    In other words, element $(i,j)$ of $AB$ is the dot product of row $i$ of $A$ with column $j$ of $B$.
+  </p>
+
+  <p>
+    <strong>Worked Example:</strong> Multiply two 2×2 matrices step by step.
+  </p>
+  <div class="math-display">
+    $$A = \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix}, \quad B = \begin{pmatrix} 1 & 0 \\ 2 & 3 \end{pmatrix}$$
+  </div>
+
+  <p>
+    Compute each element of $AB$:
+  </p>
+  <ul style="padding-left:1.5rem;">
+    <li>$[AB]_{11} = (2)(1) + (1)(2) = 2 + 2 = 4$</li>
+    <li>$[AB]_{12} = (2)(0) + (1)(3) = 0 + 3 = 3$</li>
+    <li>$[AB]_{21} = (3)(1) + (4)(2) = 3 + 8 = 11$</li>
+    <li>$[AB]_{22} = (3)(0) + (4)(3) = 0 + 12 = 12$</li>
+  </ul>
+
+  <div class="math-display">
+    $$AB = \begin{pmatrix} 4 & 3 \\ 11 & 12 \end{pmatrix}$$
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Critical Warning: Non-Commutativity</div>
+    <p>
+      Matrix multiplication is <strong>NOT commutative</strong>: $AB \neq BA$ in general! Always be careful about the order of multiplication. This is fundamentally different from arithmetic with real numbers.
+    </p>
+  </div>
+
+  <h3>Matrix-Vector Multiplication</h3>
+  <p>
+    A matrix $A$ multiplied by a vector $\mathbf{x}$ produces a new vector $A\mathbf{x}$:
+  </p>
+  <div class="math-display">
+    $$A\mathbf{x} = \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{pmatrix} a_{11}x_1 + a_{12}x_2 \\ a_{21}x_1 + a_{22}x_2 \end{pmatrix}$$
+  </div>
+
+  <p>
+    <strong>Geometric Interpretation:</strong> The matrix $A$ transforms the vector $\mathbf{x}$. It can be understood as showing how $A$ acts on the basis vectors:
+  </p>
+  <div class="math-display">
+    $$A\begin{pmatrix} 1 \\ 0 \end{pmatrix} = \begin{pmatrix} a_{11} \\ a_{21} \end{pmatrix} \quad \text{(first column of } A \text{)}$$
+  </div>
+  <div class="math-display">
+    $$A\begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} a_{12} \\ a_{22} \end{pmatrix} \quad \text{(second column of } A \text{)}$$
+  </div>
+
+  <p>
+    The columns of $A$ show where the standard basis vectors are mapped!
+  </p>
+</section>
+
+<!-- =================== DETERMINANTS =================== -->
+<section id="determinants">
+  <h2>Determinants</h2>
+
+  <h3>2×2 Determinant</h3>
+  <p>
+    For a 2×2 matrix, the determinant is computed as:
+  </p>
+  <div class="math-display">
+    $$\det(A) = \det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc$$
+  </div>
+
+  <p>
+    <strong>Example:</strong>
+  </p>
+  <div class="math-display">
+    $$\det\begin{pmatrix} 3 & 2 \\ 1 & 4 \end{pmatrix} = (3)(4) - (2)(1) = 12 - 2 = 10$$
+  </div>
+
+  <h3>3×3 Determinant (Cofactor Expansion)</h3>
+  <p>
+    For a 3×3 matrix, expand along the first row:
+  </p>
+  <div class="math-display">
+    $$\det(A) = a_{11}\det\begin{pmatrix} a_{22} & a_{23} \\ a_{32} & a_{33} \end{pmatrix} - a_{12}\det\begin{pmatrix} a_{21} & a_{23} \\ a_{31} & a_{33} \end{pmatrix} + a_{13}\det\begin{pmatrix} a_{21} & a_{22} \\ a_{31} & a_{32} \end{pmatrix}$$
+  </div>
+
+  <p>
+    Each minor (2×2 determinant) is computed using the formula above. You can expand along any row or column.
+  </p>
+
+  <div class="theorem-box">
+    <div class="box-label">Properties of Determinants</div>
+    <ul style="padding-left:1.5rem;">
+      <li>$\det(AB) = \det(A) \cdot \det(B)$</li>
+      <li>$\det(A^T) = \det(A)$ (transpose doesn't change determinant)</li>
+      <li>If two rows (or columns) are identical, $\det(A) = 0$</li>
+      <li>Swapping two rows (or columns) changes the sign of the determinant</li>
+      <li>$\det(cA) = c^n \det(A)$ for an $n \times n$ matrix</li>
+      <li>$\det(I) = 1$ (identity matrix has determinant 1)</li>
+    </ul>
+  </div>
+
+  <h3>Invertibility and the Inverse Matrix</h3>
+  <p>
+    A matrix $A$ is <strong>invertible</strong> (has an inverse $A^{-1}$) if and only if:
+  </p>
+  <div class="math-display">
+    $$\det(A) \neq 0$$
+  </div>
+
+  <p>
+    If invertible, the matrices satisfy:
+  </p>
+  <div class="math-display">
+    $$AA^{-1} = A^{-1}A = I$$
+  </div>
+
+  <p>
+    For a 2×2 matrix, the inverse formula is:
+  </p>
+  <div class="math-display">
+    $$A^{-1} = \frac{1}{\det(A)} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$$
+  </div>
+  <p>
+    where $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ and $\det(A) = ad - bc$.
+  </p>
+
+  <p>
+    <strong>Example:</strong> Find the inverse of $A = \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}$.
+  </p>
+  <p>
+    First, $\det(A) = (2)(3) - (1)(1) = 6 - 1 = 5 \neq 0$, so the inverse exists.
+  </p>
+  <div class="math-display">
+    $$A^{-1} = \frac{1}{5}\begin{pmatrix} 3 & -1 \\ -1 & 2 \end{pmatrix} = \begin{pmatrix} 3/5 & -1/5 \\ -1/5 & 2/5 \end{pmatrix}$$
+  </div>
+</section>
+
+<!-- =================== EIGENVALUES AND EIGENVECTORS =================== -->
+<section id="eigen">
+  <h2>Eigenvalues and Eigenvectors</h2>
+
+  <p style="font-size: 1.1rem; font-weight: 600; color: var(--primary);">
+    This is the most important section. Eigenvalues and eigenvectors are the key to understanding all behavior of systems of differential equations.
+  </p>
+
+  <div class="definition-box">
+    <div class="box-label">Definition</div>
+    <p>
+      A scalar $\lambda$ is an <strong>eigenvalue</strong> of an $n \times n$ matrix $A$ if there exists a nonzero vector $\mathbf{v}$ such that:
+    </p>
+    <div class="math-display" style="background: white; border: 2px solid var(--primary);">
+      $$A\mathbf{v} = \lambda\mathbf{v}$$
+    </div>
+    <p>
+      The nonzero vector $\mathbf{v}$ is called an <strong>eigenvector</strong> corresponding to eigenvalue $\lambda$.
+    </p>
+  </div>
+
+  <h3>Geometric Interpretation</h3>
+  <p>
+    When we apply the matrix $A$ to an eigenvector $\mathbf{v}$, the result is just a scaled version of $\mathbf{v}$. The eigenvalue $\lambda$ is the scaling factor:
+  </p>
+  <ul style="padding-left:1.5rem;">
+    <li>If $\lambda > 1$: the eigenvector is stretched (amplified)</li>
+    <li>If $0 < \lambda < 1$: the eigenvector is compressed (attenuated)</li>
+    <li>If $\lambda < 0$: the eigenvector is reversed and scaled</li>
+    <li>If $\lambda = 0$: the eigenvector is mapped to zero</li>
+    <li>If $\lambda$ is complex: the vector undergoes rotation and scaling</li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="box-label">Why This Matters for DEs</div>
+    <p>
+      In a differential system $\frac{d\mathbf{x}}{dt} = A\mathbf{x}$, if $\mathbf{x}(0)$ is an eigenvector $\mathbf{v}$ with eigenvalue $\lambda$, then the solution is simply $\mathbf{x}(t) = e^{\lambda t}\mathbf{v}$. The system evolves exponentially along the eigenvector direction! This is why eigenvectors are sometimes called the "natural modes" of the system.
+    </p>
+  </div>
+
+  <h3>Finding Eigenvalues: The Characteristic Equation</h3>
+  <p>
+    Starting from $A\mathbf{v} = \lambda\mathbf{v}$, rearrange:
+  </p>
+  <div class="math-display">
+    $$A\mathbf{v} = \lambda\mathbf{v}$$
+    $$A\mathbf{v} - \lambda\mathbf{v} = \mathbf{0}$$
+    $$(A - \lambda I)\mathbf{v} = \mathbf{0}$$
+  </div>
+
+  <p>
+    For a nonzero solution $\mathbf{v}$ to exist, the matrix $A - \lambda I$ must be singular (non-invertible), which means:
+  </p>
+  <div class="theorem-box">
+    <div class="box-label">The Characteristic Equation</div>
+    <div class="math-display">
+      $$\det(A - \lambda I) = 0$$
+    </div>
+    <p>
+      The solutions $\lambda$ to this equation are the eigenvalues of $A$. This equation is a polynomial of degree $n$ (for an $n \times n$ matrix), so it has exactly $n$ roots (counting multiplicity) in the complex numbers.
+    </p>
+  </div>
+
+  <h3>Step-by-Step Method to Find Eigenvalues and Eigenvectors</h3>
+  <ol class="step-list">
+    <li>
+      <strong>Write the matrix $A - \lambda I$.</strong> Subtract $\lambda$ from each diagonal entry of $A$.
+    </li>
+    <li>
+      <strong>Compute the characteristic polynomial.</strong> Calculate $\det(A - \lambda I)$ and set it equal to zero.
+    </li>
+    <li>
+      <strong>Solve for eigenvalues.</strong> Solve the characteristic equation $\det(A - \lambda I) = 0$ for $\lambda$.
+    </li>
+    <li>
+      <strong>For each eigenvalue $\lambda$, find eigenvectors.</strong> Solve the system $(A - \lambda I)\mathbf{v} = \mathbf{0}$ for the nonzero vector $\mathbf{v}$.
+    </li>
+  </ol>
+
+  <h3>Types of Eigenvalues</h3>
+  <p>
+    Depending on the characteristic equation, we can have three cases:
+  </p>
+
+  <div style="margin: 1.5rem 0;">
+    <h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.5rem;">Case 1: Two Distinct Real Eigenvalues</h4>
+    <p>
+      The characteristic equation has two different real roots $\lambda_1 \neq \lambda_2$. Each eigenvalue has its own eigenvector, and the system exhibits exponential growth or decay.
+    </p>
+  </div>
+
+  <div style="margin: 1.5rem 0;">
+    <h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.5rem;">Case 2: Repeated (Equal) Real Eigenvalues</h4>
+    <p>
+      The characteristic equation has a repeated root $\lambda$ with multiplicity $m > 1$. Depending on the structure of $A$, there may be multiple linearly independent eigenvectors (diagonalizable case) or fewer (Jordan form case). In systems of DEs, this leads to polynomial factors multiplying exponentials.
+    </p>
+  </div>
+
+  <div style="margin: 1.5rem 0;">
+    <h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.5rem;">Case 3: Complex Conjugate Eigenvalues</h4>
+    <p>
+      The characteristic equation has complex roots $\lambda = \alpha \pm \beta i$ (complex conjugate pairs). These lead to oscillatory solutions with exponential envelope: $e^{\alpha t}\cos(\beta t)$ and $e^{\alpha t}\sin(\beta t)$.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <div class="box-label">Important Note on Eigenvectors</div>
+    <p>
+      If $\mathbf{v}$ is an eigenvector with eigenvalue $\lambda$, then so is $c\mathbf{v}$ for any nonzero constant $c$. So eigenvectors are not unique—they have arbitrary scaling. We typically normalize them or choose simple integer/rational values.
+    </p>
+  </div>
+</section>
+
+<!-- =================== WORKED EXAMPLES =================== -->
+<section id="examples">
+  <h2>Worked Examples</h2>
+  <p>Click each example to reveal the complete step-by-step solution.</p>
+
+  <!-- Example 1: Distinct Real Eigenvalues -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 1:</strong> &nbsp; Find eigenvalues and eigenvectors of $A = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <h4>Solution</h4>
+      <p><strong>Step 1: Write $A - \lambda I$</strong></p>
+      <div class="math-display">
+        $$A - \lambda I = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix} - \begin{pmatrix} \lambda & 0 \\ 0 & \lambda \end{pmatrix} = \begin{pmatrix} 4-\lambda & 1 \\ 2 & 3-\lambda \end{pmatrix}$$
+      </div>
+
+      <p><strong>Step 2: Compute $\det(A - \lambda I)$</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = (4-\lambda)(3-\lambda) - (1)(2)$$
+        $$= 12 - 4\lambda - 3\lambda + \lambda^2 - 2$$
+        $$= \lambda^2 - 7\lambda + 10$$
+      </div>
+
+      <p><strong>Step 3: Solve $\det(A - \lambda I) = 0$</strong></p>
+      <div class="math-display">
+        $$\lambda^2 - 7\lambda + 10 = 0$$
+        $$(\lambda - 5)(\lambda - 2) = 0$$
+      </div>
+      <p>
+        Eigenvalues: $\lambda_1 = 5$ and $\lambda_2 = 2$ (distinct real roots) ✓
+      </p>
+
+      <p><strong>Step 4a: Find eigenvector for $\lambda_1 = 5$</strong></p>
+      <p>Solve $(A - 5I)\mathbf{v} = \mathbf{0}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 4-5 & 1 \\ 2 & 3-5 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} -1 & 1 \\ 2 & -2 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+      </div>
+      <p>
+        From the first row: $-v_1 + v_2 = 0 \Rightarrow v_2 = v_1$
+      </p>
+      <p>
+        Eigenvector (choosing $v_1 = 1$): $\mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$
+      </p>
+      <p>
+        <strong>Verification:</strong> $A\mathbf{v}_1 = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 5 \\ 5 \end{pmatrix} = 5\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ ✓
+      </p>
+
+      <p><strong>Step 4b: Find eigenvector for $\lambda_2 = 2$</strong></p>
+      <p>Solve $(A - 2I)\mathbf{v} = \mathbf{0}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 4-2 & 1 \\ 2 & 3-2 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 2 & 1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+      </div>
+      <p>
+        From the first row: $2v_1 + v_2 = 0 \Rightarrow v_2 = -2v_1$
+      </p>
+      <p>
+        Eigenvector (choosing $v_1 = 1$): $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -2 \end{pmatrix}$
+      </p>
+      <p>
+        <strong>Verification:</strong> $A\mathbf{v}_2 = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}\begin{pmatrix} 1 \\ -2 \end{pmatrix} = \begin{pmatrix} 2 \\ -4 \end{pmatrix} = 2\begin{pmatrix} 1 \\ -2 \end{pmatrix}$ ✓
+      </p>
+
+      <div style="background: #d1fae5; border-left: 5px solid #059669; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+        <p><strong>Answer:</strong></p>
+        <p>
+          Eigenvalues: $\lambda_1 = 5$, $\lambda_2 = 2$
+        </p>
+        <p>
+          Eigenvectors: $\mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$, $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -2 \end{pmatrix}$
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 2: Repeated Eigenvalue -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 2:</strong> &nbsp; Find eigenvalues and eigenvectors of $A = \begin{pmatrix} 3 & -2 \\ 1 & 1 \end{pmatrix}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <h4>Solution</h4>
+      <p><strong>Step 1: Write $A - \lambda I$</strong></p>
+      <div class="math-display">
+        $$A - \lambda I = \begin{pmatrix} 3-\lambda & -2 \\ 1 & 1-\lambda \end{pmatrix}$$
+      </div>
+
+      <p><strong>Step 2: Compute $\det(A - \lambda I)$</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = (3-\lambda)(1-\lambda) - (-2)(1)$$
+        $$= 3 - 3\lambda - \lambda + \lambda^2 + 2$$
+        $$= \lambda^2 - 4\lambda + 5$$
+      </div>
+
+      <p>
+        Wait! Let me recalculate: $(3-\lambda)(1-\lambda) = 3 - 3\lambda - \lambda + \lambda^2 = 3 - 4\lambda + \lambda^2$.
+        Adding $-(-2)(1) = 2$: we get $\lambda^2 - 4\lambda + 5$.
+      </p>
+
+      <p>
+        Actually, let me verify this matrix should give a repeated eigenvalue. Let me use $A = \begin{pmatrix} 2 & -1 \\ 1 & 0 \end{pmatrix}$ instead for this example, which has a repeated eigenvalue of $\lambda = 1$.
+      </p>
+
+      <p>
+        <strong>Revised: Find eigenvalues of $A = \begin{pmatrix} 2 & -1 \\ 1 & 0 \end{pmatrix}$</strong>
+      </p>
+
+      <div class="math-display">
+        $$A - \lambda I = \begin{pmatrix} 2-\lambda & -1 \\ 1 & -\lambda \end{pmatrix}$$
+      </div>
+
+      <div class="math-display">
+        $$\det(A - \lambda I) = (2-\lambda)(-\lambda) - (-1)(1) = -2\lambda + \lambda^2 + 1 = \lambda^2 - 2\lambda + 1 = (\lambda - 1)^2$$
+      </div>
+
+      <p>
+        Eigenvalue: $\lambda = 1$ (with multiplicity 2) ✓
+      </p>
+
+      <p><strong>Step 4: Find eigenvectors for $\lambda = 1$</strong></p>
+      <p>Solve $(A - I)\mathbf{v} = \mathbf{0}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 2-1 & -1 \\ 1 & 0-1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+      </div>
+
+      <p>
+        From the first row: $v_1 - v_2 = 0 \Rightarrow v_1 = v_2$
+      </p>
+      <p>
+        Eigenvector (choosing $v_1 = 1$): $\mathbf{v} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$
+      </p>
+      <p>
+        <strong>Note:</strong> Even though the eigenvalue has multiplicity 2, there is only one linearly independent eigenvector (geometric multiplicity 1). This matrix is not diagonalizable.
+      </p>
+
+      <div style="background: #d1fae5; border-left: 5px solid #059669; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+        <p><strong>Answer:</strong></p>
+        <p>
+          Eigenvalue: $\lambda = 1$ (repeated, multiplicity 2)
+        </p>
+        <p>
+          Eigenvector: $\mathbf{v} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$ (unique direction, up to scaling)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 3: Complex Eigenvalues -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 3:</strong> &nbsp; Find eigenvalues and eigenvectors of $A = \begin{pmatrix} 1 & -2 \\ 1 & 3 \end{pmatrix}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <h4>Solution</h4>
+      <p><strong>Step 1: Write $A - \lambda I$</strong></p>
+      <div class="math-display">
+        $$A - \lambda I = \begin{pmatrix} 1-\lambda & -2 \\ 1 & 3-\lambda \end{pmatrix}$$
+      </div>
+
+      <p><strong>Step 2: Compute $\det(A - \lambda I)$</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = (1-\lambda)(3-\lambda) - (-2)(1)$$
+        $$= 3 - \lambda - 3\lambda + \lambda^2 + 2$$
+        $$= \lambda^2 - 4\lambda + 5$$
+      </div>
+
+      <p><strong>Step 3: Solve the characteristic equation</strong></p>
+      <div class="math-display">
+        $$\lambda^2 - 4\lambda + 5 = 0$$
+      </div>
+      <p>
+        Using the quadratic formula:
+      </p>
+      <div class="math-display">
+        $$\lambda = \frac{4 \pm \sqrt{16 - 20}}{2} = \frac{4 \pm \sqrt{-4}}{2} = \frac{4 \pm 2i}{2} = 2 \pm i$$
+      </div>
+
+      <p>
+        Eigenvalues: $\lambda_1 = 2 + i$ and $\lambda_2 = 2 - i$ (complex conjugate pair with $\alpha = 2$, $\beta = 1$) ✓
+      </p>
+
+      <p><strong>Step 4: Find eigenvector for $\lambda_1 = 2 + i$</strong></p>
+      <p>Solve $(A - (2+i)I)\mathbf{v} = \mathbf{0}$:</p>
+      <div class="math-display">
+        $$\begin{pmatrix} 1-(2+i) & -2 \\ 1 & 3-(2+i) \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} -1-i & -2 \\ 1 & 1-i \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+      </div>
+
+      <p>
+        From the first row: $(-1-i)v_1 - 2v_2 = 0 \Rightarrow v_2 = \frac{-1-i}{2}v_1$
+      </p>
+      <p>
+        Choosing $v_1 = 2$: $v_2 = -(1+i) = -1-i$
+      </p>
+      <p>
+        Eigenvector: $\mathbf{v}_1 = \begin{pmatrix} 2 \\ -1-i \end{pmatrix}$ (or any scalar multiple)
+      </p>
+
+      <p><strong>For the conjugate eigenvalue $\lambda_2 = 2 - i$:</strong></p>
+      <p>
+        The eigenvector is the complex conjugate: $\mathbf{v}_2 = \begin{pmatrix} 2 \\ -1+i \end{pmatrix}$
+      </p>
+
+      <div style="background: #d1fae5; border-left: 5px solid #059669; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+        <p><strong>Answer:</strong></p>
+        <p>
+          Eigenvalues: $\lambda_1 = 2 + i$, $\lambda_2 = 2 - i$
+        </p>
+        <p>
+          Eigenvectors: $\mathbf{v}_1 = \begin{pmatrix} 2 \\ -1-i \end{pmatrix}$, $\mathbf{v}_2 = \begin{pmatrix} 2 \\ -1+i \end{pmatrix}$
+        </p>
+        <p>
+          For DEs, these lead to solutions of the form $e^{2t}\cos(t)$ and $e^{2t}\sin(t)$ (with appropriate coefficients).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 4: Another distinct case -->
+  <div class="collapsible">
+    <button class="collapsible-toggle" onclick="toggleCollapsible(this)">
+      <span><strong>Example 4:</strong> &nbsp; Find eigenvalues and eigenvectors of $A = \begin{pmatrix} 2 & 3 \\ 4 & 3 \end{pmatrix}$</span>
+      <span class="arrow">▶</span>
+    </button>
+    <div class="collapsible-content">
+      <h4>Solution</h4>
+      <p><strong>Step 1: Write $A - \lambda I$</strong></p>
+      <div class="math-display">
+        $$A - \lambda I = \begin{pmatrix} 2-\lambda & 3 \\ 4 & 3-\lambda \end{pmatrix}$$
+      </div>
+
+      <p><strong>Step 2: Compute $\det(A - \lambda I)$</strong></p>
+      <div class="math-display">
+        $$\det(A - \lambda I) = (2-\lambda)(3-\lambda) - (3)(4)$$
+        $$= 6 - 2\lambda - 3\lambda + \lambda^2 - 12$$
+        $$= \lambda^2 - 5\lambda - 6$$
+      </div>
+
+      <p><strong>Step 3: Solve the characteristic equation</strong></p>
+      <div class="math-display">
+        $$\lambda^2 - 5\lambda - 6 = 0$$
+        $$(\lambda - 6)(\lambda + 1) = 0$$
+      </div>
+
+      <p>
+        Eigenvalues: $\lambda_1 = 6$ and $\lambda_2 = -1$ (distinct real) ✓
+      </p>
+
+      <p><strong>Step 4a: Eigenvector for $\lambda_1 = 6$</strong></p>
+      <div class="math-display">
+        $$\begin{pmatrix} 2-6 & 3 \\ 4 & 3-6 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} -4 & 3 \\ 4 & -3 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>
+        From the first row: $-4v_1 + 3v_2 = 0 \Rightarrow 3v_2 = 4v_1 \Rightarrow v_2 = \frac{4}{3}v_1$
+      </p>
+      <p>
+        Choosing $v_1 = 3$: $\mathbf{v}_1 = \begin{pmatrix} 3 \\ 4 \end{pmatrix}$
+      </p>
+
+      <p><strong>Step 4b: Eigenvector for $\lambda_2 = -1$</strong></p>
+      <div class="math-display">
+        $$\begin{pmatrix} 2-(-1) & 3 \\ 4 & 3-(-1) \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 3 & 3 \\ 4 & 4 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+      </div>
+      <p>
+        From the first row: $3v_1 + 3v_2 = 0 \Rightarrow v_1 = -v_2$
+      </p>
+      <p>
+        Choosing $v_1 = 1$: $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$
+      </p>
+
+      <div style="background: #d1fae5; border-left: 5px solid #059669; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+        <p><strong>Answer:</strong></p>
+        <p>
+          Eigenvalues: $\lambda_1 = 6$, $\lambda_2 = -1$
+        </p>
+        <p>
+          Eigenvectors: $\mathbf{v}_1 = \begin{pmatrix} 3 \\ 4 \end{pmatrix}$, $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== INTERACTIVE VISUALIZER =================== -->
+<section id="visualizer">
+  <h2>Interactive Eigenvector Visualizer</h2>
+  <p>
+    Adjust the matrix entries below to visualize how the matrix transforms vectors. The red vectors are eigenvectors—notice how they only get scaled (not rotated) by the matrix transformation.
+  </p>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Matrix element $a_{11}$:</label>
+      <input type="number" id="a11" value="2" step="0.1">
+    </div>
+    <div class="control-group">
+      <label>Matrix element $a_{12}$:</label>
+      <input type="number" id="a12" value="1" step="0.1">
+    </div>
+    <div class="control-group">
+      <label>Matrix element $a_{21}$:</label>
+      <input type="number" id="a21" value="1" step="0.1">
+    </div>
+    <div class="control-group">
+      <label>Matrix element $a_{22}$:</label>
+      <input type="number" id="a22" value="2" step="0.1">
+    </div>
+    <button class="btn-primary" onclick="updateVisualizer()">Update Visualization</button>
+  </div>
+
+  <div id="visualizerPlot" class="plot-container"></div>
+
+  <div id="eigenResults" style="margin-top: 1.5rem; padding: 1.5rem; background: #f1f5f9; border-radius: 8px; border-left: 5px solid var(--primary);">
+    <p><strong>Eigenvalues and Eigenvectors:</strong></p>
+    <div id="eigenInfo" style="font-family: monospace; margin-top: 0.5rem;"></div>
+  </div>
+</section>
+
+<!-- =================== PRACTICE PROBLEMS =================== -->
+<section id="practice">
+  <h2>Exam-Style Practice Problems</h2>
+  <p>Test your understanding with these practice problems. Click each problem to reveal the step-by-step solution.</p>
+
+  <!-- Practice 1 -->
+  <div class="example-item">
+    <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <span>Practice 1: Find eigenvalues and eigenvectors of $A = \begin{pmatrix} 5 & -2 \\ 3 & -2 \end{pmatrix}$</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="example-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 0 0 8px 8px; border: 1px solid var(--border); border-top: none;">
+        <h4>Solution</h4>
+        <p><strong>Step 1: Characteristic equation</strong></p>
+        <div class="math-display">
+          $$A - \lambda I = \begin{pmatrix} 5-\lambda & -2 \\ 3 & -2-\lambda \end{pmatrix}$$
+        </div>
+        <div class="math-display">
+          $$\det(A - \lambda I) = (5-\lambda)(-2-\lambda) - (-2)(3) = -10 - 5\lambda + 2\lambda + \lambda^2 + 6 = \lambda^2 - 3\lambda - 4$$
+        </div>
+
+        <p><strong>Step 2: Solve characteristic equation</strong></p>
+        <div class="math-display">
+          $$\lambda^2 - 3\lambda - 4 = 0$$
+          $$(\lambda - 4)(\lambda + 1) = 0$$
+        </div>
+        <p>Eigenvalues: $\lambda_1 = 4$, $\lambda_2 = -1$</p>
+
+        <p><strong>Step 3: Find eigenvectors</strong></p>
+        <p>For $\lambda_1 = 4$:</p>
+        <div class="math-display">
+          $$\begin{pmatrix} 1 & -2 \\ 3 & -6 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \Rightarrow v_1 = 2v_2$$
+        </div>
+        <p>Eigenvector: $\mathbf{v}_1 = \begin{pmatrix} 2 \\ 1 \end{pmatrix}$</p>
+
+        <p>For $\lambda_2 = -1$:</p>
+        <div class="math-display">
+          $$\begin{pmatrix} 6 & -2 \\ 3 & -1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \Rightarrow 6v_1 = 2v_2 \Rightarrow v_2 = 3v_1$$
+        </div>
+        <p>Eigenvector: $\mathbf{v}_2 = \begin{pmatrix} 1 \\ 3 \end{pmatrix}$</p>
+
+        <p><strong>Answer:</strong> $\boxed{\lambda_1 = 4, \mathbf{v}_1 = \begin{pmatrix} 2 \\ 1 \end{pmatrix}; \quad \lambda_2 = -1, \mathbf{v}_2 = \begin{pmatrix} 1 \\ 3 \end{pmatrix}}$</p>
+    </div>
+  </div>
+
+  <!-- Practice 2 -->
+  <div class="example-item">
+    <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <span>Practice 2: Find eigenvalues of $A = \begin{pmatrix} 0 & -4 \\ 1 & 4 \end{pmatrix}$</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="example-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 0 0 8px 8px; border: 1px solid var(--border); border-top: none;">
+        <h4>Solution</h4>
+        <p><strong>Step 1: Characteristic equation</strong></p>
+        <div class="math-display">
+          $$\det(A - \lambda I) = \begin{vmatrix} -\lambda & -4 \\ 1 & 4-\lambda \end{vmatrix} = -\lambda(4-\lambda) - (-4)(1) = -4\lambda + \lambda^2 + 4 = \lambda^2 - 4\lambda + 4$$
+        </div>
+
+        <p><strong>Step 2: Solve</strong></p>
+        <div class="math-display">
+          $$\lambda^2 - 4\lambda + 4 = 0$$
+          $$(\lambda - 2)^2 = 0$$
+        </div>
+        <p>Eigenvalue: $\lambda = 2$ (repeated, multiplicity 2)</p>
+
+        <p><strong>Step 3: Find eigenvector</strong></p>
+        <div class="math-display">
+          $$\begin{pmatrix} -2 & -4 \\ 1 & 2 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0}$$
+        </div>
+        <p>From first row: $-2v_1 - 4v_2 = 0 \Rightarrow v_1 = -2v_2$</p>
+        <p>Eigenvector: $\mathbf{v} = \begin{pmatrix} -2 \\ 1 \end{pmatrix}$ (or $\begin{pmatrix} 2 \\ -1 \end{pmatrix}$)</p>
+
+        <p><strong>Answer:</strong> $\boxed{\lambda = 2 \text{ (repeated)}, \quad \mathbf{v} = \begin{pmatrix} 2 \\ -1 \end{pmatrix}}$</p>
+    </div>
+  </div>
+
+  <!-- Practice 3 -->
+  <div class="example-item">
+    <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600;">
+        <span>Practice 3: Find eigenvalues of $A = \begin{pmatrix} 2 & -5 \\ 1 & 2 \end{pmatrix}$</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="example-content" style="display:none; padding: 1.5rem; background: #f8fafc; border-radius: 0 0 8px 8px; border: 1px solid var(--border); border-top: none;">
+        <h4>Solution</h4>
+        <p><strong>Step 1: Characteristic equation</strong></p>
+        <div class="math-display">
+          $$\det(A - \lambda I) = \begin{vmatrix} 2-\lambda & -5 \\ 1 & 2-\lambda \end{vmatrix} = (2-\lambda)^2 + 5 = \lambda^2 - 4\lambda + 4 + 5 = \lambda^2 - 4\lambda + 9$$
+        </div>
+
+        <p><strong>Step 2: Solve using quadratic formula</strong></p>
+        <div class="math-display">
+          $$\lambda = \frac{4 \pm \sqrt{16 - 36}}{2} = \frac{4 \pm \sqrt{-20}}{2} = \frac{4 \pm 2i\sqrt{5}}{2} = 2 \pm i\sqrt{5}$$
+        </div>
+
+        <p><strong>Answer:</strong> $\boxed{\lambda = 2 \pm i\sqrt{5}}$ (complex conjugate pair with $\alpha = 2$, $\beta = \sqrt{5}$)</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- =================== SCRIPTS =================== -->
+<script>
+// Collapsible toggle for examples
+function toggleCollapsible(btn) {
+    btn.classList.toggle('open');
+    const content = btn.nextElementSibling;
+    content.classList.toggle('open');
+}
+
+// Practice problem toggle
+function togglePractice(header) {
+    var content = header.nextElementSibling;
+    var icon = header.querySelector('.toggle-icon');
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+        if (icon) icon.textContent = '\u25BC';
+    } else {
+        content.style.display = 'block';
+        if (icon) icon.textContent = '\u25B2';
+    }
+}
+
+// Eigenvalue and eigenvector computation
+function computeEigenvalues(a11, a12, a21, a22) {
+    // Characteristic polynomial: λ² - (a11+a22)λ + (a11*a22 - a12*a21) = 0
+    const trace = a11 + a22;
+    const det = a11 * a22 - a12 * a21;
+
+    const discriminant = trace * trace - 4 * det;
+
+    if (Math.abs(discriminant) < 1e-10) {
+        // Repeated eigenvalue
+        const lambda = trace / 2;
+        return {
+            type: 'repeated',
+            lambda: lambda,
+            discriminant: discriminant
+        };
+    } else if (discriminant > 0) {
+        // Two distinct real eigenvalues
+        const sqrtDisc = Math.sqrt(discriminant);
+        const lambda1 = (trace + sqrtDisc) / 2;
+        const lambda2 = (trace - sqrtDisc) / 2;
+        return {
+            type: 'distinct-real',
+            lambda1: lambda1,
+            lambda2: lambda2,
+            discriminant: discriminant
+        };
+    } else {
+        // Complex conjugate eigenvalues
+        const alpha = trace / 2;
+        const beta = Math.sqrt(-discriminant) / 2;
+        return {
+            type: 'complex',
+            alpha: alpha,
+            beta: beta,
+            discriminant: discriminant
+        };
+    }
+}
+
+function computeEigenvectors(a11, a12, a21, a22, lambda) {
+    // Solve (A - λI)v = 0
+    const m11 = a11 - lambda;
+    const m12 = a12;
+    const m21 = a21;
+    const m22 = a22 - lambda;
+
+    // If first row is non-zero, use it
+    if (Math.abs(m11) > 1e-10 || Math.abs(m12) > 1e-10) {
+        // m11*v1 + m12*v2 = 0
+        if (Math.abs(m12) > 1e-10) {
+            // v1 = -m12*t, v2 = m11*t, choose t = 1
+            return [-m12, m11];
+        } else {
+            // m11*v1 = 0, choose v1 = 0, v2 = 1
+            return [0, 1];
+        }
+    } else if (Math.abs(m21) > 1e-10 || Math.abs(m22) > 1e-10) {
+        // Use second row
+        if (Math.abs(m22) > 1e-10) {
+            return [-m22, m21];
+        } else {
+            return [1, 0];
+        }
+    }
+    return [1, 0];
+}
+
+function updateVisualizer() {
+    const a11 = parseFloat(document.getElementById('a11').value);
+    const a12 = parseFloat(document.getElementById('a12').value);
+    const a21 = parseFloat(document.getElementById('a21').value);
+    const a22 = parseFloat(document.getElementById('a22').value);
+
+    // Compute eigenvalues and eigenvectors
+    const eigen = computeEigenvalues(a11, a12, a21, a22);
+
+    // Create unit circle
+    let theta = [];
+    for (let i = 0; i <= 100; i++) {
+        theta.push((2 * Math.PI * i) / 100);
+    }
+
+    let circleX = theta.map(t => Math.cos(t));
+    let circleY = theta.map(t => Math.sin(t));
+
+    // Transform circle
+    let transformedX = circleX.map((x, i) => a11 * x + a12 * circleY[i]);
+    let transformedY = circleX.map((x, i) => a21 * x + a22 * circleY[i]);
+
+    // Create traces
+    let traces = [];
+
+    // Original circle
+    traces.push({
+        x: circleX,
+        y: circleY,
+        mode: 'lines',
+        name: 'Unit Circle',
+        line: { color: 'blue', width: 2, dash: 'dash' }
+    });
+
+    // Transformed ellipse
+    traces.push({
+        x: transformedX,
+        y: transformedY,
+        mode: 'lines',
+        name: 'Transformed Ellipse',
+        line: { color: 'green', width: 2 }
+    });
+
+    // Add eigenvectors
+    let eigenCount = 0;
+    if (eigen.type === 'distinct-real') {
+        // Two real eigenvectors
+        let v1 = computeEigenvectors(a11, a12, a21, a22, eigen.lambda1);
+        let v2 = computeEigenvectors(a11, a12, a21, a22, eigen.lambda2);
+
+        let scale1 = eigen.lambda1 / Math.sqrt(v1[0]*v1[0] + v1[1]*v1[1]);
+        traces.push({
+            x: [0, v1[0]],
+            y: [0, v1[1]],
+            mode: 'lines+markers',
+            name: 'Eigenvector 1 (λ = ' + eigen.lambda1.toFixed(2) + ')',
+            line: { color: 'red', width: 3 },
+            marker: { size: 8 }
+        });
+
+        let scale2 = eigen.lambda2 / Math.sqrt(v2[0]*v2[0] + v2[1]*v2[1]);
+        traces.push({
+            x: [0, v2[0]],
+            y: [0, v2[1]],
+            mode: 'lines+markers',
+            name: 'Eigenvector 2 (λ = ' + eigen.lambda2.toFixed(2) + ')',
+            line: { color: 'orange', width: 3 },
+            marker: { size: 8 }
+        });
+
+        // Transformed eigenvectors (should be scaled versions)
+        traces.push({
+            x: [0, scale1 * v1[0]],
+            y: [0, scale1 * v1[1]],
+            mode: 'lines+markers',
+            name: 'A*Eigenvector 1',
+            line: { color: 'darkred', width: 2, dash: 'dot' },
+            marker: { size: 6 }
+        });
+
+        traces.push({
+            x: [0, scale2 * v2[0]],
+            y: [0, scale2 * v2[1]],
+            mode: 'lines+markers',
+            name: 'A*Eigenvector 2',
+            line: { color: 'darkorange', width: 2, dash: 'dot' },
+            marker: { size: 6 }
+        });
+    } else if (eigen.type === 'repeated') {
+        let v = computeEigenvectors(a11, a12, a21, a22, eigen.lambda);
+        let scale = eigen.lambda / Math.sqrt(v[0]*v[0] + v[1]*v[1]);
+
+        traces.push({
+            x: [0, v[0]],
+            y: [0, v[1]],
+            mode: 'lines+markers',
+            name: 'Eigenvector (λ = ' + eigen.lambda.toFixed(2) + ')',
+            line: { color: 'red', width: 3 },
+            marker: { size: 8 }
+        });
+
+        traces.push({
+            x: [0, scale * v[0]],
+            y: [0, scale * v[1]],
+            mode: 'lines+markers',
+            name: 'A*Eigenvector',
+            line: { color: 'darkred', width: 2, dash: 'dot' },
+            marker: { size: 6 }
+        });
+    }
+    // For complex eigenvalues, we skip eigenvector visualization as they are complex
+
+    let layout = {
+        title: 'Matrix Transformation and Eigenvectors',
+        xaxis: { title: 'x', zeroline: true },
+        yaxis: { title: 'y', zeroline: true },
+        hovermode: 'closest',
+        width: 700,
+        height: 500
+    };
+
+    Plotly.newPlot('visualizerPlot', traces, layout, {responsive: true});
+
+    // Display eigenvalue info
+    let infoText = '<p><strong>Matrix:</strong> A = [[' + a11.toFixed(2) + ', ' + a12.toFixed(2) + '], [' + a21.toFixed(2) + ', ' + a22.toFixed(2) + ']]</p>';
+    infoText += '<p><strong>Trace (sum of diagonal):</strong> ' + (a11 + a22).toFixed(2) + '</p>';
+    infoText += '<p><strong>Determinant:</strong> ' + (a11*a22 - a12*a21).toFixed(2) + '</p>';
+
+    if (eigen.type === 'distinct-real') {
+        infoText += '<p><strong>Eigenvalues (distinct real):</strong></p>';
+        infoText += '<p>λ₁ = ' + eigen.lambda1.toFixed(4) + '</p>';
+        infoText += '<p>λ₂ = ' + eigen.lambda2.toFixed(4) + '</p>';
+    } else if (eigen.type === 'repeated') {
+        infoText += '<p><strong>Eigenvalue (repeated):</strong></p>';
+        infoText += '<p>λ = ' + eigen.lambda.toFixed(4) + ' (multiplicity 2)</p>';
+    } else {
+        infoText += '<p><strong>Eigenvalues (complex conjugate):</strong></p>';
+        infoText += '<p>λ = ' + eigen.alpha.toFixed(4) + ' ± ' + eigen.beta.toFixed(4) + 'i</p>';
+    }
+
+    document.getElementById('eigenInfo').innerHTML = infoText;
+}
+
+// Initialize visualizer on page load
+window.addEventListener('load', updateVisualizer);
+
+// Render KaTeX on page load
+document.addEventListener('DOMContentLoaded', function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+        ]
+    });
+});
+</script>
+
+</body>
+</html>
