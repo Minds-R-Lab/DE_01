@@ -423,14 +423,41 @@ section h3, h3 {
 }
 
 /* Practice problem toggle */
+.example-header {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+
+.example-header:hover {
+  opacity: 0.92;
+}
+
+.example-item {
+  margin-top: 1.5rem;
+}
+
 .example-content {
   display: none;
   padding: 0;
 }
 
-.example-content.active {
+.example-content.active,
+.example-content.open {
   display: block;
   padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  background: var(--card);
 }
 
 /* --- Step Lists --- */
