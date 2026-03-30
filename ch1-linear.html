@@ -894,6 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
     delimiters: [
       {left: '$$', right: '$$', display: true},
       {left: '\\(', right: '\\)', display: false},
+        {left: '$', right: '$', display: false},
       {left: '\\[', right: '\\]', display: true}
     ],
     throwOnError: false
@@ -913,7 +914,8 @@ function toggleCollapsible(btn) {
     renderMathInElement(content, {
       delimiters: [
         {left: '$$', right: '$$', display: true},
-        {left: '\\(', right: '\\)', display: false}
+        {left: '\\(', right: '\\)', display: false},
+        {left: '$', right: '$', display: false}
       ],
       throwOnError: false
     });
@@ -1252,7 +1254,8 @@ function checkChoice(qNum, btn, isCorrect) {
 
   // Re-render math in feedback
   renderMathInElement(fb, {
-    delimiters: [{left: '\\(', right: '\\)', display: false}],
+    delimiters: [{left: '\\(', right: '\\)', display: false},
+        {left: '$', right: '$', display: false}],
     throwOnError: false
   });
 }
