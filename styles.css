@@ -323,11 +323,12 @@ section h3, h3 {
   margin-top: 0.5rem;
 }
 
-/* --- Collapsible Sections (supports both 'open' and 'active' toggles) --- */
+/* --- Collapsible Sections --- */
 .collapsible {
   margin: 1rem 0;
 }
 
+/* Blue outlined toggle (used by many chapter pages) */
 .collapsible-toggle {
   width: 100%;
   padding: 1rem;
@@ -350,30 +351,67 @@ section h3, h3 {
   color: white;
 }
 
+/* White card-style toggle (used by ch3-inverse worked examples) */
+.collapsible-header {
+  background-color: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.collapsible-header:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.collapsible-header.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.collapsible-arrow {
+  display: inline-block;
+  margin-left: 1rem;
+  transition: transform 0.3s;
+  font-size: 1.2rem;
+}
+
+.collapsible-header.active .collapsible-arrow {
+  transform: rotate(180deg);
+}
+
 .arrow {
   display: inline-block;
   transition: transform 0.3s;
   font-size: 1.2rem;
 }
 
-.collapsible-toggle.active .arrow,
-.collapsible-toggle.open .arrow {
+.collapsible-toggle.active .arrow {
   transform: rotate(90deg);
 }
 
 .collapsible-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s;
+  display: none;
   background: var(--card);
   border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 var(--radius) var(--radius);
 }
 
-.collapsible-content.active,
-.collapsible-content.open {
-  max-height: 5000px;
+.collapsible-content.active {
+  display: block;
   padding: 1.5rem;
 }
 
@@ -450,8 +488,7 @@ section h3, h3 {
   padding: 0;
 }
 
-.example-content.active,
-.example-content.open {
+.example-content.active {
   display: block;
   padding: 1.5rem;
   border: 1px solid var(--border);

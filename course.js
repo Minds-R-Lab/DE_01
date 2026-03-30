@@ -29,19 +29,17 @@ function initKaTeX(element) {
 */
 function toggleCollapsible(btn) {
   var content = btn.nextElementSibling;
-  var icon = btn.querySelector('.toggle-icon') || btn.querySelector('.arrow');
+  var icon = btn.querySelector('.toggle-icon') || btn.querySelector('.arrow') || btn.querySelector('.collapsible-arrow');
 
-  // Toggle classes (support both conventions)
-  btn.classList.toggle('open');
+  // Toggle the 'active' class on both button and content
   btn.classList.toggle('active');
-  content.classList.toggle('open');
   content.classList.toggle('active');
 
-  var isOpen = content.classList.contains('open') || content.classList.contains('active');
+  var isOpen = content.classList.contains('active');
 
   // Update arrow/icon if present
   if (icon) {
-    if (icon.classList.contains('arrow')) {
+    if (icon.classList.contains('arrow') || icon.classList.contains('collapsible-arrow')) {
       // Arrow rotation is handled by CSS
     } else {
       icon.textContent = isOpen ? '▲' : '▼';
@@ -62,11 +60,10 @@ function togglePractice(header) {
   var content = header.nextElementSibling;
   var icon = header.querySelector('.toggle-icon') || header.querySelector('.arrow');
 
-  header.classList.toggle('open');
-  content.classList.toggle('open');
+  header.classList.toggle('active');
   content.classList.toggle('active');
 
-  var isOpen = content.classList.contains('open') || content.classList.contains('active');
+  var isOpen = content.classList.contains('active');
 
   if (icon) {
     if (icon.classList.contains('arrow')) {
