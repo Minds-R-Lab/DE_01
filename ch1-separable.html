@@ -12,172 +12,35 @@
 
     <!-- Plotly for Interactive Plots -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<link rel="stylesheet" href="styles.css">
 
     <style>
-        :root {
-            --primary: #2563eb;
-            --accent: #7c3aed;
-            --success: #059669;
-            --warning: #d97706;
-            --danger: #dc2626;
-        }
+/* Page-specific styles */
+/* Navigation Bar */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        }
-
-        /* Navigation Bar */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #e2e8f0;
-            padding: 0 2rem;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
-
-        nav h1 {
-            font-size: 1.3rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        nav a {
-            color: #666;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover,
-        nav a.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        main {
+main {
             max-width: 1100px;
             margin: 80px auto 2rem;
             padding: 0 1.5rem;
         }
 
-        /* Sections */
-        section {
-            margin-bottom: 3rem;
-            scroll-margin-top: 80px;
-        }
+/* Sections */
 
-        section > h2 {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid var(--primary);
-        }
+/* Cards and Boxes */
 
-        section > h3 {
-            font-size: 1.3rem;
-            color: #333;
-            margin: 1.5rem 0 1rem;
-        }
+/* Learning Objectives */
 
-        p, li {
-            margin-bottom: 0.8rem;
-            font-size: 0.95rem;
-        }
-
-        /* Cards and Boxes */
-        .definition-box,
-        .theorem-box,
-        .example-box,
-        .warning-box,
-        .tip-box {
-            background: white;
-            border-left: 5px solid;
-            border-radius: 12px;
-            padding: 1.2rem;
-            margin: 1rem 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .definition-box {
-            border-left-color: var(--primary);
-            background: #eff6ff;
-        }
-
-        .theorem-box {
-            border-left-color: var(--accent);
-            background: #f9f5ff;
-        }
-
-        .example-box {
-            border-left-color: var(--success);
-            background: #f0fdf4;
-        }
-
-        .warning-box {
-            border-left-color: var(--warning);
-            background: #fffbeb;
-        }
-
-        .tip-box {
-            border-left-color: #0ea5e9;
-            background: #ecf9ff;
-        }
-
-        .definition-box strong,
-        .theorem-box strong,
-        .example-box strong,
-        .warning-box strong,
-        .tip-box strong {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        /* Learning Objectives */
-        .objectives {
+.objectives {
             list-style: none;
         }
 
-        .objectives li {
+.objectives li {
             padding-left: 1.8rem;
             position: relative;
             margin-bottom: 0.6rem;
         }
 
-        .objectives li:before {
+.objectives li:before {
             content: "✓";
             position: absolute;
             left: 0;
@@ -185,38 +48,11 @@
             font-weight: bold;
         }
 
-        /* Step List */
-        .step-list {
-            list-style: none;
-            counter-reset: step;
-        }
+/* Step List */
 
-        .step-list li {
-            counter-increment: step;
-            padding-left: 2.5rem;
-            position: relative;
-            margin-bottom: 1rem;
-        }
+/* Collapsible Examples */
 
-        .step-list li:before {
-            content: counter(step);
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: var(--primary);
-            color: white;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-
-        /* Collapsible Examples */
-        .example-item {
+.example-item {
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
@@ -224,7 +60,7 @@
             overflow: hidden;
         }
 
-        .example-header {
+.example-header {
             background: linear-gradient(135deg, var(--success), #10b981);
             color: white;
             padding: 1rem 1.5rem;
@@ -237,55 +73,17 @@
             transition: background 0.3s ease;
         }
 
-        .example-header:hover {
+.example-header:hover {
             background: linear-gradient(135deg, #047857, #059669);
         }
-        .example-header .katex { color: white; }
 
-        .example-content {
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
+.example-header .katex { color: white; }
 
-        .example-content.active {
-            max-height: 2000px;
-            padding: 1.5rem;
-        }
+/* Math in examples */
 
-        .toggle-icon {
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
+/* Interactive Controls */
 
-        .example-content.active .toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        /* Math in examples */
-        .example-content .katex {
-            font-size: 0.9em;
-        }
-
-        /* Interactive Controls */
-        .control-group {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .control-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95rem;
-        }
-
-        select, input[type="text"], input[type="number"] {
+select, input[type="text"], input[type="number"] {
             width: 100%;
             padding: 0.6rem;
             border: 1px solid #d1d5db;
@@ -295,12 +93,12 @@
             margin-bottom: 1rem;
         }
 
-        input[type="range"] {
+input[type="range"] {
             width: 100%;
             margin-bottom: 0.5rem;
         }
 
-        .slider-value {
+.slider-value {
             display: inline-block;
             background: var(--primary);
             color: white;
@@ -311,7 +109,7 @@
             margin-left: 0.5rem;
         }
 
-        button {
+button {
             background: var(--primary);
             color: white;
             border: none;
@@ -323,133 +121,53 @@
             transition: all 0.3s ease;
         }
 
-        button:hover {
+button:hover {
             background: #1d4ed8;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        button:active {
+button:active {
             transform: translateY(0);
         }
 
-        /* Plot Containers */
-        .plot-container {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
+/* Plot Containers */
 
+/* Practice Quiz */
 
-        /* Practice Quiz */
-        .quiz-question {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid #e2e8f0;
-        }
-
-        .quiz-question h4 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .quiz-choices {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .choice-btn {
-            padding: 0.8rem 1rem;
-            text-align: left;
-            background: #f3f4f6;
-            border: 2px solid #d1d5db;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            color: #1e293b;
-        }
-        .choice-btn .katex { color: #1e293b; }
-        .choice-btn.correct .katex,
-        .choice-btn.incorrect .katex,
-        .choice-btn.selected .katex { color: white; }
-
-        .choice-btn:hover {
-            border-color: var(--primary);
-            background: #eff6ff;
-        }
-
-        .choice-btn.selected {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
-        }
-
-        .choice-btn.correct {
-            border-color: var(--success);
-            background: var(--success);
-            color: white;
-        }
-
-        .choice-btn.incorrect {
-            border-color: var(--danger);
-            background: var(--danger);
-            color: white;
-        }
-
-        .feedback {
+.feedback {
             margin: 1rem 0;
             padding: 1rem;
             border-radius: 6px;
             display: none;
         }
 
-        .feedback.show {
+.feedback.show {
             display: block;
         }
 
-        .feedback.correct {
+.feedback.correct {
             background: #d1fae5;
             color: #065f46;
             border-left: 4px solid var(--success);
         }
 
-        .feedback.incorrect {
+.feedback.incorrect {
             background: #fee2e2;
             color: #991b1b;
             border-left: 4px solid var(--danger);
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            margin-top: 1rem;
-            overflow: hidden;
-        }
+/* Quick Reference */
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            transition: width 0.3s ease;
-        }
-
-        /* Quick Reference */
-        .reference-grid {
+.reference-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin: 1.5rem 0;
         }
 
-        .reference-card {
+.reference-card {
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
@@ -457,46 +175,25 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        .reference-card h4 {
+.reference-card h4 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1rem;
         }
 
-        /* Utility Classes */
-        .text-center {
+/* Utility Classes */
+
+.text-center {
             text-align: center;
         }
 
-        .mt-2 { margin-top: 2rem; }
-        .mb-2 { margin-bottom: 2rem; }
+.mt-2 { margin-top: 2rem; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            nav .container {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem 0;
-            }
+.mb-2 { margin-bottom: 2rem; }
 
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            main {
-                margin-top: 150px;
-            }
-
-            section > h2 {
-                font-size: 1.5rem;
-            }
-
-            .reference-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+/* Responsive */
+</style>
+<script src="course.js"></script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -1372,23 +1069,8 @@
     <script>
         // KaTeX Rendering
         document.addEventListener('DOMContentLoaded', function() {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '\\[', right: '\\]', display: true},
-                    {left: '$', right: '$', display: false},
-                    {left: '\\(', right: '\\)', display: false}
-                ]
-            });
-
-            updateProgressBar();
+updateProgressBar();
         });
-
-        // Collapsible Examples
-        function toggleCollapsible(header) {
-            const content = header.nextElementSibling;
-            content.classList.toggle('active');
-        }
 
         // Quiz System
         let quizAnswers = {
@@ -1430,18 +1112,6 @@
         Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University, Department of Mathematics and Statistics
     </footer>
     <script>
-        // Toggle for Practice Problems
-        function togglePractice(header) {
-            var content = header.nextElementSibling;
-            var icon = header.querySelector('.toggle-icon');
-            content.classList.toggle('active');
-            if (content.classList.contains('active')) {
-                if (icon) icon.textContent = '▲';
-            } else {
-                if (icon) icon.textContent = '▼';
-            }
-        }
-
     </script>
 </body>
 </html>

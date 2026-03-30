@@ -7,258 +7,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="styles.css">
 
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-light: #dbeafe;
-            --accent: #7c3aed;
-            --accent-light: #ede9fe;
-            --success: #059669;
-            --success-light: #d1fae5;
-            --warning: #d97706;
-            --warning-light: #fef3c7;
-            --danger: #dc2626;
-            --danger-light: #fee2e2;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --radius: 12px;
-            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            font-size: 17px;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            padding: 0 2rem;
-            gap: 2rem;
-            z-index: 1000;
-            box-shadow: var(--shadow);
-        }
-
-        .logo a {
-            font-weight: 700;
-            font-size: 1.1rem;
-            text-decoration: none;
-            color: var(--primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a.active {
-            color: var(--primary);
-            font-weight: 600;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 2px;
-        }
-
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 80px 1.5rem 4rem;
-        }
-
-        section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow);
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            font-size: 1.55rem;
-            font-weight: 700;
-            color: var(--text);
-            border-bottom: 3px solid var(--primary);
-            padding-bottom: 0.5rem;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
-            border-left: 5px solid;
-            padding: 1.25rem;
-            border-radius: var(--radius);
-            margin: 1.5rem 0;
-        }
-
-        .definition-box {
-            background: var(--primary-light);
-            border-color: var(--primary);
-        }
-
-        .theorem-box {
-            background: var(--accent-light);
-            border-color: var(--accent);
-        }
-
-        .example-box {
-            background: var(--success-light);
-            border-color: var(--success);
-        }
-
-        .warning-box {
-            background: var(--warning-light);
-            border-color: var(--warning);
-        }
-
-        .tip-box {
-            background: #cffafe;
-            border-color: #0ea5e9;
-        }
-
-        .box-label {
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
-
-        .math-display {
-            background: #f0f4f8;
-            padding: 1.25rem;
-            border-radius: var(--radius);
-            margin: 0.5rem 0;
-            overflow-x: auto;
-        }
-
-        .katex-display {
-            margin: 0.5rem 0;
-        }
-
-        .step-list {
-            list-style: none;
-            counter-reset: step;
-            margin: 1.5rem 0;
-        }
-
-        .step-list li {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-            position: relative;
-        }
-
-        .step-list li::before {
-            content: counter(step);
-            counter-increment: step;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .step-list li > div {
-            flex: 1;
-        }
-
-        .collapsible {
-            background: var(--primary-light);
-            color: var(--text);
-            padding: 1rem 1.25rem;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            width: 100%;
-            text-align: left;
-            margin-top: 1.25rem;
-            transition: all 0.3s;
-            border-left: 4px solid var(--primary);
-        }
-
-        .collapsible:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .collapsible.active {
-            background: var(--primary);
-            color: white;
-            border-left-color: #1e40af;
-        }
-
-        .collapsible::after {
-            content: ' ▼';
-            float: right;
-            transition: transform 0.3s;
-        }
-
-        .collapsible.active::after {
-            transform: rotate(180deg);
-        }
-
-        .content {
+/* Page-specific styles */
+.content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
@@ -266,170 +19,45 @@
             border-radius: 0 0 var(--radius) var(--radius);
         }
 
-        .content.show {
+.content.show {
             max-height: 2000px;
             padding: 1.5rem 1.25rem;
         }
 
-        .quiz-question {
-            background: #fffbeb;
-            border-left: 4px solid var(--warning);
-            padding: 1.25rem;
-            border-radius: var(--radius);
-            margin: 1.5rem 0;
-        }
-
-        .quiz-options {
-            display: grid;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .quiz-option {
-            background: white;
-            border: 2px solid var(--border);
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .quiz-option input[type="radio"] {
-            margin-right: 0.75rem;
-        }
-
-        .quiz-option label {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .quiz-result {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: var(--radius);
-            font-weight: 600;
-            display: none;
-        }
-
-        .quiz-result.show {
-            display: block;
-        }
-
-        .quiz-result.correct {
-            background: var(--success-light);
-            color: var(--success);
-            border-left: 4px solid var(--success);
-        }
-
-        .quiz-result.incorrect {
-            background: var(--danger-light);
-            color: var(--danger);
-            border-left: 4px solid var(--danger);
-        }
-
-        .progress-container {
-            margin: 1.5rem 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        .score-text {
+.score-text {
             font-size: 0.9rem;
             color: var(--text-muted);
             margin-top: 0.5rem;
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border);
-            margin-top: 2rem;
-        }
-
-        .reference-grid {
+.reference-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
 
-        .reference-card {
+.reference-card {
             background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
             padding: 1.5rem;
             border-radius: var(--radius);
             border: 1px solid var(--border);
         }
 
-        .reference-card h4 {
+.reference-card h4 {
             color: var(--primary);
             margin-bottom: 0.75rem;
             font-weight: 700;
         }
 
-        .reference-card code {
+.reference-card code {
             background: white;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.9rem;
         }
-
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-                gap: 1rem;
-            }
-
-            .nav-links {
-                width: 100%;
-                gap: 1rem;
-                font-size: 0.85rem;
-            }
-
-            .container {
-                padding: 80px 1rem 2rem;
-            }
-
-            section {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-            }
-
-            h2 {
-                font-size: 1.3rem;
-            }
-
-            .reference-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+</style>
+<script src="course.js"></script>
 </head>
 <body>
     <nav>
@@ -1101,15 +729,7 @@
         }
 
         // Render LaTeX on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    { left: '$$', right: '$$', display: true },
-                    { left: '$', right: '$', display: false }
-                ],
-                throwOnError: false
-            });
-        });
+
     </script>
 </body>
 </html>

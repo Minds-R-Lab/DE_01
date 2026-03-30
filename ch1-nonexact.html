@@ -12,97 +12,26 @@
 
     <!-- Plotly for visualization -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<link rel="stylesheet" href="styles.css">
 
     <style>
-        :root {
-            --primary: #2563eb;
-            --accent: #7c3aed;
-            --success: #059669;
-            --warning: #d97706;
-            --danger: #dc2626;
-            --bg-light: #f9fafb;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-        }
+/* Page-specific styles */
+/* Navigation Bar */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding-top: 70px;
-        }
-
-        /* Navigation Bar */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--primary);
-            z-index: 1000;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        nav h1 {
-            font-size: 1.25rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            font-size: 0.9rem;
-        }
-
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-        }
-
-        nav a:hover {
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.1);
-        }
-
-        .nav-active {
+.nav-active {
             color: var(--primary) !important;
             font-weight: 600;
         }
 
-        /* Main content */
-        main {
+/* Main content */
+
+main {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 2rem;
         }
 
-        .section {
+.section {
             background: white;
             border-radius: 12px;
             padding: 3rem;
@@ -110,71 +39,24 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        section h2 {
-            color: var(--primary);
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 1rem;
-        }
+/* Box styles */
 
-        section h3 {
-            color: var(--accent);
-            font-size: 1.4rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
+/* Learning objectives */
 
-        /* Box styles */
-        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-            border-left: 5px solid;
-        }
-
-        .definition-box {
-            background: rgba(37, 99, 235, 0.05);
-            border-left-color: var(--primary);
-        }
-
-        .theorem-box {
-            background: rgba(124, 58, 237, 0.05);
-            border-left-color: var(--accent);
-            font-weight: 500;
-        }
-
-        .example-box {
-            background: rgba(5, 150, 105, 0.05);
-            border-left-color: var(--success);
-        }
-
-        .warning-box {
-            background: rgba(217, 119, 6, 0.05);
-            border-left-color: var(--warning);
-            font-weight: 500;
-        }
-
-        .tip-box {
-            background: rgba(59, 130, 246, 0.05);
-            border-left-color: #3b82f6;
-        }
-
-        /* Learning objectives */
-        .objectives {
+.objectives {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
 
-        .objective {
+.objective {
             display: flex;
             gap: 1rem;
             align-items: flex-start;
         }
 
-        .objective::before {
+.objective::before {
             content: "✓";
             color: var(--success);
             font-size: 1.5rem;
@@ -182,8 +64,9 @@
             flex-shrink: 0;
         }
 
-        /* Collapsible examples */
-        .example-toggle {
+/* Collapsible examples */
+
+.example-toggle {
             background: linear-gradient(135deg, var(--success), var(--accent));
             color: white;
             border: none;
@@ -198,108 +81,32 @@
             margin: 1rem 0;
         }
 
-        .example-toggle:hover {
+.example-toggle:hover {
             transform: translateX(5px);
             box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);
         }
 
-        .example-toggle.active {
+.example-toggle.active {
             background: linear-gradient(135deg, var(--primary), var(--accent));
         }
 
-        .example-content {
-            display: none;
-            background: var(--bg-light);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #e5e7eb;
-        }
+/* Quiz */
 
-        .example-content.active {
-            display: block;
-        }
+/* Input forms */
 
-        /* Quiz */
-        .quiz-question {
-            background: var(--bg-light);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .quiz-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .quiz-option {
-            padding: 0.75rem 1rem;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #1f2937;
-        }
-        .quiz-option .katex { color: #1f2937; }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-        }
-
-        .quiz-option.correct {
-            background: rgba(5, 150, 105, 0.15);
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        .quiz-option.incorrect {
-            background: rgba(220, 38, 38, 0.15);
-            border-color: var(--danger);
-        }
-
-        .quiz-feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 6px;
-            display: none;
-        }
-
-        .quiz-feedback.show {
-            display: block;
-        }
-
-        .quiz-feedback.correct {
-            background: rgba(5, 150, 105, 0.15);
-            color: var(--success);
-            border-left: 4px solid var(--success);
-        }
-
-        .quiz-feedback.incorrect {
-            background: rgba(220, 38, 38, 0.15);
-            color: var(--danger);
-            border-left: 4px solid var(--danger);
-        }
-
-        /* Input forms */
-        .input-group {
+.input-group {
             margin: 1.5rem 0;
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
         }
 
-        .input-group label {
+.input-group label {
             font-weight: 600;
             color: var(--text-dark);
         }
 
-        .input-group input, .input-group select, .input-group textarea {
+.input-group input, .input-group select, .input-group textarea {
             padding: 0.75rem 1rem;
             border: 2px solid #e5e7eb;
             border-radius: 6px;
@@ -308,13 +115,13 @@
             transition: border-color 0.3s;
         }
 
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        button {
+button {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             border: none;
@@ -325,26 +132,18 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
+button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
         }
 
-        button:active {
+button:active {
             transform: translateY(0);
         }
 
-        /* Plots */
-        .plot-container {
-            background: white;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1.5rem 0;
-            border: 1px solid #e5e7eb;
-            min-height: 500px;
-        }
+/* Plots */
 
-        .plot-controls {
+.plot-controls {
             background: var(--bg-light);
             padding: 1rem;
             border-radius: 8px;
@@ -355,8 +154,9 @@
             align-items: flex-end;
         }
 
-        /* Reference card */
-        .reference-card {
+/* Reference card */
+
+.reference-card {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             padding: 2rem;
@@ -364,77 +164,44 @@
             margin: 2rem 0;
         }
 
-        .reference-card h3 {
+.reference-card h3 {
             color: white;
             margin-top: 0;
             font-size: 1.3rem;
         }
 
-        .reference-grid {
+.reference-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
 
-        .reference-item {
+.reference-item {
             background: rgba(255, 255, 255, 0.1);
             padding: 1rem;
             border-radius: 8px;
             border-left: 3px solid rgba(255, 255, 255, 0.5);
         }
 
-        .reference-item strong {
+.reference-item strong {
             display: block;
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
         }
 
-        .reference-item code {
+.reference-item code {
             background: rgba(255, 255, 255, 0.2);
             padding: 0.25rem 0.5rem;
             border-radius: 3px;
             font-size: 0.85rem;
         }
 
-        /* Math display */
-        .katex-display {
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
+/* Math display */
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-light);
-            margin-top: 4rem;
-        }
-
-        @media (max-width: 768px) {
-            nav .container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            section {
-                padding: 1.5rem;
-            }
-
-            section h2 {
-                font-size: 1.6rem;
-            }
-
-            section h3 {
-                font-size: 1.1rem;
-            }
-        }
-    </style>
+/* Footer */
+</style>
+<script src="course.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -1256,19 +1023,6 @@
             });
         }
 
-        // Safe math evaluator
-        function safeEval(expr, x, y) {
-            try {
-                // Replace symbols and prevent malicious code
-                const safe = expr.replace(/[^0-9+\-*/().^xy\s]/g, '');
-                // Safely evaluate with x, y in scope
-                return Function('"use strict"; return (' + safe + ')')
-                    .call({x, y});
-            } catch (e) {
-                return NaN;
-            }
-        }
-
         // Numerical derivatives
         function partialDerivative(expr, variable, x, y, h = 0.0001) {
             if (variable === 'x') {
@@ -1515,32 +1269,8 @@
         });
     </script>
 <script>
-function toggleCollapsible(header) {
-    const content = header.nextElementSibling;
-    const icon = header.querySelector('.toggle-icon');
-    if (content.classList.contains('active')) {
-        content.classList.remove('active');
-        if (icon) icon.textContent = '▼';
-    } else {
-        content.classList.add('active');
-        if (icon) icon.textContent = '▲';
-    }
-}
 </script>
     <script>
-        // Toggle for Practice Problems
-        function togglePractice(header) {
-            var content = header.nextElementSibling;
-            var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
-                if (icon) icon.textContent = '▼';
-            } else {
-                content.classList.add('active');
-                if (icon) icon.textContent = '▲';
-            }
-        }
-
     </script>
 </body>
 </html>

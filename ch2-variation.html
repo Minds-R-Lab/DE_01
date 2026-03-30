@@ -8,232 +8,71 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<link rel="stylesheet" href="styles.css">
 <style>
-  :root {
-    --primary: #2563eb;
-    --primary-light: #dbeafe;
-    --accent: #7c3aed;
-    --accent-light: #ede9fe;
-    --success: #059669;
-    --success-light: #d1fae5;
-    --warning: #d97706;
-    --warning-light: #fef3c7;
-    --danger: #dc2626;
-    --danger-light: #fee2e2;
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --radius: 12px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
-  }
+/* Page-specific styles */
+/* ---- NAV ---- */
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ---- LAYOUT ---- */
 
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    font-size: 17px;
-  }
+/* ---- BOXES ---- */
 
-  /* ---- NAV ---- */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex; align-items: center; height: 60px;
-    box-shadow: var(--shadow);
-  }
-  nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
-  nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
-  nav .nav-links a {
-    text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem;
-    border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap;
-    transition: all 0.2s;
-  }
-  nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
+/* ---- MATH ---- */
 
-  /* ---- LAYOUT ---- */
-  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+/* ---- STEPS ---- */
 
-  section {
-    background: var(--card); border-radius: var(--radius);
-    padding: 2.5rem; margin-bottom: 2rem;
-    border: 1px solid var(--border); box-shadow: var(--shadow);
-  }
+/* ---- INTERACTIVE CONTROLS ---- */
 
-  h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
-  h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
-  h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
-
-  p { margin-bottom: 1rem; }
-
-  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
-
-  /* ---- BOXES ---- */
-  .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
-    border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;
-    border-left: 5px solid;
-  }
-  .definition-box { background: var(--primary-light); border-color: var(--primary); }
-  .theorem-box   { background: var(--accent-light); border-color: var(--accent); }
-  .example-box   { background: var(--success-light); border-color: var(--success); }
-  .warning-box   { background: var(--warning-light); border-color: var(--warning); }
-  .tip-box        { background: #f0f9ff; border-color: #0ea5e9; }
-
-  .box-label {
-    font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
-    letter-spacing: 0.05em; margin-bottom: 0.5rem;
-  }
-  .definition-box .box-label { color: var(--primary); }
-  .theorem-box .box-label   { color: var(--accent); }
-  .example-box .box-label   { color: var(--success); }
-  .warning-box .box-label   { color: var(--warning); }
-  .tip-box .box-label        { color: #0ea5e9; }
-
-  /* ---- MATH ---- */
-  .math-display {
-    background: #f1f5f9; border-radius: 8px; padding: 1.2rem;
-    text-align: center; margin: 1rem 0; font-size: 1.15em;
-    overflow-x: auto;
-  }
-
-  /* ---- STEPS ---- */
-  .step-list { counter-reset: step; list-style: none; padding: 0; }
-  .step-list li {
-    counter-increment: step; position: relative;
-    padding: 1rem 1rem 1rem 3.5rem; margin-bottom: 0.75rem;
-    background: #f8fafc; border-radius: 8px; border: 1px solid var(--border);
-  }
-  .step-list li::before {
-    content: counter(step);
-    position: absolute; left: 0.75rem; top: 1rem;
-    width: 2rem; height: 2rem; border-radius: 50%;
-    background: var(--primary); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.9rem;
-  }
-
-  /* ---- INTERACTIVE CONTROLS ---- */
-  .controls {
+.controls {
     display: flex; flex-wrap: wrap; gap: 1rem; align-items: end;
     margin: 1rem 0; padding: 1rem; background: #f1f5f9; border-radius: 8px;
   }
-  .control-group { display: flex; flex-direction: column; gap: 0.3rem; }
-  .control-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-  .control-group input[type="text"],
-  .control-group input[type="number"],
-  .control-group select {
-    padding: 0.5rem 0.75rem; border: 1.5px solid var(--border);
-    border-radius: 8px; font-size: 0.95rem; background: #fff;
-    transition: border-color 0.2s;
-  }
-  .control-group input:focus, .control-group select:focus {
-    outline: none; border-color: var(--primary);
-  }
 
-  .slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
-  .slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-  .slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
-  .slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+.slider-group { display: flex; flex-direction: column; gap: 0.3rem; min-width: 200px; }
 
-  button, .btn {
+.slider-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+
+.slider-group input[type="range"] { width: 100%; accent-color: var(--primary); }
+
+.slider-value { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-align: center; }
+
+button, .btn {
     padding: 0.55rem 1.2rem; border: none; border-radius: 8px;
     font-size: 0.95rem; font-weight: 600; cursor: pointer;
     transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
   }
-  .btn-primary { background: var(--primary); color: #fff; }
-  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
-  .btn-success { background: var(--success); color: #fff; }
-  .btn-success:hover { background: #047857; }
-  .btn-accent { background: var(--accent); color: #fff; }
-  .btn-accent:hover { background: #6d28d9; }
 
-  /* ---- COLLAPSIBLE ---- */
-  .collapsible { margin: 1rem 0; }
-  .collapsible-toggle {
-    width: 100%; padding: 1rem 1.25rem; background: #f1f5f9;
-    border: 1.5px solid var(--border); border-radius: 8px;
-    text-align: left; font-size: 1rem; font-weight: 600;
-    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-    transition: all 0.2s;
-  }
-  .collapsible-toggle:hover { background: var(--primary-light); border-color: var(--primary); }
-  .collapsible-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
-  .collapsible-toggle.open .arrow { transform: rotate(90deg); }
-  .collapsible-content {
-    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
-    border: 1.5px solid transparent; border-top: none; border-radius: 0 0 8px 8px;
-  }
-  .collapsible-content.open {
-    max-height: 5000px; border-color: var(--border); padding: 1.5rem;
-  }
+.btn-primary { background: var(--primary); color: #fff; }
 
-  /* ---- QUIZ ---- */
-  .quiz-problem {
-    background: #f8fafc; border: 1.5px solid var(--border);
-    border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
-  }
-  .quiz-problem .problem-num {
-    font-weight: 700; color: var(--primary); font-size: 0.9rem;
-    text-transform: uppercase; letter-spacing: 0.05em;
-  }
-  .quiz-input {
-    padding: 0.5rem 0.75rem; border: 2px solid var(--border);
-    border-radius: 8px; font-size: 1rem; width: 100%; margin: 0.5rem 0;
-    transition: border-color 0.2s;
-  }
-  .quiz-input:focus { outline: none; border-color: var(--primary); }
-  .quiz-feedback {
-    padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.5rem;
-    font-weight: 600; display: none;
-  }
-  .quiz-feedback.correct { display: block; background: var(--success-light); color: var(--success); }
-  .quiz-feedback.incorrect { display: block; background: var(--danger-light); color: var(--danger); }
-  .quiz-feedback.hint { display: block; background: var(--warning-light); color: var(--warning); }
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
 
-  .choice-btn {
-    display: block; width: 100%; text-align: left;
-    padding: 0.75rem 1rem; margin: 0.5rem 0;
-    border: 2px solid var(--border); border-radius: 8px;
-    background: #fff; font-size: 0.95rem; cursor: pointer;
-    transition: all 0.2s; color: #1e293b;
-  }
-  .choice-btn .katex { color: #1e293b; }
-  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-  .choice-btn.selected-correct { border-color: var(--success); background: var(--success-light); }
-  .choice-btn.selected-wrong { border-color: var(--danger); background: var(--danger-light); }
+.btn-success { background: var(--success); color: #fff; }
 
-  /* ---- PROGRESS ---- */
-  .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 1rem 0; }
-  .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+.btn-success:hover { background: #047857; }
 
-  /* ---- PLOT ---- */
-  .plot-container { width: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; }
+.btn-accent { background: var(--accent); color: #fff; }
 
-  /* ---- RESPONSIVE ---- */
-  @media (max-width: 640px) {
-    section { padding: 1.5rem; }
-    h1 { font-size: 1.6rem; }
-    .controls { flex-direction: column; }
-    nav .nav-links a { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
-  }
+.btn-accent:hover { background: #6d28d9; }
 
-  /* ---- MISC ---- */
-  .katex-display { margin: 0.5rem 0; }
-  .highlight { background: linear-gradient(120deg, #fef08a 0%, #fde68a 100%); padding: 0 4px; border-radius: 3px; }
-  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-  a { color: var(--primary); }
-  .text-center { text-align: center; }
-  .mt-1 { margin-top: 1rem; }
-  .mb-1 { margin-bottom: 1rem; }
+/* ---- COLLAPSIBLE ---- */
+
+/* ---- QUIZ ---- */
+
+/* ---- PROGRESS ---- */
+
+/* ---- PLOT ---- */
+
+/* ---- RESPONSIVE ---- */
+
+/* ---- MISC ---- */
+
+.text-center { text-align: center; }
+
+.mt-1 { margin-top: 1rem; }
+
+.mb-1 { margin-bottom: 1rem; }
 </style>
+<script src="course.js"></script>
 </head>
 <body>
 
@@ -936,22 +775,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateNavHighlight();
 });
 
-function toggleCollapsible(btn) {
-  btn.classList.toggle('open');
-  const content = btn.nextElementSibling;
-  content.classList.toggle('open');
-  if (content.classList.contains('open')) {
-    renderMathInElement(content, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '\\(', right: '\\)', display: false},
-        {left: '$', right: '$', display: false}
-      ],
-      throwOnError: false
-    });
-  }
-}
-
 function updateNavHighlight() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('nav .nav-links a');
@@ -1046,19 +869,6 @@ function checkChoice(problemNum, btn, isCorrect) {
 </script>
 
     <script>
-        // Toggle for Practice Problems
-        function togglePractice(header) {
-            var content = header.nextElementSibling;
-            var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('open')) {
-                content.classList.remove('open');
-                if (icon) icon.textContent = '▼';
-            } else {
-                content.classList.add('open');
-                if (icon) icon.textContent = '▲';
-            }
-        }
-
     </script>
 </body>
 </html>

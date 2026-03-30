@@ -7,97 +7,74 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary: #2563eb; --primary-light: #dbeafe;
-            --accent: #7c3aed; --accent-light: #ede9fe;
-            --success: #059669; --success-light: #d1fae5;
-            --warning: #d97706; --warning-light: #fef3c7;
-            --danger: #dc2626; --danger-light: #fee2e2;
-            --bg: #f8fafc; --card: #ffffff;
-            --text: #1e293b; --text-muted: #64748b;
-            --border: #e2e8f0; --radius: 12px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; }
-        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; height: 60px; box-shadow: var(--shadow); }
-        nav .logo { font-weight: 700; font-size: 1.15rem; color: var(--primary); margin-right: 2rem; white-space: nowrap; }
-        nav .nav-links { display: flex; gap: 0.25rem; overflow-x: auto; }
-        nav .nav-links a { text-decoration: none; color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.88rem; font-weight: 500; white-space: nowrap; transition: all 0.2s; }
-        nav .nav-links a:hover, nav .nav-links a.active { background: var(--primary-light); color: var(--primary); }
-        .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
-        section { background: var(--card); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
-        h2 { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
-        h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
-        p { margin-bottom: 1rem; }
-        .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
-        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box { border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; border-left: 5px solid; }
-        .definition-box { background: var(--primary-light); border-color: var(--primary); }
-        .theorem-box { background: var(--accent-light); border-color: var(--accent); }
-        .example-box { background: var(--success-light); border-color: var(--success); }
-        .warning-box { background: var(--warning-light); border-color: var(--warning); }
-        .tip-box { background: #f0f9ff; border-color: #0ea5e9; }
-        .box-label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
-        .definition-box .box-label { color: var(--primary); }
-        .theorem-box .box-label { color: var(--accent); }
-        .example-box .box-label { color: var(--success); }
-        .warning-box .box-label { color: var(--warning); }
-        .tip-box .box-label { color: #0ea5e9; }
-        .math-display { background: #f1f5f9; border-radius: 8px; padding: 1.2rem; text-align: center; margin: 1rem 0; font-size: 1.15em; overflow-x: auto; }
-        .katex-display { margin: 0.5rem 0; }
+/* Page-specific styles */
+/* Learning objectives box */
 
-        /* Learning objectives box */
-        .objectives-box { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border-radius: var(--radius); padding: 2rem; margin: 1.5rem 0; border-left: 5px solid var(--primary); }
-        .objectives-box h3 { color: var(--primary); margin-top: 0; }
-        .objectives-box ul { list-style: none; padding: 0; }
-        .objectives-box li { padding: 0.5rem 0 0.5rem 1.8rem; position: relative; }
-        .objectives-box li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+.objectives-box { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border-radius: var(--radius); padding: 2rem; margin: 1.5rem 0; border-left: 5px solid var(--primary); }
 
-        /* Islamic verse box */
-        .islamic-box { background: linear-gradient(135deg, #fef3c7, #fcd34d); border-radius: var(--radius); padding: 2rem; margin: 2rem 0; border: 2px solid #f59e0b; text-align: center; }
-        .islamic-box .arabic-text { font-size: 1.3rem; line-height: 2; color: #b45309; margin-bottom: 1rem; font-weight: 500; }
-        .islamic-box .translation { font-size: 0.95rem; color: #92400e; font-style: italic; margin-bottom: 0.5rem; }
-        .islamic-box .source { font-size: 0.85rem; color: #b45309; }
+.objectives-box h3 { color: var(--primary); margin-top: 0; }
 
-        /* Quote box */
-        .quote-box { background: #f0f9ff; border-left: 5px solid #0ea5e9; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 8px; font-size: 1rem; font-style: italic; color: #0c4a6e; }
-        .quote-author { text-align: right; font-weight: 600; margin-top: 1rem; color: #0369a1; }
+.objectives-box ul { list-style: none; padding: 0; }
 
-        /* Comparison table */
-        .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-        .comparison-table th { background: var(--primary); color: white; padding: 1rem; text-align: left; font-weight: 600; }
-        .comparison-table td { padding: 1rem; border-bottom: 1px solid var(--border); }
-        .comparison-table tr:nth-child(even) { background: #f8fafc; }
+.objectives-box li { padding: 0.5rem 0 0.5rem 1.8rem; position: relative; }
 
-        /* Roadmap cards */
-        .roadmap-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
-        .roadmap-card { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.3s; cursor: pointer; text-decoration: none; }
-        .roadmap-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
-        .roadmap-card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem; }
-        .roadmap-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0; }
+.objectives-box li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
 
-        /* Flowchart */
-        .flowchart { background: #f8fafc; padding: 2rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; }
-        .flow-item { background: var(--primary); color: white; padding: 1rem 1.5rem; border-radius: 8px; margin: 0.5rem 0; display: inline-block; font-weight: 600; }
-        .flow-arrow { font-size: 1.5rem; color: var(--primary); margin: 0.5rem 0; }
+/* Islamic verse box */
 
-        /* Split columns */
-        .split-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1.5rem 0; }
-        .split-columns h3 { margin-top: 0; }
+.islamic-box { background: linear-gradient(135deg, #fef3c7, #fcd34d); border-radius: var(--radius); padding: 2rem; margin: 2rem 0; border: 2px solid #f59e0b; text-align: center; }
 
-        @media (max-width: 640px) {
-            section { padding: 1.5rem; }
-            h1 { font-size: 1.6rem; }
-            h2 { font-size: 1.3rem; }
-            .roadmap-container { grid-template-columns: 1fr; }
-            .split-columns { grid-template-columns: 1fr; }
-            .comparison-table { font-size: 0.9rem; }
-            .comparison-table th, .comparison-table td { padding: 0.75rem; }
-        }
-    </style>
+.islamic-box .arabic-text { font-size: 1.3rem; line-height: 2; color: #b45309; margin-bottom: 1rem; font-weight: 500; }
+
+.islamic-box .translation { font-size: 0.95rem; color: #92400e; font-style: italic; margin-bottom: 0.5rem; }
+
+.islamic-box .source { font-size: 0.85rem; color: #b45309; }
+
+/* Quote box */
+
+.quote-box { background: #f0f9ff; border-left: 5px solid #0ea5e9; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 8px; font-size: 1rem; font-style: italic; color: #0c4a6e; }
+
+.quote-author { text-align: right; font-weight: 600; margin-top: 1rem; color: #0369a1; }
+
+/* Comparison table */
+
+.comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+
+.comparison-table th { background: var(--primary); color: white; padding: 1rem; text-align: left; font-weight: 600; }
+
+.comparison-table td { padding: 1rem; border-bottom: 1px solid var(--border); }
+
+.comparison-table tr:nth-child(even) { background: #f8fafc; }
+
+/* Roadmap cards */
+
+.roadmap-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+
+.roadmap-card { background: linear-gradient(135deg, var(--primary-light), #e0e7ff); border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.3s; cursor: pointer; text-decoration: none; }
+
+.roadmap-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+
+.roadmap-card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem; }
+
+.roadmap-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0; }
+
+/* Flowchart */
+
+.flowchart { background: #f8fafc; padding: 2rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; }
+
+.flow-item { background: var(--primary); color: white; padding: 1rem 1.5rem; border-radius: 8px; margin: 0.5rem 0; display: inline-block; font-weight: 600; }
+
+.flow-arrow { font-size: 1.5rem; color: var(--primary); margin: 0.5rem 0; }
+
+/* Split columns */
+
+.split-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1.5rem 0; }
+
+.split-columns h3 { margin-top: 0; }
+</style>
+<script src="course.js"></script>
 </head>
 <body>
     <nav>
@@ -584,17 +561,7 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: "$$", right: "$$", display: true},
-                    {left: "$", right: "$", display: false},
-                    {left: "\\(", right: "\\)", display: false},
-                    {left: "\\[", right: "\\]", display: true}
-                ],
-                throwOnError: false
-            });
-        });
+
     </script>
 </body>
 </html>

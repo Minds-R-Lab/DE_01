@@ -5,123 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math 4: Bernoulli Equations | Dr. Mohamed Mabrok</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary: #2563eb;
-            --accent: #7c3aed;
-            --success: #059669;
-            --warning: #d97706;
-            --danger: #dc2626;
-            --light-blue: #dbeafe;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9f0f7 100%);
-            color: #1f2937;
-            line-height: 1.6;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #e2e8f0;
-            z-index: 1000;
-            padding: 0 2rem;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        nav .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav h1 {
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-right: 2rem;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #6b7280;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        nav a:hover {
-            background: var(--light-blue);
-            color: var(--primary);
-        }
-
-        nav a.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        main {
+/* Page-specific styles */
+main {
             max-width: 1100px;
             margin: 80px auto 2rem;
             padding: 0 1.5rem;
         }
 
-        section {
-            scroll-margin-top: 70px;
-            margin-bottom: 3rem;
-        }
-
-        h1, h2, h3 {
-            color: var(--primary);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 0.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-top: 2rem;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            color: var(--accent);
-        }
-
-        p {
-            margin: 1rem 0;
-        }
-
-        .card {
+.card {
             background: white;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
@@ -130,39 +23,7 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
-            padding: 1.25rem 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border-left: 5px solid;
-        }
-
-        .definition-box {
-            background: #eff6ff;
-            border-left-color: var(--primary);
-        }
-
-        .theorem-box {
-            background: #faf5ff;
-            border-left-color: var(--accent);
-        }
-
-        .example-box {
-            background: #f0fdf4;
-            border-left-color: var(--success);
-        }
-
-        .warning-box {
-            background: #fffbeb;
-            border-left-color: var(--warning);
-        }
-
-        .tip-box {
-            background: #ecf7f9;
-            border-left-color: #0891b2;
-        }
-
-        .equation {
+.equation {
             background: #f9fafb;
             padding: 1rem;
             border-radius: 8px;
@@ -172,47 +33,19 @@
             text-align: center;
         }
 
-        .collapsible {
-            background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 100%);
-            border: 1px solid #d4d4ff;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s;
-        }
-
-        .collapsible:hover {
-            background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-        }
-
-        .collapsible.active {
-            background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
-        }
-
-        .collapse-content {
+.collapse-content {
             display: none;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
 
-        .collapse-content.active {
+.collapse-content.active {
             display: block;
             max-height: 2000px;
         }
 
-        .collapsible span {
-            font-size: 1.2rem;
-        }
-
-        .objective {
+.objective {
             background: white;
             padding: 0.75rem 1rem;
             border-left: 3px solid var(--success);
@@ -220,7 +53,7 @@
             border-radius: 4px;
         }
 
-        .step-box {
+.step-box {
             background: white;
             padding: 1rem;
             border-radius: 8px;
@@ -228,7 +61,7 @@
             margin: 1rem 0;
         }
 
-        .step-number {
+.step-number {
             display: inline-block;
             background: var(--accent);
             color: white;
@@ -241,7 +74,7 @@
             margin-right: 0.75rem;
         }
 
-        .controls {
+.controls {
             background: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -249,20 +82,18 @@
             margin: 1.5rem 0;
         }
 
-        .control-group {
-            margin: 1rem 0;
-        }
-
-        label {
+label {
             display: block;
             font-weight: 500;
             margin-bottom: 0.5rem;
             color: #374151;
         }
 
-        input[type="text"],
-        input[type="number"],
-        select {
+input[type="text"],
+
+input[type="number"],
+
+select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #d1d5db;
@@ -272,21 +103,23 @@
             transition: all 0.2s;
         }
 
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        select:focus {
+input[type="text"]:focus,
+
+input[type="number"]:focus,
+
+select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        input[type="range"] {
+input[type="range"] {
             width: 100%;
             height: 6px;
             cursor: pointer;
         }
 
-        .slider-value {
+.slider-value {
             display: inline-block;
             background: var(--primary);
             color: white;
@@ -297,7 +130,7 @@
             margin-left: 0.5rem;
         }
 
-        button {
+button {
             background: var(--primary);
             color: white;
             border: none;
@@ -309,173 +142,34 @@
             font-size: 0.95rem;
         }
 
-        button:hover {
+button:hover {
             background: #1d4ed8;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        button:active {
+button:active {
             transform: translateY(0);
         }
 
-        .plot-container {
-            width: 100%;
-            height: 500px;
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 1.5rem 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .quiz-container {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .quiz-question {
-            margin: 2rem 0;
-        }
-
-        .quiz-question h4 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .quiz-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .quiz-option {
-            padding: 0.75rem 1rem;
-            border: 2px solid #d1d5db;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #1e293b;
-        }
-        .quiz-option .katex { color: #1e293b; }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-            background: var(--light-blue);
-        }
-
-        .quiz-option.selected {
-            border-color: var(--primary);
-            background: var(--light-blue);
-        }
-
-        .quiz-option.correct {
-            border-color: var(--success);
-            background: #f0fdf4;
-        }
-
-        .quiz-option.incorrect {
-            border-color: var(--danger);
-            background: #fef2f2;
-        }
-
-        .quiz-feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 6px;
-            display: none;
-        }
-
-        .quiz-feedback.show {
-            display: block;
-        }
-
-        .quiz-feedback.correct {
-            background: #f0fdf4;
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-
-        .quiz-feedback.incorrect {
-            background: #fef2f2;
-            border: 1px solid var(--danger);
-            color: var(--danger);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e5e7eb;
-            border-radius: 4px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success), var(--primary));
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .reference-card {
+.reference-card {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
             margin: 1.5rem 0;
         }
 
-        .ref-item {
+.ref-item {
             background: white;
             padding: 1rem;
             border-radius: 8px;
             border-left: 4px solid var(--primary);
         }
 
-        .ref-item strong {
+.ref-item strong {
             color: var(--primary);
         }
-
-        @media (max-width: 768px) {
-            nav {
-                padding: 0 1rem;
-            }
-
-            nav h1 {
-                font-size: 1rem;
-                margin-right: 1rem;
-            }
-
-            nav a {
-                padding: 0.4rem 0.75rem;
-                font-size: 0.85rem;
-            }
-
-            main {
-                margin: 70px auto 1rem;
-                padding: 0 1rem;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            .reference-card {
-                grid-template-columns: 1fr;
-            }
-
-            .plot-container {
-                height: 400px;
-            }
-        }
-    </style>
+</style>
 </head>
 <body>
     <nav>
@@ -1240,37 +934,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <script src="course.js"></script>
 
     <script>
-        // Safe Math Expression Evaluator
-        function safeEval(expr, x, y) {
-            try {
-                let safe = expr.replace(/[^0-9+\-*/(). xy]/g, '');
-                safe = safe.replace(/\^/g, '**');
-                return Function('"use strict"; return (' + safe + ')')
-                    (x, y);
-            } catch (e) {
-                return NaN;
-            }
-        }
-
-        // RK4 Solver
-        function rk4(f, x0, y0, xf, h = 0.01) {
-            let xs = [x0], ys = [y0];
-            let x = x0, y = y0;
-            while ((xf > x0 && x < xf) || (xf < x0 && x > xf)) {
-                let k1 = f(x, y);
-                let k2 = f(x + h/2, y + k1*h/2);
-                let k3 = f(x + h/2, y + k2*h/2);
-                let k4 = f(x + h, y + k3*h);
-                y += (h/6) * (k1 + 2*k2 + 2*k3 + k4);
-                x += h;
-                xs.push(x);
-                ys.push(y);
-            }
-            return [xs, ys];
-        }
-
         // Slope Field and Tracing
         function drawSlopeField() {
             let preset = document.getElementById('preset-select').value;
@@ -1402,12 +1068,6 @@
             document.getElementById('analysis-text').innerHTML = eqText;
         }
 
-        // UI Helpers
-        function toggleCollapse(el) {
-            el.classList.toggle('active');
-            el.nextElementSibling.classList.toggle('active');
-        }
-
         function loadPreset() {
             if (document.getElementById('preset-select').value === 'custom') {
                 document.getElementById('custom-input').style.display = 'block';
@@ -1470,15 +1130,7 @@
 
         // KaTeX Rendering
         document.addEventListener('DOMContentLoaded', function() {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '\\[', right: '\\]', display: true},
-                    {left: '$', right: '$', display: false},
-                    {left: '\\(', right: '\\)', display: false}
-                ]
-            });
-            drawSlopeField();
+drawSlopeField();
             updateExplorer();
         });
     </script>
@@ -1487,19 +1139,6 @@
         Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
     </footer>
     <script>
-        // Toggle for Practice Problems
-        function togglePractice(header) {
-            var content = header.nextElementSibling;
-            var icon = header.querySelector('.toggle-icon');
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
-                if (icon) icon.textContent = '▼';
-            } else {
-                content.classList.add('active');
-                if (icon) icon.textContent = '▲';
-            }
-        }
-
     </script>
 </body>
 </html>
