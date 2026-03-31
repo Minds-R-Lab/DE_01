@@ -899,6 +899,711 @@ const PROBLEMS = [
  correct:1,
  explanation:"RK4 evaluates the slope $f(x,y)$ at the start, two midpoints, and the end of the interval, then combines them with weights $1:2:2:1$ (like Simpson's rule) for high accuracy."
 },
+
+
+// ═══════════════ EXPANDED POOL: CHAPTER 1 ═══════════════
+
+// --- Separable IVPs ---
+{ch:1, topic:"Separable Equations", type:"mc",
+ statement:"Solve the IVP: $\\frac{dy}{dx} = \\frac{2x}{y}$ with $y(0) = 3$",
+ choices:["$$y = \\sqrt{2x^2 + 9}$$", "$$y = \\sqrt{x^2 + 9}$$", "$$y = 2\\sqrt{x^2 + 9}$$", "$$y = \\sqrt{4x^2 + 9}$$"],
+ correct:0,
+ explanation:"Separating: $y\\,dy = 2x\\,dx$. Integrating: $\\frac{y^2}{2} = x^2 + C$. Using $y(0)=3$: $C = \\frac{9}{2}$, so $y^2 = 2x^2 + 9$."
+},
+{ch:1, topic:"Separable Equations", type:"free",
+ statement:"A bacterial culture has population $P(t)$ satisfying $\\frac{dP}{dt} = 0.3P$. If $P(0) = 1000$, find $P(2)$.",
+ solution:[
+   {title:"Step 1: Separate variables", text:"$$\\frac{dP}{P} = 0.3\\,dt$$"},
+   {title:"Step 2: Integrate both sides", text:"$$\\ln|P| = 0.3t + C$$"},
+   {title:"Step 3: Apply initial condition", text:"$$P(0) = 1000 \\Rightarrow C = \\ln(1000)$$"},
+   {title:"Step 4: Evaluate at t=2", text:"$$P(2) = 1000e^{0.6}$$"},
+ ],
+ answer:"$$P(2) = 1000e^{0.6} \\approx 1822$$"
+},
+{ch:1, topic:"Separable Equations", type:"mc",
+ statement:"For $\\frac{dy}{dx} = y^{2/3}$, $y(0) = 0$, which statement is true?",
+ choices:[
+   "Multiple solutions exist because $\\frac{\\partial f}{\\partial y}$ is discontinuous at $y=0$",
+   "Unique solution exists by Picard's theorem",
+   "No solution exists",
+   "The solution is $y = 0$ for all $x$"
+ ],
+ correct:0,
+ explanation:"Here $f(x,y)=y^{2/3}$. While $f$ is continuous, $\\frac{\\partial f}{\\partial y}=\\frac{2}{3}y^{-1/3}$ is discontinuous at $y=0$. Both $y=0$ and $y=(x/3)^3$ satisfy the IVP."
+},
+
+// --- Linear Applications ---
+{ch:1, topic:"Linear First-Order", type:"mc",
+ statement:"Solve: $y' + 3y = 6$ with $y(0) = 0$",
+ choices:["$$y = 2(1 - e^{-3x})$$", "$$y = 2e^{-3x}$$", "$$y = 6(1 - e^{-3x})$$", "$$y = 2 + e^{-3x}$$"],
+ correct:0,
+ explanation:"Integrating factor: $\\mu = e^{3x}$. Then $(e^{3x}y)' = 6e^{3x}$, so $e^{3x}y = 2e^{3x} + C$. With $y(0)=0$: $C=-2$. Thus $y = 2 - 2e^{-3x}$."
+},
+{ch:1, topic:"Linear First-Order", type:"free",
+ statement:"A tank contains 100 L of water with 5 kg of salt. Brine enters at 2 L/min with concentration 0.5 kg/L, and the mixture exits at 2 L/min. Find the amount of salt $S(t)$ at time $t$.",
+ solution:[
+   {title:"Step 1: Set up the DE", text:"$$\\frac{dS}{dt} = 2(0.5) - 2\\frac{S}{100} = 1 - 0.02S$$"},
+   {title:"Step 2: Standard form", text:"$$\\frac{dS}{dt} + 0.02S = 1$$"},
+   {title:"Step 3: Integrating factor", text:"$$\\mu(t) = e^{0.02t}$$"},
+   {title:"Step 4: Solve", text:"$$(e^{0.02t}S)' = e^{0.02t} \\Rightarrow e^{0.02t}S = 50e^{0.02t} + C$$"},
+   {title:"Step 5: Apply IC", text:"$$S(0) = 5 \\Rightarrow C = -45$$"},
+ ],
+ answer:"$$S(t) = 50 - 45e^{-0.02t}$$"
+},
+{ch:1, topic:"Linear First-Order", type:"mc",
+ statement:"For $\\frac{dy}{dx} = xy$, what is the isocline for slope $m = 1$?",
+ choices:["$$y = 1/x$$", "$$y = x$$", "$$x = 1$$", "$$y = 1$$"],
+ correct:0,
+ explanation:"Isoclines are curves where the slope is constant. Setting $xy = 1$ gives $y = 1/x$ as the isocline for slope 1."
+},
+
+// --- More Bernoulli ---
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve: $y' + y = y^3$",
+ solution:[
+   {title:"Step 1: Bernoulli with n=3", text:"Divide by $y^3$: $y^{-3}y' + y^{-2} = 1$"},
+   {title:"Step 2: Substitute $v = y^{-2}$", text:"$v' = -2y^{-3}y'$, so $-\\frac{v'}{2} + v = 1$"},
+   {title:"Step 3: Rewrite", text:"$v' - 2v = -2$"},
+   {title:"Step 4: Integrating factor", text:"$\\mu = e^{-2x}$, so $(e^{-2x}v)' = -2e^{-2x}$"},
+   {title:"Step 5: Integrate", text:"$e^{-2x}v = e^{-2x} + C$, so $v = 1 + Ce^{2x}$"},
+ ],
+ answer:"$$y^{-2} = 1 + Ce^{2x}, \\quad \\text{i.e.} \\quad y = \\pm\\frac{1}{\\sqrt{1 + Ce^{2x}}}$$"
+},
+
+// --- More Exact ---
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve the exact equation: $(2xy + 1)dx + (x^2 + 4y)dy = 0$",
+ solution:[
+   {title:"Step 1: Verify exactness", text:"$M_y = 2x = N_x$ ✓"},
+   {title:"Step 2: Find potential function", text:"$F = \\int(2xy+1)dx = x^2y + x + g(y)$"},
+   {title:"Step 3: Find g(y)", text:"$F_y = x^2 + g'(y) = x^2 + 4y \\Rightarrow g'(y) = 4y$"},
+   {title:"Step 4: Integrate", text:"$g(y) = 2y^2$"},
+ ],
+ answer:"$$x^2y + x + 2y^2 = C$$"
+},
+{ch:1, topic:"Exact Equations", type:"mc",
+ statement:"Which equation is exact?",
+ choices:[
+   "$(3x^2 + 2y)dx + (2x + y)dy = 0$",
+   "$(2x + y)dx + (x + 3y)dy = 0$",
+   "$(x + y)dx + (x - y)dy = 0$",
+   "$(x^2 + y)dx + (x + y^2)dy = 0$"
+ ],
+ correct:0,
+ explanation:"For $(3x^2+2y)dx+(2x+y)dy=0$: $M_y = 2$ and $N_x = 2$. Since $M_y = N_x$, the equation is exact."
+},
+
+// --- Newton's Cooling ---
+{ch:1, topic:"Separable Equations", type:"free",
+ statement:"Coffee at 90°C is placed in a 20°C room. After 10 min it is 70°C. When will it reach 40°C?",
+ solution:[
+   {title:"Step 1: Newton's law", text:"$\\frac{dT}{dt} = k(T-20)$, so $T(t) = 20 + Ce^{kt}$"},
+   {title:"Step 2: Apply $T(0)=90$", text:"$C = 70$, so $T(t) = 20 + 70e^{kt}$"},
+   {title:"Step 3: Use $T(10)=70$", text:"$70 = 20 + 70e^{10k} \\Rightarrow e^{10k} = 5/7$"},
+   {title:"Step 4: Find time for 40°C", text:"$40 = 20 + 70e^{kt} \\Rightarrow e^{kt} = 2/7$"},
+   {title:"Step 5: Solve", text:"$t = \\frac{10\\ln(2/7)}{\\ln(5/7)} \\approx 37.4$ min"},
+ ],
+ answer:"$$t = \\frac{10\\ln(2/7)}{\\ln(5/7)} \\approx 37.4 \\text{ minutes}$$"
+},
+
+// --- Radioactive Decay ---
+{ch:1, topic:"Separable Equations", type:"mc",
+ statement:"A substance has half-life 1600 years. Starting with 10 mg, how much remains after 3200 years?",
+ choices:["$$2.5 \\text{ mg}$$", "$$5 \\text{ mg}$$", "$$1.25 \\text{ mg}$$", "$$0 \\text{ mg}$$"],
+ correct:0,
+ explanation:"After 3200 years = 2 half-lives: $10 \\cdot (1/2)^2 = 10/4 = 2.5$ mg."
+},
+
+// --- Integrating Factors ---
+{ch:1, topic:"Integrating Factors", type:"free",
+ statement:"Find an integrating factor $\\mu(y)$ for $(y + x^3)dx - xdy = 0$ and solve.",
+ solution:[
+   {title:"Step 1: Check exactness", text:"$M = y + x^3$, $N = -x$. $M_y = 1 \\neq N_x = -1$. Not exact."},
+   {title:"Step 2: Compute $(M_y - N_x)/N$", text:"$(1 - (-1))/(-x) = -2/x$. This depends only on $x$."},
+   {title:"Step 3: Integrating factor", text:"$\\mu(x) = e^{\\int -2/x\\,dx} = e^{-2\\ln|x|} = 1/x^2$"},
+   {title:"Step 4: Multiply through", text:"$\\frac{y+x^3}{x^2}dx - \\frac{1}{x}dy = 0$, i.e., $(yx^{-2}+x)dx - x^{-1}dy = 0$"},
+   {title:"Step 5: Solve exact equation", text:"$F = \\int -x^{-1}dy = -y/x + h(x)$, then $F_x = yx^{-2} + h'(x) = yx^{-2}+x$, so $h'(x)=x$, $h=x^2/2$"},
+ ],
+ answer:"$$-\\frac{y}{x} + \\frac{x^2}{2} = C, \\quad \\text{i.e.,} \\quad y = \\frac{x^3}{2} + Cx$$"
+},
+
+// ═══════════════ EXPANDED POOL: CHAPTER 2 ═══════════════
+
+// --- More Homogeneous ---
+{ch:2, topic:"Homogeneous (Const. Coeff.)", type:"mc",
+ statement:"Solve: $y'' + 4y' + 13y = 0$",
+ choices:[
+   "$$y = e^{-2x}(C_1\\cos(3x) + C_2\\sin(3x))$$",
+   "$$y = e^{-4x}(C_1\\cos(x) + C_2\\sin(x))$$",
+   "$$y = e^{2x}(C_1\\cos(3x) + C_2\\sin(3x))$$",
+   "$$y = (C_1 + C_2x)e^{-2x}$$"
+ ],
+ correct:0,
+ explanation:"$r^2 + 4r + 13 = 0 \\Rightarrow r = \\frac{-4 \\pm \\sqrt{16-52}}{2} = -2 \\pm 3i$. Complex roots give $y = e^{-2x}(C_1\\cos(3x) + C_2\\sin(3x))$."
+},
+{ch:2, topic:"Homogeneous (Const. Coeff.)", type:"mc",
+ statement:"Solve: $y'' - 6y' + 9y = 0$",
+ choices:[
+   "$$y = (C_1 + C_2x)e^{3x}$$",
+   "$$y = (C_1 + C_2x)e^{-3x}$$",
+   "$$y = C_1e^{3x} + C_2e^{-3x}$$",
+   "$$y = e^{3x}(C_1\\cos x + C_2\\sin x)$$"
+ ],
+ correct:0,
+ explanation:"$r^2 - 6r + 9 = (r-3)^2 = 0$. Repeated root $r=3$, so $y = (C_1+C_2x)e^{3x}$."
+},
+{ch:2, topic:"Homogeneous (Const. Coeff.)", type:"free",
+ statement:"Solve: $y'' + 2y' + 5y = 0$ with $y(0)=1$, $y'(0)=0$",
+ solution:[
+   {title:"Step 1: Characteristic equation", text:"$r^2+2r+5=0 \\Rightarrow r = -1 \\pm 2i$"},
+   {title:"Step 2: General solution", text:"$y = e^{-x}(C_1\\cos(2x)+C_2\\sin(2x))$"},
+   {title:"Step 3: Apply $y(0)=1$", text:"$C_1 = 1$"},
+   {title:"Step 4: Derivative", text:"$y' = -e^{-x}(\\cos 2x + C_2\\sin 2x) + e^{-x}(-2\\sin 2x + 2C_2\\cos 2x)$"},
+   {title:"Step 5: Apply $y'(0)=0$", text:"$0 = -1 + 2C_2 \\Rightarrow C_2 = 1/2$"},
+ ],
+ answer:"$$y = e^{-x}\\left(\\cos(2x) + \\frac{1}{2}\\sin(2x)\\right)$$"
+},
+
+// --- More Undetermined Coefficients ---
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y''-3y'+2y = 4x^2+1$, what form should $y_p$ have?",
+ choices:[
+   "$$y_p = Ax^2+Bx+C$$",
+   "$$y_p = (Ax^2+Bx+C)x$$",
+   "$$y_p = Ae^x + Bxe^{2x}$$",
+   "$$y_p = A\\cos x + B\\sin x$$"
+ ],
+ correct:0,
+ explanation:"The RHS is a polynomial of degree 2. Since 0 is not a root of $r^2-3r+2=(r-1)(r-2)=0$, we try $y_p = Ax^2+Bx+C$."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"free",
+ statement:"Solve: $y'' - y = 3e^{2x}$",
+ solution:[
+   {title:"Step 1: Homogeneous", text:"$r^2-1=0 \\Rightarrow r=\\pm 1$, so $y_h = C_1e^x+C_2e^{-x}$"},
+   {title:"Step 2: Trial $y_p = Ae^{2x}$", text:"No resonance since $r=2$ is not a root."},
+   {title:"Step 3: Substitute", text:"$4Ae^{2x}-Ae^{2x}=3e^{2x} \\Rightarrow 3A=3 \\Rightarrow A=1$"},
+ ],
+ answer:"$$y = C_1e^x + C_2e^{-x} + e^{2x}$$"
+},
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y''+4y = 5\\sin(2x)$, what form should $y_p$ have?",
+ choices:[
+   "$$y_p = x(A\\sin 2x + B\\cos 2x)$$",
+   "$$y_p = A\\sin 2x + B\\cos 2x$$",
+   "$$y_p = A\\sin 2x$$",
+   "$$y_p = x^2(A\\sin 2x + B\\cos 2x)$$"
+ ],
+ correct:0,
+ explanation:"The homogeneous solution includes $\\sin 2x$ and $\\cos 2x$ (roots $r=\\pm 2i$). Since the RHS $5\\sin 2x$ is a solution to the homogeneous equation (resonance), we multiply by $x$."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y''-4y = xe^{2x}$, the form of $y_p$ should be:",
+ choices:[
+   "$$y_p = (Ax^2 + Bx)e^{2x}$$",
+   "$$y_p = (Ax+B)e^{2x}$$",
+   "$$y_p = (Ax+B)xe^{2x}$$",
+   "$$y_p = (Ax^3+Bx^2)e^{2x}$$"
+ ],
+ correct:0,
+ explanation:"$r^2-4=(r-2)(r+2)=0$, so $e^{2x}$ is a homogeneous solution. The standard form $(Ax+B)e^{2x}$ must be multiplied by $x$: $y_p=(Ax^2+Bx)e^{2x}$."
+},
+
+// --- More Variation of Parameters ---
+{ch:2, topic:"Variation of Parameters", type:"mc",
+ statement:"For $y''-y = e^x$, the Wronskian of $y_1=e^x, y_2=e^{-x}$ is:",
+ choices:["$$W = -2$$", "$$W = 2$$", "$$W = 1$$", "$$W = -1$$"],
+ correct:0,
+ explanation:"$W = e^x(-e^{-x}) - e^x(e^{-x}) = -1-1 = -2$."
+},
+{ch:2, topic:"Variation of Parameters", type:"free",
+ statement:"Find the particular solution of $y''+y = \\sec(x)$ using variation of parameters.",
+ solution:[
+   {title:"Step 1: $y_h = C_1\\cos x + C_2\\sin x$", text:"$y_1 = \\cos x$, $y_2 = \\sin x$"},
+   {title:"Step 2: Wronskian", text:"$W = \\cos x \\cdot \\cos x - \\sin x \\cdot (-\\sin x) = 1$"},
+   {title:"Step 3: $u_1'$", text:"$u_1' = -\\frac{y_2 g(x)}{W} = -\\frac{\\sin x \\sec x}{1} = -\\tan x$"},
+   {title:"Step 4: $u_1$", text:"$u_1 = \\int -\\tan x\\,dx = \\ln|\\cos x|$"},
+   {title:"Step 5: $u_2'$", text:"$u_2' = \\frac{y_1 g(x)}{W} = \\frac{\\cos x \\sec x}{1} = 1$"},
+   {title:"Step 6: $u_2$", text:"$u_2 = x$"},
+ ],
+ answer:"$$y_p = \\cos(x)\\ln|\\cos x| + x\\sin(x)$$"
+},
+
+// --- More Euler ---
+{ch:2, topic:"Euler Equations", type:"mc",
+ statement:"Solve: $x^2y'' - 3xy' + 4y = 0$ for $x > 0$",
+ choices:[
+   "$$y = (C_1 + C_2\\ln x)x^2$$",
+   "$$y = C_1x^2 + C_2x^{-2}$$",
+   "$$y = C_1x^2 + C_2x^3$$",
+   "$$y = C_1x^2 + C_2x^2\\ln x$$"
+ ],
+ correct:0,
+ explanation:"Indicial: $r(r-1)-3r+4 = r^2-4r+4 = (r-2)^2=0$. Repeated root $r=2$, so $y = (C_1+C_2\\ln x)x^2$."
+},
+
+// --- Superposition ---
+{ch:2, topic:"Superposition Principle", type:"mc",
+ statement:"If $y_1$ solves $Ly = f_1(x)$ and $y_2$ solves $Ly = f_2(x)$, then $3y_1 + 2y_2$ solves:",
+ choices:[
+   "$$Ly = 3f_1(x) + 2f_2(x)$$",
+   "$$Ly = f_1(x) + f_2(x)$$",
+   "$$Ly = f_1(x)f_2(x)$$",
+   "The homogeneous equation only"
+ ],
+ correct:0,
+ explanation:"By linearity: $L[3y_1+2y_2] = 3L[y_1]+2L[y_2] = 3f_1(x)+2f_2(x)$."
+},
+
+// --- Resonance ---
+{ch:2, topic:"Forced Oscillations", type:"free",
+ statement:"Solve: $y''+4y = 3\\cos(2x)$ with $y(0)=0$, $y'(0)=1$",
+ solution:[
+   {title:"Step 1: Homogeneous", text:"$y_h = C_1\\cos 2x + C_2\\sin 2x$"},
+   {title:"Step 2: Resonance trial", text:"$y_p = x(A\\cos 2x + B\\sin 2x)$"},
+   {title:"Step 3: Substitute", text:"$y_p'' + 4y_p = -4A\\sin 2x + 4B\\cos 2x = 3\\cos 2x$"},
+   {title:"Step 4: Match coefficients", text:"$4B = 3 \\Rightarrow B=3/4$, $-4A=0 \\Rightarrow A=0$"},
+   {title:"Step 5: General solution", text:"$y = C_1\\cos 2x + C_2\\sin 2x + \\frac{3x}{4}\\sin 2x$"},
+   {title:"Step 6: Apply ICs", text:"$y(0)=0 \\Rightarrow C_1=0$. $y'(0)=2C_2+0=1 \\Rightarrow C_2=1/2$"},
+ ],
+ answer:"$$y = \\frac{1}{2}\\sin(2x) + \\frac{3x}{4}\\sin(2x)$$"
+},
+
+// --- Mass-Spring ---
+{ch:2, topic:"Mass-Spring Systems", type:"mc",
+ statement:"A 2 kg mass on a spring with $k=50$ N/m and damping $b=8$ N·s/m. The damped angular frequency is:",
+ choices:[
+   "$$\\omega_d = \\sqrt{21}$$",
+   "$$\\omega_d = 5$$",
+   "$$\\omega_d = 3$$",
+   "$$\\omega_d = \\sqrt{17}$$"
+ ],
+ correct:0,
+ explanation:"DE: $2y''+8y'+50y=0$, i.e., $y''+4y'+25y=0$. Roots: $r=-2\\pm\\sqrt{4-25}i = -2\\pm\\sqrt{21}i$. The damped frequency is $\\omega_d = \\sqrt{21}$."
+},
+
+// --- Non-homogeneous with trig product ---
+{ch:2, topic:"Undetermined Coefficients", type:"free",
+ statement:"Find $y_p$ for $y''+3y'+2y = \\sin x\\cos x$",
+ solution:[
+   {title:"Step 1: Simplify RHS", text:"$\\sin x\\cos x = \\frac{1}{2}\\sin 2x$"},
+   {title:"Step 2: Trial form", text:"$y_p = A\\sin 2x + B\\cos 2x$"},
+   {title:"Step 3: Compute $y_p''$", text:"$y_p'' = -4A\\sin 2x - 4B\\cos 2x$"},
+   {title:"Step 4: Substitute into DE", text:"$(-4A-6B+2A)\\sin 2x + (-4B+6A+2B)\\cos 2x = \\frac{1}{2}\\sin 2x$"},
+   {title:"Step 5: System", text:"$-2A-6B = 1/2$ and $6A-2B = 0 \\Rightarrow B = 3A$"},
+   {title:"Step 6: Solve", text:"$-2A-18A = 1/2 \\Rightarrow A = -1/40$, $B = -3/40$"},
+ ],
+ answer:"$$y_p = -\\frac{1}{40}\\sin(2x) - \\frac{3}{40}\\cos(2x)$$"
+},
+
+// ═══════════════ EXPANDED POOL: CHAPTER 3 ═══════════════
+
+// --- Basic Laplace Transforms ---
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"What is $\\mathcal{L}\\{5\\}$?",
+ choices:["$$\\frac{5}{s}$$", "$$\\frac{1}{s}$$", "$$5$$", "$$\\frac{5}{s^2}$$"],
+ correct:0,
+ explanation:"$\\mathcal{L}\\{5\\} = 5\\int_0^\\infty e^{-st}dt = \\frac{5}{s}$ for $s>0$."
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"Find $\\mathcal{L}\\{\\sin(4t)\\}$",
+ choices:["$$\\frac{4}{s^2+16}$$", "$$\\frac{s}{s^2+16}$$", "$$\\frac{4}{s^2-16}$$", "$$\\frac{16}{s^2+16}$$"],
+ correct:0,
+ explanation:"Using the standard formula: $\\mathcal{L}\\{\\sin(bt)\\} = \\frac{b}{s^2+b^2}$, so $\\mathcal{L}\\{\\sin 4t\\} = \\frac{4}{s^2+16}$."
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"Find $\\mathcal{L}\\{3e^{2t} - 2\\cos t\\}$",
+ choices:[
+   "$$\\frac{3}{s-2} - \\frac{2s}{s^2+1}$$",
+   "$$\\frac{3}{s-2} + \\frac{2s}{s^2+1}$$",
+   "$$\\frac{3}{s+2} - \\frac{2s}{s^2+1}$$",
+   "$$\\frac{3}{s-2} - \\frac{2}{s^2+1}$$"
+ ],
+ correct:0,
+ explanation:"By linearity: $3\\mathcal{L}\\{e^{2t}\\} - 2\\mathcal{L}\\{\\cos t\\} = \\frac{3}{s-2} - \\frac{2s}{s^2+1}$."
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"Find $\\mathcal{L}\\{t^3\\}$",
+ choices:["$$\\frac{6}{s^4}$$", "$$\\frac{3}{s^4}$$", "$$\\frac{6}{s^3}$$", "$$\\frac{1}{s^3}$$"],
+ correct:0,
+ explanation:"$\\mathcal{L}\\{t^n\\} = \\frac{n!}{s^{n+1}}$, so $\\mathcal{L}\\{t^3\\} = \\frac{3!}{s^4} = \\frac{6}{s^4}$."
+},
+
+// --- Inverse ---
+{ch:3, topic:"Inverse Laplace Transform", type:"mc",
+ statement:"Find $\\mathcal{L}^{-1}\\left\\{\\frac{1}{(s-1)^2}\\right\\}$",
+ choices:["$$te^t$$", "$$e^t$$", "$$te^{-t}$$", "$$t^2e^t$$"],
+ correct:0,
+ explanation:"Using $s$-shifting: $\\mathcal{L}^{-1}\\{1/s^2\\} = t$ and shifting by $a=1$: $\\mathcal{L}^{-1}\\{1/(s-1)^2\\} = te^t$."
+},
+{ch:3, topic:"Inverse Laplace Transform", type:"mc",
+ statement:"Decompose $\\frac{3s+2}{(s-1)(s+2)}$ into partial fractions:",
+ choices:[
+   "$$\\frac{5/3}{s-1} + \\frac{4/3}{s+2}$$",
+   "$$\\frac{5/3}{s-1} - \\frac{4/3}{s+2}$$",
+   "$$\\frac{1}{s-1} + \\frac{2}{s+2}$$",
+   "$$\\frac{4/3}{s-1} - \\frac{5/3}{s+2}$$"
+ ],
+ correct:0,
+ explanation:"$3s+2 = A(s+2)+B(s-1)$. At $s=1$: $5=3A$, $A=5/3$. At $s=-2$: $-4=-3B$, $B=4/3$."
+},
+
+// --- Solving IVPs ---
+{ch:3, topic:"Solving IVPs (Laplace)", type:"free",
+ statement:"Solve $y''+3y'+2y = 0$ with $y(0)=1$, $y'(0)=0$ using Laplace transforms.",
+ solution:[
+   {title:"Step 1: Transform", text:"$s^2Y - s - 0 + 3(sY-1) + 2Y = 0$"},
+   {title:"Step 2: Collect terms", text:"$(s^2+3s+2)Y = s+3$"},
+   {title:"Step 3: Factor", text:"$Y = \\frac{s+3}{(s+1)(s+2)}$"},
+   {title:"Step 4: Partial fractions", text:"$Y = \\frac{2}{s+1} - \\frac{1}{s+2}$"},
+   {title:"Step 5: Invert", text:"$y(t) = 2e^{-t} - e^{-2t}$"},
+ ],
+ answer:"$$y(t) = 2e^{-t} - e^{-2t}$$"
+},
+{ch:3, topic:"Solving IVPs (Laplace)", type:"free",
+ statement:"Solve $y'-2y = e^{2t}$ with $y(0)=1$ using Laplace transforms.",
+ solution:[
+   {title:"Step 1: Transform", text:"$sY - 1 - 2Y = \\frac{1}{s-2}$"},
+   {title:"Step 2: Solve for Y", text:"$(s-2)Y = 1 + \\frac{1}{s-2} = \\frac{(s-2)+1}{s-2} = \\frac{s-1}{s-2}$"},
+   {title:"Step 3: Simplify", text:"$Y = \\frac{s-1}{(s-2)^2} = \\frac{1}{s-2} + \\frac{1}{(s-2)^2}$"},
+   {title:"Step 4: Invert", text:"$y(t) = e^{2t} + te^{2t}$"},
+ ],
+ answer:"$$y(t) = (1+t)e^{2t}$$"
+},
+
+// --- Properties ---
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"Find $\\mathcal{L}\\{tf(t)\\}$ in terms of $F(s)$:",
+ choices:["$$-\\frac{dF}{ds}$$", "$$\\frac{dF}{ds}$$", "$$-F(s)$$", "$$sF(s)$$"],
+ correct:0,
+ explanation:"The differentiation property: $\\mathcal{L}\\{tf(t)\\} = -F'(s) = -\\frac{dF}{ds}$."
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"What is $\\mathcal{L}\\left\\{\\int_0^t f(\\tau)d\\tau\\right\\}$?",
+ choices:["$$\\frac{F(s)}{s}$$", "$$sF(s)$$", "$$F(s)$$", "$$\\frac{F'(s)}{s}$$"],
+ correct:0,
+ explanation:"Integration property: $\\mathcal{L}\\left\\{\\int_0^t f(\\tau)d\\tau\\right\\} = \\frac{F(s)}{s}$."
+},
+
+// --- Transfer Functions ---
+{ch:3, topic:"Transfer Functions", type:"mc",
+ statement:"For a system $y''+5y'+6y = f(t)$ with zero ICs, the transfer function $H(s)$ is:",
+ choices:[
+   "$$H(s) = \\frac{1}{(s+2)(s+3)}$$",
+   "$$H(s) = \\frac{s}{s^2+5s+6}$$",
+   "$$H(s) = \\frac{1}{s^2+5s}$$",
+   "$$H(s) = (s+2)(s+3)$$"
+ ],
+ correct:0,
+ explanation:"$H(s) = Y(s)/F(s) = 1/(s^2+5s+6) = 1/((s+2)(s+3))$."
+},
+
+// --- Convolution ---
+{ch:3, topic:"Step Functions & Convolution", type:"mc",
+ statement:"$\\mathcal{L}^{-1}\\{F(s)G(s)\\}$ equals:",
+ choices:[
+   "$$\\int_0^t f(\\tau)g(t-\\tau)d\\tau$$",
+   "$$f(t)g(t)$$",
+   "$$f(t) + g(t)$$",
+   "$$\\int_0^t f(t)g(t)dt$$"
+ ],
+ correct:0,
+ explanation:"The convolution theorem: $\\mathcal{L}^{-1}\\{F(s)G(s)\\} = (f*g)(t) = \\int_0^t f(\\tau)g(t-\\tau)d\\tau$."
+},
+
+// --- Step functions ---
+{ch:3, topic:"Step Functions & Convolution", type:"free",
+ statement:"Solve: $y''+4y = u(t-\\pi)$ with $y(0)=0$, $y'(0)=0$",
+ solution:[
+   {title:"Step 1: Transform", text:"$(s^2+4)Y = \\frac{e^{-\\pi s}}{s}$"},
+   {title:"Step 2: Solve for Y", text:"$Y = \\frac{e^{-\\pi s}}{s(s^2+4)}$"},
+   {title:"Step 3: Partial fractions", text:"$\\frac{1}{s(s^2+4)} = \\frac{1/4}{s} - \\frac{s/4}{s^2+4}$"},
+   {title:"Step 4: Apply shift", text:"$y(t) = u(t-\\pi)\\left[\\frac{1}{4} - \\frac{1}{4}\\cos 2(t-\\pi)\\right]$"},
+   {title:"Step 5: Simplify", text:"$\\cos 2(t-\\pi) = \\cos(2t-2\\pi) = \\cos 2t$"},
+ ],
+ answer:"$$y(t) = u(t-\\pi)\\cdot\\frac{1}{4}(1-\\cos 2t)$$"
+},
+
+// --- Periodic ---
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"For a periodic function $f(t)$ with period $T$, $\\mathcal{L}\\{f(t)\\}$ equals:",
+ choices:[
+   "$$\\frac{1}{1-e^{-sT}}\\int_0^T e^{-st}f(t)dt$$",
+   "$$\\frac{1}{1+e^{-sT}}\\int_0^T e^{-st}f(t)dt$$",
+   "$$\\int_0^T e^{-st}f(t)dt$$",
+   "$$\\frac{1}{sT}\\int_0^T e^{-st}f(t)dt$$"
+ ],
+ correct:0,
+ explanation:"The formula for periodic functions is $\\mathcal{L}\\{f(t)\\} = \\frac{1}{1-e^{-sT}}\\int_0^T e^{-st}f(t)dt$."
+},
+
+// ═══════════════ EXPANDED POOL: CHAPTER 4 ═══════════════
+
+// --- More Eigenvalues ---
+{ch:4, topic:"Eigenvalues & Eigenvectors", type:"mc",
+ statement:"Find the eigenvalues of $A = \\begin{pmatrix} 3 & 1 \\\\ 1 & 3 \\end{pmatrix}$",
+ choices:["$$\\lambda = 2, 4$$", "$$\\lambda = 1, 3$$", "$$\\lambda = 1, 5$$", "$$\\lambda = 2, 3$$"],
+ correct:0,
+ explanation:"$\\det(A-\\lambda I) = (3-\\lambda)^2 - 1 = \\lambda^2-6\\lambda+8 = (\\lambda-2)(\\lambda-4)=0$."
+},
+{ch:4, topic:"Eigenvalues & Eigenvectors", type:"mc",
+ statement:"Find an eigenvector for $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 2 \\end{pmatrix}$ with $\\lambda = 3$",
+ choices:[
+   "$$\\begin{pmatrix} 1 \\\\ 1 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix}$$"
+ ],
+ correct:0,
+ explanation:"$(A-3I)v = 0$: $\\begin{pmatrix}-1&1\\\\1&-1\\end{pmatrix}v=0$ gives $v_1=v_2$, so $v=\\begin{pmatrix}1\\\\1\\end{pmatrix}$."
+},
+
+// --- More Systems ---
+{ch:4, topic:"Homogeneous Systems", type:"free",
+ statement:"Solve: $\\mathbf{x}' = \\begin{pmatrix} 4 & 0 \\\\ 0 & -2 \\end{pmatrix}\\mathbf{x}$",
+ solution:[
+   {title:"Step 1: Eigenvalues", text:"$\\lambda_1=4$, $\\lambda_2=-2$ (diagonal matrix)"},
+   {title:"Step 2: Eigenvectors", text:"$\\mathbf{v}_1 = \\begin{pmatrix}1\\\\0\\end{pmatrix}$, $\\mathbf{v}_2 = \\begin{pmatrix}0\\\\1\\end{pmatrix}$"},
+   {title:"Step 3: General solution", text:"$\\mathbf{x}(t) = C_1e^{4t}\\begin{pmatrix}1\\\\0\\end{pmatrix} + C_2e^{-2t}\\begin{pmatrix}0\\\\1\\end{pmatrix}$"},
+ ],
+ answer:"$$x(t) = C_1e^{4t}, \\quad y(t) = C_2e^{-2t}$$"
+},
+{ch:4, topic:"Homogeneous Systems", type:"free",
+ statement:"Solve: $\\mathbf{x}' = \\begin{pmatrix} -1 & -2 \\\\ 1 & -1 \\end{pmatrix}\\mathbf{x}$",
+ solution:[
+   {title:"Step 1: Eigenvalues", text:"$\\det(A-\\lambda I) = (1+\\lambda)^2 + 2 = \\lambda^2+2\\lambda+3=0$"},
+   {title:"Step 2: Roots", text:"$\\lambda = -1 \\pm i\\sqrt{2}$ (complex)"},
+   {title:"Step 3: Eigenvector for $\\lambda=-1+i\\sqrt{2}$", text:"$(A-(-1+i\\sqrt{2})I)v=0$ gives $v = \\begin{pmatrix}-2\\\\i\\sqrt{2}\\end{pmatrix}$"},
+   {title:"Step 4: Real and imaginary parts", text:"Use $e^{\\lambda t}v$ and separate real/imaginary parts for two linearly independent real solutions"},
+ ],
+ answer:"$$\\mathbf{x}(t) = e^{-t}\\left[C_1\\begin{pmatrix}-2\\cos\\sqrt{2}t\\\\\\sqrt{2}\\sin\\sqrt{2}t\\end{pmatrix} + C_2\\begin{pmatrix}2\\sin\\sqrt{2}t\\\\\\sqrt{2}\\cos\\sqrt{2}t\\end{pmatrix}\\right]$$"
+},
+
+// --- Phase Portrait Classification ---
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"For eigenvalues $\\lambda_1 = 3, \\lambda_2 = -2$, the equilibrium is:",
+ choices:["Saddle point", "Unstable node", "Stable node", "Center"],
+ correct:0,
+ explanation:"Eigenvalues with opposite signs (one positive, one negative) always give a saddle point."
+},
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"For complex eigenvalues $\\lambda = -1 \\pm 2i$, the equilibrium is:",
+ choices:["Stable spiral", "Unstable spiral", "Center", "Stable node"],
+ correct:0,
+ explanation:"Complex eigenvalues with negative real part indicate a stable spiral."
+},
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"For eigenvalues $\\lambda_1=-3, \\lambda_2=-1$, classify the equilibrium:",
+ choices:["Stable node", "Unstable node", "Saddle point", "Degenerate"],
+ correct:0,
+ explanation:"Both eigenvalues are real and negative, so all solutions decay to the origin. This is a stable node."
+},
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"For $\\text{tr}(A)=0$ and $\\det(A)=1$, the eigenvalues are:",
+ choices:["$$\\lambda = \\pm i$$", "$$\\lambda = 1, 1$$", "$$\\lambda = 0, 0$$", "$$\\lambda = 1, -1$$"],
+ correct:0,
+ explanation:"$\\lambda^2 - \\text{tr}(A)\\lambda + \\det(A) = \\lambda^2 + 1 = 0$, giving $\\lambda = \\pm i$ — a center."
+},
+
+// --- Matrix exponential ---
+{ch:4, topic:"Homogeneous Systems", type:"mc",
+ statement:"If $A = \\begin{pmatrix} 2 & 0 \\\\ 0 & -1 \\end{pmatrix}$, then $e^{At} = $",
+ choices:[
+   "$$\\begin{pmatrix} e^{2t} & 0 \\\\ 0 & e^{-t} \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} e^{2t} & 1 \\\\ 1 & e^{-t} \\end{pmatrix}$$",
+   "$$e^t\\begin{pmatrix} 2 & 0 \\\\ 0 & -1 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 2e^{2t} & 0 \\\\ 0 & -e^{-t} \\end{pmatrix}$$"
+ ],
+ correct:0,
+ explanation:"For diagonal matrices, $e^{At} = \\text{diag}(e^{2t}, e^{-t})$."
+},
+
+// --- Repeated eigenvalue ---
+{ch:4, topic:"Phase Portraits", type:"mc",
+ statement:"A repeated eigenvalue $\\lambda=-2$ with one eigenvector gives what type of equilibrium?",
+ choices:[
+   "Stable improper node",
+   "Unstable improper node",
+   "Center",
+   "Saddle point"
+ ],
+ correct:0,
+ explanation:"Repeated negative eigenvalue with incomplete eigenvectors: stable improper (degenerate) node."
+},
+
+// --- Jordan block ---
+{ch:4, topic:"Homogeneous Systems", type:"mc",
+ statement:"The Jordan normal form of a 2×2 matrix with double eigenvalue $\\lambda=1$ and deficiency 1 is:",
+ choices:[
+   "$$\\begin{pmatrix} 1 & 1 \\\\ 0 & 1 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 0 & 0 \\\\ 0 & 1 \\end{pmatrix}$$",
+   "$$\\begin{pmatrix} 1 & -1 \\\\ 0 & 1 \\end{pmatrix}$$"
+ ],
+ correct:0,
+ explanation:"A Jordan block for double $\\lambda$: $\\begin{pmatrix}\\lambda&1\\\\0&\\lambda\\end{pmatrix}$."
+},
+
+// --- Decoupling ---
+{ch:4, topic:"Homogeneous Systems", type:"mc",
+ statement:"If $P^{-1}AP = D$ (diagonal), the substitution $\\mathbf{u} = P^{-1}\\mathbf{x}$ transforms $\\mathbf{x}'=A\\mathbf{x}$ into:",
+ choices:["$$\\mathbf{u}' = D\\mathbf{u}$$", "$$\\mathbf{u}' = P\\mathbf{u}$$", "$$\\mathbf{u}' = AD\\mathbf{u}$$", "$$\\mathbf{u}' = PAP\\mathbf{u}$$"],
+ correct:0,
+ explanation:"Substituting $\\mathbf{x}=P\\mathbf{u}$ gives $P\\mathbf{u}' = AP\\mathbf{u}$, so $\\mathbf{u}' = P^{-1}AP\\mathbf{u} = D\\mathbf{u}$."
+},
+
+// --- 3x3 ---
+{ch:4, topic:"Eigenvalues & Eigenvectors", type:"mc",
+ statement:"For $A = \\begin{pmatrix} 2 & 0 & 0 \\\\ 0 & 3 & 0 \\\\ 0 & 0 & 4 \\end{pmatrix}$, the eigenvalues are:",
+ choices:["$$\\lambda = 2, 3, 4$$", "$$\\lambda = 1, 2, 3$$", "$$\\lambda = 0, 2, 4$$", "$$\\lambda = 2, 2, 4$$"],
+ correct:0,
+ explanation:"For diagonal matrices, eigenvalues are the diagonal entries: $\\lambda = 2,3,4$."
+},
+
+// ═══════════════ EXPANDED POOL: CHAPTER 5 ═══════════════
+
+// --- More Power Series ---
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"A power series solution to $y''+xy'+y=0$ near $x_0=0$ has the form:",
+ choices:[
+   "$$y = \\sum_{n=0}^\\infty a_n x^n$$",
+   "$$y = \\sum_{n=0}^\\infty a_n x^{n/2}$$",
+   "$$y = e^x\\sum_{n=0}^\\infty a_n x^n$$",
+   "$$y = \\sum_{n=1}^\\infty a_n x^n$$"
+ ],
+ correct:0,
+ explanation:"At an ordinary point, the standard power series form is $y = \\sum a_n x^n$."
+},
+{ch:5, topic:"Power Series", type:"free",
+ statement:"For $y''-xy=0$ with $y=\\sum a_n x^n$, find the recurrence relation.",
+ solution:[
+   {title:"Step 1: Series for $y''$", text:"$y'' = \\sum_{n=2}^\\infty n(n-1)a_n x^{n-2}$"},
+   {title:"Step 2: Series for $xy$", text:"$xy = \\sum_{n=0}^\\infty a_n x^{n+1}$"},
+   {title:"Step 3: Reindex", text:"$\\sum_{n=0}^\\infty (n+2)(n+1)a_{n+2}x^n - \\sum_{n=1}^\\infty a_{n-1}x^n = 0$"},
+   {title:"Step 4: Extract", text:"For $n=0$: $2a_2 = 0$. For $n \\ge 1$: $(n+2)(n+1)a_{n+2} = a_{n-1}$"},
+ ],
+ answer:"$$a_{n+2} = \\frac{a_{n-1}}{(n+2)(n+1)} \\text{ for } n \\ge 1, \\quad a_2 = 0$$"
+},
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"For $y''+xy'+y=0$, $x_0=0$ is an ordinary point. The radius of convergence is:",
+ choices:["$$R = \\infty$$", "$$R = 1$$", "$$R = 2$$", "$$R = 0$$"],
+ correct:0,
+ explanation:"Both $p(x)=x$ and $q(x)=1$ are analytic everywhere, so the series converges for all $x$."
+},
+
+// --- More Frobenius ---
+{ch:5, topic:"Frobenius Method", type:"mc",
+ statement:"The indicial equation for Bessel's equation $x^2y''+xy'+(x^2-\\nu^2)y=0$ is:",
+ choices:["$$r^2 - \\nu^2 = 0$$", "$$r(r-1)+r-\\nu^2=0$$", "$$r^2-1-\\nu^2=0$$", "$$r(r+1)-\\nu^2=0$$"],
+ correct:0,
+ explanation:"Substituting $y=x^r\\sum a_n x^n$ into Bessel's equation, the lowest-order term gives $r^2-\\nu^2=0$, so $r=\\pm\\nu$."
+},
+{ch:5, topic:"Frobenius Method", type:"free",
+ statement:"Find both solutions of $x^2y''-xy'+y=0$ using Frobenius method.",
+ solution:[
+   {title:"Step 1: Indicial equation", text:"$r(r-1)-r+1 = r^2-2r+1 = (r-1)^2 = 0$"},
+   {title:"Step 2: Double root", text:"$r = 1$"},
+   {title:"Step 3: First solution", text:"$y_1 = x$"},
+   {title:"Step 4: Second solution (repeated root)", text:"$y_2 = x\\ln x$"},
+ ],
+ answer:"$$y = C_1 x + C_2 x\\ln x$$"
+},
+
+// --- Radius of convergence ---
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"For the power series $\\sum_{n=1}^\\infty \\frac{x^n}{n\\cdot 2^n}$, the radius of convergence is:",
+ choices:["$$R = 2$$", "$$R = 1$$", "$$R = 1/2$$", "$$R = \\infty$$"],
+ correct:0,
+ explanation:"Ratio test: $\\lim \\frac{n}{2(n+1)}|x| = |x|/2 < 1$ when $|x|<2$, so $R=2$."
+},
+
+// --- Legendre ---
+{ch:5, topic:"Power Series", type:"mc",
+ statement:"Which is the Legendre equation?",
+ choices:[
+   "$$(1-x^2)y'' - 2xy' + n(n+1)y = 0$$",
+   "$$x^2y''+xy'+(x^2-1/4)y=0$$",
+   "$$y''+xy=0$$",
+   "$$xy''+y'+xy=0$$"
+ ],
+ correct:0,
+ explanation:"The Legendre equation is $(1-x^2)y''-2xy'+n(n+1)y=0$, whose polynomial solutions are the Legendre polynomials $P_n(x)$."
+},
+
+// --- More Euler's Method ---
+{ch:5, topic:"Euler's Method", type:"free",
+ statement:"Use Euler's method with $h=0.1$ to approximate $y(0.2)$ for $y'=2x+y$, $y(0)=1$.",
+ solution:[
+   {title:"Step 1: Formula", text:"$y_{n+1} = y_n + 0.1(2x_n+y_n)$"},
+   {title:"Step 2: $n=0$", text:"$y_1 = 1 + 0.1(0+1) = 1.1$"},
+   {title:"Step 3: $n=1$", text:"$y_2 = 1.1 + 0.1(0.2+1.1) = 1.1 + 0.13 = 1.23$"},
+ ],
+ answer:"$$y(0.2) \\approx 1.23$$"
+},
+{ch:5, topic:"Euler's Method", type:"free",
+ statement:"Use the improved Euler (Heun's) method with $h=0.1$ for $y'=y$, $y(0)=1$. Find $y(0.1)$.",
+ solution:[
+   {title:"Step 1: Predictor", text:"$\\bar{y}_1 = y_0 + hf(x_0,y_0) = 1 + 0.1(1) = 1.1$"},
+   {title:"Step 2: Corrector", text:"$y_1 = y_0 + \\frac{h}{2}[f(x_0,y_0)+f(x_1,\\bar{y}_1)] = 1 + 0.05[1+1.1] = 1.105$"},
+ ],
+ answer:"$$y(0.1) \\approx 1.105$$"
+},
+
+// --- Stability ---
+{ch:5, topic:"Euler's Method", type:"mc",
+ statement:"For $y'=-100y$, forward Euler is stable when:",
+ choices:["$$h < 0.02$$", "$$h < 0.01$$", "$$h < 0.001$$", "Always stable"],
+ correct:0,
+ explanation:"Stability requires $|1+\\lambda h|<1$. With $\\lambda=-100$: $|1-100h|<1$ gives $0<100h<2$, so $h<0.02$."
+},
+
+// --- Method Comparison ---
+{ch:5, topic:"Runge-Kutta", type:"mc",
+ statement:"The local truncation errors are: Euler $O(h^2)$, RK2 $O(h^3)$, RK4 $O(h^5)$. This means:",
+ choices:[
+   "RK4 is much more accurate for small $h$",
+   "All methods have the same accuracy",
+   "Euler is more efficient",
+   "RK4 requires fewer function evaluations"
+ ],
+ correct:0,
+ explanation:"Higher-order local truncation error means dramatically better accuracy for small step sizes. RK4's $O(h^5)$ local error makes it far more accurate than Euler's $O(h^2)$."
+},
+{ch:5, topic:"Runge-Kutta", type:"mc",
+ statement:"In adaptive step-size control, if the error estimate exceeds tolerance, we should:",
+ choices:[
+   "Decrease the step size $h$",
+   "Increase the step size $h$",
+   "Switch to backward Euler",
+   "Accept the result and continue"
+ ],
+ correct:0,
+ explanation:"When local error exceeds tolerance, we decrease $h$ to improve accuracy, then retry the step."
+},
+
+// --- Frobenius cases ---
+{ch:5, topic:"Frobenius Method", type:"free",
+ statement:"For $x^2y''+x(1+x)y'-y=0$, determine the form of the general solution near $x=0$.",
+ solution:[
+   {title:"Step 1: Indicial equation", text:"$r(r-1)+r-1 = r^2-1 = 0$"},
+   {title:"Step 2: Roots", text:"$r_1=1$, $r_2=-1$ (differ by integer 2)"},
+   {title:"Step 3: First solution", text:"$y_1 = x(1+a_1x+a_2x^2+\\cdots)$"},
+   {title:"Step 4: Second solution", text:"$y_2 = x^{-1}(1+b_1x+b_2x^2+\\cdots) + c\\ln(x)\\cdot y_1$"},
+ ],
+ answer:"$$y = C_1 x(1+a_1x+\\cdots) + C_2[x^{-1}(1+b_1x+\\cdots) + c\\ln(x)\\cdot y_1]$$"
+},
+
+// --- Shooting method ---
+{ch:5, topic:"Numerical Methods", type:"mc",
+ statement:"The shooting method for a BVP $y''=f(x,y,y')$, $y(a)=\\alpha$, $y(b)=\\beta$ works by:",
+ choices:[
+   "Solving IVPs with different guesses for $y'(a)$",
+   "Using different values of $f$",
+   "Changing the domain",
+   "Applying finite differences"
+ ],
+ correct:0,
+ explanation:"The shooting method guesses $y'(a)=s$ and solves the IVP, adjusting $s$ until $y(b)=\\beta$ is satisfied."
+},
 ];
 
 // ──────────────────────────────────────────────
