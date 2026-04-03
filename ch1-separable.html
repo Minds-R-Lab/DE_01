@@ -1080,25 +1080,37 @@ updateProgressBar();
 
         // Quiz System
         let quizAnswers = {
-            1: 1, 2: 1, 3: 0, 4: 1, 5: 3, 6: 2
+            1: 1, 2: 1, 3: 0, 4: 1, 5: 3, 6: 1
         };
         let quizScores = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false};
 
         function checkChoice(questionNum, choiceIdx) {
             const correct = quizAnswers[questionNum] === choiceIdx;
-            const buttons = document.querySelectorAll(`.quiz-question:nth-of-type(${questionNum}) .choice-btn`);
+            const quizQuestions = document.querySelectorAll('#practice .quiz-question');
+            const questionEl = quizQuestions[questionNum - 1];
+            if (!questionEl) return;
+            const buttons = questionEl.querySelectorAll('.choice-btn');
             const feedback = document.getElementById(`feedback-${questionNum}`);
 
             buttons.forEach((btn, idx) => {
+                btn.disabled = true;
                 if (idx === choiceIdx) {
                     btn.classList.add(correct ? 'correct' : 'incorrect');
-                } else {
-                    btn.disabled = true;
+                }
+                if (idx === quizAnswers[questionNum]) {
+                    btn.classList.add('correct');
+                }
+                if (idx !== choiceIdx && idx !== quizAnswers[questionNum]) {
                     btn.style.opacity = '0.5';
                 }
             });
 
-            feedback.classList.add('show', correct ? 'correct' : 'incorrect');
+            if (correct) {
+                feedback.classList.add('show', 'correct');
+            } else {
+                feedback.innerHTML = '<p><strong>Incorrect.</strong> The correct answer is highlighted in green. Review the material and try to understand why.</p>';
+                feedback.classList.add('show', 'incorrect');
+            }
             quizScores[questionNum] = correct;
             updateProgressBar();
         }

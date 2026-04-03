@@ -589,6 +589,7 @@ tbody tr:hover {
   margin: 0.5rem 0;
   text-align: left;
   background: var(--primary-light);
+  color: #1e293b;
   border: 2px solid var(--primary);
   border-radius: 8px;
   cursor: pointer;
@@ -613,10 +614,17 @@ tbody tr:hover {
   border-color: var(--success);
 }
 
-.choice-btn.incorrect {
+.choice-btn.incorrect,
+.choice-btn.selected-wrong {
   background: var(--danger);
   color: white;
   border-color: var(--danger);
+}
+
+.choice-btn.selected-correct {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
 }
 
 .quiz-feedback {
