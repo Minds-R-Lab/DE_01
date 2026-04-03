@@ -863,7 +863,7 @@ initVisualizer();
 
     buttons.forEach(btn => btn.classList.remove('selected-correct', 'selected-wrong'));
 
-    const selected = Array.from(buttons).find(btn => btn.textContent.startsWith(choice));
+    const selected = Array.from(buttons).find(btn => btn.textContent.trim().startsWith(choice));
     if (selected) {
       if (choice === answers[question]) {
         selected.classList.add('selected-correct');

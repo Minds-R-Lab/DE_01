@@ -820,16 +820,19 @@
       el.classList.remove('show', 'correct', 'incorrect');
     });
 
-    // Update button styles
-    document.querySelectorAll(`.quiz-question:nth-child(${questionNum + 6}) .choice-btn`).forEach((btn, idx) => {
-      btn.classList.remove('correct', 'incorrect');
-      const btnChoice = ['A', 'B', 'C', 'D'][idx];
-      if (btnChoice === correctAnswers[questionNum]) {
-        btn.classList.add('correct');
-      } else if (btnChoice === choice && !isCorrect) {
-        btn.classList.add('incorrect');
-      }
-    });
+    // Update button styles — find buttons via feedback's parent quiz-question
+    const questionEl = feedback.closest('.quiz-question');
+    if (questionEl) {
+      questionEl.querySelectorAll('.choice-btn').forEach((btn, idx) => {
+        btn.classList.remove('correct', 'incorrect');
+        const btnChoice = ['A', 'B', 'C', 'D'][idx];
+        if (btnChoice === correctAnswers[questionNum]) {
+          btn.classList.add('correct');
+        } else if (btnChoice === choice && !isCorrect) {
+          btn.classList.add('incorrect');
+        }
+      });
+    }
 
     if (isCorrect) {
       feedback.classList.add('show', 'correct');
