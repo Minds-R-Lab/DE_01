@@ -752,7 +752,7 @@ function updateEulerPlot() {
 function checkChoice(problem, button, isCorrect) {
   const feedback = document.getElementById(`q${problem}-fb`);
   feedback.textContent = isCorrect ? 'Correct!' : 'Not quite. Try again!';
-  feedback.className = `quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+  feedback.className = `quiz-feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
 
   if (isCorrect) {
     button.classList.add('selected-correct');

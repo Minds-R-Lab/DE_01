@@ -843,7 +843,7 @@ initVisualizer();
   // Quiz
   const answers = {
     1: 'A',
-    2: 'B',
+    2: 'A',
     3: 'C',
     4: 'B',
     5: 'A'
@@ -868,11 +868,11 @@ initVisualizer();
       if (choice === answers[question]) {
         selected.classList.add('selected-correct');
         feedback.textContent = '✓ ' + explanations[question];
-        feedback.className = 'quiz-feedback correct';
+        feedback.className = 'quiz-feedback show correct';
       } else {
         selected.classList.add('selected-wrong');
         feedback.textContent = '✗ Not quite. The correct answer is ' + answers[question] + '.';
-        feedback.className = 'quiz-feedback incorrect';
+        feedback.className = 'quiz-feedback show incorrect';
       }
     }
 

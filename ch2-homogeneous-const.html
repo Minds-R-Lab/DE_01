@@ -907,12 +907,12 @@ function checkChoice(qNum, btn, isCorrect) {
 
   if (isCorrect) {
     btn.classList.add('selected-correct');
-    fb.className = 'quiz-feedback correct';
+    fb.className = 'quiz-feedback show correct';
     fb.textContent = explanations[qNum].correct;
     quizAnswered.add(qNum);
   } else {
     btn.classList.add('selected-wrong');
-    fb.className = 'quiz-feedback incorrect';
+    fb.className = 'quiz-feedback show incorrect';
     fb.textContent = explanations[qNum].wrong;
     setTimeout(() => { btn.classList.remove('selected-wrong'); fb.style.display = 'none'; }, 2500);
     return;

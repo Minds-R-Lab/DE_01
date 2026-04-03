@@ -765,12 +765,12 @@ code {
             if (correctness === 'correct') {
                 element.classList.add('selected');
                 const feedbackDiv = document.getElementById(questionId + '-feedback');
-                feedbackDiv.className = 'quiz-feedback correct';
+                feedbackDiv.className = 'quiz-feedback show correct';
                 feedbackDiv.textContent = '✓ Correct!';
             } else {
                 element.classList.add('incorrect');
                 const feedbackDiv = document.getElementById(questionId + '-feedback');
-                feedbackDiv.className = 'quiz-feedback incorrect';
+                feedbackDiv.className = 'quiz-feedback show incorrect';
                 feedbackDiv.textContent = '✗ Incorrect. Try again!';
             }
         }

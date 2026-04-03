@@ -866,7 +866,7 @@ function checkChoice(problemNum, btn, isCorrect) {
   btn.disabled = true;
 
   fbEl.textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect. Try again.';
-  fbEl.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'incorrect');
+  fbEl.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
 
   if (isCorrect) {
     const completed = document.querySelectorAll('.choice-btn.selected-correct').length;

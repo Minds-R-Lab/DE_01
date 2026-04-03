@@ -533,11 +533,11 @@ function checkChoice(q, chosen) {
   });
   const fb = document.getElementById('fb-'+q);
   if (chosen === correct) {
-    fb.className = 'quiz-feedback correct';
+    fb.className = 'quiz-feedback show correct';
     fb.textContent = '✓ Correct!';
     score++;
   } else {
-    fb.className = 'quiz-feedback incorrect';
+    fb.className = 'quiz-feedback show incorrect';
     fb.textContent = '✗ Incorrect. The correct answer is highlighted.';
   }
   updateProgress();
