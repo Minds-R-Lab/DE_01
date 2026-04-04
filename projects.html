@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Projects — DE in Your Major | Math 4 — Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1e40af;
+    --accent: #7c3aed; --accent-light: #ede9fe;
+    --success: #059669; --success-light: #d1fae5;
+    --warning: #d97706; --warning-light: #fef3c7;
+    --danger: #dc2626; --danger-light: #fee2e2;
+    --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-muted: #64748b;
+    --border: #e2e8f0; --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:1000;padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;}
+  nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+  nav a:hover{color:var(--primary);}
+  nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+  nav .active{color:var(--accent);font-weight:700;}
+
+  .container { max-width: 960px; margin: 0 auto; padding: 80px 1.5rem 3rem; }
+
+  /* Hero */
+  .page-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #7c3aed 100%);
+    color: #fff; border-radius: var(--radius); padding: 3rem 2.5rem; margin-bottom: 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0; opacity: 0.06;
+    background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .page-hero h1 { font-size: 2.4rem; font-weight: 800; position: relative; margin-bottom: 0.5rem; }
+  .page-hero p { font-size: 1.1rem; opacity: 0.9; position: relative; max-width: 700px; }
+
+  /* Sections */
+  section { background: var(--card); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  h2 { font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; display: inline-block; }
+  h3 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--accent); }
+
+  /* Requirement boxes */
+  .req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .req-card { background: var(--primary-light); border-radius: var(--radius); padding: 1.25rem; text-align: center; }
+  .req-card .req-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .req-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.35rem; }
+  .req-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+  /* Specialty navigation */
+  .specialty-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; justify-content: center; }
+  .specialty-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.5rem 1.1rem; border-radius: 999px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.25s; border: 2px solid var(--border);
+    background: var(--card); color: var(--text-muted); text-decoration: none;
+  }
+  .specialty-chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+  /* Specialty sections */
+  .specialty-section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+  .specialty-header {
+    display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem; border-bottom: 3px solid var(--primary);
+  }
+  .specialty-header .spec-icon { font-size: 2rem; }
+  .specialty-header h2 { border: none; padding: 0; margin: 0; font-size: 1.6rem; }
+  .specialty-header .spec-count { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 0.5rem; }
+
+  /* Project cards */
+  .project-card {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius);
+    margin-bottom: 1.25rem; overflow: hidden; transition: all 0.3s;
+  }
+  .project-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); }
+
+  .project-header {
+    padding: 1.25rem 1.5rem; cursor: pointer; display: flex; align-items: flex-start; gap: 1rem;
+    user-select: none; transition: background 0.2s;
+  }
+  .project-header:hover { background: #f8fafc; }
+
+  .project-id {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 3.5rem; height: 2rem; border-radius: 6px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em;
+    background: var(--primary-light); color: var(--primary-dark);
+    flex-shrink: 0; margin-top: 0.15rem;
+  }
+  .project-header-text { flex: 1; }
+  .project-header-text h4 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+  .project-header-text .project-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .tag {
+    display: inline-block; padding: 0.15rem 0.55rem; border-radius: 6px;
+    font-size: 0.75rem; font-weight: 600;
+  }
+  .tag-chapter { background: #dbeafe; color: #1e40af; }
+  .tag-difficulty { background: #fef3c7; color: #92400e; }
+  .tag-type { background: #ede9fe; color: #6d28d9; }
+
+  .project-toggle {
+    flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--primary-light); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700; transition: transform 0.3s;
+    margin-top: 0.15rem;
+  }
+  .project-card.open .project-toggle { transform: rotate(45deg); }
+
+  .project-body {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+  }
+  .project-card.open .project-body { max-height: 2000px; }
+
+  .project-content {
+    padding: 0 1.5rem 1.5rem; border-top: 1px solid var(--border);
+  }
+  .project-content h5 {
+    font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--primary); margin: 1.25rem 0 0.5rem;
+  }
+  .project-content p { font-size: 0.95rem; color: var(--text); margin-bottom: 0.75rem; line-height: 1.75; }
+  .project-content ul { margin: 0.5rem 0 1rem 1.25rem; }
+  .project-content li { font-size: 0.93rem; margin-bottom: 0.4rem; color: var(--text); }
+
+  .de-highlight {
+    background: var(--accent-light); border-left: 4px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.25rem; margin: 1rem 0;
+  }
+  .de-highlight p { margin: 0; font-size: 0.93rem; }
+  .de-highlight strong { color: var(--accent); }
+
+  .presentation-tips {
+    background: var(--success-light); border-left: 4px solid var(--success);
+    border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.25rem; margin: 1rem 0;
+  }
+  .presentation-tips p { margin: 0; font-size: 0.93rem; }
+  .presentation-tips strong { color: var(--success); }
+
+  /* Rubric table */
+  .rubric-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  .rubric-table th { background: var(--primary); color: #fff; padding: 0.75rem 1rem; text-align: left; font-weight: 600; }
+  .rubric-table th:first-child { border-radius: 8px 0 0 0; }
+  .rubric-table th:last-child { border-radius: 0 8px 0 0; }
+  .rubric-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+  .rubric-table tr:last-child td { border-bottom: none; }
+  .rubric-table tr:nth-child(even) { background: #f8fafc; }
+
+  /* Islamic quote */
+  .islamic-box {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-left: 5px solid var(--success);
+    border-radius: var(--radius); padding: 1.5rem 2rem; margin: 2rem 0;
+  }
+  .islamic-box .arabic { font-size: 1.3rem; text-align: center; margin-bottom: 0.5rem; font-family: 'Traditional Arabic', 'Scheherazade New', serif; direction: rtl; color: var(--success); font-weight: 600; }
+  .islamic-box .translation { font-style: italic; color: #065f46; }
+  .islamic-box .source { font-weight: 600; color: var(--success); margin-top: 0.5rem; font-size: 0.9rem; }
+
+  footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+  @media (max-width: 640px) {
+    .page-hero { padding: 2rem 1.5rem; }
+    .page-hero h1 { font-size: 1.7rem; }
+    section { padding: 1.5rem; }
+    .req-grid { grid-template-columns: 1fr; }
+    .specialty-header h2 { font-size: 1.3rem; }
+    .project-header { padding: 1rem; }
+    .project-content { padding: 0 1rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html">Home</a>
+  <a href="exam-generator.html">Exam Generator</a>
+  <a href="videos.html">Videos</a>
+  <a href="projects.html" class="active">Projects</a>
+</nav>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <h1>Group Research Projects</h1>
+    <p>Discover how differential equations power your engineering specialty. Pick a topic, form a team, research it, and teach the class what you learned.</p>
+  </div>
+
+  <!-- ======================== OBJECTIVE & STRUCTURE ======================== -->
+  <section>
+    <h2>Project Objective</h2>
+    <p>The goal of this project is to connect what you learn in this DE course to real-world problems in <strong>your own engineering specialty</strong>. By researching a topic where differential equations play a central role, you will see first-hand that DEs are not abstract math — they are the language that engineers use to describe, predict, and design the systems around us.</p>
+
+    <div class="islamic-box">
+      <div class="arabic">مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ</div>
+      <div class="translation">"Whoever travels a path in search of knowledge, Allah will make easy for him a path to Paradise."</div>
+      <div class="source">— Prophet Muhammad ﷺ (Sahih Muslim)</div>
+    </div>
+
+    <h3>How It Works</h3>
+    <p>Form a group of <strong>three students</strong> (ideally from the same or related specialty). Choose one project idea from the list below — or propose your own topic with instructor approval. Research the topic together, and prepare a <strong>10–15 minute presentation</strong> to share what you learned with the rest of the class.</p>
+
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-icon">👥</div>
+        <h4>Team Size</h4>
+        <p>Groups of 3 students</p>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🎯</div>
+        <h4>Choose a Topic</h4>
+        <p>Pick from the ideas below or propose your own</p>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🔬</div>
+        <h4>Research</h4>
+        <p>Understand the DE model, solve or simulate it, explain results</p>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">🎤</div>
+        <h4>Present</h4>
+        <p>10–15 minute presentation to the class</p>
+      </div>
+    </div>
+
+    <h3>What Your Presentation Should Include</h3>
+    <p>Every presentation, regardless of the specialty, should address the following:</p>
+    <ol style="margin: 0.75rem 0 1rem 1.5rem;">
+      <li><strong>The Real-World Problem</strong> — What physical, engineering, or scientific problem are you studying? Why does it matter?</li>
+      <li><strong>The DE Model</strong> — What differential equation describes the system? Explain each term and variable.</li>
+      <li><strong>Solution or Simulation</strong> — Solve the DE analytically (if possible) or show a numerical/graphical solution. Interpret what the solution tells you.</li>
+      <li><strong>Connection to Your Major</strong> — How do engineers in your field use this model? What design decisions does it inform?</li>
+      <li><strong>What You Learned</strong> — Key takeaways and anything that surprised you.</li>
+    </ol>
+
+    <h3>Grading Rubric</h3>
+    <table class="rubric-table">
+      <thead>
+        <tr><th>Criterion</th><th>Weight</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>DE Understanding</td><td>30%</td><td>Correctly state the DE, explain terms, show solution or simulation</td></tr>
+        <tr><td>Real-World Connection</td><td>25%</td><td>Clear link between the math and the engineering application</td></tr>
+        <tr><td>Presentation Quality</td><td>20%</td><td>Organized slides, clear speaking, good visuals, within time limit</td></tr>
+        <tr><td>Depth of Research</td><td>15%</td><td>Goes beyond surface-level; cites sources; shows genuine understanding</td></tr>
+        <tr><td>Team Collaboration</td><td>10%</td><td>All members contribute meaningfully during the presentation</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ======================== SPECIALTY QUICK NAV ======================== -->
+  <section>
+    <h2>Choose Your Specialty</h2>
+    <p>Click your engineering department to jump directly to its project ideas.</p>
+    <div class="specialty-nav">
+      <a class="specialty-chip" href="#electrical">⚡ Electrical</a>
+      <a class="specialty-chip" href="#mechanical">⚙️ Mechanical</a>
+      <a class="specialty-chip" href="#civil">🏗️ Civil</a>
+      <a class="specialty-chip" href="#computer">💻 Computer</a>
+      <a class="specialty-chip" href="#industrial">🏭 Industrial</a>
+      <a class="specialty-chip" href="#mechatronics">🤖 Mechatronics</a>
+      <a class="specialty-chip" href="#mathematics">📐 Mathematics</a>
+      <a class="specialty-chip" href="#education">📚 Education</a>
+    </div>
+  </section>
+
+  <!-- ======================== ELECTRICAL ENGINEERING ======================== -->
+  <div class="specialty-section" id="electrical">
+    <div class="specialty-header">
+      <span class="spec-icon">⚡</span>
+      <h2>Electrical Engineering</h2>
+      <span class="spec-count">— 4 project ideas</span>
+    </div>
+
+    <!-- EE-01 -->
+    <div class="project-card" id="EE-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">EE-01</span>
+        <div class="project-header-text">
+          <h4>RLC Circuit Transient Response</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: 2nd-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Analytical + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>When you connect a resistor (R), inductor (L), and capacitor (C) in series and apply a voltage, the current doesn't jump instantly to its final value — it oscillates, decays, or overshoots depending on the component values. This transient behavior is described by a second-order linear ODE with constant coefficients, the same type you study in Chapter 2.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(L\,\frac{d^2q}{dt^2} + R\,\frac{dq}{dt} + \frac{1}{C}\,q = E(t)\), where \(q(t)\) is the charge and \(E(t)\) is the applied voltage.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Derive the ODE from Kirchhoff's voltage law.</li>
+            <li>Identify the three damping regimes: <em>overdamped</em>, <em>critically damped</em>, and <em>underdamped</em>. What do the characteristic roots look like in each case?</li>
+            <li>Pick specific R, L, C values for each regime, solve the ODE, and plot the resulting current \(i(t) = dq/dt\).</li>
+            <li>Explain why electrical engineers care about damping — for example, in filter design or power supply smoothing.</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Show side-by-side plots of the three damping cases. The visual contrast is very effective for the audience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EE-02 -->
+    <div class="project-card" id="EE-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">EE-02</span>
+        <div class="project-header-text">
+          <h4>RC Circuit Charging and Time Constants</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>The simple RC circuit — a resistor and capacitor in series with a battery — is one of the first things EE students encounter. Charging and discharging a capacitor is governed by a first-order linear ODE, and the concept of a "time constant" \(\tau = RC\) comes directly from its solution.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(RC\,\frac{dV_C}{dt} + V_C = V_s\), where \(V_C(t)\) is the capacitor voltage and \(V_s\) is the source voltage.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Derive the ODE from Kirchhoff's laws. Identify it as a first-order linear ODE.</li>
+            <li>Solve for charging (\(V_C(0) = 0\)) and discharging (\(V_s = 0\)) cases using an integrating factor.</li>
+            <li>Explain the time constant \(\tau = RC\): after \(5\tau\), the capacitor is about 99% charged. Why is this important in practice?</li>
+            <li>Discuss applications: touch screens, camera flashes, signal filtering, debouncing circuits.</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Bring a real capacitor and battery (or show a short video) to demonstrate charging delay.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EE-03 -->
+    <div class="project-card" id="EE-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">EE-03</span>
+        <div class="project-header-text">
+          <h4>Transfer Functions and Laplace Transforms in Circuit Analysis</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 3: Laplace Transform</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Analytical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>In practice, electrical engineers rarely solve circuit DEs in the time domain. Instead, they use the Laplace transform to convert the ODE into an algebraic equation in the \(s\)-domain, define a transfer function \(H(s)\), and analyze the system's frequency response. This is the foundation of signal processing and control theory.</p>
+          <div class="de-highlight">
+            <p><strong>Key idea:</strong> Take the Laplace transform of the circuit ODE to get \(H(s) = \frac{V_{out}(s)}{V_{in}(s)}\). The poles and zeros of \(H(s)\) tell you everything about the circuit's behavior.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Choose a simple circuit (e.g., low-pass RC filter or bandpass RLC filter).</li>
+            <li>Write the ODE, take the Laplace transform, and derive \(H(s)\).</li>
+            <li>Find the poles and zeros. Explain what they mean physically (resonance, cutoff frequency, stability).</li>
+            <li>Plot the frequency response (magnitude vs. frequency) — also known as a Bode plot.</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> If any team member has access to MATLAB or Python, a live Bode plot demo is very impressive.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EE-04 -->
+    <div class="project-card" id="EE-04">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">EE-04</span>
+        <div class="project-header-text">
+          <h4>DC Motor Speed Control</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 4: Systems</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Modeling + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>A DC motor's speed depends on the interaction between its electrical circuit (voltage, current, inductance) and its mechanical load (inertia, friction, torque). This coupling is described by a system of two first-order ODEs — exactly the type studied in Chapter 4.</p>
+          <div class="de-highlight">
+            <p><strong>The system:</strong> \(L\,\frac{di}{dt} + Ri = V - K_b\omega\) &nbsp;and&nbsp; \(J\,\frac{d\omega}{dt} + b\omega = K_t i\), where \(i(t)\) is current and \(\omega(t)\) is angular velocity.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Explain the physical meaning of each parameter: \(L\) (inductance), \(R\) (resistance), \(K_b\) (back-EMF constant), \(J\) (moment of inertia), \(b\) (friction), \(K_t\) (torque constant).</li>
+            <li>Write the system in matrix form and find the eigenvalues. What do they tell you about motor response?</li>
+            <li>Simulate the motor start-up: plot \(i(t)\) and \(\omega(t)\) from rest to steady-state.</li>
+            <li>Discuss how engineers use these models to design speed controllers (e.g., PID control).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== MECHANICAL ENGINEERING ======================== -->
+  <div class="specialty-section" id="mechanical">
+    <div class="specialty-header">
+      <span class="spec-icon">⚙️</span>
+      <h2>Mechanical Engineering</h2>
+      <span class="spec-count">— 4 project ideas</span>
+    </div>
+
+    <!-- ME-01 -->
+    <div class="project-card" id="ME-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ME-01</span>
+        <div class="project-header-text">
+          <h4>Mass-Spring-Damper: Vibration Analysis</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: 2nd-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Analytical + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Vibration analysis is arguably the most important application of second-order ODEs in mechanical engineering. Every car suspension, every building during an earthquake, and every machine on a factory floor can be modeled as a mass-spring-damper system.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(m\ddot{x} + c\dot{x} + kx = F(t)\), where \(m\) is mass, \(c\) is damping coefficient, \(k\) is spring stiffness, and \(F(t)\) is an external force.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Draw a free-body diagram and derive the ODE from Newton's second law.</li>
+            <li>Solve the free vibration case (\(F(t) = 0\)) for underdamped, critically damped, and overdamped scenarios.</li>
+            <li>Solve the forced vibration case with \(F(t) = F_0 \cos(\omega t)\) and explain resonance — when does the amplitude blow up?</li>
+            <li>Connect to real applications: car suspension tuning, earthquake-resistant building design, or washing machine balancing.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ME-02 -->
+    <div class="project-card" id="ME-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ME-02</span>
+        <div class="project-header-text">
+          <h4>Newton's Law of Cooling: Heat Transfer</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical + Experiment</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>When a hot object is placed in a cooler environment, its temperature doesn't drop instantly — it decays exponentially toward the ambient temperature. Newton's law of cooling gives a first-order linear ODE that describes this process, and it's one of the simplest yet most useful models in thermal engineering.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dT}{dt} = -k(T - T_{\text{env}})\), where \(T(t)\) is the object temperature, \(T_{\text{env}}\) is ambient, and \(k > 0\) is the cooling constant.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the ODE using separation of variables. Show that \(T(t) = T_{\text{env}} + (T_0 - T_{\text{env}})e^{-kt}\).</li>
+            <li>Run a simple experiment: measure the temperature of a cup of hot water every minute as it cools. Fit \(k\) from the data.</li>
+            <li>Discuss engineering applications: HVAC system design, CPU thermal management, food safety (how long until food reaches a safe temperature?).</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Showing your own experimental data alongside the theoretical curve is very convincing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ME-03 -->
+    <div class="project-card" id="ME-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ME-03</span>
+        <div class="project-header-text">
+          <h4>Projectile Motion with Air Resistance</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Analytical + Numerical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>In introductory physics, you learn projectile motion without air resistance — nice parabolas. But in reality, air drag dramatically changes the trajectory. With linear drag, the DE is first-order and solvable analytically. With quadratic drag (realistic for fast objects), you need numerical methods.</p>
+          <div class="de-highlight">
+            <p><strong>The DE (vertical, linear drag):</strong> \(m\frac{dv}{dt} = -mg - bv\), leading to terminal velocity \(v_{\text{term}} = mg/b\).</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the linear drag case analytically: find velocity and position as functions of time.</li>
+            <li>Show that terminal velocity exists and explain its physical meaning.</li>
+            <li>Compare trajectories with and without air resistance. How much shorter is the range?</li>
+            <li>Use Euler's method (Chapter 5) to solve the quadratic drag case numerically and compare.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ME-04 -->
+    <div class="project-card" id="ME-04">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ME-04</span>
+        <div class="project-header-text">
+          <h4>Pendulum Dynamics: From Linear to Chaotic</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2 + Ch 5</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Analytical + Numerical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>The simple pendulum gives a nonlinear ODE: \(\ddot{\theta} + (g/L)\sin\theta = 0\). For small angles, we linearize (\(\sin\theta \approx \theta\)) and get a simple harmonic oscillator. But for large angles, the nonlinearity matters and the period changes. Adding a driving force can even produce chaos (double pendulum).</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{d^2\theta}{dt^2} + \frac{g}{L}\sin\theta = 0\) (nonlinear) vs. \(\frac{d^2\theta}{dt^2} + \frac{g}{L}\theta = 0\) (linearized).</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the linearized case (Chapter 2). Find the period \(T = 2\pi\sqrt{L/g}\).</li>
+            <li>Use a numerical method (Euler or Runge-Kutta from Chapter 5) to solve the nonlinear case for large angles. How does the period change?</li>
+            <li>Compare the linear and nonlinear solutions graphically.</li>
+            <li>Optional: discuss the double pendulum and the concept of chaotic motion.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== CIVIL ENGINEERING ======================== -->
+  <div class="specialty-section" id="civil">
+    <div class="specialty-header">
+      <span class="spec-icon">🏗️</span>
+      <h2>Civil Engineering</h2>
+      <span class="spec-count">— 3 project ideas</span>
+    </div>
+
+    <!-- CE-01 -->
+    <div class="project-card" id="CE-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CE-01</span>
+        <div class="project-header-text">
+          <h4>Beam Deflection Under Load</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: 2nd-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Analytical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>When a beam carries a load, it bends. How much it bends — and where — is governed by the Euler-Bernoulli beam equation, a second-order (or fourth-order) ODE. Understanding beam deflection is fundamental to structural engineering: bridges, floors, and cranes all depend on these calculations.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(EI\,\frac{d^2y}{dx^2} = M(x)\), where \(E\) is Young's modulus, \(I\) is the moment of inertia, \(y(x)\) is the deflection, and \(M(x)\) is the bending moment.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Explain what \(E\), \(I\), and \(M(x)\) represent physically.</li>
+            <li>Solve for a simply supported beam with a uniform distributed load. Find the maximum deflection.</li>
+            <li>Compare with a cantilever beam (different boundary conditions, different solution).</li>
+            <li>Discuss building codes: how much deflection is acceptable for a floor beam?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CE-02 -->
+    <div class="project-card" id="CE-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CE-02</span>
+        <div class="project-header-text">
+          <h4>Earthquake Response of a Single-Story Structure</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: Forced Vibrations</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Modeling + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>During an earthquake, the ground moves and the building responds as a forced vibration system. A single-story structure can be modeled as a single-degree-of-freedom mass-spring-damper system — the same second-order ODE from Chapter 2, but with an earthquake forcing function.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(m\ddot{x} + c\dot{x} + kx = -m\ddot{x}_g(t)\), where \(\ddot{x}_g(t)\) is the ground acceleration from the earthquake.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Model the earthquake as a sinusoidal ground motion \(\ddot{x}_g(t) = A\sin(\omega_g t)\).</li>
+            <li>Solve using undetermined coefficients or Laplace transforms.</li>
+            <li>Investigate resonance: what happens when the earthquake frequency matches the building's natural frequency?</li>
+            <li>Explain how engineers design structures to avoid resonance (tuned mass dampers, base isolation).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CE-03 -->
+    <div class="project-card" id="CE-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CE-03</span>
+        <div class="project-header-text">
+          <h4>Mixing Tank Problem: Water Treatment</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1 + Ch 4</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>In environmental and civil engineering, water treatment involves mixing tanks where pollutants enter and leave at known rates. The concentration of pollutant over time is governed by a first-order linear ODE. With multiple connected tanks, you get a system of ODEs (Chapter 4).</p>
+          <div class="de-highlight">
+            <p><strong>The DE (single tank):</strong> \(\frac{dx}{dt} = r_{in}c_{in} - \frac{r_{out}}{V}x\), where \(x(t)\) is the amount of pollutant, \(r\) are flow rates, and \(V\) is the tank volume.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the single-tank problem: how long to reduce the pollutant concentration by 90%?</li>
+            <li>Extend to two connected tanks (Chapter 4 system) and write the system in matrix form.</li>
+            <li>Discuss real-world applications: wastewater treatment plants, chemical dosing, desalination pre-treatment.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== COMPUTER ENGINEERING / CS ======================== -->
+  <div class="specialty-section" id="computer">
+    <div class="specialty-header">
+      <span class="spec-icon">💻</span>
+      <h2>Computer Engineering / Science</h2>
+      <span class="spec-count">— 3 project ideas</span>
+    </div>
+
+    <!-- CS-01 -->
+    <div class="project-card" id="CS-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CS-01</span>
+        <div class="project-header-text">
+          <h4>Numerical ODE Solvers: Euler vs. Runge-Kutta</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 5: Numerical Methods</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Programming + Analysis</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Most real-world DEs can't be solved by hand. Computer scientists and engineers write algorithms that compute approximate solutions numerically. Euler's method is the simplest; the Runge-Kutta (RK4) method is far more accurate. Comparing them teaches you about accuracy, stability, and computational cost.</p>
+          <div class="de-highlight">
+            <p><strong>Key idea:</strong> Implement both methods in Python (or any language), solve a known ODE, and compare the errors at each step.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Implement Euler's method and RK4 from scratch (no library functions).</li>
+            <li>Choose a test ODE with a known exact solution (e.g., \(y' = -2y\), exact: \(y = e^{-2t}\)).</li>
+            <li>Plot the numerical solutions against the exact solution. Measure the error.</li>
+            <li>Show how halving the step size affects the error for each method (error order).</li>
+            <li>Discuss real-world usage: what methods do modern ODE libraries (SciPy, MATLAB) actually use?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CS-02 -->
+    <div class="project-card" id="CS-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CS-02</span>
+        <div class="project-header-text">
+          <h4>Neural ODEs: Deep Learning Meets Differential Equations</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 5 + AI/ML</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Research + Conceptual</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>In 2018, researchers showed that a deep neural network with infinitely many layers behaves like the solution of an ODE. This led to "Neural ODEs" — a cutting-edge framework where instead of stacking discrete layers, the network evolves continuously as an ODE. It's one of the hottest research areas connecting DEs to artificial intelligence.</p>
+          <div class="de-highlight">
+            <p><strong>Key idea:</strong> A residual network \(h_{t+1} = h_t + f(h_t, \theta)\) becomes, in the continuous limit, \(\frac{dh}{dt} = f(h(t), \theta)\) — an ODE solved by the network.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Explain, at a high level, what residual networks are and how they relate to Euler's method.</li>
+            <li>Explain the key insight: as the number of layers approaches infinity, the network becomes an ODE.</li>
+            <li>Discuss advantages: memory efficiency, adaptive computation, continuous-time modeling.</li>
+            <li>This is a conceptual/research project — no coding required, but read and summarize the original paper (Chen et al., NeurIPS 2018).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CS-03 -->
+    <div class="project-card" id="CS-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CS-03</span>
+        <div class="project-header-text">
+          <h4>SIR Epidemic Model: Simulating Disease Spread</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 4: Systems</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Programming + Modeling</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>The SIR model divides a population into Susceptible, Infected, and Recovered groups. The rates of change between these groups are governed by a system of nonlinear ODEs. It's the mathematical backbone behind epidemic forecasting, including the COVID-19 models that shaped public health policy worldwide.</p>
+          <div class="de-highlight">
+            <p><strong>The system:</strong> \(\frac{dS}{dt} = -\beta SI\), &ensp; \(\frac{dI}{dt} = \beta SI - \gamma I\), &ensp; \(\frac{dR}{dt} = \gamma I\).</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Explain what \(\beta\) (transmission rate) and \(\gamma\) (recovery rate) mean. What is the basic reproduction number \(R_0 = \beta/\gamma\)?</li>
+            <li>Write a Python script to solve the system numerically (Euler or RK4).</li>
+            <li>Vary \(R_0\) and show how it affects the epidemic curve. When does the epidemic die out?</li>
+            <li>Discuss extensions: vaccination, quarantine, age-structured models.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== INDUSTRIAL ENGINEERING ======================== -->
+  <div class="specialty-section" id="industrial">
+    <div class="specialty-header">
+      <span class="spec-icon">🏭</span>
+      <h2>Industrial Engineering</h2>
+      <span class="spec-count">— 3 project ideas</span>
+    </div>
+
+    <!-- IE-01 -->
+    <div class="project-card" id="IE-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">IE-01</span>
+        <div class="project-header-text">
+          <h4>Inventory Models with Continuous Demand</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical + Modeling</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>In operations research, inventory levels change continuously as items are consumed and replenished. The simplest model gives a first-order ODE where the inventory level \(I(t)\) decreases at a demand rate and jumps at replenishment. Continuous approximations lead to elegant ODE models used in supply chain optimization.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dI}{dt} = p - d\), where \(p\) is the production rate and \(d\) is the demand rate (constant or time-varying).</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Model inventory with constant production and demand: when does inventory run out?</li>
+            <li>Introduce time-varying demand (e.g., seasonal) and solve the resulting ODE.</li>
+            <li>Connect to the Economic Order Quantity (EOQ) model and just-in-time (JIT) manufacturing.</li>
+            <li>Discuss how Amazon, Toyota, and other companies use these models in practice.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- IE-02 -->
+    <div class="project-card" id="IE-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">IE-02</span>
+        <div class="project-header-text">
+          <h4>Queueing Theory: Modeling Waiting Lines</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Analytical + Modeling</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>How long will customers wait in line at a bank? How many servers does a hospital emergency room need? Queueing theory answers these questions using DEs that describe how the number of customers in the system changes over time. The birth-death process leads to first-order ODEs for the probability of being in each state.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dP_n}{dt} = \lambda P_{n-1} + \mu P_{n+1} - (\lambda + \mu)P_n\), where \(\lambda\) is the arrival rate, \(\mu\) is the service rate, and \(P_n(t)\) is the probability of \(n\) customers.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Explain the M/M/1 queue model and what each letter means.</li>
+            <li>Find the steady-state solution (\(dP_n/dt = 0\)) and derive the average waiting time.</li>
+            <li>Show what happens when the arrival rate approaches the service rate (congestion).</li>
+            <li>Discuss applications: hospital scheduling, call centers, airport security lines.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- IE-03 -->
+    <div class="project-card" id="IE-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">IE-03</span>
+        <div class="project-header-text">
+          <h4>Learning Curves in Manufacturing</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: Separable</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical + Data</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Workers get faster at a task with practice — but the improvement rate decreases over time. This "learning curve" can be modeled as a separable first-order ODE. The resulting exponential approach to a maximum productivity level is used by industrial engineers to forecast labor costs and schedule production.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dp}{dt} = k(M - p)\), where \(p(t)\) is productivity (units/hour), \(M\) is the maximum achievable rate, and \(k > 0\) controls how fast the worker learns.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the ODE (it's separable!). Show the exponential approach to \(M\).</li>
+            <li>Fit the model to real or hypothetical production data.</li>
+            <li>Discuss how this model helps with workforce planning: how many hours of training are needed for a new hire to reach 95% efficiency?</li>
+            <li>Connect to Wright's learning curve law, widely used in aerospace and defense manufacturing.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== MECHATRONICS ======================== -->
+  <div class="specialty-section" id="mechatronics">
+    <div class="specialty-header">
+      <span class="spec-icon">🤖</span>
+      <h2>Mechatronics Engineering</h2>
+      <span class="spec-count">— 3 project ideas</span>
+    </div>
+
+    <!-- MX-01 -->
+    <div class="project-card" id="MX-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">MX-01</span>
+        <div class="project-header-text">
+          <h4>PID Controller Design Using DEs</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2 + Ch 3</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Modeling + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>The PID controller is the most widely used control algorithm in industry — from cruise control in cars to temperature regulation in ovens. It works by computing a control signal based on the Proportional, Integral, and Derivative of the error signal. The closed-loop system is described by a higher-order ODE, and tuning the PID gains changes its roots and hence its behavior.</p>
+          <div class="de-highlight">
+            <p><strong>Key idea:</strong> The closed-loop transfer function is a rational function in \(s\). The PID gains \((K_p, K_i, K_d)\) shift the poles, changing stability and response speed.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Choose a simple plant model (e.g., DC motor, temperature system).</li>
+            <li>Write the closed-loop ODE with PID control. Find the characteristic equation.</li>
+            <li>Show how changing \(K_p\), \(K_i\), \(K_d\) affects the step response: overshoot, settling time, steady-state error.</li>
+            <li>Simulate the system (MATLAB/Python) and show the effect of tuning.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- MX-02 -->
+    <div class="project-card" id="MX-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">MX-02</span>
+        <div class="project-header-text">
+          <h4>Robot Arm Dynamics: Joint Motion</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: 2nd-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Modeling + Analytical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Each joint of a robot arm can be modeled as a rotational mass-spring-damper system. The motor provides a torque, joint friction acts as a damper, and the arm's inertia acts as the mass. This gives a second-order ODE for the joint angle, identical in form to the mass-spring-damper you study in Chapter 2.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(J\ddot{\theta} + b\dot{\theta} = \tau(t)\), where \(J\) is moment of inertia, \(b\) is friction coefficient, and \(\tau(t)\) is applied torque.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Derive the equation of motion for a single-joint robot arm.</li>
+            <li>Solve for the step response: apply a constant torque and find \(\theta(t)\).</li>
+            <li>Discuss how the solution changes with friction: too little (oscillation) vs. too much (sluggish).</li>
+            <li>Explain how this model is used in robot trajectory planning and joint servo design.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- MX-03 -->
+    <div class="project-card" id="MX-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">MX-03</span>
+        <div class="project-header-text">
+          <h4>Sensor Dynamics: First-Order Response of Thermocouples</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical + Experiment</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Sensors don't respond instantly. A thermocouple plunged into hot water takes time to reach the true temperature — this delay is described by a first-order ODE identical to Newton's law of cooling. Understanding sensor dynamics is critical in mechatronics: a slow sensor feeding a fast controller causes instability.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\tau\frac{dT_s}{dt} + T_s = T_{\text{actual}}\), where \(T_s\) is the sensor reading, \(T_{\text{actual}}\) is the true temperature, and \(\tau\) is the sensor's time constant.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the first-order linear ODE for a step input (sudden temperature change).</li>
+            <li>Explain the time constant \(\tau\): after \(3\tau\), the sensor reads 95% of the true value.</li>
+            <li>Discuss why fast sensors matter in control systems (bandwidth vs. noise trade-off).</li>
+            <li>Optional: run an experiment with a thermometer in hot water and fit \(\tau\).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== MATHEMATICS ======================== -->
+  <div class="specialty-section" id="mathematics">
+    <div class="specialty-header">
+      <span class="spec-icon">📐</span>
+      <h2>Mathematics</h2>
+      <span class="spec-count">— 3 project ideas</span>
+    </div>
+
+    <!-- MA-01 -->
+    <div class="project-card" id="MA-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">MA-01</span>
+        <div class="project-header-text">
+          <h4>Existence and Uniqueness: When Solutions Break Down</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: Theory</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Theoretical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Does every ODE have a solution? Is it unique? The Picard-Lindelöf theorem gives conditions under which a unique solution exists. But what happens when these conditions fail? You get equations with no solution, multiple solutions, or solutions that blow up in finite time. This is beautiful, deep mathematics.</p>
+          <div class="de-highlight">
+            <p><strong>Key theorem:</strong> If \(f(t, y)\) and \(\frac{\partial f}{\partial y}\) are continuous near \((t_0, y_0)\), then \(y' = f(t, y)\), \(y(t_0) = y_0\) has a <strong>unique</strong> local solution.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>State and explain the Picard-Lindelöf (existence-uniqueness) theorem.</li>
+            <li>Give an example where uniqueness fails: \(y' = \sqrt{y}\), \(y(0) = 0\) has infinitely many solutions.</li>
+            <li>Give an example of finite-time blow-up: \(y' = y^2\), \(y(0) = 1\) has solution \(y = 1/(1-t)\) which explodes at \(t = 1\).</li>
+            <li>Discuss why engineers care: if a model has non-unique solutions, which one does nature "choose"?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- MA-02 -->
+    <div class="project-card" id="MA-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">MA-02</span>
+        <div class="project-header-text">
+          <h4>Power Series Solutions and Special Functions</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 5: Series</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Analytical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Many important ODEs (Bessel's equation, Legendre's equation, Airy's equation) cannot be solved in terms of elementary functions. Instead, mathematicians define new "special functions" as power series solutions. These functions appear everywhere in physics and engineering — from the vibrations of a drum to the quantum mechanics of the hydrogen atom.</p>
+          <div class="de-highlight">
+            <p><strong>Example — Bessel's equation:</strong> \(x^2y'' + xy' + (x^2 - n^2)y = 0\). Its solutions \(J_n(x)\) are the Bessel functions, used in acoustics, electromagnetics, and heat conduction.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Choose one special function (Bessel, Legendre, Hermite, or Airy).</li>
+            <li>Write the ODE, find the power series solution (use the Frobenius method from Chapter 5).</li>
+            <li>Plot the function and describe its properties (zeros, oscillation, orthogonality).</li>
+            <li>Give at least two real-world applications of this special function.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- MA-03 -->
+    <div class="project-card" id="MA-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">MA-03</span>
+        <div class="project-header-text">
+          <h4>Phase Portraits and Stability of Nonlinear Systems</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 4: Phase Portraits</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Analytical + Graphical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>For a system of two ODEs, the phase portrait shows all possible trajectories in the \((x, y)\) plane. The classification of equilibrium points (nodes, spirals, saddles, centers) reveals the qualitative behavior without solving anything. This is the gateway to nonlinear dynamics and chaos theory.</p>
+          <div class="de-highlight">
+            <p><strong>Key idea:</strong> Classify the equilibrium \((0,0)\) of \(\mathbf{x}' = A\mathbf{x}\) by the eigenvalues of \(A\). Real, distinct → node; complex → spiral; pure imaginary → center; opposite sign → saddle.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Draw phase portraits for each type of equilibrium (use software or draw by hand).</li>
+            <li>Explain what the eigenvalues tell you about stability.</li>
+            <li>Apply linearization to a nonlinear system (e.g., predator-prey or Van der Pol oscillator).</li>
+            <li>Discuss why phase portraits are useful: engineers can predict long-term behavior without solving the ODE.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== EDUCATION ======================== -->
+  <div class="specialty-section" id="education">
+    <div class="specialty-header">
+      <span class="spec-icon">📚</span>
+      <h2>Mathematics Education</h2>
+      <span class="spec-count">— 3 project ideas</span>
+    </div>
+
+    <!-- ED-01 -->
+    <div class="project-card" id="ED-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ED-01</span>
+        <div class="project-header-text">
+          <h4>Population Growth Models: From Malthus to Logistic</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: Separable</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Modeling + Historical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Population growth is one of the most intuitive introductions to differential equations. Malthus proposed exponential growth (\(P' = rP\)), but Verhulst improved it with the logistic model (\(P' = rP(1 - P/K)\)) that accounts for resource limits. These models are perfect for teaching because students can relate to them and compare with real data.</p>
+          <div class="de-highlight">
+            <p><strong>The DEs:</strong> Exponential: \(\frac{dP}{dt} = rP\) &ensp;→&ensp; Logistic: \(\frac{dP}{dt} = rP\left(1 - \frac{P}{K}\right)\). Both are separable!</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve both DEs analytically. Show that the logistic model has an S-shaped curve.</li>
+            <li>Fit the models to real population data (world population, bacteria growth, etc.).</li>
+            <li>Discuss when exponential is a good approximation and when it fails.</li>
+            <li>Design a lesson plan: how would you teach this to high school or first-year university students?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Compare your logistic prediction with actual world population data — it's surprisingly accurate up to about 2050!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ED-02 -->
+    <div class="project-card" id="ED-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ED-02</span>
+        <div class="project-header-text">
+          <h4>Radioactive Decay and Carbon-14 Dating</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: Separable</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Analytical + Application</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Radioactive decay is governed by the simplest separable ODE: the rate of decay is proportional to the amount present. The half-life concept and carbon-14 dating are direct consequences. This topic connects DEs to archaeology, geology, medicine (radioactive tracers), and nuclear engineering — making it ideal for education students.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dN}{dt} = -\lambda N\), with solution \(N(t) = N_0 e^{-\lambda t}\) and half-life \(t_{1/2} = \frac{\ln 2}{\lambda}\).</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Solve the ODE and derive the half-life formula.</li>
+            <li>Work a carbon-14 dating example: estimate the age of an artifact given its remaining C-14 fraction.</li>
+            <li>Discuss other isotopes and their applications (medical imaging with technetium-99m, uranium dating for rocks).</li>
+            <li>Design a classroom activity: how would you make this topic engaging for students?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ED-03 -->
+    <div class="project-card" id="ED-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">ED-03</span>
+        <div class="project-header-text">
+          <h4>Slope Fields as a Visual Teaching Tool</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1 + Ch 5</span>
+            <span class="tag tag-difficulty">Introductory</span>
+            <span class="tag tag-type">Visual + Pedagogical</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Many students struggle with DEs because they're abstract. Slope fields provide a visual, geometric way to understand solutions without solving anything. At each point \((t, y)\), you draw a small line segment with slope \(f(t, y)\). Solution curves "flow" along these slopes. This tool is powerful for building intuition.</p>
+          <div class="de-highlight">
+            <p><strong>Key idea:</strong> For \(y' = f(t, y)\), draw the slope \(f(t, y)\) at a grid of points. Solutions are curves tangent to these slopes everywhere.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>Draw slope fields (by hand or with software) for several DEs: \(y' = y\), \(y' = t - y\), \(y' = y(1 - y)\).</li>
+            <li>Overlay actual solution curves on the slope fields. Show how different initial conditions lead to different solutions.</li>
+            <li>Explain how slope fields reveal qualitative behavior: equilibrium solutions, stability, asymptotic behavior.</li>
+            <li>Design an interactive classroom activity where students draw slope fields by hand and predict solutions.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== FOOTER ======================== -->
+  <section style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-left: 5px solid var(--success);">
+    <h2 style="border-color: var(--success);">Want to Propose Your Own Topic?</h2>
+    <p>The ideas above are suggestions — you are welcome to propose a different topic that connects DEs to your specialty. Just make sure it includes a clear DE model, a solution or simulation, and a connection to real engineering practice. Email your proposal to <strong>Dr. Mabrok</strong> for approval before starting.</p>
+  </section>
+
+</div>
+
+<footer>
+  Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University, Department of Mathematics and Statistics
+</footer>
+
+<script>
+  // Toggle project cards open/closed
+  function toggleProject(headerEl) {
+    const card = headerEl.closest('.project-card');
+    card.classList.toggle('open');
+  }
+
+  // Smooth scroll for specialty nav chips
+  document.querySelectorAll('.specialty-chip').forEach(chip => {
+    chip.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // KaTeX rendering
+  document.addEventListener('DOMContentLoaded', function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });
+  });
+</script>
+</body>
+</html>
