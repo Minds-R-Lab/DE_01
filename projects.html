@@ -279,967 +279,697 @@
     </div>
   </section>
 
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engineering Applications of Differential Equations</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            padding: 40px 20px;
-            min-height: 100vh;
-        }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .page-header {
-            text-align: center;
-            color: white;
-            margin-bottom: 50px;
-        }
-
-        .page-header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
-
-        .specialty-section {
-            background: white;
-            border-radius: 12px;
-            padding: 35px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .specialty-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 20px;
-        }
-
-        .spec-icon {
-            font-size: 2.5em;
-        }
-
-        .specialty-header h2 {
-            font-size: 2em;
-            color: #333;
-            flex: 1;
-        }
-
-        .spec-count {
-            font-size: 1.1em;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-            gap: 20px;
-        }
-
-        .project-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        .project-card:hover {
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            border-color: #667eea;
-        }
-
-        .project-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            cursor: pointer;
-            user-select: none;
-            transition: background 0.3s ease;
-        }
-
-        .project-header:hover {
-            background: linear-gradient(135deg, #e8ecf1 0%, #bccae2 100%);
-        }
-
-        .project-id {
-            font-weight: 700;
-            font-size: 1.1em;
-            color: #667eea;
-            min-width: 60px;
-        }
-
-        .project-header-text {
-            flex: 1;
-            margin: 0 20px;
-        }
-
-        .project-header-text h4 {
-            color: #333;
-            font-size: 1.2em;
-            margin-bottom: 8px;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .tag-chapter {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .tag-difficulty {
-            background: #fff3e0;
-            color: #f57c00;
-        }
-
-        .tag-type {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .project-toggle {
-            font-size: 1.8em;
-            color: #667eea;
-            font-weight: bold;
-            transition: transform 0.3s ease;
-            width: 30px;
-            text-align: center;
-        }
-
-        .project-card.expanded .project-toggle {
-            transform: rotate(45deg);
-        }
-
-        .project-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .project-card.expanded .project-body {
-            max-height: 1500px;
-        }
-
-        .project-content {
-            padding: 25px 20px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .project-content h5 {
-            color: #333;
-            font-size: 1.05em;
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        .project-content h5:first-child {
-            margin-top: 0;
-        }
-
-        .project-content p {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 12px;
-            font-size: 0.95em;
-        }
-
-        .de-highlight {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-
-        .de-highlight p {
-            margin: 0;
-            color: #333;
-        }
-
-        .de-highlight strong {
-            color: #667eea;
-        }
-
-        .project-content ul {
-            list-style: none;
-            margin-left: 0;
-            margin-bottom: 15px;
-        }
-
-        .project-content li {
-            color: #555;
-            padding: 8px 0 8px 25px;
-            position: relative;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-
-        .project-content li:before {
-            content: "▸";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        .presentation-tips {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 4px;
-        }
-
-        .presentation-tips p {
-            margin: 0;
-            color: #2e7d32;
-            font-size: 0.95em;
-        }
-
-        .presentation-tips strong {
-            color: #1b5e20;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="page-header">
-            <h1>Engineering Applications of Differential Equations</h1>
-            <p>Explore real-world systems through conceptual understanding</p>
+<div class="specialty-section" id="electrical">
+        <div class="specialty-header">
+            <span class="spec-icon">⚡</span>
+            <h2>Electrical Engineering</h2>
+            <span class="spec-count">— 10 project ideas</span>
         </div>
-
-        <div class="specialty-section" id="electrical">
-            <div class="specialty-header">
-                <span class="spec-icon">⚡</span>
-                <h2>Electrical Engineering</h2>
-                <span class="spec-count">— 10 project ideas</span>
+                        <div class="project-card" id="EE-01">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-01</span>
+                    <div class="project-header-text">
+                        <h4>RLC Circuit Transient Response</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 2</span>
+                            <span class="tag tag-difficulty">Introductory</span>
+                            <span class="tag tag-type">Conceptual</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>RLC circuits are fundamental to electrical engineering, found in power supplies, filters, and radio tuners. When a switch closes or opens, the circuit undergoes a transient response before reaching steady state. Understanding this transient behavior is critical for designing circuits that respond appropriately to sudden changes.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(L\frac{d^2i}{dt^2} + R\frac{di}{dt} + \frac{i}{C} = V(t)\) where \(L\) is inductance, \(R\) is resistance, \(C\) is capacitance, and \(V(t)\) is the applied voltage.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How does the damping ratio determine whether the circuit oscillates or settles smoothly to steady state?</li>
+                            <li>What is resonance, and why does excessive current flow at the natural frequency?</li>
+                            <li>How do engineers choose component values to achieve overdamped, critically damped, or underdamped responses?</li>
+                            <li>Why are RLC circuits used in radio receivers to select specific frequencies?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Create a visual showing how current vs. time graphs change as you vary the damping ratio. Show oscillatory vs. non-oscillatory cases side-by-side.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="projects-grid">
-                <div class="project-card" id="EE-01">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-01</span>
-                        <div class="project-header-text">
-                            <h4>RLC Circuit Transient Response</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 2</span>
-                                <span class="tag tag-difficulty">Introductory</span>
-                                <span class="tag tag-type">Conceptual</span>
-                            </div>
+
+            <div class="project-card" id="EE-02">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-02</span>
+                    <div class="project-header-text">
+                        <h4>RC Circuit and Time Constants</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 1</span>
+                            <span class="tag tag-difficulty">Introductory</span>
+                            <span class="tag tag-type">Conceptual</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>RLC circuits are fundamental to electrical engineering, found in power supplies, filters, and radio tuners. When a switch closes or opens, the circuit undergoes a transient response before reaching steady state. Understanding this transient behavior is critical for designing circuits that respond appropriately to sudden changes.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(L\frac{d^2i}{dt^2} + R\frac{di}{dt} + \frac{i}{C} = V(t)\) where \(L\) is inductance, \(R\) is resistance, \(C\) is capacitance, and \(V(t)\) is the applied voltage.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How does the damping ratio determine whether the circuit oscillates or settles smoothly to steady state?</li>
-                                <li>What is resonance, and why does excessive current flow at the natural frequency?</li>
-                                <li>How do engineers choose component values to achieve overdamped, critically damped, or underdamped responses?</li>
-                                <li>Why are RLC circuits used in radio receivers to select specific frequencies?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Create a visual showing how current vs. time graphs change as you vary the damping ratio. Show oscillatory vs. non-oscillatory cases side-by-side.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>RC circuits govern the charging and discharging of capacitors, appearing in camera flash circuits, touch screens, and analog filters. The time constant determines how quickly a capacitor responds to input changes. Smartphones use RC circuits to filter finger touches and distinguish them from noise.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(RC\frac{dV_C}{dt} + V_C = V_{in}(t)\) where \(V_C\) is the capacitor voltage and \(V_{in}\) is the input voltage.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>What is the time constant \(\tau = RC\), and why does it determine charging/discharging speed?</li>
+                            <li>Why does the capacitor voltage never instantaneously match the input?</li>
+                            <li>How can touchscreen engineers use the time constant to filter out noise while preserving real touches?</li>
+                            <li>What happens if you apply an AC signal to an RC circuit instead of a step input?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Show actual smartphone touch calibration data or camera flash timing, then explain how the time constant ensures proper operation.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="EE-02">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-02</span>
-                        <div class="project-header-text">
-                            <h4>RC Circuit and Time Constants</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 1</span>
-                                <span class="tag tag-difficulty">Introductory</span>
-                                <span class="tag tag-type">Conceptual</span>
-                            </div>
+            <div class="project-card" id="EE-03">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-03</span>
+                    <div class="project-header-text">
+                        <h4>Transfer Functions and Laplace in Circuit Analysis</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 3</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Analytical</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>RC circuits govern the charging and discharging of capacitors, appearing in camera flash circuits, touch screens, and analog filters. The time constant determines how quickly a capacitor responds to input changes. Smartphones use RC circuits to filter finger touches and distinguish them from noise.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(RC\frac{dV_C}{dt} + V_C = V_{in}(t)\) where \(V_C\) is the capacitor voltage and \(V_{in}\) is the input voltage.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>What is the time constant \(\tau = RC\), and why does it determine charging/discharging speed?</li>
-                                <li>Why does the capacitor voltage never instantaneously match the input?</li>
-                                <li>How can touchscreen engineers use the time constant to filter out noise while preserving real touches?</li>
-                                <li>What happens if you apply an AC signal to an RC circuit instead of a step input?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Show actual smartphone touch calibration data or camera flash timing, then explain how the time constant ensures proper operation.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Transfer functions and Laplace transforms are essential tools for circuit design and analysis. They allow engineers to work in the frequency domain (s-domain) instead of the time domain, making complex circuits much easier to analyze. Control systems, audio equalizers, and antenna filters all rely on transfer function concepts.</p>
+                        <div class="de-highlight">
+                            <p><strong>The Concept:</strong> A transfer function \(H(s) = \frac{V_{out}(s)}{V_{in}(s)}\) describes how a circuit responds to different frequencies, with poles and zeros determining stability and resonance behavior.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>What do poles and zeros of a transfer function tell you about circuit stability and frequency response?</li>
+                            <li>Why does working in the s-domain transform differential equations into simpler algebraic equations?</li>
+                            <li>How do engineers use Bode plots to visualize frequency response without solving equations?</li>
+                            <li>What does it mean when poles cross the right half-plane, and why is this dangerous?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" id="EE-04">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-04</span>
+                    <div class="project-header-text">
+                        <h4>DC Motor Speed Control</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 4</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>DC motors are found everywhere—from power tools to electric vehicles. Motor speed depends on applied voltage and load torque. The relationship between electrical input (voltage) and mechanical output (shaft speed) forms a system of coupled differential equations that describe the electromechanical interaction.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE System:</strong> Electrical: \(L\frac{di}{dt} + Ri + K_b\omega = V(t)\); Mechanical: \(J\frac{d\omega}{dt} + b\omega = K_t i - T_L\) where \(\omega\) is speed, \(K_b\) is back-EMF constant, and \(K_t\) is torque constant.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>Why does the back-EMF (counter-voltage) increase as the motor speeds up, eventually limiting current?</li>
+                            <li>How do the electrical and mechanical time constants differ, and which dominates motor response?</li>
+                            <li>What role does inertia play in how quickly a motor can accelerate or decelerate?</li>
+                            <li>How would you design a control system to maintain constant speed despite changing load?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Simulate or demonstrate a motor starting with and without load, showing how the speed curve changes with different applied voltages.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="EE-03">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-03</span>
-                        <div class="project-header-text">
-                            <h4>Transfer Functions and Laplace in Circuit Analysis</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 3</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Analytical</span>
-                            </div>
+            <div class="project-card" id="EE-05">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-05</span>
+                    <div class="project-header-text">
+                        <h4>Transmission Line Equations — Telegrapher's Equations</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 4</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Analytical</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Transfer functions and Laplace transforms are essential tools for circuit design and analysis. They allow engineers to work in the frequency domain (s-domain) instead of the time domain, making complex circuits much easier to analyze. Control systems, audio equalizers, and antenna filters all rely on transfer function concepts.</p>
-                            <div class="de-highlight">
-                                <p><strong>The Concept:</strong> A transfer function \(H(s) = \frac{V_{out}(s)}{V_{in}(s)}\) describes how a circuit responds to different frequencies, with poles and zeros determining stability and resonance behavior.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>What do poles and zeros of a transfer function tell you about circuit stability and frequency response?</li>
-                                <li>Why does working in the s-domain transform differential equations into simpler algebraic equations?</li>
-                                <li>How do engineers use Bode plots to visualize frequency response without solving equations?</li>
-                                <li>What does it mean when poles cross the right half-plane, and why is this dangerous?</li>
-                            </ul>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Power transmission lines, coaxial cables, and telephone wires are governed by coupled partial differential equations called the Telegrapher's Equations. These equations describe how voltage and current propagate down a cable as waves. Understanding transmission lines is critical for power system design and high-speed digital communication.</p>
+                        <div class="de-highlight">
+                            <p><strong>The PDE:</strong> \(\frac{\partial V}{\partial z} = -L\frac{\partial i}{\partial t} - Ri\) and \(\frac{\partial i}{\partial z} = -C\frac{\partial V}{\partial t} - GV\) where \(L, C, R, G\) are per-unit-length parameters.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How do voltage and current waves propagate down a transmission line, and at what velocity?</li>
+                            <li>What is characteristic impedance, and why must it be matched to prevent reflections?</li>
+                            <li>What happens when a signal encounters the end of a cable (open or short circuit)?</li>
+                            <li>Why do high-speed digital signals require careful cable management and impedance matching?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Animate voltage and current waves traveling down a transmission line, showing what happens at the termination.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="EE-04">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-04</span>
-                        <div class="project-header-text">
-                            <h4>DC Motor Speed Control</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 4</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
+            <div class="project-card" id="EE-06">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-06</span>
+                    <div class="project-header-text">
+                        <h4>Phase-Locked Loops in Communication Systems</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 4</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>DC motors are found everywhere—from power tools to electric vehicles. Motor speed depends on applied voltage and load torque. The relationship between electrical input (voltage) and mechanical output (shaft speed) forms a system of coupled differential equations that describe the electromechanical interaction.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE System:</strong> Electrical: \(L\frac{di}{dt} + Ri + K_b\omega = V(t)\); Mechanical: \(J\frac{d\omega}{dt} + b\omega = K_t i - T_L\) where \(\omega\) is speed, \(K_b\) is back-EMF constant, and \(K_t\) is torque constant.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>Why does the back-EMF (counter-voltage) increase as the motor speeds up, eventually limiting current?</li>
-                                <li>How do the electrical and mechanical time constants differ, and which dominates motor response?</li>
-                                <li>What role does inertia play in how quickly a motor can accelerate or decelerate?</li>
-                                <li>How would you design a control system to maintain constant speed despite changing load?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Simulate or demonstrate a motor starting with and without load, showing how the speed curve changes with different applied voltages.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Phase-locked loops (PLLs) synchronize oscillators to incoming signals and are essential components in radio receivers, GPS systems, and clock recovery circuits. A PLL continuously adjusts a local oscillator's frequency to match an incoming signal's frequency, creating a feedback control system governed by nonlinear differential equations.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(\frac{d\theta_{vco}}{dt} = \omega_0 + K_p e(t) + K_i \int e(\tau)d\tau\) where \(e(t)\) is the phase error and \(K_p, K_i\) are proportional and integral gains.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How does negative feedback in a PLL help synchronize the local oscillator to an incoming signal?</li>
+                            <li>What determines the lock range—the range of input frequencies the PLL can synchronize to?</li>
+                            <li>Why is the transient response of a PLL (lock-in time) important in wireless receivers?</li>
+                            <li>What advantages do proportional-integral (PI) controllers provide over simple proportional control?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" id="EE-07">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-07</span>
+                    <div class="project-header-text">
+                        <h4>Power Grid Stability and Swing Equation</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 2</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Power grids operate at a constant frequency (60 Hz in North America, 50 Hz elsewhere), and generators must maintain synchronism despite varying loads and disturbances. The swing equation governs generator rotor dynamics and is central to power system stability analysis. A blackout can result from instability in this nonlinear system.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(2H\frac{d^2\delta}{dt^2} + D\frac{d\delta}{dt} = P_m - P_e(\delta)\) where \(\delta\) is rotor angle, \(H\) is inertia constant, \(P_m\) is mechanical power, and \(P_e\) is electrical power.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>What role does generator inertia play in the power grid's ability to withstand sudden disturbances?</li>
+                            <li>Why is synchronism stability a nonlinear problem, and what happens when generators lose synchronism?</li>
+                            <li>How do protective relays detect instability and isolate failing components before cascading failure?</li>
+                            <li>What is the critical clearing time, and why is it important for grid reliability?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Simulate a sudden fault (like a short circuit) and show how different inertia levels affect grid stability.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="EE-05">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-05</span>
-                        <div class="project-header-text">
-                            <h4>Transmission Line Equations — Telegrapher's Equations</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 4</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Analytical</span>
-                            </div>
+            <div class="project-card" id="EE-08">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-08</span>
+                    <div class="project-header-text">
+                        <h4>Semiconductor Physics — Drift-Diffusion Equation</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 5</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Analytical</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Power transmission lines, coaxial cables, and telephone wires are governed by coupled partial differential equations called the Telegrapher's Equations. These equations describe how voltage and current propagate down a cable as waves. Understanding transmission lines is critical for power system design and high-speed digital communication.</p>
-                            <div class="de-highlight">
-                                <p><strong>The PDE:</strong> \(\frac{\partial V}{\partial z} = -L\frac{\partial i}{\partial t} - Ri\) and \(\frac{\partial i}{\partial z} = -C\frac{\partial V}{\partial t} - GV\) where \(L, C, R, G\) are per-unit-length parameters.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How do voltage and current waves propagate down a transmission line, and at what velocity?</li>
-                                <li>What is characteristic impedance, and why must it be matched to prevent reflections?</li>
-                                <li>What happens when a signal encounters the end of a cable (open or short circuit)?</li>
-                                <li>Why do high-speed digital signals require careful cable management and impedance matching?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Animate voltage and current waves traveling down a transmission line, showing what happens at the termination.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Transistors, diodes, and solar cells operate based on charge carrier movement through semiconductor materials. The drift-diffusion equation describes how electrons and holes move due to both electric fields (drift) and concentration gradients (diffusion). This partial differential equation is the foundation of semiconductor device modeling and design.</p>
+                        <div class="de-highlight">
+                            <p><strong>The PDE:</strong> \(\frac{\partial n}{\partial t} = \frac{1}{q}\frac{\partial J_n}{\partial x} - R\) where \(J_n = qD_n\frac{\partial n}{\partial x} - q\mu_n n E\) is the electron current density.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How do drift (electric field) and diffusion (concentration gradient) compete in determining carrier motion?</li>
+                            <li>What is the Einstein relation, and why does it connect diffusivity and mobility?</li>
+                            <li>How do pn-junctions create the depletion region that makes diodes and transistors work?</li>
+                            <li>Why do temperature and doping concentration profoundly affect semiconductor device performance?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" id="EE-09">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-09</span>
+                    <div class="project-header-text">
+                        <h4>EM Wave Propagation — Maxwell to Wave Equation</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 4</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Analytical</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Electromagnetic waves—radio, microwaves, light—are the foundation of wireless communication, radar, and fiber optics. Maxwell's equations describe how electric and magnetic fields couple and propagate. Combining these equations yields the wave equation, revealing that EM waves travel at the speed of light and their wavelength and frequency are related by \(c = \lambda f\).</p>
+                        <div class="de-highlight">
+                            <p><strong>The Wave Equation:</strong> \(\nabla^2 E - \mu_0 \epsilon_0 \frac{\partial^2 E}{\partial t^2} = 0\) with wave speed \(v = \frac{1}{\sqrt{\mu_0 \epsilon_0}} = c\).</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How do changing electric and magnetic fields continuously generate each other, sustaining wave propagation?</li>
+                            <li>Why do radio waves at different frequencies propagate differently through materials?</li>
+                            <li>What is impedance matching, and why do antennas have specific shapes and sizes?</li>
+                            <li>How does the wave equation explain attenuation and reflection in conductors versus insulators?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Show how antenna design relates to wavelength, explaining why a smartphone's 4G antenna is much shorter than a radio station's FM antenna.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="EE-06">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-06</span>
-                        <div class="project-header-text">
-                            <h4>Phase-Locked Loops in Communication Systems</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 4</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Phase-locked loops (PLLs) synchronize oscillators to incoming signals and are essential components in radio receivers, GPS systems, and clock recovery circuits. A PLL continuously adjusts a local oscillator's frequency to match an incoming signal's frequency, creating a feedback control system governed by nonlinear differential equations.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(\frac{d\theta_{vco}}{dt} = \omega_0 + K_p e(t) + K_i \int e(\tau)d\tau\) where \(e(t)\) is the phase error and \(K_p, K_i\) are proportional and integral gains.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How does negative feedback in a PLL help synchronize the local oscillator to an incoming signal?</li>
-                                <li>What determines the lock range—the range of input frequencies the PLL can synchronize to?</li>
-                                <li>Why is the transient response of a PLL (lock-in time) important in wireless receivers?</li>
-                                <li>What advantages do proportional-integral (PI) controllers provide over simple proportional control?</li>
-                            </ul>
+            <div class="project-card" id="EE-10">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">EE-10</span>
+                    <div class="project-header-text">
+                        <h4>Signal Processing and Convolution — Impulse Response</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 3</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
                         </div>
                     </div>
+                    <span class="project-toggle">+</span>
                 </div>
-
-                <div class="project-card" id="EE-07">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-07</span>
-                        <div class="project-header-text">
-                            <h4>Power Grid Stability and Swing Equation</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 2</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Linear time-invariant (LTI) systems, such as audio filters, equalizers, and communication channels, can be completely characterized by a single function: the impulse response. Convolution combines the input signal with the impulse response to predict any output. This principle is fundamental to audio processing, image filtering, and signal denoising.</p>
+                        <div class="de-highlight">
+                            <p><strong>The Concept:</strong> \(y(t) = \int_{-\infty}^{\infty} h(\tau) u(t - \tau) d\tau\) where \(h(t)\) is the impulse response and \(u(t)\) is the input signal.</p>
                         </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Power grids operate at a constant frequency (60 Hz in North America, 50 Hz elsewhere), and generators must maintain synchronism despite varying loads and disturbances. The swing equation governs generator rotor dynamics and is central to power system stability analysis. A blackout can result from instability in this nonlinear system.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(2H\frac{d^2\delta}{dt^2} + D\frac{d\delta}{dt} = P_m - P_e(\delta)\) where \(\delta\) is rotor angle, \(H\) is inertia constant, \(P_m\) is mechanical power, and \(P_e\) is electrical power.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>What role does generator inertia play in the power grid's ability to withstand sudden disturbances?</li>
-                                <li>Why is synchronism stability a nonlinear problem, and what happens when generators lose synchronism?</li>
-                                <li>How do protective relays detect instability and isolate failing components before cascading failure?</li>
-                                <li>What is the critical clearing time, and why is it important for grid reliability?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Simulate a sudden fault (like a short circuit) and show how different inertia levels affect grid stability.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" id="EE-08">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-08</span>
-                        <div class="project-header-text">
-                            <h4>Semiconductor Physics — Drift-Diffusion Equation</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 5</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Analytical</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Transistors, diodes, and solar cells operate based on charge carrier movement through semiconductor materials. The drift-diffusion equation describes how electrons and holes move due to both electric fields (drift) and concentration gradients (diffusion). This partial differential equation is the foundation of semiconductor device modeling and design.</p>
-                            <div class="de-highlight">
-                                <p><strong>The PDE:</strong> \(\frac{\partial n}{\partial t} = \frac{1}{q}\frac{\partial J_n}{\partial x} - R\) where \(J_n = qD_n\frac{\partial n}{\partial x} - q\mu_n n E\) is the electron current density.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How do drift (electric field) and diffusion (concentration gradient) compete in determining carrier motion?</li>
-                                <li>What is the Einstein relation, and why does it connect diffusivity and mobility?</li>
-                                <li>How do pn-junctions create the depletion region that makes diodes and transistors work?</li>
-                                <li>Why do temperature and doping concentration profoundly affect semiconductor device performance?</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" id="EE-09">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-09</span>
-                        <div class="project-header-text">
-                            <h4>EM Wave Propagation — Maxwell to Wave Equation</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 4</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Analytical</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Electromagnetic waves—radio, microwaves, light—are the foundation of wireless communication, radar, and fiber optics. Maxwell's equations describe how electric and magnetic fields couple and propagate. Combining these equations yields the wave equation, revealing that EM waves travel at the speed of light and their wavelength and frequency are related by \(c = \lambda f\).</p>
-                            <div class="de-highlight">
-                                <p><strong>The Wave Equation:</strong> \(\nabla^2 E - \mu_0 \epsilon_0 \frac{\partial^2 E}{\partial t^2} = 0\) with wave speed \(v = \frac{1}{\sqrt{\mu_0 \epsilon_0}} = c\).</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How do changing electric and magnetic fields continuously generate each other, sustaining wave propagation?</li>
-                                <li>Why do radio waves at different frequencies propagate differently through materials?</li>
-                                <li>What is impedance matching, and why do antennas have specific shapes and sizes?</li>
-                                <li>How does the wave equation explain attenuation and reflection in conductors versus insulators?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Show how antenna design relates to wavelength, explaining why a smartphone's 4G antenna is much shorter than a radio station's FM antenna.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" id="EE-10">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">EE-10</span>
-                        <div class="project-header-text">
-                            <h4>Signal Processing and Convolution — Impulse Response</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 3</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Linear time-invariant (LTI) systems, such as audio filters, equalizers, and communication channels, can be completely characterized by a single function: the impulse response. Convolution combines the input signal with the impulse response to predict any output. This principle is fundamental to audio processing, image filtering, and signal denoising.</p>
-                            <div class="de-highlight">
-                                <p><strong>The Concept:</strong> \(y(t) = \int_{-\infty}^{\infty} h(\tau) u(t - \tau) d\tau\) where \(h(t)\) is the impulse response and \(u(t)\) is the input signal.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>What does the impulse response tell you about how a system will respond to any input signal?</li>
-                                <li>Why does convolution mathematically describe how systems filter and shape signals?</li>
-                                <li>How can the Laplace transform turn convolution (an integral) into simple multiplication?</li>
-                                <li>How do audio engineers use impulse responses to simulate room acoustics or famous recording studios?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Record a room's impulse response with a speaker and microphone, then show how convolving it with music creates a realistic reverberation effect.</p>
-                            </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>What does the impulse response tell you about how a system will respond to any input signal?</li>
+                            <li>Why does convolution mathematically describe how systems filter and shape signals?</li>
+                            <li>How can the Laplace transform turn convolution (an integral) into simple multiplication?</li>
+                            <li>How do audio engineers use impulse responses to simulate room acoustics or famous recording studios?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Record a room's impulse response with a speaker and microphone, then show how convolving it with music creates a realistic reverberation effect.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="specialty-section" id="mechanical">
-            <div class="specialty-header">
-                <span class="spec-icon">⚙️</span>
-                <h2>Mechanical Engineering</h2>
-                <span class="spec-count">— 10 project ideas</span>
+<div class="specialty-section" id="mechanical">
+        <div class="specialty-header">
+            <span class="spec-icon">⚙️</span>
+            <h2>Mechanical Engineering</h2>
+            <span class="spec-count">— 10 project ideas</span>
+        </div>
+                        <div class="project-card" id="ME-01">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-01</span>
+                    <div class="project-header-text">
+                        <h4>Mass-Spring-Damper Vibration Analysis</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 2</span>
+                            <span class="tag tag-difficulty">Introductory</span>
+                            <span class="tag tag-type">Conceptual</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>The mass-spring-damper system is the foundation of vibration analysis and appears everywhere: car suspensions, earthquake-resistant buildings, and vibration isolation systems. When a mass is displaced from equilibrium, springs restore it and dampers dissipate energy. Understanding the balance between these forces explains everything from smooth rides to structural failures.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(m\frac{d^2x}{dt^2} + c\frac{dx}{dt} + kx = F(t)\) where \(m\) is mass, \(c\) is damping coefficient, \(k\) is spring stiffness, and \(F(t)\) is applied force.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How does the damping ratio determine whether vibrations oscillate or decay monotonically?</li>
+                            <li>What is resonance, and why can even small periodic forces cause large oscillations near the natural frequency?</li>
+                            <li>Why do car suspensions need both springs and shock absorbers—what does each provide?</li>
+                            <li>How would you design a suspension to isolate a sensitive instrument from floor vibrations?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Show videos of car suspensions responding to bumps, then explain the physics using your differential equation model.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="projects-grid">
-                <div class="project-card" id="ME-01">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-01</span>
-                        <div class="project-header-text">
-                            <h4>Mass-Spring-Damper Vibration Analysis</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 2</span>
-                                <span class="tag tag-difficulty">Introductory</span>
-                                <span class="tag tag-type">Conceptual</span>
-                            </div>
+
+            <div class="project-card" id="ME-02">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-02</span>
+                    <div class="project-header-text">
+                        <h4>Newton's Law of Cooling</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 1</span>
+                            <span class="tag tag-difficulty">Introductory</span>
+                            <span class="tag tag-type">Conceptual</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>The mass-spring-damper system is the foundation of vibration analysis and appears everywhere: car suspensions, earthquake-resistant buildings, and vibration isolation systems. When a mass is displaced from equilibrium, springs restore it and dampers dissipate energy. Understanding the balance between these forces explains everything from smooth rides to structural failures.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(m\frac{d^2x}{dt^2} + c\frac{dx}{dt} + kx = F(t)\) where \(m\) is mass, \(c\) is damping coefficient, \(k\) is spring stiffness, and \(F(t)\) is applied force.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How does the damping ratio determine whether vibrations oscillate or decay monotonically?</li>
-                                <li>What is resonance, and why can even small periodic forces cause large oscillations near the natural frequency?</li>
-                                <li>Why do car suspensions need both springs and shock absorbers—what does each provide?</li>
-                                <li>How would you design a suspension to isolate a sensitive instrument from floor vibrations?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Show videos of car suspensions responding to bumps, then explain the physics using your differential equation model.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Newton's Law of Cooling describes how objects exchange heat with their surroundings. It governs heating, cooling, and thermal comfort in buildings, refrigeration systems, and even forensic science. When your coffee cools down, when an oven heats food, or when engineers design HVAC systems, Newton's law is at work.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(\frac{dT}{dt} = -h(T - T_{ambient})\) where \(T\) is object temperature, \(T_{ambient}\) is surroundings temperature, and \(h\) is a heat transfer coefficient.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>Why is the cooling rate proportional to the temperature difference, not the absolute temperature?</li>
+                            <li>What is the time constant for cooling, and how does it depend on material properties and environment?</li>
+                            <li>How do thermally insulated containers slow cooling, and what does this reveal about the heat transfer coefficient?</li>
+                            <li>How can forensic scientists use Newton's law to estimate time of death from body temperature?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Measure the temperature of hot water or coffee over time and fit your data to the exponential solution.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="ME-02">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-02</span>
-                        <div class="project-header-text">
-                            <h4>Newton's Law of Cooling</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 1</span>
-                                <span class="tag tag-difficulty">Introductory</span>
-                                <span class="tag tag-type">Conceptual</span>
-                            </div>
+            <div class="project-card" id="ME-03">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-03</span>
+                    <div class="project-header-text">
+                        <h4>Projectile Motion with Air Resistance</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 1</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Newton's Law of Cooling describes how objects exchange heat with their surroundings. It governs heating, cooling, and thermal comfort in buildings, refrigeration systems, and even forensic science. When your coffee cools down, when an oven heats food, or when engineers design HVAC systems, Newton's law is at work.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(\frac{dT}{dt} = -h(T - T_{ambient})\) where \(T\) is object temperature, \(T_{ambient}\) is surroundings temperature, and \(h\) is a heat transfer coefficient.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>Why is the cooling rate proportional to the temperature difference, not the absolute temperature?</li>
-                                <li>What is the time constant for cooling, and how does it depend on material properties and environment?</li>
-                                <li>How do thermally insulated containers slow cooling, and what does this reveal about the heat transfer coefficient?</li>
-                                <li>How can forensic scientists use Newton's law to estimate time of death from body temperature?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Measure the temperature of hot water or coffee over time and fit your data to the exponential solution.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Projectile motion without air resistance is idealized high school physics, but real objects experience drag. Whether it's baseball trajectory in sports, artillery range calculations, or skydivers reaching terminal velocity, air resistance fundamentally changes how objects move. Understanding drag is essential for sports engineering, aerospace design, and safety systems.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DEs:</strong> \(m\frac{dv_x}{dt} = -bv_x\) and \(m\frac{dv_y}{dt} = -mg - bv_y\) where \(b\) is the drag coefficient and \(g\) is gravitational acceleration.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How does air resistance change the optimal launch angle for maximum range?</li>
+                            <li>Why do objects reach terminal velocity, and what determines it?</li>
+                            <li>How do baseball pitches and curveballs exploit aerodynamic effects?</li>
+                            <li>Why is skydiver acceleration initially high but eventually reaches near-zero?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Compare trajectories with and without drag for a baseball or basketball, explaining why real sports don't follow parabolic paths.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="ME-03">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-03</span>
-                        <div class="project-header-text">
-                            <h4>Projectile Motion with Air Resistance</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 1</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
+            <div class="project-card" id="ME-04">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-04</span>
+                    <div class="project-header-text">
+                        <h4>Pendulum Dynamics — Linear to Chaotic</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 2</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Projectile motion without air resistance is idealized high school physics, but real objects experience drag. Whether it's baseball trajectory in sports, artillery range calculations, or skydivers reaching terminal velocity, air resistance fundamentally changes how objects move. Understanding drag is essential for sports engineering, aerospace design, and safety systems.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DEs:</strong> \(m\frac{dv_x}{dt} = -bv_x\) and \(m\frac{dv_y}{dt} = -mg - bv_y\) where \(b\) is the drag coefficient and \(g\) is gravitational acceleration.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How does air resistance change the optimal launch angle for maximum range?</li>
-                                <li>Why do objects reach terminal velocity, and what determines it?</li>
-                                <li>How do baseball pitches and curveballs exploit aerodynamic effects?</li>
-                                <li>Why is skydiver acceleration initially high but eventually reaches near-zero?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Compare trajectories with and without drag for a baseball or basketball, explaining why real sports don't follow parabolic paths.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>The simple pendulum is deceptively complex. For small angles, the equation linearizes and behaves predictably. But for larger angles or with driving forces, the pendulum exhibits chaos—sensitive dependence on initial conditions where tiny differences lead to completely different outcomes. This nonlinear phenomenon illustrates why weather and complex systems are unpredictable.</p>
+                        <div class="de-highlight">
+                            <p><strong>The Nonlinear DE:</strong> \(\frac{d^2\theta}{dt^2} + \frac{g}{L}\sin\theta = 0\) (exact); approximation: \(\frac{d^2\theta}{dt^2} + \frac{g}{L}\theta = 0\) (small angle).</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>Why is the small-angle approximation valid for small angles but fails for large angles?</li>
+                            <li>How does nonlinearity prevent superposition—can you add two solutions to get another solution?</li>
+                            <li>What is chaos, and how does a driven, damped pendulum transition from regular to chaotic motion?</li>
+                            <li>Why are Lyapunov exponents important for understanding long-term predictability?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Simulate pendulum trajectories with slightly different initial conditions, showing how they diverge exponentially in chaotic regimes.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="ME-04">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-04</span>
-                        <div class="project-header-text">
-                            <h4>Pendulum Dynamics — Linear to Chaotic</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 2</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
+            <div class="project-card" id="ME-05">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-05</span>
+                    <div class="project-header-text">
+                        <h4>Heat Conduction — Fourier's Law and Heat Equation</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 4</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Analytical</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>The simple pendulum is deceptively complex. For small angles, the equation linearizes and behaves predictably. But for larger angles or with driving forces, the pendulum exhibits chaos—sensitive dependence on initial conditions where tiny differences lead to completely different outcomes. This nonlinear phenomenon illustrates why weather and complex systems are unpredictable.</p>
-                            <div class="de-highlight">
-                                <p><strong>The Nonlinear DE:</strong> \(\frac{d^2\theta}{dt^2} + \frac{g}{L}\sin\theta = 0\) (exact); approximation: \(\frac{d^2\theta}{dt^2} + \frac{g}{L}\theta = 0\) (small angle).</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>Why is the small-angle approximation valid for small angles but fails for large angles?</li>
-                                <li>How does nonlinearity prevent superposition—can you add two solutions to get another solution?</li>
-                                <li>What is chaos, and how does a driven, damped pendulum transition from regular to chaotic motion?</li>
-                                <li>Why are Lyapunov exponents important for understanding long-term predictability?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Simulate pendulum trajectories with slightly different initial conditions, showing how they diverge exponentially in chaotic regimes.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Heat conduction governs temperature distribution within solid materials. From cooking food to designing semiconductor cooling systems, understanding how heat diffuses through materials is critical. The heat equation is a fundamental PDE in engineering and shows how temperature gradients drive heat flow and eventually homogenize temperature.</p>
+                        <div class="de-highlight">
+                            <p><strong>The PDE:</strong> \(\rho c\frac{\partial T}{\partial t} = k\nabla^2 T + q\) where \(\rho\) is density, \(c\) is specific heat, \(k\) is thermal conductivity, and \(q\) is internal heat generation.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How does thermal conductivity determine how fast temperature changes propagate through a material?</li>
+                            <li>Why does the heat equation smooth out temperature discontinuities over time?</li>
+                            <li>How do engineers design heat sinks for electronics to keep temperatures manageable?</li>
+                            <li>What is the Fourier number, and why does it determine whether transient or steady-state analysis applies?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" id="ME-06">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-06</span>
+                    <div class="project-header-text">
+                        <h4>Fluid Flow in Pipes — Navier-Stokes Connection</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 2</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Analytical + Simulation</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Fluid flow through pipes is central to engineering: water distribution, blood circulation, oil pipelines, and hydraulic systems all rely on understanding how viscosity, pressure, and flow rate interact. The Navier-Stokes equations govern fluid motion, and for fully developed pipe flow, they yield the elegant Hagen-Poiseuille formula predicting laminar flow profiles.</p>
+                        <div class="de-highlight">
+                            <p><strong>The Result (Hagen-Poiseuille):</strong> \(Q = \frac{\pi R^4 \Delta P}{8\mu L}\) where \(Q\) is flow rate, \(\Delta P\) is pressure drop, \(\mu\) is viscosity, and \(R, L\) are pipe radius and length.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>Why does flow rate depend on the fourth power of pipe radius—what does this reveal about fluid resistance?</li>
+                            <li>How does viscosity resistance dominate in laminar flow but become less important in turbulent flow?</li>
+                            <li>What is the Reynolds number, and how does it predict whether flow will be laminar or turbulent?</li>
+                            <li>How do doctors understand blood flow and design better stents for clogged arteries?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Show how blood flow rates change in stenosed (partially blocked) arteries and why the r^4 dependence makes small blockages dangerous.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="ME-05">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-05</span>
-                        <div class="project-header-text">
-                            <h4>Heat Conduction — Fourier's Law and Heat Equation</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 4</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Analytical</span>
-                            </div>
+            <div class="project-card" id="ME-07">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-07</span>
+                    <div class="project-header-text">
+                        <h4>Shaft Torsion and Torsional Vibration</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 2</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Heat conduction governs temperature distribution within solid materials. From cooking food to designing semiconductor cooling systems, understanding how heat diffuses through materials is critical. The heat equation is a fundamental PDE in engineering and shows how temperature gradients drive heat flow and eventually homogenize temperature.</p>
-                            <div class="de-highlight">
-                                <p><strong>The PDE:</strong> \(\rho c\frac{\partial T}{\partial t} = k\nabla^2 T + q\) where \(\rho\) is density, \(c\) is specific heat, \(k\) is thermal conductivity, and \(q\) is internal heat generation.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How does thermal conductivity determine how fast temperature changes propagate through a material?</li>
-                                <li>Why does the heat equation smooth out temperature discontinuities over time?</li>
-                                <li>How do engineers design heat sinks for electronics to keep temperatures manageable?</li>
-                                <li>What is the Fourier number, and why does it determine whether transient or steady-state analysis applies?</li>
-                            </ul>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Rotating shafts in turbines, pumps, and motor drivetrains experience torsional vibrations—twisting oscillations that can cause fatigue failure. Torsional stiffness and rotational inertia determine natural frequencies. Resonance in torsional vibration has caused catastrophic failures in turbines and submarines, making this analysis critical for safe design.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(I_p\frac{d^2\theta}{dt^2} + c\frac{d\theta}{dt} + k_t\theta = T(t)\) where \(I_p\) is polar moment of inertia, \(k_t\) is torsional stiffness, and \(T(t)\) is applied torque.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>How do torsional rigidity and rotational inertia determine the natural frequency of torsional vibration?</li>
+                            <li>Why can periodic torque inputs (like from reciprocating engines) excite torsional resonance?</li>
+                            <li>What is a torsional damper, and how does it prevent dangerous resonance?</li>
+                            <li>How do engineers avoid operating turbines and compressors near torsional natural frequencies?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" id="ME-08">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-08</span>
+                    <div class="project-header-text">
+                        <h4>Rocket Propulsion — Tsiolkovsky Equation</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 1</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Conceptual</span>
+                        </div>
+                    </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>Rockets propel spacecraft by ejecting mass at high velocity. Unlike cars that push against the road, rockets carry all their propellant and must expel it to accelerate. The Tsiolkovsky rocket equation relates velocity change to exhaust velocity and fuel mass. It governs whether missions reach orbit, escape Earth's gravity, or achieve deep space goals.</p>
+                        <div class="de-highlight">
+                            <p><strong>The Tsiolkovsky Equation:</strong> \(\Delta v = v_e \ln\left(\frac{m_0}{m_f}\right)\) where \(v_e\) is exhaust velocity, \(m_0\) is initial mass (with fuel), and \(m_f\) is final mass (empty).</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>Why does velocity change depend logarithmically on mass ratio, not linearly?</li>
+                            <li>What is the ideal velocity increment (delta-v) needed to reach lunar orbit, escape velocity, Mars transfer?</li>
+                            <li>Why do multi-stage rockets provide better performance than single-stage designs?</li>
+                            <li>How do gravity losses and atmospheric drag reduce actual achieved velocity below theoretical delta-v?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Calculate delta-v requirements for various space missions and explain why Saturn V needed so much fuel to land humans on the Moon.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="ME-06">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-06</span>
-                        <div class="project-header-text">
-                            <h4>Fluid Flow in Pipes — Navier-Stokes Connection</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 2</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Analytical + Simulation</span>
-                            </div>
+            <div class="project-card" id="ME-09">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-09</span>
+                    <div class="project-header-text">
+                        <h4>Lumped Capacitance — Transient Heat Transfer</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 1</span>
+                            <span class="tag tag-difficulty">Moderate</span>
+                            <span class="tag tag-type">Conceptual</span>
                         </div>
-                        <span class="project-toggle">+</span>
                     </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Fluid flow through pipes is central to engineering: water distribution, blood circulation, oil pipelines, and hydraulic systems all rely on understanding how viscosity, pressure, and flow rate interact. The Navier-Stokes equations govern fluid motion, and for fully developed pipe flow, they yield the elegant Hagen-Poiseuille formula predicting laminar flow profiles.</p>
-                            <div class="de-highlight">
-                                <p><strong>The Result (Hagen-Poiseuille):</strong> \(Q = \frac{\pi R^4 \Delta P}{8\mu L}\) where \(Q\) is flow rate, \(\Delta P\) is pressure drop, \(\mu\) is viscosity, and \(R, L\) are pipe radius and length.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>Why does flow rate depend on the fourth power of pipe radius—what does this reveal about fluid resistance?</li>
-                                <li>How does viscosity resistance dominate in laminar flow but become less important in turbulent flow?</li>
-                                <li>What is the Reynolds number, and how does it predict whether flow will be laminar or turbulent?</li>
-                                <li>How do doctors understand blood flow and design better stents for clogged arteries?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Show how blood flow rates change in stenosed (partially blocked) arteries and why the r^4 dependence makes small blockages dangerous.</p>
-                            </div>
+                    <span class="project-toggle">+</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>When a solid object is suddenly exposed to different temperature (quenching steel, cooling electronics), temperature first drops rapidly at the surface, then slowly throughout the interior. The lumped capacitance method assumes the entire object remains at uniform temperature, valid when internal conduction is fast compared to surface cooling. This simplifies transient heat transfer analysis significantly.</p>
+                        <div class="de-highlight">
+                            <p><strong>The DE:</strong> \(\rho V c\frac{dT}{dt} = hA(T_{ambient} - T)\) where \(\rho V\) is total mass, \(c\) is specific heat, \(hA\) is total heat transfer conductance.</p>
+                        </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>What is the Biot number, and when is lumped capacitance valid versus needing spatial analysis?</li>
+                            <li>Why does a small object cool faster than a large one with the same material properties?</li>
+                            <li>How do metallurgists use quenching to harden steel, and what differential equations guide the process?</li>
+                            <li>How does surface heat transfer coefficient (coating, fluid type) dominate cooling rate?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Record temperature at the surface and center of a large object during cooling, comparing to lumped capacitance predictions.</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="project-card" id="ME-07">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-07</span>
-                        <div class="project-header-text">
-                            <h4>Shaft Torsion and Torsional Vibration</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 2</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Rotating shafts in turbines, pumps, and motor drivetrains experience torsional vibrations—twisting oscillations that can cause fatigue failure. Torsional stiffness and rotational inertia determine natural frequencies. Resonance in torsional vibration has caused catastrophic failures in turbines and submarines, making this analysis critical for safe design.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(I_p\frac{d^2\theta}{dt^2} + c\frac{d\theta}{dt} + k_t\theta = T(t)\) where \(I_p\) is polar moment of inertia, \(k_t\) is torsional stiffness, and \(T(t)\) is applied torque.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>How do torsional rigidity and rotational inertia determine the natural frequency of torsional vibration?</li>
-                                <li>Why can periodic torque inputs (like from reciprocating engines) excite torsional resonance?</li>
-                                <li>What is a torsional damper, and how does it prevent dangerous resonance?</li>
-                                <li>How do engineers avoid operating turbines and compressors near torsional natural frequencies?</li>
-                            </ul>
+            <div class="project-card" id="ME-10">
+                <div class="project-header" onclick="toggleProject(this)">
+                    <span class="project-id">ME-10</span>
+                    <div class="project-header-text">
+                        <h4>PID Control of Mechanical Systems</h4>
+                        <div class="project-tags">
+                            <span class="tag tag-chapter">Ch 4</span>
+                            <span class="tag tag-difficulty">Advanced</span>
+                            <span class="tag tag-type">Conceptual + Simulation</span>
                         </div>
                     </div>
+                    <span class="project-toggle">+</span>
                 </div>
-
-                <div class="project-card" id="ME-08">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-08</span>
-                        <div class="project-header-text">
-                            <h4>Rocket Propulsion — Tsiolkovsky Equation</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 1</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Conceptual</span>
-                            </div>
+                <div class="project-body">
+                    <div class="project-content">
+                        <h5>Background</h5>
+                        <p>PID (Proportional-Integral-Derivative) control is ubiquitous in engineering: cruise control in cars, temperature regulation in ovens, and robotic arm positioning. A PID controller continuously compares actual output to desired setpoint and adjusts the control input. This feedback system governs transient response, steady-state error, and stability—critical for safe, responsive systems.</p>
+                        <div class="de-highlight">
+                            <p><strong>PID Law:</strong> \(u(t) = K_p e(t) + K_i \int e(\tau)d\tau + K_d \frac{de}{dt}\) where \(e(t) = \text{setpoint} - \text{output}\) is the error.</p>
                         </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>Rockets propel spacecraft by ejecting mass at high velocity. Unlike cars that push against the road, rockets carry all their propellant and must expel it to accelerate. The Tsiolkovsky rocket equation relates velocity change to exhaust velocity and fuel mass. It governs whether missions reach orbit, escape Earth's gravity, or achieve deep space goals.</p>
-                            <div class="de-highlight">
-                                <p><strong>The Tsiolkovsky Equation:</strong> \(\Delta v = v_e \ln\left(\frac{m_0}{m_f}\right)\) where \(v_e\) is exhaust velocity, \(m_0\) is initial mass (with fuel), and \(m_f\) is final mass (empty).</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>Why does velocity change depend logarithmically on mass ratio, not linearly?</li>
-                                <li>What is the ideal velocity increment (delta-v) needed to reach lunar orbit, escape velocity, Mars transfer?</li>
-                                <li>Why do multi-stage rockets provide better performance than single-stage designs?</li>
-                                <li>How do gravity losses and atmospheric drag reduce actual achieved velocity below theoretical delta-v?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Calculate delta-v requirements for various space missions and explain why Saturn V needed so much fuel to land humans on the Moon.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" id="ME-09">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-09</span>
-                        <div class="project-header-text">
-                            <h4>Lumped Capacitance — Transient Heat Transfer</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 1</span>
-                                <span class="tag tag-difficulty">Moderate</span>
-                                <span class="tag tag-type">Conceptual</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>When a solid object is suddenly exposed to different temperature (quenching steel, cooling electronics), temperature first drops rapidly at the surface, then slowly throughout the interior. The lumped capacitance method assumes the entire object remains at uniform temperature, valid when internal conduction is fast compared to surface cooling. This simplifies transient heat transfer analysis significantly.</p>
-                            <div class="de-highlight">
-                                <p><strong>The DE:</strong> \(\rho V c\frac{dT}{dt} = hA(T_{ambient} - T)\) where \(\rho V\) is total mass, \(c\) is specific heat, \(hA\) is total heat transfer conductance.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>What is the Biot number, and when is lumped capacitance valid versus needing spatial analysis?</li>
-                                <li>Why does a small object cool faster than a large one with the same material properties?</li>
-                                <li>How do metallurgists use quenching to harden steel, and what differential equations guide the process?</li>
-                                <li>How does surface heat transfer coefficient (coating, fluid type) dominate cooling rate?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Record temperature at the surface and center of a large object during cooling, comparing to lumped capacitance predictions.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" id="ME-10">
-                    <div class="project-header" onclick="toggleProject(this)">
-                        <span class="project-id">ME-10</span>
-                        <div class="project-header-text">
-                            <h4>PID Control of Mechanical Systems</h4>
-                            <div class="project-tags">
-                                <span class="tag tag-chapter">Ch 4</span>
-                                <span class="tag tag-difficulty">Advanced</span>
-                                <span class="tag tag-type">Conceptual + Simulation</span>
-                            </div>
-                        </div>
-                        <span class="project-toggle">+</span>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-content">
-                            <h5>Background</h5>
-                            <p>PID (Proportional-Integral-Derivative) control is ubiquitous in engineering: cruise control in cars, temperature regulation in ovens, and robotic arm positioning. A PID controller continuously compares actual output to desired setpoint and adjusts the control input. This feedback system governs transient response, steady-state error, and stability—critical for safe, responsive systems.</p>
-                            <div class="de-highlight">
-                                <p><strong>PID Law:</strong> \(u(t) = K_p e(t) + K_i \int e(\tau)d\tau + K_d \frac{de}{dt}\) where \(e(t) = \text{setpoint} - \text{output}\) is the error.</p>
-                            </div>
-                            <h5>What to Investigate</h5>
-                            <ul>
-                                <li>What does each term (P, I, D) do: proportional responds to current error, integral corrects steady-state offset, derivative anticipates change?</li>
-                                <li>How do control gains (Kp, Ki, Kd) affect stability, settling time, and overshoot?</li>
-                                <li>Why is tuning a PID controller an art—what design rules (Ziegler-Nichols) help?</li>
-                                <li>How do engineers prevent integrator windup when the system saturates?</li>
-                            </ul>
-                            <div class="presentation-tips">
-                                <p><strong>Presentation tip:</strong> Simulate cruise control—show how different PID gains produce oscillations, sluggish response, or smooth tracking.</p>
-                            </div>
+                        <h5>What to Investigate</h5>
+                        <ul>
+                            <li>What does each term (P, I, D) do: proportional responds to current error, integral corrects steady-state offset, derivative anticipates change?</li>
+                            <li>How do control gains (Kp, Ki, Kd) affect stability, settling time, and overshoot?</li>
+                            <li>Why is tuning a PID controller an art—what design rules (Ziegler-Nichols) help?</li>
+                            <li>How do engineers prevent integrator windup when the system saturates?</li>
+                        </ul>
+                        <div class="presentation-tips">
+                            <p><strong>Presentation tip:</strong> Simulate cruise control—show how different PID gains produce oscillations, sluggish response, or smooth tracking.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    
 
-    <script>
-        function toggleProject(headerElement) {
-            const card = headerElement.closest('.project-card');
-            card.classList.toggle('expanded');
-        }
-    </script>
-</body>
-</html>
 
-  <!-- SPECIALTY 1: CIVIL ENGINEERING -->
+<script>
+    function toggleProject(headerElement) {
+        const card = headerElement.closest('.project-card');
+        card.classList.toggle('expanded');
+    }
+</script>
+
+    <!-- SPECIALTY 1: CIVIL ENGINEERING -->
 <div id="civil" class="specialty-section">
   <div class="specialty-header">
     <span class="spec-icon">🏗️</span>
