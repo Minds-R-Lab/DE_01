@@ -172,6 +172,84 @@
 
   footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem; }
 
+  /* ── Project Selection System ── */
+  .section-picker-bar {
+    position: sticky; top: 44px; z-index: 999;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--primary);
+    padding: 0.6rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+    justify-content: center; flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .section-picker-bar label { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+  .section-btn {
+    padding: 0.4rem 1.2rem; border-radius: 999px; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; border: 2px solid var(--border); background: var(--card); color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .section-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .section-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .section-status {
+    font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;
+  }
+  .section-status.connected { color: var(--success); }
+  .section-status.error { color: var(--danger); }
+
+  /* Select button inside project cards */
+  .project-select-area {
+    padding: 1rem 1.5rem; border-top: 1px dashed var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 0.75rem; flex-wrap: wrap;
+  }
+  .select-btn {
+    padding: 0.5rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; border: none; transition: all 0.2s;
+    background: var(--primary); color: #fff;
+  }
+  .select-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  .select-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; transform: none; }
+  .select-btn.taken {
+    background: var(--danger-light); color: var(--danger); border: 1.5px solid var(--danger);
+  }
+  .select-btn.mine {
+    background: var(--success-light); color: var(--success); border: 1.5px solid var(--success);
+  }
+  .taken-info {
+    font-size: 0.82rem; color: var(--danger); font-weight: 600;
+  }
+  .mine-info {
+    font-size: 0.82rem; color: var(--success); font-weight: 600;
+  }
+  .no-section-msg {
+    font-size: 0.82rem; color: var(--text-muted); font-style: italic;
+  }
+
+  /* Modal for group name entry */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 2000; align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: var(--radius); padding: 2rem; max-width: 420px; width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .modal-box h3 { font-size: 1.2rem; margin-bottom: 0.25rem; color: var(--text); }
+  .modal-box .modal-project { font-size: 0.9rem; color: var(--primary); font-weight: 600; margin-bottom: 1rem; }
+  .modal-box input {
+    width: 100%; padding: 0.65rem 0.75rem; border: 2px solid var(--border); border-radius: 8px;
+    font-size: 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s;
+  }
+  .modal-box input:focus { border-color: var(--primary); }
+  .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+  .modal-actions button {
+    padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; border: none;
+  }
+  .modal-cancel { background: var(--border); color: var(--text); }
+  .modal-confirm { background: var(--primary); color: #fff; }
+  .modal-confirm:disabled { background: #cbd5e1; cursor: not-allowed; }
+  .modal-error { font-size: 0.82rem; color: var(--danger); margin-bottom: 0.75rem; display: none; }
+
   @media (max-width: 640px) {
     .page-hero { padding: 2rem 1.5rem; }
     .page-hero h1 { font-size: 1.7rem; }
@@ -192,6 +270,32 @@
   <a href="videos.html">Videos</a>
   <a href="projects.html" class="active">Projects</a>
 </nav>
+
+<!-- Section Picker Bar -->
+<div class="section-picker-bar" id="sectionPickerBar">
+  <label>Your Section:</label>
+  <button class="section-btn" data-section="L53" onclick="selectSection('L53')">L53</button>
+  <button class="section-btn" data-section="L51" onclick="selectSection('L51')">L51</button>
+  <button class="section-btn" data-section="L02" onclick="selectSection('L02')">L02</button>
+  <span class="section-status" id="sectionStatus"></span>
+</div>
+
+<!-- Group Name Modal -->
+<div class="modal-overlay" id="selectModal">
+  <div class="modal-box">
+    <h3>Select This Project</h3>
+    <div class="modal-project" id="modalProjectName"></div>
+    <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.4rem;">
+      Enter your group name or number:
+    </label>
+    <input type="text" id="groupNameInput" placeholder="e.g. Group 3, Team Alpha..." maxlength="50" autocomplete="off">
+    <div class="modal-error" id="modalError"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" id="modalConfirmBtn" onclick="confirmSelection()">Confirm Selection</button>
+    </div>
+  </div>
+</div>
 
 <div class="container">
 
@@ -3066,7 +3170,14 @@
 </footer>
 
 <script>
+  // ═══════════════════════════════════════════════════════
+  // CONFIGURATION — Paste your Google Apps Script URL here
+  // ═══════════════════════════════════════════════════════
+  const APPS_SCRIPT_URL = ""; // <-- PASTE YOUR WEB APP URL HERE
+
+  // ═══════════════════════════════════════════════════════
   // Toggle project cards open/closed
+  // ═══════════════════════════════════════════════════════
   function toggleProject(headerEl) {
     const card = headerEl.closest('.project-card');
     card.classList.toggle('open');
@@ -3092,7 +3203,248 @@
       ],
       throwOnError: false
     });
+    injectSelectButtons();
   });
+
+  // ═══════════════════════════════════════════════════════
+  // PROJECT SELECTION SYSTEM
+  // ═══════════════════════════════════════════════════════
+  let currentSection = null;
+  let currentSelections = {};  // { projectId: { groupName, projectTitle } }
+  let pendingProjectId = null;
+  let pendingProjectTitle = null;
+
+  // Inject "Select This Project" buttons into every project card
+  function injectSelectButtons() {
+    document.querySelectorAll('.project-card').forEach(card => {
+      const projectId = card.id;
+      if (!projectId) return;
+
+      const selectArea = document.createElement('div');
+      selectArea.className = 'project-select-area';
+      selectArea.id = 'select-area-' + projectId;
+      selectArea.innerHTML = '<span class="no-section-msg">Select your section above to reserve this project</span>';
+
+      // Insert at end of project-body > project-content
+      const body = card.querySelector('.project-body');
+      if (body) {
+        body.appendChild(selectArea);
+      }
+
+      // Also add a small status badge in the header
+      const header = card.querySelector('.project-header');
+      if (header) {
+        const badge = document.createElement('span');
+        badge.className = 'project-status-badge';
+        badge.id = 'badge-' + projectId;
+        badge.style.cssText = 'display:none; font-size:0.7rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:6px; margin-left:0.25rem; flex-shrink:0;';
+        const toggle = header.querySelector('.project-toggle');
+        if (toggle) header.insertBefore(badge, toggle);
+      }
+    });
+  }
+
+  // Select a section
+  function selectSection(section) {
+    currentSection = section;
+
+    // Update button states
+    document.querySelectorAll('.section-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.section === section);
+    });
+
+    // Save to localStorage
+    try { localStorage.setItem('de_section', section); } catch(e) {}
+
+    // Fetch selections for this section
+    fetchSelections(section);
+  }
+
+  // Fetch selections from Google Sheets
+  async function fetchSelections(section) {
+    const statusEl = document.getElementById('sectionStatus');
+
+    if (!APPS_SCRIPT_URL) {
+      statusEl.textContent = '⚠ Backend not configured';
+      statusEl.className = 'section-status error';
+      updateAllCards({});
+      return;
+    }
+
+    statusEl.textContent = 'Loading...';
+    statusEl.className = 'section-status';
+
+    try {
+      const url = APPS_SCRIPT_URL + '?action=getSelections&section=' + encodeURIComponent(section);
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.success) {
+        currentSelections = data.selections || {};
+        statusEl.textContent = '● Connected — Section ' + section;
+        statusEl.className = 'section-status connected';
+        updateAllCards(currentSelections);
+      } else {
+        statusEl.textContent = '⚠ ' + (data.error || 'Error loading data');
+        statusEl.className = 'section-status error';
+      }
+    } catch (err) {
+      statusEl.textContent = '⚠ Cannot reach server';
+      statusEl.className = 'section-status error';
+      updateAllCards({});
+    }
+  }
+
+  // Update all project cards based on current selections
+  function updateAllCards(selections) {
+    document.querySelectorAll('.project-card').forEach(card => {
+      const projectId = card.id;
+      if (!projectId) return;
+
+      const area = document.getElementById('select-area-' + projectId);
+      const badge = document.getElementById('badge-' + projectId);
+      if (!area) return;
+
+      const sel = selections[projectId];
+
+      if (!currentSection) {
+        area.innerHTML = '<span class="no-section-msg">Select your section above to reserve this project</span>';
+        if (badge) badge.style.display = 'none';
+        return;
+      }
+
+      if (sel) {
+        // Project is taken
+        area.innerHTML =
+          '<span class="taken-info">Taken by: <strong>' + escapeHtml(sel.groupName) + '</strong></span>' +
+          '<button class="select-btn taken" disabled>Taken</button>';
+        if (badge) {
+          badge.textContent = 'TAKEN';
+          badge.style.display = 'inline-block';
+          badge.style.background = '#fee2e2';
+          badge.style.color = '#dc2626';
+        }
+      } else {
+        // Project is available
+        const title = card.querySelector('.project-header-text h4');
+        const titleText = title ? title.textContent : projectId;
+        area.innerHTML =
+          '<span style="font-size:0.82rem; color:var(--success); font-weight:600;">Available</span>' +
+          '<button class="select-btn" onclick="openModal(\'' + projectId + '\', \'' + escapeAttr(titleText) + '\')">Select This Project</button>';
+        if (badge) {
+          badge.textContent = 'AVAILABLE';
+          badge.style.display = 'inline-block';
+          badge.style.background = '#d1fae5';
+          badge.style.color = '#059669';
+        }
+      }
+    });
+  }
+
+  // Open the selection modal
+  function openModal(projectId, projectTitle) {
+    pendingProjectId = projectId;
+    pendingProjectTitle = projectTitle;
+    document.getElementById('modalProjectName').textContent = projectId + ' — ' + projectTitle;
+    document.getElementById('groupNameInput').value = '';
+    document.getElementById('modalError').style.display = 'none';
+    document.getElementById('modalConfirmBtn').disabled = false;
+    document.getElementById('selectModal').classList.add('show');
+    setTimeout(() => document.getElementById('groupNameInput').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('selectModal').classList.remove('show');
+    pendingProjectId = null;
+    pendingProjectTitle = null;
+  }
+
+  // Handle Enter key in modal input
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.getElementById('selectModal').classList.contains('show')) {
+      confirmSelection();
+    }
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Confirm the selection — send to Google Sheets
+  async function confirmSelection() {
+    const groupName = document.getElementById('groupNameInput').value.trim();
+    const errorEl = document.getElementById('modalError');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+
+    if (!groupName) {
+      errorEl.textContent = 'Please enter your group name or number.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    if (!APPS_SCRIPT_URL) {
+      errorEl.textContent = 'Backend not configured. Please contact your instructor.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Submitting...';
+    errorEl.style.display = 'none';
+
+    try {
+      const params = new URLSearchParams({
+        action: 'selectProject',
+        section: currentSection,
+        projectId: pendingProjectId,
+        groupName: groupName,
+        projectTitle: pendingProjectTitle
+      });
+
+      const response = await fetch(APPS_SCRIPT_URL + '?' + params.toString());
+      const data = await response.json();
+
+      if (data.success) {
+        closeModal();
+        // Refresh selections
+        await fetchSelections(currentSection);
+        // Show a brief success message
+        const area = document.getElementById('select-area-' + pendingProjectId);
+        if (area) {
+          const successMsg = document.createElement('div');
+          successMsg.style.cssText = 'color:var(--success); font-weight:700; font-size:0.9rem; padding:0.5rem 0; text-align:center;';
+          successMsg.textContent = 'Successfully reserved!';
+          area.prepend(successMsg);
+          setTimeout(() => successMsg.remove(), 3000);
+        }
+      } else {
+        errorEl.textContent = data.error || 'Selection failed. Please try again.';
+        errorEl.style.display = 'block';
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirm Selection';
+      }
+    } catch (err) {
+      errorEl.textContent = 'Network error. Please check your connection and try again.';
+      errorEl.style.display = 'block';
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Confirm Selection';
+    }
+  }
+
+  // Utility: escape HTML
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+  function escapeAttr(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  // Auto-restore section from localStorage
+  try {
+    const saved = localStorage.getItem('de_section');
+    if (saved && ['L53','L51','L02'].includes(saved)) {
+      document.addEventListener('DOMContentLoaded', () => selectSection(saved));
+    }
+  } catch(e) {}
 </script>
 </body>
 </html>
