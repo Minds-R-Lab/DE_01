@@ -274,6 +274,7 @@
       <a class="specialty-chip" href="#computer">💻 Computer</a>
       <a class="specialty-chip" href="#industrial">🏭 Industrial</a>
       <a class="specialty-chip" href="#mechatronics">🤖 Mechatronics</a>
+      <a class="specialty-chip" href="#chemical">🧪 Chemical</a>
       <a class="specialty-chip" href="#mathematics">📐 Mathematics</a>
       <a class="specialty-chip" href="#education">📚 Education</a>
     </div>
@@ -2403,6 +2404,366 @@
           </ul>
           <div class="presentation-tips">
             <p><strong>Presentation tip:</strong> Simulate sample paths of classic SDEs (geometric Brownian motion, Ornstein-Uhlenbeck process). Show an ensemble of trajectories and compute statistics like mean and variance at each time, illustrating how randomness creates a distribution of outcomes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SPECIALTY: CHEMICAL ENGINEERING -->
+  <div class="specialty-section" id="chemical">
+    <div class="specialty-header">
+      <span class="spec-icon">🧪</span>
+      <h2>Chemical Engineering</h2>
+      <span class="spec-count">— 10 project ideas</span>
+    </div>
+
+    <!-- CH-01 -->
+    <div class="project-card" id="CH-01">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-01</span>
+        <div class="project-header-text">
+          <h4>Chemical Reactor Design — The CSTR and Plug Flow Models</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Conceptual + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Chemical reactors are the heart of every chemical plant. The continuous stirred-tank reactor (CSTR) and plug flow reactor (PFR) are modeled by first-order ODEs derived from mass and energy balances. These differential equations predict how reactant concentrations change with time or position, enabling engineers to size reactors, optimize yield, and ensure safe operation. Understanding these models is fundamental to process design in petroleum refining, pharmaceutical manufacturing, and polymer production.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(V\frac{dC_A}{dt} = F(C_{A0} - C_A) - Vk C_A\) for a CSTR, and \(\frac{dC_A}{dV} = \frac{r_A}{F}\) for a PFR, where \(C_A\) is concentration, \(F\) is flow rate, \(k\) is the rate constant, and \(r_A\) is the reaction rate.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How do CSTR and PFR models differ in their mathematical formulation, and what does this mean for reactor performance?</li>
+            <li>What role does residence time play in determining conversion and selectivity?</li>
+            <li>How do engineers use these ODE models to size reactors for desired production rates?</li>
+            <li>What happens when multiple reactions occur simultaneously — how do coupled ODEs describe selectivity?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Compare CSTR and PFR performance for the same reaction by plotting conversion vs. reactor volume. Show how the ODE solutions reveal which reactor type is more efficient for different reaction orders.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-02 -->
+    <div class="project-card" id="CH-02">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-02</span>
+        <div class="project-header-text">
+          <h4>Heat Exchangers — Temperature Profiles and Effectiveness</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Conceptual</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Heat exchangers transfer thermal energy between fluid streams and appear in every chemical plant, power station, and HVAC system. The temperature profiles along a heat exchanger are governed by coupled first-order ODEs derived from energy balances on each fluid stream. These equations predict outlet temperatures, required surface area, and thermal effectiveness — all critical for energy-efficient process design.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dT_h}{dx} = -\frac{UA}{m_h c_{p,h}}(T_h - T_c)\) and \(\frac{dT_c}{dx} = \frac{UA}{m_c c_{p,c}}(T_h - T_c)\), where \(T_h, T_c\) are hot and cold stream temperatures, \(U\) is the overall heat transfer coefficient, and \(A\) is the exchange area.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How do co-current and counter-current flow arrangements produce different temperature profiles, and why is counter-current more efficient?</li>
+            <li>What does the concept of effectiveness-NTU tell us about heat exchanger performance?</li>
+            <li>How do engineers use these ODE models to determine required exchanger size and material selection?</li>
+            <li>What are real-world challenges like fouling, and how do they alter the DE parameters over time?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Plot temperature profiles for both co-current and counter-current configurations side by side. Show how the ODE solutions demonstrate the thermodynamic advantage of counter-current flow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-03 -->
+    <div class="project-card" id="CH-03">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-03</span>
+        <div class="project-header-text">
+          <h4>Distillation Column Dynamics — Separation of Mixtures</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 4: Systems</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Conceptual + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Distillation is the most widely used separation process in chemical engineering, from oil refining to alcohol production. Each tray in a distillation column is described by coupled ODEs for mass and energy balances, forming a system of differential equations whose solutions predict composition profiles, required reflux ratios, and column stability. Understanding these dynamics is essential for designing and controlling separation processes.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(M_n \frac{dx_n}{dt} = L_{n+1}x_{n+1} + V_{n-1}y_{n-1} - L_n x_n - V_n y_n + Fz_F\delta_n\), a system of ODEs for each tray \(n\), where \(x, y\) are liquid and vapor compositions, \(L, V\) are liquid and vapor flow rates.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How does the system of tray-by-tray ODEs describe the separation of a binary mixture?</li>
+            <li>What is the role of reflux ratio in determining product purity, and how does the DE model predict optimal operation?</li>
+            <li>How do transient disturbances (feed composition changes) propagate through the column according to the coupled ODEs?</li>
+            <li>Why is feedback control essential for distillation, and how do the system dynamics inform controller design?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Animate the composition profile on each tray over time as the column reaches steady state. Show how changing reflux ratio shifts the solution of the ODE system.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-04 -->
+    <div class="project-card" id="CH-04">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-04</span>
+        <div class="project-header-text">
+          <h4>Polymer Reaction Kinetics — Chain Growth and Molecular Weight</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Conceptual</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Polymers — from plastics to synthetic fibers — are created through polymerization reactions governed by systems of ODEs. The evolution of monomer concentration, growing chain populations, and molecular weight distribution over time follows from kinetic rate equations. These differential equation models allow engineers to predict and control the properties of the final polymer product, including average molecular weight, polydispersity, and mechanical strength.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{d[M]}{dt} = -k_p [M][P^*]\) for monomer consumption and \(\frac{d\mu_k}{dt}\) for the \(k\)-th moment of the molecular weight distribution, where \([M]\) is monomer concentration, \([P^*]\) is active polymer concentration, and \(k_p\) is the propagation rate constant.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How do the ODEs for initiation, propagation, and termination determine the final polymer properties?</li>
+            <li>What is molecular weight distribution and why do engineers use moment equations (ODEs) to track it?</li>
+            <li>How does reactor type (batch vs. continuous) affect the polymerization kinetics and product quality?</li>
+            <li>What real-world products depend on precise control of these reaction kinetics?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Show how monomer conversion and average molecular weight evolve over time by solving the kinetic ODEs. Compare batch and continuous reactor predictions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-05 -->
+    <div class="project-card" id="CH-05">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-05</span>
+        <div class="project-header-text">
+          <h4>Diffusion and Mass Transfer — Fick's Law in Practice</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: 2nd-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Conceptual + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Mass transfer by diffusion is central to chemical engineering — from drug delivery through membranes to gas absorption in scrubbers. Fick's second law is a second-order differential equation that describes how concentration changes with position and time. In steady state, it reduces to a second-order ODE whose solutions predict concentration profiles across membranes, catalyst pellets, and biological tissues.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(D\frac{d^2C}{dx^2} = 0\) for steady-state diffusion (yielding linear profiles), and \(D\frac{d^2C}{dx^2} - k C = 0\) when a first-order reaction consumes the diffusing species inside a catalyst pellet.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How does the ODE solution predict concentration profiles across membranes and porous catalysts?</li>
+            <li>What is the Thiele modulus and how does it characterize the competition between diffusion and reaction?</li>
+            <li>How do engineers design drug delivery patches, gas separation membranes, and catalytic converters using these models?</li>
+            <li>What happens when diffusion limitations control the overall reaction rate in industrial processes?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Plot concentration profiles inside a catalyst pellet for different Thiele modulus values. Show how the ODE solution transitions from reaction-limited to diffusion-limited regimes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-06 -->
+    <div class="project-card" id="CH-06">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-06</span>
+        <div class="project-header-text">
+          <h4>Process Control — PID Controllers in Chemical Plants</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 2: 2nd-Order</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Conceptual + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Chemical plants operate safely and efficiently because of automatic control systems. PID (Proportional-Integral-Derivative) controllers are the workhorses of process control, and their behavior is described by second-order ODEs when coupled with process dynamics. Understanding these differential equations reveals why some processes oscillate, how to tune controllers for stability, and what happens during disturbances — knowledge essential for every chemical engineer.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\tau^2\frac{d^2y}{dt^2} + 2\zeta\tau\frac{dy}{dt} + y = K_c\left(e + \frac{1}{\tau_I}\int e\,dt + \tau_D\frac{de}{dt}\right)\), where \(y\) is the process variable, \(e\) is the error signal, and \(K_c, \tau_I, \tau_D\) are controller parameters.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How does the second-order ODE describe the closed-loop response of a controlled chemical process?</li>
+            <li>What do the damping ratio and natural frequency tell us about whether the process will oscillate or settle smoothly?</li>
+            <li>How do engineers tune PID parameters to achieve fast, stable responses without overshooting?</li>
+            <li>What are real examples of process control failures and how do the DEs explain what went wrong?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Simulate a temperature control loop for a CSTR. Show step responses for underdamped, critically damped, and overdamped cases, and demonstrate the effect of PID tuning.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-07 -->
+    <div class="project-card" id="CH-07">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-07</span>
+        <div class="project-header-text">
+          <h4>Catalysis and Surface Reactions — The Langmuir-Hinshelwood Model</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Conceptual</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Catalytic reactions drive much of the chemical industry — from ammonia synthesis to catalytic converters in cars. The Langmuir-Hinshelwood kinetic model describes how molecules adsorb onto catalyst surfaces and react, leading to nonlinear ODEs for surface coverage and gas-phase concentrations. These models are essential for designing catalysts, optimizing reaction conditions, and understanding why some catalysts deactivate over time.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{d\theta}{dt} = k_a C(1-\theta) - k_d \theta - k_r \theta^2\), where \(\theta\) is fractional surface coverage, \(k_a, k_d, k_r\) are adsorption, desorption, and surface reaction rate constants.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How does the nonlinear ODE model capture the competition between adsorption, desorption, and surface reaction?</li>
+            <li>What is catalyst saturation and how does the DE predict when adding more reactant no longer increases the rate?</li>
+            <li>How do automotive catalytic converters, ammonia synthesis (Haber process), and petroleum cracking rely on these models?</li>
+            <li>What causes catalyst deactivation and how can time-dependent DE models describe it?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Plot reaction rate versus reactant concentration showing the saturation curve predicted by the ODE model. Explain the physical meaning of each regime and connect it to industrial catalyst design.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-08 -->
+    <div class="project-card" id="CH-08">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-08</span>
+        <div class="project-header-text">
+          <h4>Crystallization Kinetics — Population Balance Equations</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 4: Systems</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Conceptual + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Crystallization is used in pharmaceutical, food, and chemical industries to produce solid products with specific particle sizes. The crystal size distribution evolves over time according to population balance equations — a system of ODEs that track nucleation (birth of new crystals) and growth rates. These models are critical for producing uniform drug tablets, sugar crystals, and semiconductor materials.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dn(L,t)}{dt} + G\frac{\partial n}{\partial L} = B\delta(L - L_0)\), simplified to ODE moments: \(\frac{d\mu_j}{dt} = jG\mu_{j-1} + BL_0^j\), where \(n(L,t)\) is the number density of crystals of size \(L\), \(G\) is growth rate, and \(B\) is nucleation rate.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How do the moment ODEs capture the evolution of average crystal size and size distribution over time?</li>
+            <li>What determines whether a crystallizer produces uniform or widely distributed particle sizes?</li>
+            <li>How do pharmaceutical companies use these models to ensure consistent drug tablet properties?</li>
+            <li>What role does supersaturation play in controlling nucleation and growth rates?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Simulate crystal size distribution evolution in a batch crystallizer. Show how changing cooling rate (which affects supersaturation) shifts the distribution from fine to coarse crystals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-09 -->
+    <div class="project-card" id="CH-09">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-09</span>
+        <div class="project-header-text">
+          <h4>Biochemical Engineering — Enzyme Kinetics and Bioreactors</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 1: 1st-Order</span>
+            <span class="tag tag-difficulty">Moderate</span>
+            <span class="tag tag-type">Conceptual + Simulation</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Enzyme-catalyzed reactions are the basis of biotechnology — from brewing and baking to pharmaceutical production and biofuels. The Michaelis-Menten model describes enzyme kinetics through a nonlinear ODE that predicts how substrate is consumed over time. Bioreactor design relies on these models to optimize cell growth, product formation, and nutrient feeding strategies in industries ranging from insulin production to wastewater treatment.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{d[S]}{dt} = -\frac{V_{max}[S]}{K_m + [S]}\), where \([S]\) is substrate concentration, \(V_{max}\) is the maximum reaction rate, and \(K_m\) is the Michaelis constant representing enzyme-substrate affinity.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How does the Michaelis-Menten ODE transition between zero-order and first-order kinetics, and what does this mean physically?</li>
+            <li>How do engineers use Lineweaver-Burk plots to extract kinetic parameters from experimental data?</li>
+            <li>What role do bioreactor models (batch, fed-batch, continuous) play in scaling up bioprocesses?</li>
+            <li>How are these models applied in real industries — insulin production, biofuel fermentation, wastewater treatment?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Solve the Michaelis-Menten ODE numerically and plot substrate depletion curves for different enzyme concentrations. Show how the kinetic parameters determine production efficiency in a bioreactor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH-10 -->
+    <div class="project-card" id="CH-10">
+      <div class="project-header" onclick="toggleProject(this)">
+        <span class="project-id">CH-10</span>
+        <div class="project-header-text">
+          <h4>Thermal Runaway in Exothermic Reactors — Safety and Stability</h4>
+          <div class="project-tags">
+            <span class="tag tag-chapter">Ch 4: Systems</span>
+            <span class="tag tag-difficulty">Advanced</span>
+            <span class="tag tag-type">Conceptual</span>
+          </div>
+        </div>
+        <span class="project-toggle">+</span>
+      </div>
+      <div class="project-body">
+        <div class="project-content">
+          <h5>Background</h5>
+          <p>Thermal runaway is one of the most dangerous failure modes in chemical plants — when an exothermic reaction generates heat faster than the cooling system can remove it, temperatures escalate exponentially, potentially causing explosions. The coupled mass and energy balance ODEs for a CSTR exhibit multiple steady states and bifurcation behavior. Understanding these dynamics through differential equations is critical for designing safe reactors and preventing industrial disasters.</p>
+          <div class="de-highlight">
+            <p><strong>The DE:</strong> \(\frac{dT}{dt} = \frac{(-\Delta H_r)(-r_A)V - UA(T - T_c)}{\rho V c_p}\) coupled with \(\frac{dC_A}{dt} = \frac{F}{V}(C_{A0} - C_A) - k_0 e^{-E_a/RT}C_A\), where the Arrhenius temperature dependence creates nonlinear feedback between temperature and reaction rate.</p>
+          </div>
+          <h5>What to Investigate</h5>
+          <ul>
+            <li>How do the coupled mass-energy ODEs produce multiple steady states, and what determines which one the reactor operates at?</li>
+            <li>What is the Semenov diagram and how does it visually predict runaway conditions from the heat generation and removal curves?</li>
+            <li>What historical accidents (e.g., Bhopal, T2 Laboratories) were caused by thermal runaway, and how do the DEs explain what happened?</li>
+            <li>How do modern safety systems use these mathematical models to detect and prevent runaway conditions?</li>
+          </ul>
+          <div class="presentation-tips">
+            <p><strong>Presentation tip:</strong> Plot the heat generation and heat removal curves for a CSTR, showing how they intersect to create stable and unstable steady states. Demonstrate how reducing cooling shifts the system into the runaway regime.</p>
           </div>
         </div>
       </div>
