@@ -173,27 +173,49 @@
   footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); margin-top: 2rem; }
 
   /* ── Project Selection System ── */
-  .section-picker-bar {
-    position: sticky; top: 44px; z-index: 999;
-    background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
-    border-bottom: 2px solid var(--primary);
-    padding: 0.6rem 1.5rem; display: flex; align-items: center; gap: 1rem;
-    justify-content: center; flex-wrap: wrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  .section-picker-section {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #ede9fe 100%);
+    border: 2px solid var(--primary); text-align: center;
   }
-  .section-picker-bar label { font-weight: 700; font-size: 0.9rem; color: var(--text); }
-  .section-btn {
-    padding: 0.4rem 1.2rem; border-radius: 999px; font-size: 0.85rem; font-weight: 700;
-    cursor: pointer; border: 2px solid var(--border); background: var(--card); color: var(--text-muted);
-    transition: all 0.2s;
+  .section-picker-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+  .section-picker-title {
+    display: block; font-size: 1.6rem; border: none; padding: 0; margin: 0 0 0.5rem;
+    color: var(--primary-dark);
   }
-  .section-btn:hover { border-color: var(--primary); color: var(--primary); }
-  .section-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .section-status {
-    font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;
+  .section-picker-desc {
+    font-size: 1rem; color: var(--text-muted); max-width: 550px; margin: 0 auto 1.5rem;
   }
-  .section-status.connected { color: var(--success); }
-  .section-status.error { color: var(--danger); }
+  .section-picker-buttons {
+    display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1rem;
+  }
+  .section-btn-lg {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 140px; height: 100px; border-radius: var(--radius); cursor: pointer;
+    border: 3px solid var(--border); background: var(--card); transition: all 0.25s;
+    box-shadow: var(--shadow);
+  }
+  .section-btn-lg:hover {
+    border-color: var(--primary); transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(37,99,235,0.15);
+  }
+  .section-btn-lg.active {
+    background: var(--primary); border-color: var(--primary-dark);
+    transform: translateY(-4px); box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+  }
+  .section-btn-label {
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .section-btn-lg.active .section-btn-label { color: rgba(255,255,255,0.8); }
+  .section-btn-code {
+    font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); line-height: 1.2;
+  }
+  .section-btn-lg.active .section-btn-code { color: #fff; }
+  .section-status-box {
+    font-size: 0.95rem; font-weight: 600; min-height: 1.5rem; color: var(--text-muted);
+  }
+  .section-status-box.connected { color: var(--success); }
+  .section-status-box.error { color: var(--danger); }
 
   /* Select button inside project cards */
   .project-select-area {
@@ -270,15 +292,6 @@
   <a href="videos.html">Videos</a>
   <a href="projects.html" class="active">Projects</a>
 </nav>
-
-<!-- Section Picker Bar -->
-<div class="section-picker-bar" id="sectionPickerBar">
-  <label>Your Section:</label>
-  <button class="section-btn" data-section="L53" onclick="selectSection('L53')">L53</button>
-  <button class="section-btn" data-section="L51" onclick="selectSection('L51')">L51</button>
-  <button class="section-btn" data-section="L02" onclick="selectSection('L02')">L02</button>
-  <span class="section-status" id="sectionStatus"></span>
-</div>
 
 <!-- Group Name Modal -->
 <div class="modal-overlay" id="selectModal">
@@ -367,9 +380,31 @@
     </table>
   </section>
 
+  <!-- ======================== SECTION PICKER ======================== -->
+  <section class="section-picker-section" id="sectionPickerBar">
+    <div class="section-picker-icon">📋</div>
+    <h2 class="section-picker-title">Step 1: Select Your Section</h2>
+    <p class="section-picker-desc">Choose your lecture section below. This ensures no two groups in the same section pick the same project.</p>
+    <div class="section-picker-buttons">
+      <button class="section-btn-lg" data-section="L53" onclick="selectSection('L53')">
+        <span class="section-btn-label">Section</span>
+        <span class="section-btn-code">L53</span>
+      </button>
+      <button class="section-btn-lg" data-section="L51" onclick="selectSection('L51')">
+        <span class="section-btn-label">Section</span>
+        <span class="section-btn-code">L51</span>
+      </button>
+      <button class="section-btn-lg" data-section="L02" onclick="selectSection('L02')">
+        <span class="section-btn-label">Section</span>
+        <span class="section-btn-code">L02</span>
+      </button>
+    </div>
+    <div class="section-status-box" id="sectionStatus"></div>
+  </section>
+
   <!-- ======================== SPECIALTY QUICK NAV ======================== -->
   <section>
-    <h2>Choose Your Specialty</h2>
+    <h2>Step 2: Choose Your Specialty</h2>
     <p>Click your engineering department to jump directly to its project ideas.</p>
     <div class="specialty-nav">
       <a class="specialty-chip" href="#electrical">⚡ Electrical</a>
@@ -3249,7 +3284,7 @@
     currentSection = section;
 
     // Update button states
-    document.querySelectorAll('.section-btn').forEach(btn => {
+    document.querySelectorAll('.section-btn-lg').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.section === section);
     });
 
@@ -3266,13 +3301,13 @@
 
     if (!APPS_SCRIPT_URL) {
       statusEl.textContent = '⚠ Backend not configured';
-      statusEl.className = 'section-status error';
+      statusEl.className = 'section-status-box error';
       updateAllCards({});
       return;
     }
 
     statusEl.textContent = 'Loading...';
-    statusEl.className = 'section-status';
+    statusEl.className = 'section-status-box';
 
     try {
       const url = APPS_SCRIPT_URL + '?action=getSelections&section=' + encodeURIComponent(section);
@@ -3282,15 +3317,15 @@
       if (data.success) {
         currentSelections = data.selections || {};
         statusEl.textContent = '● Connected — Section ' + section;
-        statusEl.className = 'section-status connected';
+        statusEl.className = 'section-status-box connected';
         updateAllCards(currentSelections);
       } else {
         statusEl.textContent = '⚠ ' + (data.error || 'Error loading data');
-        statusEl.className = 'section-status error';
+        statusEl.className = 'section-status-box error';
       }
     } catch (err) {
       statusEl.textContent = '⚠ Cannot reach server';
-      statusEl.className = 'section-status error';
+      statusEl.className = 'section-status-box error';
       updateAllCards({});
     }
   }
