@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math 4: Exact Equations | Dr. Mohamed Mabrok</title>
@@ -20,25 +12,197 @@
 
     <!-- Plotly for Visualizations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<link rel="stylesheet" href="styles.css">
 
     <style>
-/* Page-specific styles */
-/* Fixed Navigation Bar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-main {
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Fixed Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.25rem;
+        }
+
+        main {
             max-width: 1200px;
             margin: 0 auto;
             padding: 6rem 2rem 2rem;
         }
 
-/* Card Styles */
+        section {
+            margin-bottom: 3rem;
+        }
 
-/* Collapsible Examples */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
 
-/* Input Form */
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
 
-.input-group {
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        p, li {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Card Styles */
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .definition-box {
+            background: #dbeafe;
+            border-color: var(--primary);
+        }
+
+        .theorem-box {
+            background: #ede9fe;
+            border-color: var(--accent);
+        }
+
+        .example-box {
+            background: #dcfce7;
+            border-color: var(--success);
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-color: var(--warning);
+        }
+
+        .tip-box {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Collapsible Examples */
+        .collapsible {
+            background: linear-gradient(to right, var(--success), #10b981);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            margin: 0.8rem 0;
+            transition: background 0.3s;
+        }
+
+        .collapsible:hover {
+            background: linear-gradient(to right, #059669, #0d9488);
+        }
+
+        .collapsible.active {
+            background: linear-gradient(to right, #047857, #0f766e);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 1.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .collapsible-content.show {
+            display: block;
+        }
+
+        /* Input Form */
+        .input-group {
             margin: 1.5rem 0;
             padding: 1.5rem;
             background: var(--bg-white);
@@ -46,14 +210,14 @@ main {
             border: 1px solid var(--border);
         }
 
-label {
+        label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--text-dark);
         }
 
-input[type="text"], select {
+        input[type="text"], select {
             width: 100%;
             padding: 0.75rem;
             margin-bottom: 1rem;
@@ -63,7 +227,7 @@ input[type="text"], select {
             font-family: 'Segoe UI', system-ui;
         }
 
-button {
+        button {
             background: linear-gradient(to right, var(--primary), #1d4ed8);
             color: white;
             padding: 0.75rem 1.5rem;
@@ -75,48 +239,126 @@ button {
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-button:hover {
+        button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-button:active {
+        button:active {
             transform: translateY(0);
         }
 
-.result {
+        .result {
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 6px;
             font-weight: 600;
         }
 
-.result.exact {
+        .result.exact {
             background: #dcfce7;
             color: var(--success);
             border: 1px solid var(--success);
         }
 
-.result.not-exact {
+        .result.not-exact {
             background: #fee2e2;
             color: var(--danger);
             border: 1px solid var(--danger);
         }
 
-/* Quiz */
+        /* Quiz */
+        .quiz-container {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
 
-/* Plotly Containers */
+        .quiz-question {
+            margin-bottom: 1.5rem;
+        }
 
-/* Grid for multiple items */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
 
-.grid-2 {
+        .quiz-option {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #1e293b;
+        }
+        .quiz-option .katex { color: #1e293b; }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 0.8rem;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .quiz-feedback.correct {
+            background: #dcfce7;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Plotly Containers */
+        .plot-container {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        /* Grid for multiple items */
+        .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 2rem;
             margin: 2rem 0;
         }
 
-.reference-card {
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .reference-card {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             padding: 2rem;
@@ -124,22 +366,22 @@ button:active {
             margin: 2rem 0;
         }
 
-.reference-card h3 {
+        .reference-card h3 {
             color: white;
             margin-top: 1rem;
         }
 
-.reference-card p {
+        .reference-card p {
             color: rgba(255,255,255,0.95);
         }
 
-.reference-card code {
+        .reference-card code {
             background: rgba(255,255,255,0.2);
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
         }
 
-code {
+        code {
             background: var(--bg-light);
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
@@ -147,7 +389,7 @@ code {
             color: var(--danger);
         }
 
-.learning-objectives {
+        .learning-objectives {
             background: #ede9fe;
             border-left: 5px solid var(--accent);
             padding: 1.5rem;
@@ -155,33 +397,33 @@ code {
             margin: 1.5rem 0;
         }
 
-.learning-objectives ol {
+        .learning-objectives ol {
             margin-left: 2rem;
         }
 
-/* Practice problem toggle */
-</style>
-<script src="course.js"></script>
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-gray);
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+        }
+  /* Practice problem toggle */
+  .example-content { display: none; padding: 0; }
+  .example-content.active { display: block; padding: 1.5rem; }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="ch1-separable.html">1.1 Separable</a>
-            <a href="ch1-linear.html">1.2 Linear</a>
-            <a href="ch1-bernoulli.html">1.3 Bernoulli</a>
-            <a href="ch1-exact.html" class="active">1.4 Exact</a>
-            <a href="ch1-nonexact.html">1.5 Non-Exact</a>
-            <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
-            <a href="#intro">Intro</a>
-            <a href="#theory">Theory</a>
-            <a href="#method">Method</a>
-            <a href="#examples">Examples</a>
-            <a href="#visualizer">Visualizer</a>
-            <a href="#practice">Practice</a>
-        </div>
+        <ul>
+            <li><a href="index.html">Course Home</a></li>
+            <li><a href="ch1-separable.html">Separable</a></li>
+            <li><a href="ch1-linear.html">Linear</a></li>
+            <li><a href="ch1-bernoulli.html">Bernoulli</a></li>
+            <li><a href="ch1-exact.html" class="active">Exact</a></li>
+            <li><a href="ch1-nonexact.html">Non-Exact</a></li>
+        </ul>
     </nav>
 
     <main>
@@ -552,7 +794,7 @@ code {
             <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 1: $(2xy + e^x)\,dx + (x^2 + \cos y)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -577,7 +819,7 @@ code {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 2: $(3x^2 + y\cos(x))\,dx + (\sin(x) - 4y^3)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -601,7 +843,7 @@ code {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 3: $(y^2 + \ln x)\,dx + (2xy - 3)\,dy = 0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -697,7 +939,7 @@ code {
                             <input type="radio" name="q1" value="b"> (B) $(2xy)\,dx + (x^2)\,dy = 0$
                         </label>
                         <label class="quiz-option">
-                            <input type="radio" name="q1" value="c"> (C) $(x^2 + y)\,dx + (x)\,dy = 0$
+                            <input type="radio" name="q1" value="c"> (C) $(x^2 + y)\,dx + (y)\,dy = 0$
                         </label>
                         <label class="quiz-option">
                             <input type="radio" name="q1" value="d"> (D) $(y^2)\,dx + (x)\,dy = 0$
@@ -712,10 +954,10 @@ code {
                     <h3>Q2: Is $(2xy^3 + 1)\,dx + (3x^2y^2)\,dy = 0$ exact?</h3>
                     <div class="quiz-options">
                         <label class="quiz-option">
-                            <input type="radio" name="q2" value="a"> (A) Yes, because both sides have $x$ and $y$
+                            <input type="radio" name="q2" value="a"> (A) Yes, because $\frac{\partial M}{\partial y} = 6xy^2 = 6xy^2 = \frac{\partial N}{\partial x}$
                         </label>
                         <label class="quiz-option">
-                            <input type="radio" name="q2" value="b"> (B) No, because $\frac{\partial M}{\partial y} = 6xy^2 \neq 6xy^2 = \frac{\partial N}{\partial x}$
+                            <input type="radio" name="q2" value="b"> (B) No, because $\frac{\partial M}{\partial y} = 2y^3 \neq 6xy^2 = \frac{\partial N}{\partial x}$
                         </label>
                         <label class="quiz-option">
                             <input type="radio" name="q2" value="c"> (C) No, because $\frac{\partial M}{\partial y} = 6xy^2 \neq 6xy = \frac{\partial N}{\partial x}$
@@ -724,7 +966,7 @@ code {
                             <input type="radio" name="q2" value="d"> (D) Yes, it's always exact if continuous partials exist
                         </label>
                     </div>
-                    <button onclick="checkAnswer('q2', 'c')">Submit</button>
+                    <button onclick="checkAnswer('q2', 'a')">Submit</button>
                     <div id="feedback-q2"></div>
                 </div>
 
@@ -850,7 +1092,14 @@ code {
     <script>
         // Initialize KaTeX rendering
         document.addEventListener('DOMContentLoaded', function() {
-plot3DSurface();
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+
+            plot3DSurface();
         });
 
         // Collapsible Examples
@@ -875,6 +1124,21 @@ plot3DSurface();
                 document.getElementById('funcN').value = presets[this.value].N;
             }
         });
+
+        // Safe evaluation function
+        function safeEval(expr, x, y) {
+            const Math_funcs = {
+                'sin': Math.sin, 'cos': Math.cos, 'tan': Math.tan,
+                'exp': Math.exp, 'log': Math.log, 'sqrt': Math.sqrt,
+                'abs': Math.abs, 'pow': Math.pow
+            };
+            try {
+                const func = new Function('x', 'y', 'Math', `return ${expr}`);
+                return func(x, y, Math);
+            } catch (e) {
+                return NaN;
+            }
+        }
 
         // Numerical partial derivative
         function partialDerivative(expr, variable, x, y) {
@@ -1003,7 +1267,7 @@ plot3DSurface();
 
         // Quiz functions
         const quizAnswers = {
-            'q1': 'b', 'q2': 'c', 'q3': 'b', 'q4': 'b', 'q5': 'b', 'q6': 'b'
+            'q1': 'b', 'q2': 'a', 'q3': 'b', 'q4': 'b', 'q5': 'b', 'q6': 'b'
         };
 
         function checkAnswer(questionId, correctAnswer) {
@@ -1054,8 +1318,32 @@ plot3DSurface();
       Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
     </footer>
 <script>
+function toggleCollapsible(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        if (icon) icon.textContent = '▼';
+    } else {
+        content.classList.add('active');
+        if (icon) icon.textContent = '▲';
+    }
+}
 </script>
     <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.classList.add('active');
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
     </script>
 </body>
 </html>

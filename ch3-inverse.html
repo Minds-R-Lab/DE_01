@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math 4: Inverse Laplace Transform | Dr. Mohamed Mabrok</title>
@@ -17,68 +9,308 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<link rel="stylesheet" href="styles.css">
 
     <style>
-/* Page-specific styles */
-main {
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(248, 250, 252, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 2rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        main {
             margin-top: 80px;
             padding: 3rem 2rem;
         }
 
-.quote-box,
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
 
-.verse-box {
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-light);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .definition-box,
+        .theorem-box,
+        .example-box,
+        .warning-box,
+        .tip-box,
+        .quote-box,
+        .verse-box {
             padding: 1.5rem;
             border-radius: var(--radius);
             margin: 1.5rem 0;
             border-left: 5px solid;
         }
 
-.quote-box {
+        .definition-box {
+            background-color: var(--primary-light);
+            border-left-color: var(--primary);
+        }
+
+        .theorem-box {
+            background-color: var(--accent-light);
+            border-left-color: var(--accent);
+        }
+
+        .example-box {
+            background-color: #f0fdf4;
+            border-left-color: var(--success);
+        }
+
+        .warning-box {
+            background-color: var(--warning-light);
+            border-left-color: var(--warning);
+        }
+
+        .tip-box {
+            background-color: var(--success-light);
+            border-left-color: var(--success);
+        }
+
+        .quote-box {
             background: linear-gradient(135deg, #fef08a 0%, #fcd34d 100%);
             border-left-color: var(--warning);
             font-style: italic;
             color: #78350f;
         }
 
-.verse-box {
+        .verse-box {
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             border-left-color: var(--success);
             text-align: center;
         }
 
-.verse-arabic {
+        .verse-arabic {
             font-size: 1.3rem;
             direction: rtl;
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
 
-.verse-translation {
+        .verse-translation {
             font-size: 1rem;
             color: var(--text);
             margin-bottom: 0.5rem;
         }
 
-.verse-ref {
+        .verse-ref {
             font-size: 0.9rem;
             color: var(--text-muted);
             font-style: italic;
         }
 
-.solution {
+        p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .math-display {
+            background-color: var(--card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 1.5rem 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .collapsible-header {
+            background-color: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            padding: 1rem 1.5rem;
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .collapsible-header:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .collapsible-header.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .collapsible-arrow {
+            display: inline-block;
+            margin-left: 1rem;
+            transition: transform 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .collapsible-header.active .collapsible-arrow {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+            margin-bottom: 0.5rem;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+
+        .solution {
             background-color: var(--bg);
             padding: 1rem;
             border-radius: var(--radius);
             margin-top: 1rem;
         }
 
-.solution strong {
+        .solution strong {
             color: var(--accent);
         }
 
-.quiz {
+        .quiz {
             background-color: var(--card);
             padding: 1.5rem;
             border-radius: var(--radius);
@@ -86,7 +318,107 @@ main {
             margin: 1.5rem 0;
         }
 
-.button {
+        .quiz-question {
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-question h4 {
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .choice-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            background-color: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .choice-btn.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .choice-btn.correct {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .choice-btn.incorrect {
+            background-color: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background-color: var(--success-light);
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background-color: var(--danger-light);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 4px;
+            margin: 0.5rem 0 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            transition: width 0.3s;
+        }
+
+        .plot-container {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .visualizer-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .button {
             padding: 0.75rem 1.5rem;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
@@ -98,26 +430,67 @@ main {
             font-size: 0.95rem;
         }
 
-.button:hover {
+        .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-.button.secondary {
+        .button.secondary {
             background: linear-gradient(135deg, var(--bg), var(--border));
             color: var(--text);
             border: 2px solid var(--border);
         }
 
-.button.secondary:hover {
+        .button.secondary:hover {
             border-color: var(--primary);
             background: var(--primary-light);
         }
 
+        .plots-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
 
-/* Practice problem toggle */
-</style>
-<script src="course.js"></script>
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            nav .nav-links {
+                gap: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .plots-row {
+                grid-template-columns: 1fr;
+            }
+        }
+  /* Practice problem toggle */
+  .example-content { display: none; padding: 0; }
+  .example-content.active { display: block; padding: 1.5rem; }
+    </style>
 </head>
 <body>
     <nav>
@@ -447,7 +820,7 @@ main {
                 <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
                 <div class="example-item">
-                    <div class="example-header" onclick="togglePractice(this)">
+                    <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                         <span>Practice 1: Find $\mathcal{L}^{-1}\left\{\dfrac{2s+7}{s^2+4s+13}\right\}$</span>
                         <span class="toggle-icon">▼</span>
                     </div>
@@ -467,7 +840,7 @@ main {
                 </div>
 
                 <div class="example-item">
-                    <div class="example-header" onclick="togglePractice(this)">
+                    <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                         <span>Practice 2: Find $\mathcal{L}^{-1}\left\{\dfrac{5s - 1}{s^2 - 6s + 10}\right\}$</span>
                         <span class="toggle-icon">▼</span>
                     </div>
@@ -485,7 +858,7 @@ main {
                 </div>
 
                 <div class="example-item">
-                    <div class="example-header" onclick="togglePractice(this)">
+                    <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                         <span>Practice 3: Find $\mathcal{L}^{-1}\left\{\dfrac{s+3}{(s+1)(s^2+4)}\right\}$ using partial fractions</span>
                         <span class="toggle-icon">▼</span>
                     </div>
@@ -528,11 +901,13 @@ main {
                     <button class="button secondary" onclick="clearPoles()">Clear</button>
                 </div>
 
-                <div class="plot-container">
-                    <div id="polePlot" style="width:100%;height:450px;"></div>
-                </div>
-                <div class="plot-container">
-                    <div id="responsePlot" style="width:100%;height:450px;"></div>
+                <div class="plots-row">
+                    <div class="plot-container">
+                        <div id="polePlot" style="width:100%;height:400px;"></div>
+                    </div>
+                    <div class="plot-container">
+                        <div id="responsePlot" style="width:100%;height:400px;"></div>
+                    </div>
                 </div>
             </section>
 
@@ -580,7 +955,7 @@ main {
                 <div class="quiz">
                     <div class="quiz-question">
                         <h4>Question 4: Using Heaviside's method for \(F(s) = \frac{s}{(s-1)(s+2)}\), what is \(A\) (coefficient of \(\frac{1}{s-1}\))?</h4>
-                        <button class="choice-btn" onclick="checkAnswer(this, 'q4', 'incorrect')">A) \(\frac{1}{3}\)</button>
+                        <button class="choice-btn" onclick="checkAnswer(this, 'q4', 'incorrect')">A) \(\frac{2}{3}\)</button>
                         <button class="choice-btn" onclick="checkAnswer(this, 'q4', 'incorrect')">B) \(-\frac{1}{3}\)</button>
                         <button class="choice-btn" onclick="checkAnswer(this, 'q4', 'correct')">C) \(\frac{1}{3}\)</button>
                         <button class="choice-btn" onclick="checkAnswer(this, 'q4', 'incorrect')">D) \(1\)</button>
@@ -620,6 +995,13 @@ main {
     </footer>
 
     <script>
+        // Toggle collapsible sections
+        function toggleCollapsible(button) {
+            button.classList.toggle('active');
+            const content = button.nextElementSibling;
+            content.classList.toggle('active');
+        }
+
         // Quiz answer checking
         function checkAnswer(button, qId, isCorrect) {
             const parent = button.parentElement;
@@ -791,6 +1173,19 @@ main {
         });
     </script>
     <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.classList.add('active');
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
     </script>
 </body>
 </html>

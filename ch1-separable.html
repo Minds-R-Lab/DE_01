@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math 4: Separable Differential Equations | Dr. Mohamed Mabrok</title>
@@ -20,35 +12,172 @@
 
     <!-- Plotly for Interactive Plots -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<link rel="stylesheet" href="styles.css">
 
     <style>
-/* Page-specific styles */
-/* Navigation Bar */
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
 
-main {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav h1 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        main {
             max-width: 1100px;
             margin: 80px auto 2rem;
             padding: 0 1.5rem;
         }
 
-/* Sections */
+        /* Sections */
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 80px;
+        }
 
-/* Cards and Boxes */
+        section > h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
 
-/* Learning Objectives */
+        section > h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin: 1.5rem 0 1rem;
+        }
 
-.objectives {
+        p, li {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        /* Cards and Boxes */
+        .definition-box,
+        .theorem-box,
+        .example-box,
+        .warning-box,
+        .tip-box {
+            background: white;
+            border-left: 5px solid;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .definition-box {
+            border-left-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .theorem-box {
+            border-left-color: var(--accent);
+            background: #f9f5ff;
+        }
+
+        .example-box {
+            border-left-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .warning-box {
+            border-left-color: var(--warning);
+            background: #fffbeb;
+        }
+
+        .tip-box {
+            border-left-color: #0ea5e9;
+            background: #ecf9ff;
+        }
+
+        .definition-box strong,
+        .theorem-box strong,
+        .example-box strong,
+        .warning-box strong,
+        .tip-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Learning Objectives */
+        .objectives {
             list-style: none;
         }
 
-.objectives li {
+        .objectives li {
             padding-left: 1.8rem;
             position: relative;
             margin-bottom: 0.6rem;
         }
 
-.objectives li:before {
+        .objectives li:before {
             content: "✓";
             position: absolute;
             left: 0;
@@ -56,11 +185,38 @@ main {
             font-weight: bold;
         }
 
-/* Step List */
+        /* Step List */
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+        }
 
-/* Collapsible Examples */
+        .step-list li {
+            counter-increment: step;
+            padding-left: 2.5rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
 
-.example-item {
+        .step-list li:before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* Collapsible Examples */
+        .example-item {
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
@@ -68,7 +224,7 @@ main {
             overflow: hidden;
         }
 
-.example-header {
+        .example-header {
             background: linear-gradient(135deg, var(--success), #10b981);
             color: white;
             padding: 1rem 1.5rem;
@@ -81,17 +237,55 @@ main {
             transition: background 0.3s ease;
         }
 
-.example-header:hover {
+        .example-header:hover {
             background: linear-gradient(135deg, #047857, #059669);
         }
+        .example-header .katex { color: white; }
 
-.example-header .katex { color: white; }
+        .example-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
 
-/* Math in examples */
+        .example-content.active {
+            max-height: 2000px;
+            padding: 1.5rem;
+        }
 
-/* Interactive Controls */
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
 
-select, input[type="text"], input[type="number"] {
+        .example-content.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Math in examples */
+        .example-content .katex {
+            font-size: 0.9em;
+        }
+
+        /* Interactive Controls */
+        .control-group {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        select, input[type="text"], input[type="number"] {
             width: 100%;
             padding: 0.6rem;
             border: 1px solid #d1d5db;
@@ -101,12 +295,12 @@ select, input[type="text"], input[type="number"] {
             margin-bottom: 1rem;
         }
 
-input[type="range"] {
+        input[type="range"] {
             width: 100%;
             margin-bottom: 0.5rem;
         }
 
-.slider-value {
+        .slider-value {
             display: inline-block;
             background: var(--primary);
             color: white;
@@ -117,7 +311,7 @@ input[type="range"] {
             margin-left: 0.5rem;
         }
 
-button {
+        button {
             background: var(--primary);
             color: white;
             border: none;
@@ -129,53 +323,133 @@ button {
             transition: all 0.3s ease;
         }
 
-button:hover {
+        button:hover {
             background: #1d4ed8;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-button:active {
+        button:active {
             transform: translateY(0);
         }
 
-/* Plot Containers */
+        /* Plot Containers */
+        .plot-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
 
-/* Practice Quiz */
 
-.feedback {
+        /* Practice Quiz */
+        .quiz-question {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quiz-question h4 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .quiz-choices {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .choice-btn {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            background: #f3f4f6;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex,
+        .choice-btn.incorrect .katex,
+        .choice-btn.selected .katex { color: white; }
+
+        .choice-btn:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .choice-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .choice-btn.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .choice-btn.incorrect {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: white;
+        }
+
+        .feedback {
             margin: 1rem 0;
             padding: 1rem;
             border-radius: 6px;
             display: none;
         }
 
-.feedback.show {
+        .feedback.show {
             display: block;
         }
 
-.feedback.correct {
+        .feedback.correct {
             background: #d1fae5;
             color: #065f46;
             border-left: 4px solid var(--success);
         }
 
-.feedback.incorrect {
+        .feedback.incorrect {
             background: #fee2e2;
             color: #991b1b;
             border-left: 4px solid var(--danger);
         }
 
-/* Quick Reference */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
 
-.reference-grid {
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        /* Quick Reference */
+        .reference-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin: 1.5rem 0;
         }
 
-.reference-card {
+        .reference-card {
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
@@ -183,43 +457,66 @@ button:active {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-.reference-card h4 {
+        .reference-card h4 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1rem;
         }
 
-/* Utility Classes */
-
-.text-center {
+        /* Utility Classes */
+        .text-center {
             text-align: center;
         }
 
-.mt-2 { margin-top: 2rem; }
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
 
-.mb-2 { margin-bottom: 2rem; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav .container {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem 0;
+            }
 
-/* Responsive */
-</style>
-<script src="course.js"></script>
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            main {
+                margin-top: 150px;
+            }
+
+            section > h2 {
+                font-size: 1.5rem;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav>
-        <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="ch1-separable.html" class="active">1.1 Separable</a>
-            <a href="ch1-linear.html">1.2 Linear</a>
-            <a href="ch1-bernoulli.html">1.3 Bernoulli</a>
-            <a href="ch1-exact.html">1.4 Exact</a>
-            <a href="ch1-nonexact.html">1.5 Non-Exact</a>
-            <span style="color:#e2e8f0;margin:0 0.25rem;">|</span>
-            <a href="#intro">Intro</a>
-            <a href="#theory">Theory</a>
-            <a href="#method">Method</a>
-            <a href="#examples">Examples</a>
-            <a href="#practice">Practice</a>
+        <div class="container">
+            <h1>DiffEq Course</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch1-separable.html" class="active">Separable</a></li>
+                <li><a href="ch1-linear.html">Linear</a></li>
+                <li><a href="ch1-bernoulli.html">Bernoulli</a></li>
+                <li><a href="ch1-exact.html">Exact</a></li>
+                <li><a href="ch1-nonexact.html">Non-Exact</a></li>
+                <li style="opacity:0.3;">|</li>
+                <li><a href="#intro">Intro</a></li>
+                <li><a href="#theory">Theory</a></li>
+                <li><a href="#method">Method</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#practice">Practice</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -800,7 +1097,7 @@ button:active {
             <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 1: $\dfrac{dy}{dx} = y^2\cos(x) + y^2 + \cos(x) + 1$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -824,7 +1121,7 @@ button:active {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 2: $\dfrac{dy}{dx} = \dfrac{x e^x}{y^2 + 1}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -847,7 +1144,7 @@ button:active {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 3 (IVP): $\dfrac{dy}{dx} = \dfrac{2x}{3y^2 - 4}, \quad y(0) = 1$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -903,7 +1200,7 @@ button:active {
                         (B) $\frac{dy}{dx} = xy$
                     </button>
                     <button class="choice-btn" onclick="checkChoice(1, 2)">
-                        (C) $\frac{dy}{dx} = xy + x$
+                        (C) $\frac{dy}{dx} = x^2 + y^2$
                     </button>
                     <button class="choice-btn" onclick="checkChoice(1, 3)">
                         (D) $\frac{dy}{dx} = x + y^2$
@@ -998,7 +1295,7 @@ button:active {
                     </button>
                 </div>
                 <div class="feedback" id="feedback-5">
-                    <p><strong>Correct!</strong> Separating: $y\,dy = x\,dx$. Integrating: $\frac{y^2}{2} = \frac{x^2}{2} + K$, which gives $y^2 - x^2 = C$ (circles/hyperbolas).</p>
+                    <p><strong>Correct!</strong> Separating: $y\,dy = x\,dx$. Integrating: $\frac{y^2}{2} = \frac{x^2}{2} + K$, which gives $y^2 - x^2 = C$ (hyperbolas).</p>
                 </div>
             </div>
 
@@ -1075,8 +1372,23 @@ button:active {
     <script>
         // KaTeX Rendering
         document.addEventListener('DOMContentLoaded', function() {
-updateProgressBar();
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+
+            updateProgressBar();
         });
+
+        // Collapsible Examples
+        function toggleCollapsible(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
 
         // Quiz System
         let quizAnswers = {
@@ -1086,31 +1398,19 @@ updateProgressBar();
 
         function checkChoice(questionNum, choiceIdx) {
             const correct = quizAnswers[questionNum] === choiceIdx;
-            const quizQuestions = document.querySelectorAll('#practice .quiz-question');
-            const questionEl = quizQuestions[questionNum - 1];
-            if (!questionEl) return;
-            const buttons = questionEl.querySelectorAll('.choice-btn');
+            const buttons = document.querySelectorAll(`.quiz-question:nth-of-type(${questionNum}) .choice-btn`);
             const feedback = document.getElementById(`feedback-${questionNum}`);
 
             buttons.forEach((btn, idx) => {
-                btn.disabled = true;
                 if (idx === choiceIdx) {
                     btn.classList.add(correct ? 'correct' : 'incorrect');
-                }
-                if (idx === quizAnswers[questionNum]) {
-                    btn.classList.add('correct');
-                }
-                if (idx !== choiceIdx && idx !== quizAnswers[questionNum]) {
+                } else {
+                    btn.disabled = true;
                     btn.style.opacity = '0.5';
                 }
             });
 
-            if (correct) {
-                feedback.classList.add('show', 'correct');
-            } else {
-                feedback.innerHTML = '<p><strong>Incorrect.</strong> The correct answer is highlighted in green. Review the material and try to understand why.</p>';
-                feedback.classList.add('show', 'incorrect');
-            }
+            feedback.classList.add('show', correct ? 'correct' : 'incorrect');
             quizScores[questionNum] = correct;
             updateProgressBar();
         }
@@ -1130,6 +1430,18 @@ updateProgressBar();
         Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University, Department of Mathematics and Statistics
     </footer>
     <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            content.classList.toggle('active');
+            if (content.classList.contains('active')) {
+                if (icon) icon.textContent = '▲';
+            } else {
+                if (icon) icon.textContent = '▼';
+            }
+        }
+
     </script>
 </body>
 </html>
