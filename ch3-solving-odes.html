@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math 4: Solving IVPs with Laplace Transforms | Dr. Mohamed Mabrok</title>
@@ -17,27 +9,207 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<link rel="stylesheet" href="styles.css">
 
     <style>
-/* Page-specific styles */
-/* Navigation */
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
 
-/* Container */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Section */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
 
-/* Heading styles */
+        /* Navigation */
+        nav {
+            background-color: var(--card);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
 
-/* Boxes */
+        nav .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
 
-/* Math display */
+        nav .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
-/* Step list */
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
 
-/* Quote */
+        nav a:hover {
+            color: var(--primary);
+        }
 
-.quote {
+        nav a.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.25rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 100px;
+        }
+
+        section h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Heading styles */
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Boxes */
+        .definition-box, .theorem-box, .tip-box, .warning-box {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid;
+        }
+
+        .definition-box {
+            background-color: var(--primary-light);
+            border-left-color: var(--primary);
+        }
+
+        .theorem-box {
+            background-color: var(--accent-light);
+            border-left-color: var(--accent);
+        }
+
+        .tip-box {
+            background-color: var(--success-light);
+            border-left-color: var(--success);
+        }
+
+        .warning-box {
+            background-color: var(--warning-light);
+            border-left-color: var(--warning);
+        }
+
+        .definition-box strong, .theorem-box strong, .tip-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Math display */
+        .math-display {
+            background-color: var(--card);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        /* Step list */
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 1.5rem 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+            background-color: var(--card);
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: var(--radius);
+            border-left: 5px solid var(--primary);
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 700;
+        }
+
+        /* Quote */
+        .quote {
             border-left: 5px solid;
             padding: 1.5rem;
             margin: 1.5rem 0;
@@ -46,29 +218,64 @@
             font-size: 1.1rem;
         }
 
-.quote.history {
+        .quote.history {
             background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), rgba(217, 119, 6, 0.05));
             border-left-color: var(--warning);
         }
 
-.quote.islamic {
+        .quote.islamic {
             background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(5, 150, 105, 0.05));
             border-left-color: var(--success);
         }
 
-.quote p {
+        .quote p {
             margin-bottom: 0.5rem;
         }
 
-.quote-attribution {
+        .quote-attribution {
             color: var(--text-muted);
             font-size: 0.95rem;
             margin-top: 0.5rem;
         }
 
-/* Collapsible */
+        /* Collapsible */
+        .collapsible {
+            background-color: var(--primary-light);
+            color: var(--text);
+            cursor: pointer;
+            padding: 1rem;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.content {
+        .collapsible:hover {
+            background-color: #bae6fd;
+        }
+
+        .collapsible.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .collapsible::after {
+            content: "▼";
+            transition: transform 0.3s;
+        }
+
+        .collapsible.active::after {
+            transform: rotate(180deg);
+        }
+
+        .content {
             display: none;
             padding: 1rem;
             background-color: var(--card);
@@ -78,13 +285,12 @@
             margin-bottom: 1rem;
         }
 
-.content.active {
+        .content.active {
             display: block;
         }
 
-/* Quiz */
-
-.quiz {
+        /* Quiz */
+        .quiz {
             background-color: var(--card);
             border: 2px solid var(--accent);
             border-radius: var(--radius);
@@ -92,9 +298,73 @@
             margin-bottom: 1.5rem;
         }
 
-/* Slider group */
+        .quiz-question {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
 
-.slider-group {
+        .quiz-question:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .quiz-question label {
+            display: flex;
+            align-items: center;
+            margin: 0.75rem 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .quiz-question input[type="radio"] {
+            margin-right: 0.75rem;
+            cursor: pointer;
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .quiz-button {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .quiz-button:hover {
+            background-color: #6d28d9;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius);
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background-color: var(--success-light);
+            border-left: 5px solid var(--success);
+            color: var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background-color: var(--danger-light);
+            border-left: 5px solid var(--danger);
+            color: var(--danger);
+        }
+
+        /* Slider group */
+        .slider-group {
             margin-bottom: 1.5rem;
             padding: 1rem;
             background-color: var(--card);
@@ -102,18 +372,18 @@
             border: 1px solid var(--border);
         }
 
-.slider-item {
+        .slider-item {
             margin-bottom: 1rem;
         }
 
-.slider-item label {
+        .slider-item label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--primary);
         }
 
-.slider-item input[type="range"] {
+        .slider-item input[type="range"] {
             width: 100%;
             height: 6px;
             border-radius: 5px;
@@ -122,7 +392,7 @@
             -webkit-appearance: none;
         }
 
-.slider-item input[type="range"]::-webkit-slider-thumb {
+        .slider-item input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
@@ -132,7 +402,7 @@
             cursor: pointer;
         }
 
-.slider-item input[type="range"]::-moz-range-thumb {
+        .slider-item input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -141,16 +411,15 @@
             border: none;
         }
 
-.slider-value {
+        .slider-value {
             display: inline-block;
             margin-left: 0.5rem;
             color: var(--text-muted);
             font-weight: 500;
         }
 
-/* Buttons */
-
-button {
+        /* Buttons */
+        button {
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: var(--radius);
@@ -159,25 +428,24 @@ button {
             transition: all 0.3s;
         }
 
-.btn-primary {
+        .btn-primary {
             background-color: var(--primary);
             color: white;
         }
 
-.btn-primary:hover {
+        .btn-primary:hover {
             background-color: #1d4ed8;
         }
 
-/* Controls */
-
-.controls {
+        /* Controls */
+        .controls {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 1.5rem;
         }
 
-.controls select {
+        .controls select {
             padding: 0.75rem;
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -185,36 +453,112 @@ button {
             background-color: var(--card);
         }
 
-/* Plot container */
+        /* Plot container */
+        .plot-container {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            min-height: 500px;
+        }
 
-/* Progress bar */
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
 
-/* Responsive */
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--success);
+            transition: width 0.3s;
+        }
 
-/* Misc */
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-strong {
+            nav .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            .plot-container {
+                min-height: 400px;
+            }
+        }
+
+        /* Misc */
+        p {
+            margin-bottom: 1rem;
+        }
+
+        strong {
             color: var(--primary);
             font-weight: 700;
         }
 
-code {
+        code {
             background-color: var(--primary-light);
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
         }
 
-.example-label {
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .example-label {
             font-weight: 700;
             color: var(--accent);
             font-size: 1.1rem;
             margin-top: 0.5rem;
         }
 
-/* Practice problem toggle */
-</style>
-<script src="course.js"></script>
+        hr {
+            border: none;
+            border-top: 2px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        footer {
+            background-color: var(--card);
+            border-top: 2px solid var(--border);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+  /* Practice problem toggle */
+  .example-content { display: none; padding: 0; }
+  .example-content.active { display: block; padding: 1.5rem; }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -536,7 +880,7 @@ code {
                 <ul style="margin-left: 1.5rem;">
                     <li><strong>Steady-state charge:</strong> $y_{\text{ss}} = 5/2 = 2.5$ coulombs (from $\lim_{t \to \infty} y(t)$)</li>
                     <li><strong>Transient response:</strong> The $e^{-2t}$ and $te^{-2t}$ terms decay due to critical damping ($\zeta = 1$)</li>
-                    <li><strong>Current:</strong> $i(t) = y'(t) = 5e^{-2t} + 10te^{-2t} - 10e^{-2t} = -5e^{-2t} + 10te^{-2t}$, starting at 0 and decaying to 0</li>
+                    <li><strong>Current:</strong> $i(t) = y'(t) = 5e^{-2t} - 5e^{-2t} + 10te^{-2t} = 10te^{-2t}$, starting at 0 and decaying to 0</li>
                 </ul>
             </div>
         </section>
@@ -547,7 +891,7 @@ code {
             <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 1: Solve $y'' + 4y = 8$ with $y(0)=0$, $y'(0)=2$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -579,7 +923,7 @@ code {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 2: Solve $y'' - 3y' + 2y = e^{3t}$ with $y(0)=1$, $y'(0)=0$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -742,6 +1086,15 @@ code {
 
     <!-- JavaScript -->
     <script>
+        // Collapsible functionality
+        function toggleCollapsible(btn) {
+            btn.classList.toggle('active');
+            const content = btn.nextElementSibling;
+            if (content) {
+                content.classList.toggle('active');
+            }
+        }
+
         document.querySelectorAll('.collapsible').forEach(btn => {
             btn.addEventListener('click', function() {
                 toggleCollapsible(this);
@@ -911,7 +1264,7 @@ code {
                 q3: 'b',
                 q4: 'c',
                 q5: 'b',
-                q6: 'c'
+                q6: 'a'
             };
 
             let correct = 0;
@@ -944,10 +1297,31 @@ code {
 
         // Initialize visualizer on page load
         document.addEventListener('DOMContentLoaded', function() {
-updateVisualizer();
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+            updateVisualizer();
         });
     </script>
     <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.classList.add('active');
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
     </script>
 </body>
 </html>

@@ -1,48 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5.1 — Power Series Solutions Around Ordinary Points</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
-  <link rel="stylesheet" href="styles.css">
   <style>
-/* Page-specific styles */
-.reference-grid {
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      height: 60px;
+      box-shadow: var(--shadow);
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-right: 2rem;
+      white-space: nowrap;
+    }
+
+    nav .logo a {
+      text-decoration: none;
+      color: var(--primary);
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      overflow-x: auto;
+    }
+
+    nav .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    nav .nav-links a:hover,
+    nav .nav-links a.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 1.5rem 4rem;
+    }
+
+    section {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .definition-box,
+    .theorem-box,
+    .example-box,
+    .warning-box,
+    .tip-box {
+      border-left: 5px solid;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .definition-box {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .theorem-box {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .example-box {
+      background: var(--success-light);
+      border-color: var(--success);
+    }
+
+    .warning-box {
+      background: var(--warning-light);
+      border-color: var(--warning);
+    }
+
+    .tip-box {
+      background: #f0f9ff;
+      border-color: #0ea5e9;
+    }
+
+    .box-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .math-display {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 1.2rem;
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.15em;
+      overflow-x: auto;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding: 1rem 1rem 1rem 3.5rem;
+      margin-bottom: 0.75rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0.75rem;
+      top: 1rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .collapsible-toggle {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: #f1f5f9;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .collapsible-toggle:hover {
+      background: #e2e8f0;
+    }
+
+    .collapsible-toggle .arrow {
+      transform: rotate(0deg);
+      transition: transform 0.3s ease;
+    }
+
+    .collapsible-toggle.open .arrow {
+      transform: rotate(90deg);
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      border: 1.5px solid transparent;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .collapsible-content.open {
+      max-height: 5000px;
+      border-color: var(--border);
+      padding: 1.5rem;
+    }
+
+    .quiz-problem {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .choice-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+      text-align: left;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .choice-btn:disabled {
+      cursor: not-allowed;
+    }
+
+    .choice-btn.selected-correct {
+      background: var(--success-light);
+      border-color: var(--success);
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .choice-btn.selected-wrong {
+      background: var(--danger-light);
+      border-color: var(--danger);
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .quiz-feedback.incorrect {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .reference-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-top: 1.5rem;
     }
 
-.reference-card {
+    .reference-card {
       padding: 1.5rem;
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 8px;
     }
 
-.reference-card h4 {
+    .reference-card h4 {
       color: var(--primary);
       font-size: 1rem;
       margin-bottom: 0.75rem;
     }
 
-.reference-card code {
+    .reference-card code {
       background: #fff;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
       font-size: 0.9rem;
     }
-</style>
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .katex-display {
+      margin: 0.5rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 70px 1rem 2rem;
+      }
+      section {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
+      nav .nav-links {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -88,7 +474,7 @@
       infinite series. This approach is particularly valuable for:
     </p>
     <ul style="margin-left: 1.5rem;">
-      <li style="margin-bottom: 0.5rem;"><strong>Airy equation</strong> ($y'' + xy = 0$) — describes diffraction and wave propagation</li>
+      <li style="margin-bottom: 0.5rem;"><strong>Airy equation</strong> ($y'' - xy = 0$) — describes diffraction and wave propagation</li>
       <li style="margin-bottom: 0.5rem;"><strong>Bessel equation</strong> — fundamental in cylindrical and polar coordinates</li>
       <li style="margin-bottom: 0.5rem;"><strong>Hermite and Legendre equations</strong> — central to quantum mechanics and special functions</li>
       <li style="margin-bottom: 0.5rem;"><strong>Variable-coefficient ODEs</strong> without polynomial or rational closed forms</li>
@@ -239,37 +625,37 @@
 
     <!-- Example 2 -->
     <button class="collapsible-toggle" onclick="toggle(this)">
-      <span><strong>Example 2:</strong> Airy Equation $y'' + xy = 0$ around $x_0 = 0$</span>
+      <span><strong>Example 2:</strong> Airy Equation $y'' - xy = 0$ around $x_0 = 0$</span>
       <span class="arrow">→</span>
     </button>
     <div class="collapsible-content">
       <p>
-        <strong>Setup:</strong> The Airy equation $y'' + xy = 0$ has no solution in terms of elementary functions. This classic example demonstrates the power of series methods.
+        <strong>Setup:</strong> The Airy equation $y'' - xy = 0$ has no solution in terms of elementary functions. This classic example demonstrates the power of series methods.
       </p>
       <p><strong>Assume:</strong> $y = \sum_{n=0}^{\infty} a_n x^n$</p>
       <p><strong>Derivatives:</strong></p>
       <div class="math-display">
         $$y'' = \sum_{n=2}^{\infty} n(n-1) a_n x^{n-2}$$
       </div>
-      <p><strong>Substitute into $y'' + xy = 0$:</strong></p>
+      <p><strong>Substitute into $y'' - xy = 0$:</strong></p>
       <div class="math-display">
-        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} + x \sum_{n=0}^{\infty} a_n x^n = 0$$
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} - x \sum_{n=0}^{\infty} a_n x^n = 0$$
       </div>
       <div class="math-display">
-        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} + \sum_{n=0}^{\infty} a_n x^{n+1} = 0$$
+        $$\sum_{n=2}^{\infty} n(n-1) a_n x^{n-2} - \sum_{n=0}^{\infty} a_n x^{n+1} = 0$$
       </div>
       <p><strong>Shift indices:</strong> First sum: $m = n-2$; second sum: $m = n+1$</p>
       <div class="math-display">
-        $$\sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2} x^m + \sum_{m=1}^{\infty} a_{m-1} x^m = 0$$
+        $$\sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2} x^m - \sum_{m=1}^{\infty} a_{m-1} x^m = 0$$
       </div>
       <p><strong>Separate by power:</strong></p>
       <ul style="margin-left: 1.5rem;">
         <li style="margin-bottom: 0.5rem;">Coefficient of $x^0$: $2a_2 = 0 \Rightarrow a_2 = 0$</li>
-        <li style="margin-bottom: 0.5rem;">Coefficient of $x^n$ ($n \geq 1$): $(n+2)(n+1)a_{n+2} + a_{n-1} = 0$</li>
+        <li style="margin-bottom: 0.5rem;">Coefficient of $x^n$ ($n \geq 1$): $(n+2)(n+1)a_{n+2} - a_{n-1} = 0$</li>
       </ul>
       <p><strong>Recurrence relation:</strong></p>
       <div class="math-display">
-        $$a_{n+2} = -\frac{a_{n-1}}{(n+2)(n+1)} \quad \text{for } n \geq 1$$
+        $$a_{n+2} = \frac{a_{n-1}}{(n+2)(n+1)} \quad \text{for } n \geq 1$$
       </div>
       <p><strong>First few terms:</strong></p>
       <div class="math-display">
@@ -425,9 +811,9 @@
 
     <!-- Question 3 -->
     <div class="quiz-problem" id="q3">
-      <p><strong>Question 3:</strong> For the Airy equation $y'' + xy = 0$, what is the coefficient of $x^6$ in the solution $y_1 = a_0(1 + \frac{x^3}{6} + \cdots)$?</p>
+      <p><strong>Question 3:</strong> For the Airy equation $y'' - xy = 0$, what is the coefficient of $x^6$ in the solution $y_1 = a_0(1 + \frac{x^3}{6} + \cdots)$?</p>
       <button class="choice-btn" onclick="checkChoice(3, 0)">A) The coefficient of $x^6$ does not appear (recurrence skips even and odd separately)</button>
-      <button class="choice-btn" onclick="checkChoice(3, 1)">B) $\frac{a_0}{360}$</button>
+      <button class="choice-btn" onclick="checkChoice(3, 1)">B) $\frac{a_0}{180}$</button>
       <button class="choice-btn" onclick="checkChoice(3, 2)">C) $\frac{a_0}{120}$</button>
       <button class="choice-btn" onclick="checkChoice(3, 3)">D) $\frac{a_0}{720}$</button>
       <div id="fb-3" class="quiz-feedback"></div>
@@ -510,13 +896,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
-<script src="course.js"></script>
 
 <script>
 function toggle(btn) {
   const content = btn.nextElementSibling;
-  btn.classList.toggle('active');
-  content.classList.toggle('active');
+  btn.classList.toggle('open');
+  content.classList.toggle('open');
 }
 
 let defined = {};
@@ -533,17 +918,17 @@ function checkChoice(q, chosen) {
   });
   const fb = document.getElementById('fb-'+q);
   if (chosen === correct) {
-    fb.className = 'quiz-feedback show correct';
+    fb.className = 'quiz-feedback correct';
     fb.textContent = '✓ Correct!';
     score++;
   } else {
-    fb.className = 'quiz-feedback show incorrect';
+    fb.className = 'quiz-feedback incorrect';
     fb.textContent = '✗ Incorrect. The correct answer is highlighted.';
   }
   updateProgress();
 }
 
-var answers = {1:1, 2:1, 3:0, 4:3, 5:1, 6:1};
+var answers = {1:1, 2:1, 3:1, 4:3, 5:1, 6:1};
 var score = 0;
 
 function updateProgress() {
@@ -552,6 +937,14 @@ function updateProgress() {
   document.getElementById('progressText').textContent = score+' / 6 correct';
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });
+});
 </script>
 
 </body>
