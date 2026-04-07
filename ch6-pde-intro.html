@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: Introduction to Partial Differential Equations | Dr. Mohamed Mabrok</title>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+    <!-- Plotly for Interactive Plots -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-P9F00LPZD5');</script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        nav .container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+        nav h1 { font-size: 1.3rem; color: var(--primary); font-weight: 600; }
+        nav ul { display: flex; list-style: none; gap: 1.5rem; align-items: center; }
+        nav a {
+            color: #666; text-decoration: none; font-weight: 500;
+            padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+
+        main { max-width: 1100px; margin: 80px auto 2rem; padding: 0 1.5rem; }
+
+        /* Sections */
+        section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+        section > h2 {
+            font-size: 2rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem; border-bottom: 3px solid var(--primary);
+        }
+        section > h3 { font-size: 1.3rem; color: #333; margin: 1.5rem 0 1rem; }
+        p, li { margin-bottom: 0.8rem; font-size: 0.95rem; }
+
+        /* Cards and Boxes */
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            background: white; border-left: 5px solid; border-radius: 12px;
+            padding: 1.2rem; margin: 1rem 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .definition-box { border-left-color: var(--primary); background: #eff6ff; }
+        .theorem-box { border-left-color: var(--accent); background: #f9f5ff; }
+        .example-box { border-left-color: var(--success); background: #f0fdf4; }
+        .warning-box { border-left-color: var(--warning); background: #fffbeb; }
+        .tip-box { border-left-color: #0ea5e9; background: #ecf9ff; }
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong {
+            display: block; margin-bottom: 0.5rem; font-size: 0.95rem;
+        }
+
+        /* Learning Objectives */
+        .objectives { list-style: none; }
+        .objectives li { padding-left: 1.8rem; position: relative; margin-bottom: 0.6rem; }
+        .objectives li:before { content: "\2713"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        /* Step List */
+        .step-list { list-style: none; counter-reset: step; }
+        .step-list li { counter-increment: step; padding-left: 2.5rem; position: relative; margin-bottom: 1rem; }
+        .step-list li:before {
+            content: counter(step); position: absolute; left: 0; top: 0;
+            background: var(--primary); color: white; width: 2rem; height: 2rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.85rem;
+        }
+
+        /* Collapsible Examples */
+        .example-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin: 1.2rem 0; overflow: hidden; }
+        .example-header {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white; padding: 1rem 1.5rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; user-select: none; transition: background 0.3s ease;
+        }
+        .example-header:hover { background: linear-gradient(135deg, #047857, #059669); }
+        .example-header .katex { color: white; }
+        .example-content { padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .example-content.active { max-height: 5000px; padding: 1.5rem; }
+        .toggle-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+
+        /* Interactive Controls */
+        .control-group {
+            background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .control-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 6px;
+            font-size: 0.9rem; font-family: 'Segoe UI', system-ui; margin-bottom: 1rem;
+        }
+        input[type="range"] { width: 100%; margin-bottom: 0.5rem; }
+        .slider-value {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-left: 0.5rem;
+        }
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer;
+            font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;
+        }
+        button:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+        /* Plot Containers */
+        .plot-container { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        /* Practice Quiz */
+        .quiz-question { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e2e8f0; }
+        .quiz-question h4 { margin-bottom: 1rem; color: #333; }
+        .quiz-choices { display: grid; grid-template-columns: 1fr; gap: 0.8rem; margin-bottom: 1rem; }
+        .choice-btn {
+            padding: 0.8rem 1rem; text-align: left; background: #f3f4f6;
+            border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer;
+            transition: all 0.3s ease; font-weight: 500; color: #1e293b;
+        }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex, .choice-btn.incorrect .katex { color: white; }
+        .choice-btn:hover { border-color: var(--primary); background: #eff6ff; }
+        .choice-btn.correct { border-color: var(--success); background: var(--success); color: white; }
+        .choice-btn.incorrect { border-color: var(--danger); background: var(--danger); color: white; }
+        .feedback { margin: 1rem 0; padding: 1rem; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
+        .feedback.incorrect { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
+        .progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+        /* Quick Reference */
+        .reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+        .reference-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .reference-card h4 { color: var(--primary); margin-bottom: 1rem; font-size: 1rem; }
+
+        .text-center { text-align: center; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center; padding: 3rem 1rem 2rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f9f5ff 100%);
+            border-radius: 16px; margin-bottom: 2rem;
+        }
+        .hero h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .hero p { color: #64748b; font-size: 1.1rem; }
+        .hero .chapter-badge {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 1rem;
+        }
+
+        /* Summary table */
+        .summary-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .summary-table th, .summary-table td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+        .summary-table th { background: var(--primary); color: white; font-weight: 600; }
+        .summary-table tr:nth-child(even) { background: #f8fafc; }
+        .summary-table tr:hover { background: #eff6ff; }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .hero h1 { font-size: 1.5rem; }
+            section > h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>Ch 6: Introduction to PDEs</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#concepts">Concepts</a></li>
+                <li><a href="#heat">Heat Eq.</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#nonhomogeneous">Non-Homog.</a></li>
+                <li><a href="#neumann">Neumann</a></li>
+                <li><a href="#wave">Wave Eq.</a></li>
+                <li><a href="#visualize">Visualize</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#reference">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <div class="hero">
+            <span class="chapter-badge">Chapter 6</span>
+            <h1>Introduction to Partial Differential Equations</h1>
+            <p>Heat Equation &bull; Wave Equation &bull; Separation of Variables &bull; Fourier Series</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <section id="objectives">
+            <h2>Learning Objectives</h2>
+            <ul class="objectives">
+                <li>Understand the definition and classification of partial differential equations</li>
+                <li>Recognize the three classical second-order PDEs: heat, wave, and Laplace equations</li>
+                <li>Apply the method of separation of variables to solve the heat equation</li>
+                <li>Handle homogeneous and non-homogeneous boundary conditions</li>
+                <li>Use Fourier sine and cosine series to find coefficients</li>
+                <li>Solve the heat equation with a source term</li>
+                <li>Solve problems with Neumann boundary conditions</li>
+                <li>Apply separation of variables to the wave equation</li>
+            </ul>
+        </section>
+
+        <!-- Section 1: Definition and Basic Concepts -->
+        <section id="concepts">
+            <h2>Definition and Basic Concepts</h2>
+
+            <div class="definition-box">
+                <strong>Definition: Partial Differential Equation (PDE)</strong>
+                A <strong>partial differential equation</strong> is an equation involving partial derivatives of an unknown function $u$ that depends on several variables (e.g., $u(x,t)$, or $u(x,y)$, ...).
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Terminology</strong>
+                <p><strong>Order of a PDE:</strong> The highest order of derivatives appearing.</p>
+                <p><strong>Linear PDE:</strong> The terms with $u$ and its derivatives are in linear form.</p>
+                <p><strong>Homogeneous:</strong> Each term contains $u$ or its derivatives.</p>
+                <p><strong>Non-Homogeneous:</strong> Otherwise (contains forcing terms not involving $u$).</p>
+            </div>
+
+            <h3>Classical Second-Order Linear PDEs</h3>
+
+            <div class="theorem-box">
+                <strong>The Three Great Equations</strong>
+                <p><strong>1. Wave Equation:</strong> $$\frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}$$</p>
+                <p>Models vibrating strings, sound waves, electromagnetic waves.</p>
+                <p style="margin-top:1rem;"><strong>2. Heat (Diffusion) Equation:</strong> $$\frac{\partial u}{\partial t} = K \frac{\partial^2 u}{\partial x^2}$$</p>
+                <p>Models heat conduction, diffusion processes.</p>
+                <p style="margin-top:1rem;"><strong>3. Laplace Equation:</strong> $$\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$$</p>
+                <p>Models steady-state temperature, electrostatic potential, incompressible fluid flow.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: The Heat Equation -->
+        <section id="heat">
+            <h2>The Heat Equation</h2>
+
+            <div class="definition-box">
+                <strong>Heat Equation Setup</strong>
+                <p>Consider a wire placed along the $x$-axis from $x = 0$ to $x = L$. Let $u(x,t)$ denote the temperature at position $x$ and time $t$. The heat equation for an insulated wire is:</p>
+                $$\frac{\partial u}{\partial t} = K \frac{\partial^2 u}{\partial x^2}, \qquad 0 < x < L, \quad t > 0$$
+                <p>where $K > 0$ is the <strong>thermal diffusivity</strong> (constant).</p>
+            </div>
+
+            <h3>Initial and Boundary Conditions</h3>
+
+            <div class="tip-box">
+                <strong>Conditions for the Heat Equation</strong>
+                <p><strong>Initial condition:</strong> $u(x,0) = f(x)$, $\quad 0 < x < L$</p>
+                <p style="margin-top:0.5rem;"><strong>Boundary conditions</strong> (at $x = 0$ and $x = L$):</p>
+                <p><strong>(a) Dirichlet (Homogeneous):</strong> $u(0,t) = 0$, $\; u(L,t) = 0$ &mdash; temperature is zero at both ends.</p>
+                <p><strong>(b) Neumann:</strong> $\frac{\partial u}{\partial x}(0,t) = 0$, $\; \frac{\partial u}{\partial x}(L,t) = 0$ &mdash; both ends insulated; no heat flows out.</p>
+                <p><strong>(c) Non-Homogeneous:</strong> $u(0,t) = T_1$, $\; u(L,t) = T_2$ &mdash; prescribed temperatures.</p>
+                <p><strong>(d) Periodic:</strong> $u(-L,t) = u(L,t)$, $\; \frac{\partial u}{\partial x}(-L,t) = \frac{\partial u}{\partial x}(L,t)$</p>
+            </div>
+
+            <h3>Method of Separation of Variables</h3>
+
+            <div class="theorem-box">
+                <strong>Separation of Variables</strong>
+                <p>Assume the solution has the form: $$u(x,t) = P(x)\,Q(t)$$</p>
+                <p>where $P(x)$ depends only on $x$ and $Q(t)$ depends only on $t$. Substituting into the heat equation reduces it to <strong>two ordinary differential equations</strong>.</p>
+            </div>
+
+            <h3>Solving with Homogeneous Dirichlet BCs</h3>
+
+            <div class="definition-box">
+                <strong>Problem Setup</strong>
+                $$\begin{cases} \dfrac{\partial u}{\partial t} = K \dfrac{\partial^2 u}{\partial x^2} \\[6pt] u(x,0) = f(x), \quad u(0,t) = 0, \quad u(L,t) = 0 \end{cases}$$
+            </div>
+
+            <p>The step-by-step procedure:</p>
+
+            <ul class="step-list">
+                <li>Let $u(x,t) = P(x)\,Q(t)$. Substituting: $P(x)\,Q'(t) = K\,P''(x)\,Q(t)$, so $$\frac{1}{K\,Q(t)}\frac{dQ}{dt} = \frac{1}{P(x)}\frac{d^2 P}{dx^2} = -\lambda$$</li>
+                <li>This gives two ODEs:
+                    $$\frac{dQ}{dt} + K\lambda\,Q(t) = 0 \qquad \text{and} \qquad \frac{d^2 P}{dx^2} + \lambda\,P(x) = 0$$
+                    with boundary conditions $P(0) = 0$ and $P(L) = 0$.</li>
+                <li>Solve the spatial ODE ($P$-equation) for three cases:
+                    <p><strong>Case I ($\lambda < 0$):</strong> $P(x) = C_1 e^{\sqrt{-\lambda}\,x} + C_2 e^{-\sqrt{-\lambda}\,x}$. Applying BCs gives only the trivial solution.</p>
+                    <p><strong>Case II ($\lambda = 0$):</strong> $P(x) = C_1 + C_2 x$. BCs give $C_1 = C_2 = 0$; no non-trivial solution.</p>
+                    <p><strong>Case III ($\lambda > 0$):</strong> $P(x) = C_1 \cos(\sqrt{\lambda}\,x) + C_2 \sin(\sqrt{\lambda}\,x)$.
+                    Applying $P(0) = 0 \Rightarrow C_1 = 0$. Then $P(L) = 0 \Rightarrow C_2 \sin(\sqrt{\lambda}\,L) = 0$.
+                    For non-trivial solution: $\sin(\sqrt{\lambda}\,L) = 0 \Rightarrow \sqrt{\lambda}\,L = m\pi$.</p>
+                </li>
+                <li><strong>Eigenvalues and eigenfunctions:</strong>
+                    $$\lambda_m = \left(\frac{m\pi}{L}\right)^2, \qquad P_m(x) = \sin\!\left(\frac{m\pi x}{L}\right), \qquad m = 1, 2, 3, \ldots$$
+                </li>
+                <li>Solve the temporal ODE using $\lambda_m$:
+                    $$\frac{dQ}{dt} + K\lambda_m\,Q = 0 \quad \Longrightarrow \quad Q_m(t) = C\,e^{-K\left(\frac{m\pi}{L}\right)^2 t}$$
+                </li>
+            </ul>
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Homogeneous Heat Equation</strong>
+                $$u(x,t) = \sum_{m=1}^{\infty} C_m \sin\!\left(\frac{m\pi x}{L}\right) e^{-K\left(\frac{m\pi}{L}\right)^2 t}$$
+                <p style="margin-top:0.5rem;"><strong>Finding $C_m$:</strong></p>
+                <p>(a) If $f(x) = \sum C_m \sin\!\left(\frac{m\pi x}{L}\right)$, find $C_m$ by <strong>comparison</strong>.</p>
+                <p>(b) Otherwise, use the <strong>Fourier Sine Series</strong>:</p>
+                $$C_m = \frac{2}{L}\int_0^L f(x)\sin\!\left(\frac{m\pi x}{L}\right)\,dx, \qquad m = 1, 2, 3, \ldots$$
+            </div>
+        </section>
+
+        <!-- Section 3: Worked Examples -->
+        <section id="examples">
+            <h2>Worked Examples &mdash; Homogeneous Heat Equation</h2>
+
+            <!-- Example 1 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 1: Heat equation with Fourier coefficients ($K = 4$, $L = 4$, $f(x) = x - 1$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = 4\,\dfrac{\partial^2 u}{\partial x^2}, \qquad 0 < x < 4 \\[4pt] u(0,t) = 0, \quad u(4,t) = 0 \\[4pt] u(x,0) = x - 1 \end{cases}$$
+                    </div>
+
+                    <p><strong>Solution:</strong> Here $K = 4$, $L = 4$, and $f(x) = x - 1$.</p>
+
+                    <p><strong>(a)</strong> Separation of variables yields the two ODEs: $P''(x) + \lambda P(x) = 0$, $P(0) = 0$, $P(4) = 0$ and $Q'(t) + 4\lambda\,Q(t) = 0$.</p>
+
+                    <p><strong>(b)</strong> For $\lambda > 0$: eigenvalues $\lambda_m = \left(\frac{m\pi}{4}\right)^2$ and eigenfunctions $P_m(x) = \sin\!\left(\frac{m\pi x}{4}\right)$.</p>
+
+                    <p>The temporal solution: $Q_m(t) = e^{-4\left(\frac{m\pi}{4}\right)^2 t}$.</p>
+
+                    <p><strong>(c)</strong> The general solution is:</p>
+                    $$u(x,t) = \sum_{m=1}^{\infty} C_m\,e^{-4\left(\frac{m\pi}{4}\right)^2 t}\,\sin\!\left(\frac{m\pi x}{4}\right)$$
+
+                    <p>Using $u(x,0) = x - 1$:</p>
+                    $$C_m = \frac{2}{4}\int_0^4 (x-1)\sin\!\left(\frac{m\pi x}{4}\right)\,dx = \frac{-2}{m\pi}\left[1 + 3(-1)^m\right]$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \sum_{m=1}^{\infty} \frac{-2}{m\pi}\left[1 + 3(-1)^m\right]\,e^{-\left(\frac{m\pi}{4}\right)^2 \cdot 4t}\,\sin\!\left(\frac{m\pi x}{4}\right)$$
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 2: Comparison method ($K = 7$, $L = \pi$, $f(x) = 3\sin(2x) - 6\sin(5x)$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = 7\,\dfrac{\partial^2 u}{\partial x^2}, \quad 0 < x < \pi,\; t > 0 \\[4pt] u(0,t) = u(\pi,t) = 0 \\[4pt] u(x,0) = 3\sin(2x) - 6\sin(5x) \end{cases}$$
+                    </div>
+
+                    <p><strong>Solution:</strong> Here $K = 7$, $L = \pi$, so $\frac{m\pi}{L} = m$ and the general form is:</p>
+                    $$u(x,t) = \sum_{m=1}^{\infty} C_m \sin(mx)\,e^{-7m^2 t}$$
+
+                    <p>At $t = 0$: $\sum C_m \sin(mx) = 3\sin(2x) - 6\sin(5x)$.</p>
+                    <p>By <strong>comparison</strong>: $C_2 = 3$, $C_5 = -6$, and $C_i = 0$ for $i \neq 2, 5$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = 3\,e^{-28t}\sin(2x) - 6\,e^{-175t}\sin(5x)$$
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 3: Matching by comparison ($K = 4$, $L = 4$, $f(x) = 5\sin(\pi x)$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = 4\,\dfrac{\partial^2 u}{\partial x^2} \\[4pt] u(0,t) = u(4,t) = 0 \\[4pt] u(x,0) = 5\sin(\pi x) \end{cases}$$
+                    </div>
+
+                    <p><strong>Solution:</strong> Here $K = 4$, $L = 4$. The general solution is:</p>
+                    $$u(x,t) = \sum_{m=1}^{\infty} C_m \sin\!\left(\frac{m\pi x}{4}\right) e^{-4\left(\frac{m\pi}{4}\right)^2 t}$$
+
+                    <p>At $t = 0$: $\sum C_m \sin\!\left(\frac{m\pi x}{4}\right) = 5\sin(\pi x)$.</p>
+                    <p>Matching: $\frac{m\pi}{4} = \pi \Rightarrow m = 4$, so $C_4 = 5$, all other $C_i = 0$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = 5\,e^{-4\pi^2 t}\sin(\pi x)$$
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 4 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 4: Constant initial condition ($f(x) = 20$, homogeneous BCs)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = K\,\dfrac{\partial^2 u}{\partial x^2} \\[4pt] u(x,0) = 20, \quad u(0,t) = 0, \quad u(L,t) = 0 \end{cases}$$
+                    </div>
+
+                    <p><strong>Solution:</strong> The general solution is $u(x,t) = \sum_{m=1}^{\infty} C_m \sin\!\left(\frac{m\pi x}{L}\right) e^{-K\left(\frac{m\pi}{L}\right)^2 t}$.</p>
+
+                    <p>The Fourier coefficients are:</p>
+                    $$C_m = \frac{2}{L}\int_0^L 20\sin\!\left(\frac{m\pi x}{L}\right)\,dx = \frac{40}{m\pi}\left(1 - (-1)^m\right)$$
+
+                    <p>Note: $C_m = 0$ for even $m$, and $C_m = \frac{80}{m\pi}$ for odd $m$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \sum_{m=1}^{\infty} \frac{40\left(1-(-1)^m\right)}{m\pi} \sin\!\left(\frac{m\pi x}{L}\right) e^{-K\left(\frac{m\pi}{L}\right)^2 t}$$
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Non-Homogeneous BCs -->
+        <section id="nonhomogeneous">
+            <h2>Heat Equation with Non-Homogeneous BCs</h2>
+
+            <div class="definition-box">
+                <strong>Non-Homogeneous Boundary Value Problem</strong>
+                $$\begin{cases} \dfrac{\partial u}{\partial t} = K\,\dfrac{\partial^2 u}{\partial x^2}, \qquad 0 < x < L \\[4pt] u(x,0) = f(x), \quad u(0,t) = T_1, \quad u(L,t) = T_2 \end{cases}$$
+            </div>
+
+            <div class="warning-box">
+                <strong>Strategy: Decompose into Steady-State + Transient</strong>
+                <p>Let $u(x,t) = V(x) + w(x,t)$, where:</p>
+                <p>$V(x) = T_1 + \dfrac{T_2 - T_1}{L}\,x$ is the <strong>steady-state solution</strong></p>
+                <p>$w(x,t)$ is the <strong>transient solution</strong> (tends to 0 as $t \to \infty$), satisfying a <em>homogeneous</em> BVP.</p>
+            </div>
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Non-Homogeneous BCs</strong>
+                $$u(x,t) = \left(T_1 + \frac{T_2 - T_1}{L}\,x\right) + \sum_{m=1}^{\infty} C_m\,e^{-K\left(\frac{m\pi}{L}\right)^2 t}\,\sin\!\left(\frac{m\pi x}{L}\right)$$
+                <p>where</p>
+                $$C_m = \frac{2}{L}\int_0^L \left[f(x) - T_1 - \frac{T_2 - T_1}{L}\,x\right]\sin\!\left(\frac{m\pi x}{L}\right)\,dx$$
+            </div>
+
+            <!-- Example 5 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 5: Non-homogeneous BCs ($T_1 = 3$, $T_2 = 7$, $f(x) = 2x + 2$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = 4\,\dfrac{\partial^2 u}{\partial x^2} \\[4pt] u(0,t) = 3, \quad u(4,t) = 7 \\[4pt] u(x,0) = 2x + 2 \end{cases}$$
+                    </div>
+
+                    <p><strong>Solution:</strong> $K = 4$, $T_1 = 3$, $T_2 = 7$, $L = 4$.</p>
+                    <p><strong>Steady state:</strong> $V(x) = 3 + \frac{7 - 3}{4}\,x = x + 3$.</p>
+                    <p><strong>Transient:</strong> $w(x,0) = f(x) - V(x) = (2x+2) - (x+3) = x - 1$.</p>
+                    <p>This is the same as Example 1, so:</p>
+                    $$w(x,t) = \sum_{m=1}^{\infty} \frac{-2}{m\pi}\left[1 + 3(-1)^m\right]\,e^{-\left(\frac{m\pi}{2}\right)^2 t}\,\sin\!\left(\frac{m\pi x}{4}\right)$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = x + 3 + \sum_{m=1}^{\infty} \frac{-2}{m\pi}\left[1 + 3(-1)^m\right]\,e^{-\left(\frac{m\pi}{2}\right)^2 t}\,\sin\!\left(\frac{m\pi x}{4}\right)$$
+                    </div>
+                </div>
+            </div>
+
+            <h3>Heat Equation with Non-Homogeneous BCs and Source Term</h3>
+
+            <div class="definition-box">
+                <strong>Non-Homogeneous PDE with Source</strong>
+                $$\begin{cases} \dfrac{\partial u}{\partial t} = K\,\dfrac{\partial^2 u}{\partial x^2} + p(x), \qquad 0 < x < L \\[4pt] u(0,t) = T_1, \quad u(L,t) = T_2 \\[4pt] u(x,0) = f(x) \end{cases}$$
+                <p style="margin-top:0.5rem;"><strong>Strategy:</strong> Let $u(x,t) = V(x) + w(x,t)$ where $V(x)$ satisfies: $K\,V''(x) + p(x) = 0$, $V(0) = T_1$, $V(L) = T_2$.
+                Then $w(x,t)$ satisfies a homogeneous BVP with $w(x,0) = f(x) - V(x)$.</p>
+            </div>
+
+            <!-- Example 6 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 6: Source term $p(x) = x$ ($K = 4$, $T_1 = 3$, $T_2 = 7$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = 4\,\dfrac{\partial^2 u}{\partial x^2} + x \\[4pt] u(0,t) = 3, \quad u(4,t) = 7 \\[4pt] u(x,0) = -\frac{1}{24}x^3 + \frac{8}{3}x + 2 \end{cases}$$
+                    </div>
+
+                    <p><strong>Find $V(x)$:</strong> $4V''(x) + x = 0 \Rightarrow V''(x) = -\frac{x}{4}$.</p>
+                    <p>Integrating twice: $V(x) = -\frac{x^3}{24} + Ax + B$.</p>
+                    <p>Using $V(0) = 3 \Rightarrow B = 3$ and $V(4) = 7 \Rightarrow A = \frac{5}{3}$.</p>
+                    $$V(x) = -\frac{x^3}{24} + \frac{5}{3}\,x + 3$$
+
+                    <p><strong>Transient:</strong> $w(x,0) = f(x) - V(x) = x - 1$ (same as Example 1).</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = -\frac{x^3}{24} + \frac{5x}{3} + 3 + \sum_{m=1}^{\infty} \frac{-2}{m\pi}\left[1 + 3(-1)^m\right]\,e^{-\left(\frac{m\pi}{2}\right)^2 t}\,\sin\!\left(\frac{m\pi x}{4}\right)$$
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 7 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">
+                    <span>Example 7: Source term $p(x) = x$ ($K = \frac{1}{6}$, $L = 1$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial u}{\partial t} = \frac{1}{6}\,\dfrac{\partial^2 u}{\partial x^2} + x \\[4pt] u(0,t) = 1, \quad u(1,t) = 2 \\[4pt] u(x,0) = 1 - x^3 \end{cases}$$
+                    </div>
+
+                    <p><strong>Find $V(x)$:</strong> $\frac{1}{6}V''(x) + x = 0 \Rightarrow V''(x) = -6x \Rightarrow V(x) = -x^3 + Ax + B$.</p>
+                    <p>$V(0) = 1 \Rightarrow B = 1$; $\;V(1) = 2 \Rightarrow A = 2$. So $V(x) = -x^3 + 2x + 1$.</p>
+                    <p><strong>Transient:</strong> $w(x,0) = (1 - x^3) - (-x^3 + 2x + 1) = -2x$.</p>
+                    <p>With $K = \frac{1}{6}$, $L = 1$:</p>
+                    $$C_m = 2\int_0^1 (-2x)\sin(m\pi x)\,dx = \frac{(-1)^m\,4}{m\pi}$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = (-x^3 + 2x + 1) + \sum_{m=1}^{\infty} \frac{(-1)^m\,4}{m\pi}\,e^{-\frac{1}{6}m^2\pi^2 t}\,\sin(m\pi x)$$
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Neumann BCs -->
+        <section id="neumann">
+            <h2>Heat Equation with Neumann Boundary Conditions</h2>
+
+            <div class="definition-box">
+                <strong>Neumann Boundary Conditions</strong>
+                $$\begin{cases} \dfrac{\partial u}{\partial t} = K\,\dfrac{\partial^2 u}{\partial x^2}, \qquad 0 < x < L \\[4pt] \dfrac{\partial u}{\partial x}(0,t) = 0, \quad \dfrac{\partial u}{\partial x}(L,t) = 0 \\[4pt] u(x,0) = f(x) \end{cases}$$
+            </div>
+
+            <p>Using separation of variables with Neumann BCs ($P'(0) = 0$ and $P'(L) = 0$), the eigenvalues and eigenfunctions become:</p>
+
+            $$\lambda_m = \left(\frac{m\pi}{L}\right)^2, \qquad P_m(x) = \cos\!\left(\frac{m\pi x}{L}\right), \qquad m = 1, 2, 3, \ldots$$
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Neumann BCs</strong>
+                $$u(x,t) = \frac{C_0}{2} + \sum_{m=1}^{\infty} C_m \cos\!\left(\frac{m\pi x}{L}\right) e^{-K\left(\frac{m\pi}{L}\right)^2 t}$$
+                <p>If $f(x)$ is already a cosine series, find $C_m$ by comparison. Otherwise, use the <strong>Fourier Cosine Series</strong>:</p>
+                $$C_m = \frac{2}{L}\int_0^L f(x)\cos\!\left(\frac{m\pi x}{L}\right)\,dx, \qquad m = 0, 1, 2, 3, \ldots$$
+            </div>
+        </section>
+
+        <!-- Section 6: Wave Equation -->
+        <section id="wave">
+            <h2>The Wave Equation</h2>
+
+            <div class="definition-box">
+                <strong>One-Dimensional Wave Equation</strong>
+                $$\begin{cases} \dfrac{\partial^2 u}{\partial t^2} = a^2\,\dfrac{\partial^2 u}{\partial x^2}, \qquad 0 < x < L,\; t > 0 \\[4pt] u(0,t) = u(L,t) = 0 \\[4pt] u(x,0) = f(x), \quad \dfrac{\partial u}{\partial t}(x,0) = g(x), \quad 0 < x < L \end{cases}$$
+                <p>The wave equation requires <strong>two</strong> initial conditions: the initial displacement $f(x)$ and initial velocity $g(x)$.</p>
+            </div>
+
+            <h3>Solution via Separation of Variables</h3>
+
+            <p>Let $u(x,t) = P(x)\,Q(t)$. Substituting gives: $\dfrac{Q''(t)}{a^2 Q(t)} = \dfrac{P''(x)}{P(x)} = -\lambda$</p>
+
+            <p>The spatial problem is identical to the heat equation, yielding the same eigenvalues and eigenfunctions. The temporal ODE is now second-order:</p>
+            $$Q''(t) + \frac{a^2 m^2 \pi^2}{L^2}\,Q(t) = 0$$
+            <p>whose solution involves both cosine and sine:</p>
+            $$Q_m(t) = A_m \cos\!\left(\frac{m\pi a}{L}\,t\right) + B_m \sin\!\left(\frac{m\pi a}{L}\,t\right)$$
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Wave Equation</strong>
+                $$u(x,t) = \sum_{m=1}^{\infty} \left(A_m \cos\frac{m\pi a}{L}\,t + B_m \sin\frac{m\pi a}{L}\,t\right)\sin\frac{m\pi x}{L}$$
+                <p>where</p>
+                $$A_m = \frac{2}{L}\int_0^L f(x)\sin\!\left(\frac{m\pi x}{L}\right)\,dx, \qquad B_m = \frac{2}{m\pi a}\int_0^L g(x)\sin\!\left(\frac{m\pi x}{L}\right)\,dx$$
+            </div>
+
+            <!-- Example 8 -->
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,#dc2626,#b91c1c)">
+                    <span>Example 8: Wave equation ($a^2 = 9$, $L = 4$, $f(x) = x-1$, $g(x) = x$)</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} \dfrac{\partial^2 u}{\partial t^2} = 9\,\dfrac{\partial^2 u}{\partial x^2}, \quad 0 < x < 4,\; t > 0 \\[4pt] u(0,t) = u(4,t) = 0 \\[4pt] u(x,0) = x - 1, \quad \dfrac{\partial u}{\partial t}(x,0) = x \end{cases}$$
+                    </div>
+
+                    <p><strong>Solution:</strong> Here $a^2 = 9$ so $a = 3$, $L = 4$.</p>
+                    <p><strong>Eigenvalues:</strong> $\lambda_m = \left(\frac{m\pi}{4}\right)^2$, eigenfunctions $P_m(x) = \sin\!\left(\frac{m\pi x}{4}\right)$.</p>
+                    <p><strong>Temporal ODE:</strong> $Q''(t) + \frac{9m^2\pi^2}{16}\,Q(t) = 0$</p>
+                    $$Q_m(t) = A_m\cos\!\left(\frac{3m\pi}{4}\,t\right) + B_m\sin\!\left(\frac{3m\pi}{4}\,t\right)$$
+
+                    <p><strong>Find $A_m$:</strong> Using $u(x,0) = x - 1$:</p>
+                    $$A_m = \frac{2}{4}\int_0^4 (x-1)\sin\!\left(\frac{m\pi x}{4}\right)\,dx = \frac{-2}{m\pi}\left[1 + 3(-1)^m\right]$$
+
+                    <p><strong>Find $B_m$:</strong> Using $\frac{\partial u}{\partial t}(x,0) = x$:</p>
+                    $$B_m = \frac{2}{3m\pi}\int_0^4 x\sin\!\left(\frac{m\pi x}{4}\right)\,dx = \frac{2}{3m\pi}\cdot\frac{-16(-1)^m}{m\pi} = \frac{-32(-1)^m}{3m^2\pi^2}$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \sum_{m=1}^{\infty}\left[\frac{-2(1+3(-1)^m)}{m\pi}\cos\frac{3m\pi t}{4} + \frac{-32(-1)^m}{3m^2\pi^2}\sin\frac{3m\pi t}{4}\right]\sin\frac{m\pi x}{4}$$
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Interactive Visualization -->
+        <section id="visualize">
+            <h2>Interactive Visualization</h2>
+
+            <h3>Heat Equation Simulator</h3>
+            <p>Watch how an initial temperature profile evolves over time as heat diffuses. Adjust the parameters below.</p>
+
+            <div class="control-group">
+                <label>Thermal Diffusivity $K$: <span class="slider-value" id="kVal">1.0</span></label>
+                <input type="range" id="kSlider" min="0.1" max="10" step="0.1" value="1.0" oninput="document.getElementById('kVal').textContent=this.value">
+
+                <label>Rod Length $L$: <span class="slider-value" id="lVal">4</span></label>
+                <input type="range" id="lSlider" min="1" max="10" step="1" value="4" oninput="document.getElementById('lVal').textContent=this.value">
+
+                <label>Number of Fourier Terms:</label>
+                <input type="range" id="nTerms" min="1" max="50" step="1" value="20" oninput="document.getElementById('nVal').textContent=this.value">
+                <span class="slider-value" id="nVal">20</span>
+
+                <label>Initial Condition:</label>
+                <select id="icSelect">
+                    <option value="x-1">f(x) = x - 1</option>
+                    <option value="sin">f(x) = sin(pi*x/L)</option>
+                    <option value="constant">f(x) = 20</option>
+                    <option value="triangle">f(x) = triangle wave</option>
+                </select>
+
+                <button onclick="plotHeat()">Plot Heat Evolution</button>
+            </div>
+
+            <div class="plot-container" id="heatPlot" style="min-height:400px;"></div>
+
+            <h3>Wave Equation Simulator</h3>
+            <p>See how a vibrating string oscillates. The wave equation preserves energy &mdash; unlike the heat equation, solutions do not decay.</p>
+
+            <div class="control-group">
+                <label>Wave Speed $a$: <span class="slider-value" id="aVal">3</span></label>
+                <input type="range" id="aSlider" min="1" max="10" step="0.5" value="3" oninput="document.getElementById('aVal').textContent=this.value">
+
+                <button onclick="plotWave()">Plot Wave Motion</button>
+            </div>
+
+            <div class="plot-container" id="wavePlot" style="min-height:400px;"></div>
+        </section>
+
+        <!-- Section 8: Practice Quiz -->
+        <section id="quiz">
+            <h2>Practice Problems</h2>
+            <p>Test your understanding with these multiple-choice questions. Click a choice to see if you're correct.</p>
+
+            <!-- Q1 -->
+            <div class="quiz-question">
+                <h4>Q1: Which equation is the heat equation?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(1, 0)">(A) $\dfrac{\partial^2 u}{\partial t^2} = c^2 \dfrac{\partial^2 u}{\partial x^2}$</button>
+                    <button class="choice-btn" onclick="checkChoice(1, 1)">(B) $\dfrac{\partial u}{\partial t} = K \dfrac{\partial^2 u}{\partial x^2}$</button>
+                    <button class="choice-btn" onclick="checkChoice(1, 2)">(C) $\dfrac{\partial^2 u}{\partial x^2} + \dfrac{\partial^2 u}{\partial y^2} = 0$</button>
+                    <button class="choice-btn" onclick="checkChoice(1, 3)">(D) $\dfrac{\partial u}{\partial t} + u\dfrac{\partial u}{\partial x} = 0$</button>
+                </div>
+                <div class="feedback" id="feedback-1">
+                    <p><strong>Correct!</strong> The heat equation is $u_t = K u_{xx}$, a first-order PDE in time and second-order in space.</p>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-question">
+                <h4>Q2: For the heat equation on $[0, L]$ with homogeneous Dirichlet BCs, the eigenfunctions are:</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(2, 0)">(A) $\cos\!\left(\frac{m\pi x}{L}\right)$</button>
+                    <button class="choice-btn" onclick="checkChoice(2, 1)">(B) $\sin\!\left(\frac{m\pi x}{L}\right)$</button>
+                    <button class="choice-btn" onclick="checkChoice(2, 2)">(C) $e^{-m\pi x/L}$</button>
+                    <button class="choice-btn" onclick="checkChoice(2, 3)">(D) $x^m$</button>
+                </div>
+                <div class="feedback" id="feedback-2">
+                    <p><strong>Correct!</strong> Homogeneous Dirichlet BCs ($u(0,t) = u(L,t) = 0$) yield sine eigenfunctions.</p>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-question">
+                <h4>Q3: Solve $u_t = 7u_{xx}$ on $[0,\pi]$ with $u(0,t) = u(\pi,t) = 0$ and $u(x,0) = 3\sin(2x) - 6\sin(5x)$.</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(3, 0)">(A) $u = 3e^{-14t}\sin(2x) - 6e^{-35t}\sin(5x)$</button>
+                    <button class="choice-btn" onclick="checkChoice(3, 1)">(B) $u = 3e^{-28t}\sin(2x) - 6e^{-175t}\sin(5x)$</button>
+                    <button class="choice-btn" onclick="checkChoice(3, 2)">(C) $u = 3\sin(2x) - 6\sin(5x)$</button>
+                    <button class="choice-btn" onclick="checkChoice(3, 3)">(D) $u = 3e^{-7t}\sin(2x) - 6e^{-7t}\sin(5x)$</button>
+                </div>
+                <div class="feedback" id="feedback-3">
+                    <p><strong>Correct!</strong> With $L = \pi$, the decay rate for mode $m$ is $Km^2 = 7m^2$. So $C_2 e^{-7(4)t} = 3e^{-28t}$ and $C_5 e^{-7(25)t} = -6e^{-175t}$.</p>
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-question">
+                <h4>Q4: For non-homogeneous BCs $u(0,t) = T_1$, $u(L,t) = T_2$, the steady-state solution is:</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(4, 0)">(A) $V(x) = T_1 + \dfrac{T_2 - T_1}{L}\,x$</button>
+                    <button class="choice-btn" onclick="checkChoice(4, 1)">(B) $V(x) = T_1 e^{-x}$</button>
+                    <button class="choice-btn" onclick="checkChoice(4, 2)">(C) $V(x) = \dfrac{T_1 + T_2}{2}$</button>
+                    <button class="choice-btn" onclick="checkChoice(4, 3)">(D) $V(x) = T_1\cos(x) + T_2\sin(x)$</button>
+                </div>
+                <div class="feedback" id="feedback-4">
+                    <p><strong>Correct!</strong> The steady state satisfies $V''(x) = 0$ with $V(0) = T_1$ and $V(L) = T_2$, giving a linear function.</p>
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-question">
+                <h4>Q5: Neumann boundary conditions ($u_x(0,t) = u_x(L,t) = 0$) yield which eigenfunctions?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(5, 0)">(A) $\sin\!\left(\frac{m\pi x}{L}\right)$</button>
+                    <button class="choice-btn" onclick="checkChoice(5, 1)">(B) $\cos\!\left(\frac{m\pi x}{L}\right)$</button>
+                    <button class="choice-btn" onclick="checkChoice(5, 2)">(C) $e^{m\pi x/L}$</button>
+                    <button class="choice-btn" onclick="checkChoice(5, 3)">(D) $x\sin\!\left(\frac{m\pi x}{L}\right)$</button>
+                </div>
+                <div class="feedback" id="feedback-5">
+                    <p><strong>Correct!</strong> Neumann BCs give cosine eigenfunctions, and the Fourier Cosine Series is used for the coefficients.</p>
+                </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-question">
+                <h4>Q6: The wave equation $u_{tt} = a^2 u_{xx}$ differs from the heat equation because its temporal solution:</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(6, 0)">(A) Decays exponentially</button>
+                    <button class="choice-btn" onclick="checkChoice(6, 1)">(B) Grows exponentially</button>
+                    <button class="choice-btn" onclick="checkChoice(6, 2)">(C) Oscillates (involves sin and cos in $t$)</button>
+                    <button class="choice-btn" onclick="checkChoice(6, 3)">(D) Is a polynomial in $t$</button>
+                </div>
+                <div class="feedback" id="feedback-6">
+                    <p><strong>Correct!</strong> The temporal ODE is $Q'' + \omega^2 Q = 0$, giving oscillatory solutions $A\cos(\omega t) + B\sin(\omega t)$ instead of the exponential decay of the heat equation.</p>
+                </div>
+            </div>
+
+            <div class="progress-bar mt-2">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText" class="text-center" style="margin-top:0.5rem; font-weight:600; color:var(--primary);">0 / 6 correct</p>
+        </section>
+
+        <!-- Section 9: Summary of Problem Types -->
+        <section id="summary">
+            <h2>Summary of Problem Types</h2>
+
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Problem Type</th>
+                        <th>BCs</th>
+                        <th>Strategy</th>
+                        <th>Eigenfunctions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Problem 1:</strong> Homogeneous BCs</td>
+                        <td>$u(0,t) = 0$, $u(L,t) = 0$</td>
+                        <td>Direct separation of variables</td>
+                        <td>$\sin(m\pi x/L)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Problem 2:</strong> Non-Homogeneous BCs</td>
+                        <td>$u(0,t) = T_1$, $u(L,t) = T_2$</td>
+                        <td>$u = V(x) + w(x,t)$; $V = T_1 + \frac{T_2-T_1}{L}x$</td>
+                        <td>$\sin(m\pi x/L)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Problem 3:</strong> Non-Homogeneous PDE + source</td>
+                        <td>$u(0,t) = T_1$, $u(L,t) = T_2$</td>
+                        <td>$u = V(x) + w$; find $V$ from $KV'' + p(x) = 0$</td>
+                        <td>$\sin(m\pi x/L)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Problem 4:</strong> Neumann BCs</td>
+                        <td>$u_x(0,t) = 0$, $u_x(L,t) = 0$</td>
+                        <td>Same separation; cosine series</td>
+                        <td>$\cos(m\pi x/L)$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Quick Reference Card -->
+        <section id="reference">
+            <h2>Quick Reference Card</h2>
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h4>Heat Equation</h4>
+                    <p>$$\frac{\partial u}{\partial t} = K\frac{\partial^2 u}{\partial x^2}$$</p>
+                    <p>Decay: $e^{-K(m\pi/L)^2 t}$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Wave Equation</h4>
+                    <p>$$\frac{\partial^2 u}{\partial t^2} = a^2\frac{\partial^2 u}{\partial x^2}$$</p>
+                    <p>Oscillation: $\cos/\sin\!\left(\frac{m\pi a}{L}t\right)$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Laplace Equation</h4>
+                    <p>$$\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$$</p>
+                    <p>Steady-state (no time dependence)</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Dirichlet Eigenfunctions</h4>
+                    <p>$$P_m(x) = \sin\!\left(\frac{m\pi x}{L}\right)$$</p>
+                    <p>Fourier Sine Series for $C_m$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Neumann Eigenfunctions</h4>
+                    <p>$$P_m(x) = \cos\!\left(\frac{m\pi x}{L}\right)$$</p>
+                    <p>Fourier Cosine Series for $C_m$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Non-Homogeneous Strategy</h4>
+                    <p>$$u(x,t) = V(x) + w(x,t)$$</p>
+                    <p>Reduce to homogeneous problem for $w$</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University, Department of Mathematics and Statistics
+    </footer>
+
+    <script>
+        // KaTeX Rendering
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+            updateProgressBar();
+        });
+
+        // Collapsible Examples
+        function toggleExample(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                icon.textContent = '\u25B2';
+                // Re-render KaTeX inside newly opened content
+                renderMathInElement(content, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            } else {
+                icon.textContent = '\u25BC';
+            }
+        }
+
+        // Quiz System
+        let quizAnswers = { 1: 1, 2: 1, 3: 1, 4: 0, 5: 1, 6: 2 };
+        let quizScores = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false };
+
+        function checkChoice(questionNum, choiceIdx) {
+            const correct = quizAnswers[questionNum] === choiceIdx;
+            const parent = document.querySelectorAll('.quiz-question')[questionNum - 1];
+            const buttons = parent.querySelectorAll('.choice-btn');
+            const feedback = document.getElementById('feedback-' + questionNum);
+
+            buttons.forEach((btn, idx) => {
+                if (idx === choiceIdx) {
+                    btn.classList.add(correct ? 'correct' : 'incorrect');
+                } else {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                }
+            });
+
+            feedback.classList.add('show', correct ? 'correct' : 'incorrect');
+            if (!correct) {
+                feedback.innerHTML = '<p><strong>Incorrect.</strong> Try reviewing the relevant section above.</p>';
+            }
+            quizScores[questionNum] = correct;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const correct = Object.values(quizScores).filter(v => v === true).length;
+            const total = 6;
+            const percent = (correct / total) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = correct + ' / ' + total + ' correct';
+        }
+
+        // Heat Equation Visualization
+        function plotHeat() {
+            const K = parseFloat(document.getElementById('kSlider').value);
+            const L = parseFloat(document.getElementById('lSlider').value);
+            const N = parseInt(document.getElementById('nTerms').value);
+            const ic = document.getElementById('icSelect').value;
+
+            const nx = 200;
+            const times = [0, 0.01, 0.05, 0.1, 0.3, 0.5, 1.0, 2.0];
+            const x = [];
+            for (let i = 0; i <= nx; i++) x.push(i * L / nx);
+
+            // Compute Fourier coefficients
+            function getCm(m) {
+                const mp = m * Math.PI;
+                if (ic === 'x-1') {
+                    // C_m = (2/L) integral_0^L (x-1) sin(m*pi*x/L) dx
+                    const val = (2/L);
+                    let integral = 0;
+                    const dx = L / 1000;
+                    for (let j = 0; j <= 1000; j++) {
+                        const xi = j * dx;
+                        integral += (xi - 1) * Math.sin(mp * xi / L) * dx;
+                    }
+                    return val * integral;
+                } else if (ic === 'sin') {
+                    return (m === 1) ? 1 : 0;
+                } else if (ic === 'constant') {
+                    return 40 / (mp) * (1 - Math.pow(-1, m));
+                } else if (ic === 'triangle') {
+                    if (m % 2 === 0) return 0;
+                    return 8 * L / (mp * mp) * Math.pow(-1, (m-1)/2);
+                }
+                return 0;
+            }
+
+            const traces = [];
+            const colors = ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0ea5e9','#64748b','#ec4899'];
+
+            times.forEach((t, ti) => {
+                const y = x.map(xi => {
+                    let val = 0;
+                    for (let m = 1; m <= N; m++) {
+                        const cm = getCm(m);
+                        val += cm * Math.sin(m * Math.PI * xi / L) * Math.exp(-K * Math.pow(m * Math.PI / L, 2) * t);
+                    }
+                    return val;
+                });
+                traces.push({
+                    x: x, y: y, mode: 'lines', name: 't = ' + t,
+                    line: { color: colors[ti % colors.length], width: 2 }
+                });
+            });
+
+            Plotly.newPlot('heatPlot', traces, {
+                title: 'Heat Equation: Temperature Evolution',
+                xaxis: { title: 'Position x' },
+                yaxis: { title: 'Temperature u(x,t)' },
+                legend: { orientation: 'h', y: -0.2 },
+                height: 450
+            }, { responsive: true });
+        }
+
+        // Wave Equation Visualization
+        function plotWave() {
+            const a = parseFloat(document.getElementById('aSlider').value);
+            const L = 4;
+            const N = 20;
+            const nx = 200;
+            const times = [0, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0, 1.5];
+            const x = [];
+            for (let i = 0; i <= nx; i++) x.push(i * L / nx);
+
+            // f(x) = sin(pi*x/L), g(x) = 0 (plucked string)
+            const traces = [];
+            const colors = ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0ea5e9','#64748b','#ec4899'];
+
+            times.forEach((t, ti) => {
+                const y = x.map(xi => {
+                    let val = 0;
+                    for (let m = 1; m <= N; m++) {
+                        // A_m for f(x) = sin(pi*x/L): only A_1 = 1
+                        const Am = (m === 1) ? 1 : 0;
+                        val += Am * Math.cos(m * Math.PI * a * t / L) * Math.sin(m * Math.PI * xi / L);
+                    }
+                    return val;
+                });
+                traces.push({
+                    x: x, y: y, mode: 'lines', name: 't = ' + t,
+                    line: { color: colors[ti % colors.length], width: 2 }
+                });
+            });
+
+            Plotly.newPlot('wavePlot', traces, {
+                title: 'Wave Equation: String Vibration (f(x) = sin(pi*x/L), g(x) = 0)',
+                xaxis: { title: 'Position x' },
+                yaxis: { title: 'Displacement u(x,t)', range: [-1.5, 1.5] },
+                legend: { orientation: 'h', y: -0.2 },
+                height: 450
+            }, { responsive: true });
+        }
+
+        // Auto-plot on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() { plotHeat(); plotWave(); }, 500);
+        });
+    </script>
+</body>
+</html>
