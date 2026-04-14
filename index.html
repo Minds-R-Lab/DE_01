@@ -532,7 +532,7 @@
 
       <!-- ===== CH 01: First-Order DEs ===== -->
       <g style="cursor:pointer;" onclick="window.location.href='#chapter1'">
-        <rect x="5" y="130" rx="14" ry="14" width="290" height="180" fill="#fff" stroke="#059669" stroke-width="2.5" filter="url(#shadow-sm)"/>
+        <rect x="5" y="130" rx="14" ry="14" width="290" height="200" fill="#fff" stroke="#059669" stroke-width="2.5" filter="url(#shadow-sm)"/>
         <!-- Header bar -->
         <path d="M5,144 a14,14 0 0 1 14,-14 H281 a14,14 0 0 1 14,14 V164 H5 Z" fill="url(#grad-ch1)"/>
         <text x="150" y="152" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">Chapter 1 · First-Order DEs</text>
@@ -540,13 +540,14 @@
         <text x="150" y="182" text-anchor="middle" font-size="13" fill="#374151" font-weight="600">Topics:</text>
         <text x="30" y="202" font-size="12" fill="#374151">  ▸ Separable Equations</text>
         <text x="30" y="220" font-size="12" fill="#374151">  ▸ Linear First-Order (Integrating Factor)</text>
-        <text x="30" y="238" font-size="12" fill="#374151">  ▸ Exact &amp; Non-Exact Equations</text>
-        <text x="30" y="256" font-size="12" fill="#374151">  ▸ Bernoulli Equations</text>
+        <text x="30" y="238" font-size="12" fill="#374151">  ▸ Bernoulli Equations</text>
+        <text x="30" y="256" font-size="12" fill="#374151">  ▸ Exact &amp; Non-Exact Equations</text>
+        <text x="30" y="274" font-size="12" fill="#374151">  ▸ Homogeneous Equations</text>
         <!-- Tagline -->
-        <text x="150" y="280" text-anchor="middle" font-size="12" fill="#059669" font-style="italic" font-weight="500">5 fundamental solution techniques</text>
+        <text x="150" y="298" text-anchor="middle" font-size="12" fill="#059669" font-style="italic" font-weight="500">6 fundamental solution techniques</text>
         <!-- Badge -->
-        <rect x="220" y="295" rx="8" ry="8" width="68" height="18" fill="#d1fae5"/>
-        <text x="254" y="308" text-anchor="middle" font-size="10" fill="#059669" font-weight="700">5 topics</text>
+        <rect x="220" y="313" rx="8" ry="8" width="68" height="18" fill="#d1fae5"/>
+        <text x="254" y="326" text-anchor="middle" font-size="10" fill="#059669" font-weight="700">6 topics</text>
       </g>
 
       <!-- ===== CH 02: Second-Order DEs ===== -->
@@ -680,6 +681,7 @@
         <span class="topic-tag done">Bernoulli</span>
         <span class="topic-tag done">Exact</span>
         <span class="topic-tag done">Non-Exact</span>
+        <span class="topic-tag done">Homogeneous</span>
       </div>
     </a>
 
@@ -804,6 +806,15 @@
           <h4>1.5 — Non-Exact Equations</h4>
           <p>Finding integrating factors to convert non-exact equations into exact ones.</p>
           <div class="math-preview">\(\mu(M\,dx + N\,dy) = 0\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch1-homogeneous.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">H</div>
+        <div>
+          <h4>1.6 — Homogeneous Equations</h4>
+          <p>Equations whose right-hand side depends only on \(y/x\); solved by the substitution \(v = y/x\).</p>
+          <div class="math-preview">\(\frac{dy}{dx} = F(y/x)\)</div>
         </div>
       </a>
 

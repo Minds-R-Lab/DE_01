@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: Homogeneous First-Order Equations | Dr. Mohamed Mabrok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --light-blue: #dbeafe;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f0f7 100%);
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        nav .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-right: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #6b7280;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: var(--light-blue);
+            color: var(--primary);
+        }
+
+        nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 80px auto 2rem;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            scroll-margin-top: 70px;
+            margin-bottom: 3rem;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+
+        p { margin: 1rem 0; }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 5px solid;
+        }
+
+        .definition-box { background: #eff6ff; border-left-color: var(--primary); }
+        .theorem-box { background: #faf5ff; border-left-color: var(--accent); }
+        .example-box { background: #f0fdf4; border-left-color: var(--success); }
+        .warning-box { background: #fffbeb; border-left-color: var(--warning); }
+        .tip-box { background: #ecf7f9; border-left-color: #0891b2; }
+
+        .equation {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Monaco', monospace;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .collapsible {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 100%);
+            border: 1px solid #d4d4ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .collapsible:hover {
+            background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .collapsible.active {
+            background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
+        }
+
+        .collapse-content {
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapse-content.active {
+            display: block;
+            max-height: 2000px;
+        }
+
+        .collapsible span { font-size: 1.2rem; }
+
+        .objective {
+            background: white;
+            padding: 0.75rem 1rem;
+            border-left: 3px solid var(--success);
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+
+        .step-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 1rem 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin: 1.5rem 0;
+        }
+
+        .control-group { margin: 1rem 0; }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .plot-container {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .quiz-question { margin: 2rem 0; }
+
+        .quiz-question h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+        .quiz-option .katex { color: #1e293b; }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--light-blue);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: var(--light-blue);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .quiz-feedback.show { display: block; }
+
+        .quiz-feedback.correct {
+            background: #f0fdf4;
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: #fef2f2;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .reference-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .ref-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .ref-item strong { color: var(--primary); }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 1rem; }
+            nav h1 { font-size: 1rem; margin-right: 1rem; }
+            nav a { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
+            main { margin: 70px auto 1rem; padding: 0 1rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            .reference-card { grid-template-columns: 1fr; }
+            .plot-container { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <h1>DE Course</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch1-separable.html">1.1 Separable</a></li>
+                <li><a href="ch1-linear.html">1.2 Linear</a></li>
+                <li><a href="ch1-bernoulli.html">1.3 Bernoulli</a></li>
+                <li><a href="ch1-exact.html">1.4 Exact</a></li>
+                <li><a href="ch1-nonexact.html">1.5 Non-Exact</a></li>
+                <li><a href="ch1-homogeneous.html" class="active">1.6 Homogeneous</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- INTRODUCTION SECTION -->
+        <section id="intro">
+            <h1>1.6 Homogeneous First-Order Equations</h1>
+
+            <p>Homogeneous first-order differential equations form an elegant class of nonlinear ODEs that can be solved by a clever change of variables. They appear naturally whenever the rate of change depends only on the <em>ratio</em> \(y/x\) rather than on \(x\) and \(y\) separately — a situation common in geometry, fluid flow along radial lines, and physical problems with scale invariance.</p>
+
+            <div class="definition-box">
+                <h3>Learning Objectives</h3>
+                <div class="objective">Identify first-order homogeneous differential equations</div>
+                <div class="objective">Recognize homogeneous functions of degree \(n\)</div>
+                <div class="objective">Apply the substitution \(v = y/x\) to reduce to a separable equation</div>
+                <div class="objective">Solve initial value problems involving homogeneous equations</div>
+                <div class="objective">Interpret solution curves geometrically</div>
+            </div>
+
+            <div class="theorem-box">
+                <h3>Standard Form of a Homogeneous Equation</h3>
+                <p>A first-order ODE is called <strong>homogeneous</strong> if it can be written in either of the equivalent forms:</p>
+                <div class="equation">
+                    $$\frac{dy}{dx} = F\!\left(\frac{y}{x}\right)$$
+                </div>
+                <p style="text-align:center; color:#6b7280; font-size:0.95rem;">— or, in differential form —</p>
+                <div class="equation">
+                    $$M(x,y)\,dx + N(x,y)\,dy = 0$$
+                </div>
+                <p style="margin-top:1rem;">where \(M\) and \(N\) are <strong>homogeneous functions of the same degree</strong> \(n\); that is, \(M(tx,ty) = t^n M(x,y)\) and \(N(tx,ty) = t^n N(x,y)\) for every \(t\).</p>
+            </div>
+
+            <p><strong>Why homogeneous equations are important:</strong></p>
+            <ul style="margin-left: 2rem; margin: 1rem 0;">
+                <li><strong>Geometric symmetry:</strong> The slope at any point depends only on direction from the origin, so solutions exhibit a scaling/dilation symmetry.</li>
+                <li><strong>Reducible to separable:</strong> A single substitution \(v = y/x\) always converts a homogeneous equation into a separable one — a guaranteed solution path.</li>
+                <li><strong>Bridge between methods:</strong> They sit between separable and exact equations and often appear in problems where neither of those methods applies directly.</li>
+            </ul>
+
+            <div class="card">
+                <h3>Applications</h3>
+                <p><strong>Pursuit Curves:</strong> When one object pursues another with velocity always pointing toward the target, the resulting trajectory satisfies a homogeneous ODE. The substitution \(v = y/x\) reveals the pursuit path explicitly.</p>
+
+                <p style="margin-top: 1rem;"><strong>Radial Heat Flow:</strong> In a long cylindrical body with heat flowing outward, the temperature \(T(r)\) often satisfies an equation depending only on \(T/r\), making it homogeneous.</p>
+
+                <p style="margin-top: 1rem;"><strong>Mixing with Proportional Rates:</strong> When the rate of change of a substance is proportional to a ratio of two scaled quantities (e.g., concentration ratios), the resulting model is homogeneous.</p>
+            </div>
+        </section>
+
+        <!-- HISTORICAL QUOTE -->
+        <div style="background:linear-gradient(135deg, #fefce8, #fef9c3); border-left:5px solid #d97706; border-radius:12px; padding:1.5rem 1.5rem 1.5rem 2rem; margin:1.5rem 0; font-style:italic; position:relative;">
+          <span style="font-size:4rem; color:#d97706; opacity:0.3; position:absolute; top:-0.2rem; left:0.5rem; font-family:Georgia,serif;">&ldquo;</span>
+          <p style="margin-bottom:0.5rem;">Leonhard Euler systematically studied homogeneous functions in the 1750s, identifying the substitution \(y = vx\) as the key to reducing this class of equations. His insight — that scale-invariant problems should be analyzed in scale-invariant variables — remains a guiding principle in mathematical physics today.</p>
+          <div style="font-style:normal; font-weight:600; color:#d97706; font-size:0.95rem;">— On Leonhard Euler (1707–1783), one of the founders of the theory of differential equations</div>
+        </div>
+
+        <!-- THEORY SECTION -->
+        <section id="theory">
+            <h2>Theory: Homogeneous Functions and the Substitution</h2>
+
+            <div class="theorem-box">
+                <h3>Homogeneous Functions of Degree \(n\)</h3>
+                <p>A function \(f(x,y)\) is called <strong>homogeneous of degree \(n\)</strong> if, for every real number \(t \neq 0\),</p>
+                <div class="equation">
+                    $$f(tx,\,ty) = t^n\,f(x,y).$$
+                </div>
+                <p><strong>Examples:</strong></p>
+                <ul style="margin-left:2rem;">
+                    <li>\(f(x,y) = x^2 + xy + y^2\) is homogeneous of degree \(2\).</li>
+                    <li>\(f(x,y) = \sqrt{x^2 + y^2}\) is homogeneous of degree \(1\).</li>
+                    <li>\(f(x,y) = \dfrac{y}{x}\) is homogeneous of degree \(0\).</li>
+                    <li>\(f(x,y) = x^2 + y\) is <em>not</em> homogeneous (the terms have different degrees).</li>
+                </ul>
+            </div>
+
+            <div class="theorem-box">
+                <h3>Why the Substitution \(v = y/x\) Works</h3>
+                <p>Starting from \(\displaystyle \frac{dy}{dx} = F\!\left(\frac{y}{x}\right)\), let</p>
+                <div class="equation">
+                    $$v = \frac{y}{x} \quad \Longrightarrow \quad y = v\,x.$$
+                </div>
+                <p>Differentiating both sides of \(y = vx\) with respect to \(x\) (using the product rule):</p>
+                <div class="equation">
+                    $$\frac{dy}{dx} = v + x\,\frac{dv}{dx}.$$
+                </div>
+                <p>Substituting into the original equation:</p>
+                <div class="equation">
+                    $$v + x\,\frac{dv}{dx} = F(v).$$
+                </div>
+                <p>Solving for \(\dfrac{dv}{dx}\) gives a <strong>separable</strong> equation in \(v\) and \(x\):</p>
+                <div class="equation">
+                    $$x\,\frac{dv}{dx} = F(v) - v \quad \Longrightarrow \quad \frac{dv}{F(v) - v} = \frac{dx}{x}.$$
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>From Differential Form to Standard Form</h3>
+                <p>If the equation is given as \(M(x,y)\,dx + N(x,y)\,dy = 0\), we can rewrite it as:</p>
+                <div class="equation">
+                    $$\frac{dy}{dx} = -\frac{M(x,y)}{N(x,y)}.$$
+                </div>
+                <p>Because \(M\) and \(N\) are homogeneous of the same degree \(n\), the ratio \(M/N\) is homogeneous of degree \(0\) — meaning it depends only on \(y/x\). So we can write \(-M/N = F(y/x)\), and the standard substitution applies.</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>Two Equivalent Substitutions</h3>
+                <p>Either substitution works for a homogeneous equation. Choose the one that makes the resulting integral simpler.</p>
+                <p style="margin-top:0.75rem;"><strong>Standard:</strong> \(v = y/x\), so \(y = vx\) and \(\dfrac{dy}{dx} = v + x\dfrac{dv}{dx}\).</p>
+                <p style="margin-top:0.75rem;"><strong>Alternative:</strong> \(u = x/y\), so \(x = uy\) and \(\dfrac{dx}{dy} = u + y\dfrac{du}{dy}\). This is preferred when \(F(x/y)\) is simpler than \(F(y/x)\).</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Quick Test for Homogeneity</h3>
+                <p>To check whether \(\dfrac{dy}{dx} = G(x,y)\) is homogeneous, replace \(x \to tx\) and \(y \to ty\). If the \(t\)'s cancel completely (i.e., \(G(tx,ty) = G(x,y)\)), then \(G\) is homogeneous of degree \(0\) and the equation is homogeneous.</p>
+            </div>
+        </section>
+
+        <!-- METHOD SECTION -->
+        <section id="method">
+            <h2>Step-by-Step Solution Method</h2>
+
+            <div class="tip-box" style="background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                <strong>Key Insight:</strong> A homogeneous equation always reduces to a separable equation in \(v\) and \(x\) under the substitution \(v = y/x\). The procedure is mechanical once you recognize the form.
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">1</span>
+                <strong>Verify that the equation is homogeneous</strong>
+                <p>Rewrite \(\dfrac{dy}{dx}\) so the right-hand side depends only on \(y/x\). If given in differential form \(M\,dx + N\,dy = 0\), confirm \(M\) and \(N\) are homogeneous of the same degree.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2</span>
+                <strong>Apply the substitution \(y = v\,x\)</strong>
+                <p>Compute \(\dfrac{dy}{dx} = v + x\dfrac{dv}{dx}\) and substitute into the equation to obtain a relation between \(v\), \(x\), and \(\dfrac{dv}{dx}\).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3</span>
+                <strong>Separate variables</strong>
+                <p>Rearrange to \(\displaystyle \frac{dv}{F(v) - v} = \frac{dx}{x}\) and integrate both sides. Apply standard separable-equation techniques (partial fractions, substitution, etc.) as needed.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4</span>
+                <strong>Back-substitute \(v = y/x\)</strong>
+                <p>Replace \(v\) in your implicit or explicit solution by \(y/x\). Simplify, and apply any initial conditions to determine the constant of integration.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">5</span>
+                <strong>Check singular cases</strong>
+                <p>If you divided by \(F(v) - v\) during separation, the values of \(v\) where \(F(v) - v = 0\) correspond to <strong>linear solutions</strong> of the form \(y = v_0\,x\). These should be reported separately if they are not captured by the general solution.</p>
+            </div>
+        </section>
+
+        <!-- EXAMPLES SECTION -->
+        <section id="examples">
+            <h2>Worked Examples</h2>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 1: \(\displaystyle \frac{dy}{dx} = \frac{x + y}{x}\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{x + y}{x} = 1 + \frac{y}{x}\)</p>
+
+                    <p><strong>Step 1: Verify homogeneity.</strong> The right-hand side depends only on \(y/x\), so the equation is homogeneous with \(F(v) = 1 + v\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong> Then \(\dfrac{dy}{dx} = v + x\dfrac{dv}{dx}\), and the equation becomes:
+                    $$v + x\frac{dv}{dx} = 1 + v \quad\Longrightarrow\quad x\frac{dv}{dx} = 1.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$dv = \frac{dx}{x} \quad\Longrightarrow\quad v = \ln|x| + C.$$</p>
+
+                    <p><strong>Step 4: Back-substitute \(v = y/x\).</strong>
+                    $$\frac{y}{x} = \ln|x| + C \quad\Longrightarrow\quad \boxed{y = x\bigl(\ln|x| + C\bigr)}.$$</p>
+
+                    <p><strong>Verification:</strong> \(\dfrac{dy}{dx} = \ln|x| + C + x \cdot \dfrac{1}{x} = \ln|x| + C + 1\). Also \(\dfrac{y}{x} + 1 = \ln|x| + C + 1\). ✓</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 2: \(\displaystyle \frac{dy}{dx} = \frac{x^2 + y^2}{xy}\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{x^2 + y^2}{xy}\)</p>
+
+                    <p><strong>Step 1: Verify homogeneity.</strong> Both numerator and denominator are homogeneous of degree \(2\). Dividing top and bottom by \(x^2\):
+                    $$\frac{dy}{dx} = \frac{1 + (y/x)^2}{y/x}.$$
+                    So \(F(v) = \dfrac{1 + v^2}{v}\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = \frac{1 + v^2}{v} = \frac{1}{v} + v \quad\Longrightarrow\quad x\frac{dv}{dx} = \frac{1}{v}.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$v\,dv = \frac{dx}{x} \quad\Longrightarrow\quad \frac{v^2}{2} = \ln|x| + C_1 \quad\Longrightarrow\quad v^2 = 2\ln|x| + C.$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$\left(\frac{y}{x}\right)^2 = 2\ln|x| + C \quad\Longrightarrow\quad \boxed{y^2 = x^2\bigl(2\ln|x| + C\bigr)}.$$</p>
+
+                    <p><strong>Verification:</strong> Differentiating implicitly: \(2y\,y' = 4x\ln|x| + 2x + 2Cx\), so \(y' = \dfrac{2x\ln|x| + x + Cx}{y}\). Substituting \(y^2 = x^2(2\ln|x| + C)\) into the original right-hand side gives the same expression. ✓</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 3: \(\displaystyle \frac{dy}{dx} = \frac{y^2 - x^2}{2xy}\) (family of circles)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{y^2 - x^2}{2xy}\)</p>
+
+                    <p><strong>Step 1: Verify homogeneity.</strong> Both \(y^2 - x^2\) and \(2xy\) are homogeneous of degree \(2\). Dividing by \(x^2\): \(F(v) = \dfrac{v^2 - 1}{2v}\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = \frac{v^2 - 1}{2v} \quad\Longrightarrow\quad x\frac{dv}{dx} = \frac{v^2 - 1}{2v} - v = \frac{v^2 - 1 - 2v^2}{2v} = -\frac{v^2 + 1}{2v}.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$\frac{2v}{v^2 + 1}\,dv = -\frac{dx}{x} \quad\Longrightarrow\quad \ln(v^2 + 1) = -\ln|x| + C_1.$$
+                    Exponentiating: \(v^2 + 1 = \dfrac{C}{x}\), where \(C = e^{C_1}\) is a new constant.</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$\frac{y^2}{x^2} + 1 = \frac{C}{x} \quad\Longrightarrow\quad y^2 + x^2 = Cx.$$
+                    Completing the square: \(\bigl(x - \tfrac{C}{2}\bigr)^2 + y^2 = \bigl(\tfrac{C}{2}\bigr)^2\).</p>
+
+                    <p><strong>Solution:</strong> \(\boxed{x^2 + y^2 = Cx}\) — a one-parameter family of <strong>circles</strong> passing through the origin with centers on the \(x\)-axis.</p>
+
+                    <div class="tip-box">
+                        <strong>Geometric insight:</strong> This equation describes the orthogonal trajectories of the family of circles passing through the origin and centered on the \(y\)-axis. Such families arise naturally in electrostatics and fluid flow.
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 4: \((x^2 + 3y^2)\,dx + 2xy\,dy = 0\) (differential form)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \((x^2 + 3y^2)\,dx + 2xy\,dy = 0\)</p>
+
+                    <p><strong>Step 1: Verify homogeneity.</strong> \(M = x^2 + 3y^2\) and \(N = 2xy\) are both homogeneous of degree \(2\). Solving for \(\dfrac{dy}{dx}\):
+                    $$\frac{dy}{dx} = -\frac{x^2 + 3y^2}{2xy}.$$
+                    Dividing by \(x^2\): \(F(v) = -\dfrac{1 + 3v^2}{2v}\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = -\frac{1 + 3v^2}{2v} \quad\Longrightarrow\quad x\frac{dv}{dx} = -\frac{1 + 3v^2}{2v} - v = -\frac{1 + 5v^2}{2v}.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$\frac{2v}{1 + 5v^2}\,dv = -\frac{dx}{x}.$$
+                    Let \(u = 1 + 5v^2\), so \(du = 10v\,dv\) and \(2v\,dv = \tfrac{1}{5}du\):
+                    $$\frac{1}{5}\ln|1 + 5v^2| = -\ln|x| + C_1 \quad\Longrightarrow\quad \ln(1 + 5v^2) = -5\ln|x| + C_2.$$
+                    Exponentiating: \(1 + 5v^2 = \dfrac{C}{x^5}\).</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$1 + \frac{5y^2}{x^2} = \frac{C}{x^5} \quad\Longrightarrow\quad x^2 + 5y^2 = \frac{C}{x^3} \quad\Longrightarrow\quad \boxed{x^3(x^2 + 5y^2) = C}.$$</p>
+
+                    <p><strong>Verification:</strong> Differentiate \(x^5 + 5x^3 y^2 = C\) implicitly:
+                    $$5x^4 + 15x^2 y^2 + 10x^3 y\,y' = 0 \quad\Longrightarrow\quad y' = -\frac{5x^4 + 15x^2 y^2}{10x^3 y} = -\frac{x^2 + 3y^2}{2xy}. \checkmark$$</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 5: \(xy' = y + x\), \(y(1) = 1\) (initial value problem)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(xy' = y + x\) with \(y(1) = 1\).</p>
+
+                    <p><strong>Step 1: Standard form.</strong> Divide by \(x\):
+                    $$\frac{dy}{dx} = \frac{y}{x} + 1 = F\!\left(\frac{y}{x}\right) \text{ with } F(v) = v + 1.$$</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = v + 1 \quad\Longrightarrow\quad x\frac{dv}{dx} = 1.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$dv = \frac{dx}{x} \quad\Longrightarrow\quad v = \ln|x| + C.$$</p>
+
+                    <p><strong>Step 4: Back-substitute and apply IC.</strong>
+                    $$\frac{y}{x} = \ln|x| + C \quad\Longrightarrow\quad y = x\bigl(\ln|x| + C\bigr).$$
+                    At \(x = 1\): \(1 = 1 \cdot (0 + C) \Rightarrow C = 1\).</p>
+
+                    <p><strong>Solution:</strong> \(\boxed{y(x) = x\bigl(\ln x + 1\bigr)}\) for \(x &gt; 0\).</p>
+
+                    <p><strong>Verification:</strong> \(y(1) = 1(0 + 1) = 1\). ✓ &nbsp;\(y' = \ln x + 1 + 1 = \ln x + 2\), and \(\dfrac{y}{x} + 1 = \ln x + 1 + 1 = \ln x + 2\). ✓</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 6: \(\displaystyle \frac{dy}{dx} = \frac{x - y}{x + y}\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{x - y}{x + y}\)</p>
+
+                    <p><strong>Step 1: Verify homogeneity.</strong> Both numerator and denominator are homogeneous of degree \(1\). Dividing by \(x\):
+                    $$F(v) = \frac{1 - v}{1 + v}.$$</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = \frac{1 - v}{1 + v} \quad\Longrightarrow\quad x\frac{dv}{dx} = \frac{1 - v}{1 + v} - v = \frac{1 - v - v(1+v)}{1 + v} = \frac{1 - 2v - v^2}{1 + v}.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$\frac{1 + v}{1 - 2v - v^2}\,dv = \frac{dx}{x}.$$
+                    Notice that \(\dfrac{d}{dv}(1 - 2v - v^2) = -2 - 2v = -2(1 + v)\). So the left side becomes:
+                    $$-\frac{1}{2}\cdot\frac{d(1 - 2v - v^2)}{1 - 2v - v^2} = \frac{dx}{x}.$$
+                    Integrating:
+                    $$-\frac{1}{2}\ln|1 - 2v - v^2| = \ln|x| + C_1 \quad\Longrightarrow\quad \ln|1 - 2v - v^2| = -2\ln|x| + C_2.$$
+                    Exponentiating: \(1 - 2v - v^2 = \dfrac{C}{x^2}\).</p>
+
+                    <p><strong>Step 4: Back-substitute \(v = y/x\) and multiply by \(x^2\).</strong>
+                    $$x^2 - 2xy - y^2 = C.$$</p>
+
+                    <p><strong>Solution:</strong> \(\boxed{x^2 - 2xy - y^2 = C}\) (implicit form).</p>
+
+                    <p><strong>Verification:</strong> Differentiating implicitly: \(2x - 2y - 2x\,y' - 2y\,y' = 0\), so \(y' = \dfrac{2x - 2y}{2x + 2y} = \dfrac{x - y}{x + y}\). ✓</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 7: \((x^2 + y^2)\,dx - xy\,dy = 0\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \((x^2 + y^2)\,dx - xy\,dy = 0\)</p>
+
+                    <p><strong>Step 1: Standard form.</strong> Solve for \(\dfrac{dy}{dx}\):
+                    $$\frac{dy}{dx} = \frac{x^2 + y^2}{xy}.$$
+                    This is identical to Example 2! \(F(v) = \dfrac{1 + v^2}{v}\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = \frac{1 + v^2}{v} \quad\Longrightarrow\quad x\frac{dv}{dx} = \frac{1}{v}.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$v\,dv = \frac{dx}{x} \quad\Longrightarrow\quad \frac{v^2}{2} = \ln|x| + C_1.$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$\frac{y^2}{2x^2} = \ln|x| + C_1 \quad\Longrightarrow\quad \boxed{y^2 = 2x^2\ln|x| + Cx^2}.$$</p>
+
+                    <div class="tip-box">
+                        <strong>Recognition tip:</strong> Whenever you see a differential form \(M\,dx + N\,dy = 0\) where \(M\) and \(N\) are clearly homogeneous of the same degree, immediately consider the substitution \(y = vx\). It will always reduce the equation to separable form.
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Example 8: \(\displaystyle \frac{dy}{dx} = \frac{y}{x} + \tan\!\left(\frac{y}{x}\right)\) (transcendental \(F\))</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{y}{x} + \tan\!\left(\frac{y}{x}\right)\)</p>
+
+                    <p><strong>Step 1: Verify homogeneity.</strong> The right-hand side depends only on \(y/x\), so \(F(v) = v + \tan v\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = v + \tan v \quad\Longrightarrow\quad x\frac{dv}{dx} = \tan v.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$\frac{dv}{\tan v} = \frac{dx}{x} \quad\Longrightarrow\quad \int \cot v\,dv = \int \frac{dx}{x}.$$
+                    $$\ln|\sin v| = \ln|x| + C_1 \quad\Longrightarrow\quad \sin v = Cx.$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$\boxed{\sin\!\left(\frac{y}{x}\right) = Cx}.$$</p>
+
+                    <p><strong>Singular solutions:</strong> \(\tan v = 0\) gives \(v = k\pi\), i.e., \(y = k\pi x\) for integer \(k\). These straight-line solutions are not captured by the general formula and should be reported separately.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Problems Section -->
+        <section id="exam-practice">
+            <h2>📝 Exam-Style Practice Problems</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Practice 1: Solve \(\displaystyle \frac{dy}{dx} = \frac{2y - x}{x}\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{2y - x}{x} = \frac{2y}{x} - 1\)</p>
+
+                    <p><strong>Step 1: Identify homogeneity.</strong> \(F(v) = 2v - 1\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = 2v - 1 \quad\Longrightarrow\quad x\frac{dv}{dx} = v - 1.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$\frac{dv}{v - 1} = \frac{dx}{x} \quad\Longrightarrow\quad \ln|v - 1| = \ln|x| + C_1 \quad\Longrightarrow\quad v - 1 = Cx.$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$\frac{y}{x} - 1 = Cx \quad\Longrightarrow\quad \boxed{y = x + Cx^2}.$$</p>
+
+                    <p><strong>Verification:</strong> \(y' = 1 + 2Cx\). And \(\dfrac{2y - x}{x} = \dfrac{2x + 2Cx^2 - x}{x} = 1 + 2Cx\). ✓</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Practice 2: Solve \((x + y)\,dx - x\,dy = 0\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \((x + y)\,dx - x\,dy = 0\)</p>
+
+                    <p><strong>Step 1: Standard form.</strong>
+                    $$\frac{dy}{dx} = \frac{x + y}{x} = 1 + \frac{y}{x}.$$
+                    Both \(M = x + y\) and \(N = -x\) are homogeneous of degree \(1\). \(F(v) = 1 + v\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = 1 + v \quad\Longrightarrow\quad x\frac{dv}{dx} = 1.$$</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$dv = \frac{dx}{x} \quad\Longrightarrow\quad v = \ln|x| + C.$$</p>
+
+                    <p><strong>Step 4: Back-substitute.</strong>
+                    $$\frac{y}{x} = \ln|x| + C \quad\Longrightarrow\quad \boxed{y = x\bigl(\ln|x| + C\bigr)}.$$</p>
+                </div>
+            </div>
+
+            <div class="collapsible" onclick="toggleCollapse(this)">
+                <span>Practice 3: Solve \(\displaystyle \frac{dy}{dx} = \frac{x + 2y}{2x + y}\), \(y(1) = 0\)</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse-content">
+                <div class="card">
+                    <p><strong>Given equation:</strong> \(\displaystyle \frac{dy}{dx} = \frac{x + 2y}{2x + y}\) with \(y(1) = 0\).</p>
+
+                    <p><strong>Step 1: Identify homogeneity.</strong> Dividing by \(x\): \(F(v) = \dfrac{1 + 2v}{2 + v}\).</p>
+
+                    <p><strong>Step 2: Substitute \(y = vx\).</strong>
+                    $$v + x\frac{dv}{dx} = \frac{1 + 2v}{2 + v}.$$
+                    Compute \(F(v) - v\):
+                    $$\frac{1 + 2v}{2 + v} - v = \frac{1 + 2v - v(2 + v)}{2 + v} = \frac{1 - v^2}{2 + v} = \frac{(1-v)(1+v)}{2+v}.$$
+                    So \(\displaystyle x\frac{dv}{dx} = \frac{(1-v)(1+v)}{2+v}\).</p>
+
+                    <p><strong>Step 3: Separate and integrate.</strong>
+                    $$\frac{(2 + v)\,dv}{(1-v)(1+v)} = \frac{dx}{x}.$$
+                    Partial fractions: \(\displaystyle \frac{2 + v}{(1-v)(1+v)} = \frac{A}{1-v} + \frac{B}{1+v}\). Multiplying out: \(2 + v = A(1+v) + B(1-v)\).
+                    Setting \(v = 1\): \(3 = 2A \Rightarrow A = \tfrac{3}{2}\). Setting \(v = -1\): \(1 = 2B \Rightarrow B = \tfrac{1}{2}\). So:
+                    $$\int\!\left[\frac{3/2}{1-v} + \frac{1/2}{1+v}\right]dv = \int \frac{dx}{x}.$$
+                    $$-\frac{3}{2}\ln|1-v| + \frac{1}{2}\ln|1+v| = \ln|x| + C_1.$$
+                    Multiplying by 2 and combining: \(\ln\!\left|\dfrac{1+v}{(1-v)^3}\right| = 2\ln|x| + C_2\), so
+                    $$\frac{1 + v}{(1 - v)^3} = K\,x^2.$$</p>
+
+                    <p><strong>Step 4: Back-substitute and apply IC.</strong> With \(v = y/x\):
+                    $$\frac{1 + y/x}{(1 - y/x)^3} = K\,x^2 \quad\Longrightarrow\quad \frac{(x + y)/x}{(x - y)^3/x^3} = K\,x^2 \quad\Longrightarrow\quad \frac{x^2(x + y)}{(x - y)^3} = K\,x^2.$$
+                    Simplifying: \(\dfrac{x + y}{(x - y)^3} = K\). Apply \(y(1) = 0\): \(\dfrac{1 + 0}{(1 - 0)^3} = K = 1\).</p>
+
+                    <p><strong>Solution:</strong> \(\boxed{x + y = (x - y)^3}\) (implicit form).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE VISUALIZER -->
+        <section id="visualizer">
+            <h2>Interactive Slope Field Visualizer</h2>
+            <p>Explore the slope field for various homogeneous equations. Click any point on the plot to trace a solution curve passing through it.</p>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="preset-select">Select Example or Custom:</label>
+                    <select id="preset-select" onchange="loadPreset()">
+                        <option value="ex1">Example 1: dy/dx = 1 + y/x</option>
+                        <option value="ex2">Example 2: dy/dx = (x² + y²)/(xy)</option>
+                        <option value="ex3">Example 3: dy/dx = (y² - x²)/(2xy)</option>
+                        <option value="ex6">Example 6: dy/dx = (x - y)/(x + y)</option>
+                        <option value="custom">Custom Equation</option>
+                    </select>
+                </div>
+
+                <div class="control-group" id="custom-input" style="display: none;">
+                    <label for="equation-input">Enter equation (dy/dx = f(x,y)):</label>
+                    <input type="text" id="equation-input" placeholder="e.g., (x+y)/(x-y)" value="(x+y)/x">
+                    <small style="color: #6b7280; margin-top: 0.5rem; display: block;">Use ** for power, * for multiply, / for divide</small>
+                </div>
+
+                <div class="control-group">
+                    <label>X range: <span id="x-min-val">-3</span> to <span id="x-max-val">3</span></label>
+                    <input type="range" id="x-min" min="-5" max="5" value="-3" oninput="updateRanges()">
+                    <input type="range" id="x-max" min="-5" max="5" value="3" oninput="updateRanges()" style="margin-top: 0.5rem;">
+                </div>
+
+                <div class="control-group">
+                    <label>Y range: <span id="y-min-val">-3</span> to <span id="y-max-val">3</span></label>
+                    <input type="range" id="y-min" min="-5" max="5" value="-3" oninput="updateRanges()">
+                    <input type="range" id="y-max" min="-5" max="5" value="3" oninput="updateRanges()" style="margin-top: 0.5rem;">
+                </div>
+
+                <button onclick="drawSlopeField()">Draw Slope Field</button>
+                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">Click on the plot to trace a solution curve</small>
+            </div>
+
+            <div id="plot-slope" class="plot-container"></div>
+
+            <div class="tip-box" id="plot-info" style="display: none;">
+                <strong>Solution Trace Information:</strong>
+                <p id="trace-info"></p>
+            </div>
+        </section>
+
+        <!-- ISLAMIC MOTIVATION BOX -->
+        <div style="background:linear-gradient(135deg, #ecfdf5, #d1fae5); border-left:5px solid #059669; border-radius:12px; padding:1.5rem 1.5rem 1.5rem 2rem; margin:2rem 0;">
+          <div style="font-size:1.3rem; text-align:center; margin-bottom:0.5rem; font-family:'Traditional Arabic','Scheherazade New',serif; direction:rtl; color:#059669; font-weight:600;">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
+          <div style="font-style:italic; color:#065f46;">"And say: My Lord, increase me in knowledge."</div>
+          <div style="font-weight:600; color:#059669; margin-top:0.5rem; font-size:0.9rem;">— Quran 20:114</div>
+          <p style="margin-top:0.75rem; margin-bottom:0;">Homogeneous equations teach a profound lesson: changing your <em>perspective</em> — moving from \((x, y)\) to the ratio \(y/x\) — can turn an intractable problem into a simple one. So too in life: a humble shift in viewpoint can illuminate what seemed impossibly complex.</p>
+        </div>
+
+        <!-- PRACTICE QUIZ -->
+        <section id="practice">
+            <h2>Practice Problems</h2>
+
+            <div class="quiz-container">
+                <h3>Self-Assessment Quiz</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 1: Identify Homogeneous Equations</h4>
+                    <p>Which of the following is a first-order <strong>homogeneous</strong> equation?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(1, 'a')">
+                            (a) \(\displaystyle \frac{dy}{dx} = \frac{x + y}{x - y}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(1, 'b')">
+                            (b) \(\displaystyle \frac{dy}{dx} = x^2 + y\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(1, 'c')">
+                            (c) \(\displaystyle \frac{dy}{dx} = \sin(x + y)\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(1, 'd')">
+                            (d) \(\displaystyle \frac{dy}{dx} = e^{x}\,y\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-1"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 2: Standard Substitution</h4>
+                    <p>For a first-order homogeneous equation \(\dfrac{dy}{dx} = F(y/x)\), what substitution converts it to a separable equation?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(2, 'a')">
+                            (a) \(v = y/x\), so \(y = vx\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(2, 'b')">
+                            (b) \(v = xy\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(2, 'c')">
+                            (c) \(v = y - x\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(2, 'd')">
+                            (d) \(v = y^{1-n}\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-2"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 3: Derivative After Substitution</h4>
+                    <p>If \(y = vx\) where \(v = v(x)\), what is \(\dfrac{dy}{dx}\)?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(3, 'a')">
+                            (a) \(\displaystyle \frac{dy}{dx} = v\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(3, 'b')">
+                            (b) \(\displaystyle \frac{dy}{dx} = v + x\,\frac{dv}{dx}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(3, 'c')">
+                            (c) \(\displaystyle \frac{dy}{dx} = x\,\frac{dv}{dx}\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(3, 'd')">
+                            (d) \(\displaystyle \frac{dy}{dx} = \frac{dv}{dx}\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-3"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 4: General Solution</h4>
+                    <p>Find the general solution of \(\displaystyle \frac{dy}{dx} = \frac{y}{x} + 1\).</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(4, 'a')">
+                            (a) \(y = x\bigl(\ln|x| + C\bigr)\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(4, 'b')">
+                            (b) \(y = \ln|x| + C\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(4, 'c')">
+                            (c) \(y = Cx\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(4, 'd')">
+                            (d) \(y = x + C\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-4"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 5: Initial Value Problem</h4>
+                    <p>Solve \(xy' = y + x\) with \(y(1) = 2\). What is \(y(e)\)?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(5, 'a')">
+                            (a) \(e\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(5, 'b')">
+                            (b) \(2e\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(5, 'c')">
+                            (c) \(3e\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(5, 'd')">
+                            (d) \(e + 2\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-5"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>Question 6: Implicit Solution</h4>
+                    <p>The general solution of \(\displaystyle \frac{dy}{dx} = \frac{x^2 + y^2}{xy}\) is:</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(6, 'a')">
+                            (a) \(y^2 = x^2\bigl(2\ln|x| + C\bigr)\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(6, 'b')">
+                            (b) \(y = x\ln|x|\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(6, 'c')">
+                            (c) \(y^2 = 2\ln|x| + C\)
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(6, 'd')">
+                            (d) \(y = Cx^2\)
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="feedback-6"></div>
+                </div>
+
+                <button onclick="resetQuiz()" style="margin-top: 2rem;">Reset Quiz</button>
+            </div>
+        </section>
+
+        <!-- QUICK REFERENCE -->
+        <section id="reference">
+            <h2>Quick Reference Card</h2>
+
+            <div class="reference-card">
+                <div class="ref-item">
+                    <strong>Standard Form</strong>
+                    <p>\(\displaystyle \frac{dy}{dx} = F\!\left(\frac{y}{x}\right)\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Differential Form</strong>
+                    <p>\(M(x,y)\,dx + N(x,y)\,dy = 0\) with \(M, N\) homogeneous of same degree</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Homogeneous Function (degree \(n\))</strong>
+                    <p>\(f(tx, ty) = t^n\,f(x, y)\) for all \(t \neq 0\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Substitution</strong>
+                    <p>\(v = y/x \;\Rightarrow\; y = vx\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Derivative Relation</strong>
+                    <p>\(\displaystyle \frac{dy}{dx} = v + x\,\frac{dv}{dx}\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Separated Form</strong>
+                    <p>\(\displaystyle \frac{dv}{F(v) - v} = \frac{dx}{x}\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Alternative Substitution</strong>
+                    <p>\(u = x/y\) when \(F(x/y)\) is simpler</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Quick Test</strong>
+                    <p>Replace \(x \to tx\), \(y \to ty\). If \(t\) cancels, equation is homogeneous.</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Singular Solutions</strong>
+                    <p>Roots of \(F(v) - v = 0\) give linear solutions \(y = v_0 x\)</p>
+                </div>
+
+                <div class="ref-item">
+                    <strong>Don't Forget</strong>
+                    <p>Always back-substitute \(v = y/x\) at the end</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+
+    <script>
+        // Safe Math Expression Evaluator
+        function safeEval(expr, x, y) {
+            try {
+                let safe = expr.replace(/[^0-9+\-*/(). xy]/g, '');
+                safe = safe.replace(/\^/g, '**');
+                return Function('x', 'y', '"use strict"; return (' + safe + ')')(x, y);
+            } catch (e) {
+                return NaN;
+            }
+        }
+
+        // RK4 Solver
+        function rk4(f, x0, y0, xf, h = 0.01) {
+            let xs = [x0], ys = [y0];
+            let x = x0, y = y0;
+            let maxSteps = 5000;
+            let step = 0;
+            while (((xf > x0 && x < xf) || (xf < x0 && x > xf)) && step < maxSteps) {
+                let k1 = f(x, y);
+                if (!isFinite(k1)) break;
+                let k2 = f(x + h/2, y + k1*h/2);
+                let k3 = f(x + h/2, y + k2*h/2);
+                let k4 = f(x + h, y + k3*h);
+                if (!isFinite(k2) || !isFinite(k3) || !isFinite(k4)) break;
+                y += (h/6) * (k1 + 2*k2 + 2*k3 + k4);
+                x += h;
+                if (Math.abs(y) > 1e6) break;
+                xs.push(x);
+                ys.push(y);
+                step++;
+            }
+            return [xs, ys];
+        }
+
+        function drawSlopeField() {
+            let preset = document.getElementById('preset-select').value;
+            let f;
+            if (preset === 'custom') {
+                let expr = document.getElementById('equation-input').value;
+                f = (x, y) => safeEval(expr, x, y);
+            } else {
+                const presets = {
+                    'ex1': (x, y) => 1 + y/x,
+                    'ex2': (x, y) => (x*x + y*y)/(x*y),
+                    'ex3': (x, y) => (y*y - x*x)/(2*x*y),
+                    'ex6': (x, y) => (x - y)/(x + y)
+                };
+                f = presets[preset] || ((x, y) => 1 + y/x);
+            }
+
+            let xMin = parseFloat(document.getElementById('x-min').value);
+            let xMax = parseFloat(document.getElementById('x-max').value);
+            let yMin = parseFloat(document.getElementById('y-min').value);
+            let yMax = parseFloat(document.getElementById('y-max').value);
+
+            let quiver = { x: [], y: [], u: [], v: [] };
+            let dx = (xMax - xMin) / 18;
+            let dy = (yMax - yMin) / 18;
+
+            for (let x = xMin; x <= xMax; x += dx) {
+                for (let y = yMin; y <= yMax; y += dy) {
+                    let dydx = f(x, y);
+                    if (isFinite(dydx)) {
+                        let scale = 0.06 * Math.min(dx, dy) / Math.sqrt(1 + dydx*dydx);
+                        quiver.x.push(x); quiver.x.push(x + scale); quiver.x.push(null);
+                        quiver.y.push(y); quiver.y.push(y + scale*dydx); quiver.y.push(null);
+                    }
+                }
+            }
+
+            let trace1 = {
+                type: 'scatter',
+                x: quiver.x,
+                y: quiver.y,
+                mode: 'lines',
+                line: { color: '#7c3aed', width: 1.5 },
+                hoverinfo: 'skip',
+                showlegend: false
+            };
+
+            let layout = {
+                title: 'Slope Field for Homogeneous Equation',
+                xaxis: { range: [xMin, xMax], title: 'x', zeroline: true, zerolinecolor: '#9ca3af' },
+                yaxis: { range: [yMin, yMax], title: 'y', zeroline: true, zerolinecolor: '#9ca3af' },
+                hovermode: 'closest',
+                plot_bgcolor: '#f9fafb',
+                paper_bgcolor: '#ffffff'
+            };
+
+            Plotly.newPlot('plot-slope', [trace1], layout, { responsive: true });
+            document.getElementById('plot-slope').on('plotly_click', function(data) {
+                let pt = data.points[0];
+                traceSolution(f, pt.x, pt.y);
+            });
+        }
+
+        function traceSolution(f, x0, y0) {
+            let [xs, ys] = rk4(f, x0, y0, x0 + 5, 0.01);
+            let [xs2, ys2] = rk4(f, x0, y0, x0 - 5, -0.01);
+            xs2.reverse(); ys2.reverse();
+            xs = xs2.concat(xs);
+            ys = ys2.concat(ys);
+
+            let trace = {
+                x: xs, y: ys, type: 'scatter', mode: 'lines',
+                line: { color: '#dc2626', width: 2.5 },
+                name: `Through (${x0.toFixed(2)}, ${y0.toFixed(2)})`,
+                hoverinfo: 'name'
+            };
+
+            Plotly.addTraces('plot-slope', [trace]);
+            document.getElementById('trace-info').textContent =
+                `Initial condition: (x₀, y₀) = (${x0.toFixed(2)}, ${y0.toFixed(2)})`;
+            document.getElementById('plot-info').style.display = 'block';
+        }
+
+        // UI Helpers
+        function toggleCollapse(el) {
+            el.classList.toggle('active');
+            el.nextElementSibling.classList.toggle('active');
+        }
+
+        function loadPreset() {
+            if (document.getElementById('preset-select').value === 'custom') {
+                document.getElementById('custom-input').style.display = 'block';
+            } else {
+                document.getElementById('custom-input').style.display = 'none';
+            }
+            drawSlopeField();
+        }
+
+        function updateRanges() {
+            document.getElementById('x-min-val').textContent = document.getElementById('x-min').value;
+            document.getElementById('x-max-val').textContent = document.getElementById('x-max').value;
+            document.getElementById('y-min-val').textContent = document.getElementById('y-min').value;
+            document.getElementById('y-max-val').textContent = document.getElementById('y-max').value;
+        }
+
+        // Quiz System
+        const answers = { 1: 'a', 2: 'a', 3: 'b', 4: 'a', 5: 'c', 6: 'a' };
+        const feedbacks = {
+            1: { correct: 'Correct! Both numerator (x+y) and denominator (x-y) are homogeneous of degree 1, so the right-hand side depends only on y/x. The other options have terms of mixed or no homogeneous structure.',
+                 incorrect: 'A homogeneous equation has its right-hand side depending only on y/x. Test by replacing x→tx, y→ty: if all the t\'s cancel, it\'s homogeneous. Try (a).' },
+            2: { correct: 'Correct! Setting v = y/x (so y = vx) is the standard substitution that always reduces a homogeneous equation to separable form.',
+                 incorrect: 'For a homogeneous equation, the right substitution is v = y/x, which makes the equation separable in v and x.' },
+            3: { correct: 'Correct! Differentiating y = vx using the product rule (treating v as a function of x): dy/dx = v·1 + x·dv/dx = v + x dv/dx.',
+                 incorrect: 'Use the product rule on y = v(x)·x. Both v and x depend on the differentiation variable, giving dy/dx = v + x·dv/dx.' },
+            4: { correct: 'Correct! With v = y/x, we get v + x·v\' = 1 + v, so x·v\' = 1, giving v = ln|x| + C, hence y = x(ln|x| + C).',
+                 incorrect: 'Substitute y = vx: v + x·v\' = 1 + v simplifies to x·v\' = 1, so v = ln|x| + C and y = x(ln|x| + C).' },
+            5: { correct: 'Correct! From Example 5\'s method: y = x(ln|x| + C). With y(1) = 2: C = 2. So y(e) = e(ln(e) + 2) = e(1 + 2) = 3e.',
+                 incorrect: 'Solve to get y = x(ln|x| + C). Apply y(1) = 2 to find C = 2, then evaluate y(e) = e(1 + 2) = 3e.' },
+            6: { correct: 'Correct! With v = y/x: x·v\' = 1/v gives v dv = dx/x, so v²/2 = ln|x| + C₁, hence (y/x)² = 2ln|x| + C, i.e., y² = x²(2ln|x| + C).',
+                 incorrect: 'Substitute v = y/x: v + x·v\' = (1+v²)/v = 1/v + v, so x·v\' = 1/v. Separating gives v² = 2ln|x| + C, so y² = x²(2ln|x| + C).' }
+        };
+
+        function checkAnswer(q, ans) {
+            let correct = answers[q] === ans;
+            let feedback = document.getElementById(`feedback-${q}`);
+            feedback.classList.add('show');
+            feedback.classList.toggle('correct', correct);
+            feedback.classList.toggle('incorrect', !correct);
+            feedback.textContent = correct ?
+                '✓ ' + feedbacks[q].correct :
+                '✗ ' + feedbacks[q].incorrect;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let correct = document.querySelectorAll('.quiz-feedback.correct').length;
+            document.getElementById('progress-fill').style.width = (correct / 6 * 100) + '%';
+        }
+
+        function resetQuiz() {
+            document.querySelectorAll('.quiz-feedback').forEach(el => {
+                el.classList.remove('show', 'correct', 'incorrect');
+            });
+            document.getElementById('progress-fill').style.width = '0%';
+        }
+
+        // KaTeX Rendering
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+            drawSlopeField();
+        });
+    </script>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
+</body>
+</html>
