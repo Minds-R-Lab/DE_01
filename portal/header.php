@@ -8,7 +8,7 @@ $__user  = is_logged_in() ? current_user() : null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= h($__title) ?> &mdash; <?= h(SITE_NAME) ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <nav class="topnav">
@@ -17,19 +17,19 @@ $__user  = is_logged_in() ? current_user() : null;
         <ul>
             <li><a href="<?= h(COURSE_URL) ?>">&larr; Course Site</a></li>
             <?php if ($__user): ?>
-                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="/dashboard.php">Dashboard</a></li>
                 <?php if (in_array($__user['role'], ['instructor','admin'], true)): ?>
-                    <li><a href="instructor/index.php">Instructor</a></li>
+                    <li><a href="/instructor/index.php">Instructor</a></li>
                 <?php endif; ?>
                 <li style="padding-left:0.5rem; color:#94a3b8;">|</li>
                 <li style="color:var(--text-muted); padding:0.45rem 0;">
                     <?= h($__user['full_name']) ?>
                 </li>
-                <li><a href="logout.php">Logout</a></li>
+                <li><a href="/logout.php">Logout</a></li>
             <?php else: ?>
-                <li><a href="login.php">Login</a></li>
+                <li><a href="/login.php">Login</a></li>
                 <?php if (ALLOW_SELF_REGISTRATION): ?>
-                    <li><a href="register.php">Register</a></li>
+                    <li><a href="/register.php">Register</a></li>
                 <?php endif; ?>
             <?php endif; ?>
         </ul>
