@@ -1,0 +1,13 @@
+# Block all direct HTTP access to uploaded files.
+# Students must download through the portal, which enforces auth.
+Require all denied
+
+# Also disable PHP execution here — belt-and-braces in case the rule above
+# is ever accidentally relaxed.
+<FilesMatch "\.(php|phtml|phar|phps)$">
+    SetHandler None
+    ForceType text/plain
+</FilesMatch>
+
+# And disable directory listing
+Options -Indexes

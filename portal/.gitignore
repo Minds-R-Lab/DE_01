@@ -1,0 +1,6 @@
+# NEVER commit the live config — it contains database credentials.
+config.php
+
+# Student submissions are private and sometimes large.
+uploads/*
+!uploads/.htaccess
