@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: The Wave Equation | Dr. Mohamed Mabrok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-P9F00LPZD5');</script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --teal: #0891b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.65;
+            color: #1f2937;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        nav .container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+            flex-wrap: wrap;
+        }
+        nav h1 { font-size: 1.15rem; color: var(--primary); font-weight: 700; }
+        nav ul { display: flex; list-style: none; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        nav a {
+            color: #475569; text-decoration: none; font-weight: 500;
+            padding: 0.5rem 0.9rem; border-radius: 6px; transition: all 0.2s ease;
+            font-size: 0.92rem;
+        }
+        nav a:hover { background: #eff6ff; color: var(--primary); }
+        nav a.active { background: var(--primary); color: white; }
+
+        main { max-width: 1100px; margin: 90px auto 2rem; padding: 0 1.5rem; }
+
+        section { margin-bottom: 3rem; scroll-margin-top: 90px; }
+        section > h2 {
+            font-size: 1.9rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem; border-bottom: 3px solid var(--primary);
+        }
+        section > h3 { font-size: 1.3rem; color: #1e293b; margin: 1.8rem 0 1rem; }
+        section > h4 { font-size: 1.1rem; color: #374151; margin: 1.25rem 0 0.75rem; }
+        p, li { margin-bottom: 0.8rem; font-size: 0.97rem; }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box, .case-box {
+            background: white; border-left: 5px solid; border-radius: 12px;
+            padding: 1.2rem 1.4rem; margin: 1.2rem 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .definition-box { border-left-color: var(--primary); background: #eff6ff; }
+        .theorem-box { border-left-color: var(--accent); background: #f9f5ff; }
+        .example-box { border-left-color: var(--success); background: #f0fdf4; }
+        .warning-box { border-left-color: var(--warning); background: #fffbeb; }
+        .tip-box { border-left-color: var(--teal); background: #ecfeff; }
+        .case-box { border-left-color: #64748b; background: #f8fafc; }
+        .case-trivial { border-left-color: var(--danger); background: #fef2f2; }
+        .case-nontrivial { border-left-color: var(--success); background: #f0fdf4; }
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong, .case-box strong {
+            display: block; margin-bottom: 0.5rem; font-size: 1rem; color: #1e293b;
+        }
+
+        .key-step {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid var(--warning);
+            padding: 1rem 1.3rem;
+            margin: 1.2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
+        }
+        .key-step strong { display: block; color: #78350f; margin-bottom: 0.4rem; font-size: 1rem; }
+
+        .objectives { list-style: none; }
+        .objectives li { padding-left: 1.8rem; position: relative; margin-bottom: 0.6rem; }
+        .objectives li:before { content: "\2713"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        .step-list { list-style: none; counter-reset: step; padding-left: 0; }
+        .step-list > li {
+            counter-increment: step; padding-left: 3rem; position: relative;
+            margin-bottom: 1.2rem;
+        }
+        .step-list > li:before {
+            content: counter(step); position: absolute; left: 0; top: 0;
+            background: var(--primary); color: white; width: 2.1rem; height: 2.1rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.9rem;
+        }
+
+        .example-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin: 1.2rem 0; overflow: hidden; }
+        .example-header {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white; padding: 1rem 1.5rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; user-select: none; transition: background 0.3s ease;
+        }
+        .example-header:hover { background: linear-gradient(135deg, #047857, #059669); }
+        .example-header .katex { color: white; }
+        .example-content { padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .example-content.active { max-height: 8000px; padding: 1.5rem; }
+        .toggle-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+
+        .control-group {
+            background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .control-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 6px;
+            font-size: 0.9rem; font-family: 'Segoe UI', system-ui; margin-bottom: 1rem;
+        }
+        input[type="range"] { width: 100%; margin-bottom: 0.5rem; }
+        .slider-value {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-left: 0.5rem;
+        }
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 0.65rem 1.5rem; border-radius: 6px; cursor: pointer;
+            font-weight: 600; font-size: 0.92rem; transition: all 0.2s ease;
+        }
+        button:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+        .plot-container { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        .quiz-question { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e2e8f0; }
+        .quiz-question h4 { margin-bottom: 1rem; color: #1e293b; }
+        .quiz-choices { display: grid; grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 1rem; }
+        .choice-btn {
+            padding: 0.8rem 1rem; text-align: left; background: #f3f4f6;
+            border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; font-weight: 500; color: #1e293b;
+        }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex, .choice-btn.incorrect .katex { color: white; }
+        .choice-btn:hover { border-color: var(--primary); background: #eff6ff; }
+        .choice-btn.correct { border-color: var(--success); background: var(--success); color: white; }
+        .choice-btn.incorrect { border-color: var(--danger); background: var(--danger); color: white; }
+        .feedback { margin: 1rem 0; padding: 1rem; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
+        .feedback.incorrect { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
+        .progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+        .reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+        .reference-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .reference-card h4 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
+
+        .hero {
+            text-align: center; padding: 2.5rem 1rem 1.75rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f9f5ff 100%);
+            border-radius: 16px; margin-bottom: 2rem;
+        }
+        .hero h1 { font-size: 2.1rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .hero p { color: #64748b; font-size: 1.05rem; }
+        .hero .chapter-badge {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 1rem;
+        }
+
+        .page-link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .page-link {
+            display: block; padding: 1.2rem 1.3rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 12px;
+            text-decoration: none; color: inherit;
+            transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .page-link:hover {
+            border-color: var(--primary); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+        }
+        .page-link .page-num {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.25rem 0.65rem; border-radius: 6px; font-weight: 700;
+            font-size: 0.8rem; margin-bottom: 0.6rem; letter-spacing: 0.5px;
+        }
+        .page-link h3 { margin: 0 0 0.4rem; color: #1e293b; font-size: 1.1rem; }
+        .page-link p { font-size: 0.88rem; color: #64748b; margin: 0; }
+
+        .summary-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .summary-table th, .summary-table td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+        .summary-table th { background: var(--primary); color: white; font-weight: 600; }
+        .summary-table tr:nth-child(even) { background: #f8fafc; }
+
+        .page-nav-bottom {
+            display: flex; justify-content: space-between; gap: 1rem;
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;
+        }
+        .page-nav-bottom a {
+            flex: 1; padding: 1rem 1.25rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            text-decoration: none; color: var(--primary); font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .page-nav-bottom a:hover { background: var(--primary); color: white; }
+        .page-nav-bottom a.next { text-align: right; }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .hero h1 { font-size: 1.5rem; }
+            section > h2 { font-size: 1.5rem; }
+            main { padding: 0 1rem; }
+            .page-nav-bottom { flex-direction: column; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>Ch 6: PDEs</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch6-pde-intro.html">6.1 Overview</a></li>
+                <li><a href="ch6-heat-separation.html">6.2 Heat Eq.</a></li>
+                <li><a href="ch6-bc-cases.html">6.3 BC Cases</a></li>
+                <li><a href="ch6-wave-equation.html" class="active">6.4 Wave Eq.</a></li>
+                <li><a href="ch6-pde-practice.html">6.5 Practice</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+
+        <div class="hero">
+            <span class="chapter-badge">Section 6.4</span>
+            <h1>The Wave Equation</h1>
+            <p>Second-order in time &bull; Two initial conditions &bull; Oscillating solutions</p>
+        </div>
+
+        <section id="setup">
+            <h2>1. Physical Setup and Governing Equation</h2>
+
+            <div class="definition-box">
+                <strong>The 1-D Wave Equation</strong>
+                <p>Consider a taut string of length $L$ fixed at both ends, lying along the $x$-axis. Let $u(x,t)$ denote the vertical displacement of the string at position $x$ and time $t$. Under small-amplitude assumptions, $u$ satisfies</p>
+                $$\frac{\partial^2 u}{\partial t^2} = a^2\,\frac{\partial^2 u}{\partial x^2},\qquad 0 < x < L,\; t > 0.$$
+                <p>Here $a > 0$ is the <strong>wave speed</strong>, determined by the string's tension $T$ and density $\rho$ as $a = \sqrt{T/\rho}$.</p>
+            </div>
+
+            <h3>Initial and Boundary Conditions</h3>
+
+            <div class="warning-box">
+                <strong>Why TWO Initial Conditions?</strong>
+                <p>The wave equation is <strong>second-order in time</strong>, unlike the heat equation which is first-order. This means we must specify both</p>
+                <ul style="margin-left:1.5rem;">
+                    <li>the initial <em>displacement</em>: $u(x,0) = f(x)$, and</li>
+                    <li>the initial <em>velocity</em>: $\dfrac{\partial u}{\partial t}(x,0) = g(x)$.</li>
+                </ul>
+                <p>Compare with mechanics: to predict a ball's trajectory, you need both its initial position <em>and</em> initial velocity &mdash; not just one. The wave equation is simply Newton's second law for a string.</p>
+            </div>
+
+            <div class="definition-box">
+                <strong>Full Problem Statement (Dirichlet BCs)</strong>
+                $$\begin{cases} u_{tt} = a^2\,u_{xx},\qquad 0 < x < L,\; t > 0 \\[4pt] u(0,t) = u(L,t) = 0 \qquad \text{(fixed ends)} \\[4pt] u(x,0) = f(x),\quad u_t(x,0) = g(x) \qquad \text{(initial state)} \end{cases}$$
+            </div>
+        </section>
+
+        <section id="separation">
+            <h2>2. Separation of Variables</h2>
+
+            <p>Assume $u(x,t) = P(x)Q(t)$. Compute the partial derivatives:</p>
+
+            $$\frac{\partial^2 u}{\partial t^2} = P(x)Q''(t), \qquad \frac{\partial^2 u}{\partial x^2} = P''(x)Q(t).$$
+
+            <p>Substitute into $u_{tt} = a^2 u_{xx}$:</p>
+
+            $$P(x)Q''(t) = a^2\,P''(x)Q(t).$$
+
+            <div class="key-step">
+                <strong>Separate the Variables</strong>
+                <p>Divide both sides by $a^2\,P(x)\,Q(t)$:</p>
+                $$\frac{Q''(t)}{a^2 Q(t)} = \frac{P''(x)}{P(x)} = -\lambda.$$
+                <p>Same separation constant trick as in the heat equation.</p>
+            </div>
+
+            <h3>The Two ODEs</h3>
+
+            <p>We obtain two ordinary differential equations:</p>
+
+            <div class="theorem-box">
+                <strong>Spatial ODE (same as heat equation)</strong>
+                $$P''(x) + \lambda P(x) = 0, \qquad P(0) = P(L) = 0.$$
+            </div>
+
+            <div class="theorem-box">
+                <strong>Temporal ODE (now SECOND-order)</strong>
+                $$Q''(t) + a^2\lambda\, Q(t) = 0.$$
+            </div>
+
+            <div class="tip-box">
+                <strong>Observation</strong>
+                <p>The spatial problem is <em>identical</em> to the one we solved for the heat equation. Therefore the spatial three-case analysis gives the <strong>same eigenvalues and eigenfunctions</strong>:</p>
+                $$\lambda_m = \left(\frac{m\pi}{L}\right)^2, \qquad P_m(x) = \sin\!\left(\frac{m\pi x}{L}\right), \quad m = 1,2,3,\ldots$$
+                <p>Only the <em>temporal</em> behaviour differs.</p>
+            </div>
+        </section>
+
+        <section id="spatial-cases">
+            <h2>3. Spatial Three-Case Analysis (Review)</h2>
+
+            <p>We briefly recapitulate the three-case analysis for completeness, since the <em>same</em> spatial problem appears:</p>
+
+            <div class="case-box case-trivial">
+                <strong>Case I: $\lambda &lt; 0$</strong>
+                <p>$P(x) = A\cosh(\alpha x) + B\sinh(\alpha x)$. BCs $P(0)=P(L)=0$ force $A = B = 0$. Trivial.</p>
+            </div>
+
+            <div class="case-box case-trivial">
+                <strong>Case II: $\lambda = 0$</strong>
+                <p>$P(x) = C_1 x + C_2$. BCs force $C_1 = C_2 = 0$. Trivial.</p>
+            </div>
+
+            <div class="case-box case-nontrivial">
+                <strong>Case III: $\lambda &gt; 0$ &mdash; NON-TRIVIAL</strong>
+                <p>$P(x) = A\cos(\alpha x) + B\sin(\alpha x)$. $P(0) = 0 \Rightarrow A = 0$. $P(L) = B\sin(\alpha L) = 0$ with $B \neq 0$ gives</p>
+                $$\alpha_m = \frac{m\pi}{L}, \qquad \lambda_m = \left(\frac{m\pi}{L}\right)^2, \qquad P_m(x) = \sin\!\left(\frac{m\pi x}{L}\right).$$
+            </div>
+        </section>
+
+        <section id="temporal">
+            <h2>4. Solving the Temporal ODE</h2>
+
+            <p>With $\lambda = \lambda_m = (m\pi/L)^2$, the temporal ODE reads</p>
+            $$Q_m''(t) + a^2\lambda_m\,Q_m(t) = 0 \implies Q_m''(t) + \left(\frac{m\pi a}{L}\right)^2 Q_m(t) = 0.$$
+
+            <p>This is a simple harmonic oscillator with angular frequency</p>
+            $$\omega_m = \frac{m\pi a}{L}.$$
+
+            <p>Its general solution contains <strong>both</strong> a cosine and a sine term (because of the two arbitrary constants that come with any second-order ODE):</p>
+
+            $$Q_m(t) = A_m\,\cos\!\left(\frac{m\pi a}{L}\,t\right) + B_m\,\sin\!\left(\frac{m\pi a}{L}\,t\right).$$
+
+            <div class="key-step">
+                <strong>Contrast with the Heat Equation</strong>
+                <p>Heat: $Q' + K\lambda Q = 0 \Rightarrow Q(t) = C\,e^{-K\lambda t}$ (exponential decay).</p>
+                <p>Wave: $Q'' + a^2\lambda Q = 0 \Rightarrow Q(t) = A\cos(\omega t) + B\sin(\omega t)$ (pure oscillation, no decay).</p>
+                <p>This is why the <strong>wave equation conserves energy</strong> while the heat equation dissipates it.</p>
+            </div>
+        </section>
+
+        <section id="general-solution">
+            <h2>5. General Solution of the Wave Equation</h2>
+
+            <p>Each product solution $u_m(x,t) = P_m(x)Q_m(t)$ is called a <strong>mode</strong> or <strong>normal mode</strong>. By linearity we can superpose:</p>
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Wave Equation (Fixed Ends)</strong>
+                $$\boxed{\;u(x,t) = \sum_{m=1}^{\infty}\!\left[A_m\,\cos\!\left(\frac{m\pi a}{L}\,t\right) + B_m\,\sin\!\left(\frac{m\pi a}{L}\,t\right)\right]\!\sin\!\left(\frac{m\pi x}{L}\right)\;}$$
+                <p>We must determine both the $A_m$ and the $B_m$ to match the two initial conditions.</p>
+            </div>
+
+            <h3>Determining the $A_m$ from $u(x,0) = f(x)$</h3>
+
+            <p>Setting $t = 0$ in the general solution (note $\sin(0) = 0$, $\cos(0) = 1$):</p>
+
+            $$u(x,0) = \sum_{m=1}^{\infty} A_m\,\sin\!\left(\frac{m\pi x}{L}\right) = f(x).$$
+
+            <p>This is the Fourier sine series of $f(x)$, so</p>
+
+            $$\boxed{\;A_m = \frac{2}{L}\int_0^L f(x)\,\sin\!\left(\frac{m\pi x}{L}\right)dx.\;}$$
+
+            <h3>Determining the $B_m$ from $u_t(x,0) = g(x)$</h3>
+
+            <p>Differentiate the general solution term-by-term with respect to $t$:</p>
+
+            $$u_t(x,t) = \sum_{m=1}^{\infty}\!\left[-A_m\frac{m\pi a}{L}\sin\!\left(\frac{m\pi a}{L}t\right) + B_m\frac{m\pi a}{L}\cos\!\left(\frac{m\pi a}{L}t\right)\right]\!\sin\!\left(\frac{m\pi x}{L}\right).$$
+
+            <p>Set $t = 0$:</p>
+            $$u_t(x,0) = \sum_{m=1}^{\infty} B_m\,\frac{m\pi a}{L}\,\sin\!\left(\frac{m\pi x}{L}\right) = g(x).$$
+
+            <p>This is the Fourier sine series of $g(x)$, with coefficients $B_m(m\pi a/L)$. Solving for $B_m$:</p>
+
+            $$\boxed{\;B_m = \frac{2}{m\pi a}\int_0^L g(x)\,\sin\!\left(\frac{m\pi x}{L}\right)dx.\;}$$
+
+            <div class="tip-box">
+                <strong>Two ICs &rArr; Two Coefficients per Mode</strong>
+                <p>For each mode $m$, the displacement IC $f$ gives $A_m$ and the velocity IC $g$ gives $B_m$. Two scalar pieces of data per mode to fix two unknown amplitudes &mdash; perfectly balanced.</p>
+            </div>
+        </section>
+
+        <section id="method-summary">
+            <h2>6. Method Summary</h2>
+            <ul class="step-list">
+                <li><strong>Separate variables</strong> $u = PQ$, obtaining spatial and temporal ODEs.</li>
+                <li><strong>Spatial three-case analysis</strong>: only $\lambda &gt; 0$ survives, giving $\lambda_m = (m\pi/L)^2$ and $P_m = \sin(m\pi x/L)$.</li>
+                <li><strong>Solve the second-order temporal ODE</strong>: $Q_m = A_m\cos(\omega_m t) + B_m\sin(\omega_m t)$ where $\omega_m = m\pi a/L$.</li>
+                <li><strong>Superpose</strong>: $u = \sum (A_m\cos\omega_m t + B_m\sin\omega_m t)\sin(m\pi x/L)$.</li>
+                <li><strong>Compute $A_m$</strong> from $u(x,0) = f(x)$ via Fourier sine coefficients.</li>
+                <li><strong>Compute $B_m$</strong> from $u_t(x,0) = g(x)$ &mdash; with the $1/\omega_m$ factor because of the derivative.</li>
+            </ul>
+        </section>
+
+        <section id="examples">
+            <h2>7. Worked Examples</h2>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,var(--danger),#b91c1c)">
+                    <span>Example 1: $a^2 = 9$, $L=4$, $f(x) = x-1$, $g(x) = x$ &mdash; both ICs non-trivial</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_{tt} = 9\,u_{xx},\quad 0 < x < 4,\; t > 0 \\[4pt] u(0,t) = u(4,t) = 0 \\[4pt] u(x,0) = x - 1,\quad u_t(x,0) = x \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; Parameters.</strong> $a = 3$, $L = 4$, $\omega_m = 3m\pi/4$.</p>
+
+                    <p><strong>Step 2 &mdash; General form.</strong></p>
+                    $$u(x,t) = \sum_{m=1}^{\infty}\!\left[A_m\cos\!\left(\frac{3m\pi t}{4}\right) + B_m\sin\!\left(\frac{3m\pi t}{4}\right)\right]\!\sin\!\left(\frac{m\pi x}{4}\right).$$
+
+                    <p><strong>Step 3 &mdash; Compute $A_m$ from $f(x) = x - 1$.</strong> This is the same computation as Example 3 on page 6.2:</p>
+                    $$A_m = \frac{2}{4}\int_0^4 (x-1)\sin\!\left(\frac{m\pi x}{4}\right)dx = -\frac{2}{m\pi}\bigl[1 + 3(-1)^m\bigr].$$
+
+                    <p><strong>Step 4 &mdash; Compute $B_m$ from $g(x) = x$.</strong> We need</p>
+                    $$B_m = \frac{2}{m\pi \cdot 3}\int_0^4 x\sin\!\left(\frac{m\pi x}{4}\right)dx.$$
+                    <p>Integration by parts with $u = x$, $dv = \sin(m\pi x/4)dx$, so $du = dx$, $v = -\dfrac{4}{m\pi}\cos(m\pi x/4)$:</p>
+                    $$\int_0^4 x\sin\!\left(\frac{m\pi x}{4}\right)dx = \left[-\frac{4x}{m\pi}\cos\!\left(\frac{m\pi x}{4}\right)\right]_0^4 + \frac{4}{m\pi}\int_0^4 \cos\!\left(\frac{m\pi x}{4}\right)dx.$$
+
+                    <p>The remaining integral is zero (as in earlier examples). Evaluating the boundary term:</p>
+                    $$-\frac{16}{m\pi}\cos(m\pi) - 0 = -\frac{16(-1)^m}{m\pi}.$$
+
+                    <p>Therefore</p>
+                    $$B_m = \frac{2}{3m\pi}\cdot\left(-\frac{16(-1)^m}{m\pi}\right) = -\frac{32(-1)^m}{3 m^2 \pi^2}.$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \sum_{m=1}^{\infty}\!\left[-\frac{2(1+3(-1)^m)}{m\pi}\cos\!\frac{3m\pi t}{4} - \frac{32(-1)^m}{3m^2\pi^2}\sin\!\frac{3m\pi t}{4}\right]\!\sin\!\frac{m\pi x}{4}.$$
+                    </div>
+
+                    <p><strong>Physical check:</strong> Energy does not decay &mdash; oscillations persist forever. The displacement is an infinite superposition of standing-wave modes, each oscillating at its own frequency $\omega_m = 3m\pi/4$.</p>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,var(--danger),#b91c1c)">
+                    <span>Example 2: Plucked string &mdash; $f(x) = \sin(\pi x/L)$, $g(x) = 0$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_{tt} = a^2\,u_{xx} \\[4pt] u(0,t) = u(L,t) = 0 \\[4pt] u(x,0) = \sin(\pi x/L),\quad u_t(x,0) = 0 \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; $A_m$ by comparison.</strong> $f(x) = \sin(\pi x/L)$ is exactly the $m=1$ eigenfunction, so $A_1 = 1$ and all other $A_m = 0$.</p>
+                    <p><strong>Step 2 &mdash; $B_m$.</strong> Since $g(x) \equiv 0$, all $B_m = 0$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \cos\!\left(\frac{\pi a}{L}\,t\right)\sin\!\left(\frac{\pi x}{L}\right).$$
+                    </div>
+
+                    <p><strong>Physical meaning:</strong> A pure sinusoidal standing wave. Every point on the string oscillates at frequency $\omega_1 = \pi a/L$, with amplitude $\sin(\pi x/L)$ depending on position. The endpoints $x=0, L$ are nodes (fixed); the midpoint $x = L/2$ is an antinode. This is the <strong>fundamental mode</strong> of the string &mdash; the lowest musical pitch it can produce.</p>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,var(--danger),#b91c1c)">
+                    <span>Example 3: Struck string &mdash; $f(x) = 0$, $g(x) = \sin(2\pi x/L)$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_{tt} = a^2\,u_{xx} \\[4pt] u(0,t) = u(L,t) = 0 \\[4pt] u(x,0) = 0,\quad u_t(x,0) = \sin(2\pi x/L) \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; $A_m$:</strong> Since $f \equiv 0$, all $A_m = 0$.</p>
+
+                    <p><strong>Step 2 &mdash; $B_m$:</strong> The velocity matches the $m = 2$ eigenfunction. In the Fourier-sine expansion $g(x) = \sum B_m(m\pi a/L)\sin(m\pi x/L)$ we match mode by mode:</p>
+                    $$B_2\,\frac{2\pi a}{L} = 1 \implies B_2 = \frac{L}{2\pi a},$$
+                    <p>and all other $B_m = 0$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \frac{L}{2\pi a}\,\sin\!\left(\frac{2\pi a}{L}\,t\right)\sin\!\left(\frac{2\pi x}{L}\right).$$
+                    </div>
+
+                    <p><strong>Physical meaning:</strong> No initial displacement, but an initial velocity kick. The string responds by oscillating in the second mode (two half-wavelengths fit in $L$). The $\sin$ in time means the displacement starts at zero and grows sinusoidally &mdash; exactly what you'd expect from an initial "kick".</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dAlembert">
+            <h2>8. Note: The d'Alembert Form</h2>
+
+            <div class="tip-box">
+                <strong>Alternative Representation</strong>
+                <p>On the infinite line (no boundaries), the wave equation also admits the closed-form d'Alembert solution</p>
+                $$u(x,t) = \frac{1}{2}\bigl[f(x + at) + f(x - at)\bigr] + \frac{1}{2a}\int_{x - at}^{x + at} g(s)\,ds.$$
+                <p>This makes explicit that the wave equation propagates disturbances at speed $a$ in both directions, without distortion. For the finite string with Dirichlet BCs, the Fourier-series solution above is equivalent to the d'Alembert form extended by periodic/odd reflection.</p>
+            </div>
+        </section>
+        <div class="page-nav-bottom">
+            <a href="ch6-bc-cases.html">&larr; BC Cases</a>
+            <a href="ch6-pde-practice.html" class="next">Next: Visualizations &amp; Practice &rarr;</a>
+        </div>
+    </main>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+        });
+
+        function toggleExample(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                icon.textContent = '\u25B2';
+                renderMathInElement(content, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            } else {
+                icon.textContent = '\u25BC';
+            }
+        }
+    </script>
+</body>
+</html>

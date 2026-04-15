@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: Heat Equation &amp; Separation of Variables | Dr. Mohamed Mabrok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-P9F00LPZD5');</script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --teal: #0891b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.65;
+            color: #1f2937;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        nav .container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+            flex-wrap: wrap;
+        }
+        nav h1 { font-size: 1.15rem; color: var(--primary); font-weight: 700; }
+        nav ul { display: flex; list-style: none; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        nav a {
+            color: #475569; text-decoration: none; font-weight: 500;
+            padding: 0.5rem 0.9rem; border-radius: 6px; transition: all 0.2s ease;
+            font-size: 0.92rem;
+        }
+        nav a:hover { background: #eff6ff; color: var(--primary); }
+        nav a.active { background: var(--primary); color: white; }
+
+        main { max-width: 1100px; margin: 90px auto 2rem; padding: 0 1.5rem; }
+
+        section { margin-bottom: 3rem; scroll-margin-top: 90px; }
+        section > h2 {
+            font-size: 1.9rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem; border-bottom: 3px solid var(--primary);
+        }
+        section > h3 { font-size: 1.3rem; color: #1e293b; margin: 1.8rem 0 1rem; }
+        section > h4 { font-size: 1.1rem; color: #374151; margin: 1.25rem 0 0.75rem; }
+        p, li { margin-bottom: 0.8rem; font-size: 0.97rem; }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box, .case-box {
+            background: white; border-left: 5px solid; border-radius: 12px;
+            padding: 1.2rem 1.4rem; margin: 1.2rem 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .definition-box { border-left-color: var(--primary); background: #eff6ff; }
+        .theorem-box { border-left-color: var(--accent); background: #f9f5ff; }
+        .example-box { border-left-color: var(--success); background: #f0fdf4; }
+        .warning-box { border-left-color: var(--warning); background: #fffbeb; }
+        .tip-box { border-left-color: var(--teal); background: #ecfeff; }
+        .case-box { border-left-color: #64748b; background: #f8fafc; }
+        .case-trivial { border-left-color: var(--danger); background: #fef2f2; }
+        .case-nontrivial { border-left-color: var(--success); background: #f0fdf4; }
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong, .case-box strong {
+            display: block; margin-bottom: 0.5rem; font-size: 1rem; color: #1e293b;
+        }
+
+        .key-step {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid var(--warning);
+            padding: 1rem 1.3rem;
+            margin: 1.2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
+        }
+        .key-step strong { display: block; color: #78350f; margin-bottom: 0.4rem; font-size: 1rem; }
+
+        .objectives { list-style: none; }
+        .objectives li { padding-left: 1.8rem; position: relative; margin-bottom: 0.6rem; }
+        .objectives li:before { content: "\2713"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        .step-list { list-style: none; counter-reset: step; padding-left: 0; }
+        .step-list > li {
+            counter-increment: step; padding-left: 3rem; position: relative;
+            margin-bottom: 1.2rem;
+        }
+        .step-list > li:before {
+            content: counter(step); position: absolute; left: 0; top: 0;
+            background: var(--primary); color: white; width: 2.1rem; height: 2.1rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.9rem;
+        }
+
+        .example-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin: 1.2rem 0; overflow: hidden; }
+        .example-header {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white; padding: 1rem 1.5rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; user-select: none; transition: background 0.3s ease;
+        }
+        .example-header:hover { background: linear-gradient(135deg, #047857, #059669); }
+        .example-header .katex { color: white; }
+        .example-content { padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .example-content.active { max-height: 8000px; padding: 1.5rem; }
+        .toggle-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+
+        .control-group {
+            background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .control-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 6px;
+            font-size: 0.9rem; font-family: 'Segoe UI', system-ui; margin-bottom: 1rem;
+        }
+        input[type="range"] { width: 100%; margin-bottom: 0.5rem; }
+        .slider-value {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-left: 0.5rem;
+        }
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 0.65rem 1.5rem; border-radius: 6px; cursor: pointer;
+            font-weight: 600; font-size: 0.92rem; transition: all 0.2s ease;
+        }
+        button:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+        .plot-container { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        .quiz-question { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e2e8f0; }
+        .quiz-question h4 { margin-bottom: 1rem; color: #1e293b; }
+        .quiz-choices { display: grid; grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 1rem; }
+        .choice-btn {
+            padding: 0.8rem 1rem; text-align: left; background: #f3f4f6;
+            border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; font-weight: 500; color: #1e293b;
+        }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex, .choice-btn.incorrect .katex { color: white; }
+        .choice-btn:hover { border-color: var(--primary); background: #eff6ff; }
+        .choice-btn.correct { border-color: var(--success); background: var(--success); color: white; }
+        .choice-btn.incorrect { border-color: var(--danger); background: var(--danger); color: white; }
+        .feedback { margin: 1rem 0; padding: 1rem; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
+        .feedback.incorrect { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
+        .progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+        .reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+        .reference-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .reference-card h4 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
+
+        .hero {
+            text-align: center; padding: 2.5rem 1rem 1.75rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f9f5ff 100%);
+            border-radius: 16px; margin-bottom: 2rem;
+        }
+        .hero h1 { font-size: 2.1rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .hero p { color: #64748b; font-size: 1.05rem; }
+        .hero .chapter-badge {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 1rem;
+        }
+
+        .page-link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .page-link {
+            display: block; padding: 1.2rem 1.3rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 12px;
+            text-decoration: none; color: inherit;
+            transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .page-link:hover {
+            border-color: var(--primary); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+        }
+        .page-link .page-num {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.25rem 0.65rem; border-radius: 6px; font-weight: 700;
+            font-size: 0.8rem; margin-bottom: 0.6rem; letter-spacing: 0.5px;
+        }
+        .page-link h3 { margin: 0 0 0.4rem; color: #1e293b; font-size: 1.1rem; }
+        .page-link p { font-size: 0.88rem; color: #64748b; margin: 0; }
+
+        .summary-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .summary-table th, .summary-table td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+        .summary-table th { background: var(--primary); color: white; font-weight: 600; }
+        .summary-table tr:nth-child(even) { background: #f8fafc; }
+
+        .page-nav-bottom {
+            display: flex; justify-content: space-between; gap: 1rem;
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;
+        }
+        .page-nav-bottom a {
+            flex: 1; padding: 1rem 1.25rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            text-decoration: none; color: var(--primary); font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .page-nav-bottom a:hover { background: var(--primary); color: white; }
+        .page-nav-bottom a.next { text-align: right; }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .hero h1 { font-size: 1.5rem; }
+            section > h2 { font-size: 1.5rem; }
+            main { padding: 0 1rem; }
+            .page-nav-bottom { flex-direction: column; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>Ch 6: PDEs</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch6-pde-intro.html">6.1 Overview</a></li>
+                <li><a href="ch6-heat-separation.html" class="active">6.2 Heat Eq.</a></li>
+                <li><a href="ch6-bc-cases.html">6.3 BC Cases</a></li>
+                <li><a href="ch6-wave-equation.html">6.4 Wave Eq.</a></li>
+                <li><a href="ch6-pde-practice.html">6.5 Practice</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+
+        <div class="hero">
+            <span class="chapter-badge">Section 6.2</span>
+            <h1>Heat Equation &amp; Separation of Variables</h1>
+            <p>Full step-by-step derivation &bull; Three-case eigenvalue analysis &bull; Fourier sine series</p>
+        </div>
+
+        <section id="setup">
+            <h2>1. Setting Up the Heat Equation</h2>
+
+            <div class="definition-box">
+                <strong>Physical Setup</strong>
+                <p>Consider a thin, laterally insulated wire of length $L$ placed along the $x$-axis from $x = 0$ to $x = L$. Let $u(x,t)$ denote the temperature at position $x$ at time $t$. The <strong>heat equation</strong> is:</p>
+                $$\frac{\partial u}{\partial t} = K\,\frac{\partial^2 u}{\partial x^2}, \qquad 0 < x < L,\quad t > 0$$
+                <p>where $K > 0$ is the <strong>thermal diffusivity</strong> of the material (a positive constant).</p>
+            </div>
+
+            <h3>Initial and Boundary Conditions</h3>
+
+            <p>To pin down a unique solution, the heat equation must be accompanied by:</p>
+
+            <div class="tip-box">
+                <strong>Required Data for a Well-Posed Heat Problem</strong>
+                <p><strong>&bull; One initial condition</strong> (temperature at $t = 0$):
+                $$u(x,0) = f(x), \qquad 0 < x < L$$</p>
+                <p><strong>&bull; Two boundary conditions</strong> (one at each end of the wire). The possibilities are:</p>
+                <p style="margin-left:1rem;"><strong>(a) Homogeneous Dirichlet:</strong> $u(0,t) = 0$ and $u(L,t) = 0$ &mdash; both ends held at zero temperature.</p>
+                <p style="margin-left:1rem;"><strong>(b) Non-homogeneous Dirichlet:</strong> $u(0,t) = T_1$, $u(L,t) = T_2$ &mdash; prescribed (non-zero) temperatures.</p>
+                <p style="margin-left:1rem;"><strong>(c) Neumann:</strong> $u_x(0,t) = 0$, $u_x(L,t) = 0$ &mdash; insulated ends (no heat flux).</p>
+            </div>
+
+            <p>This page focuses on the <strong>simplest case</strong>: homogeneous Dirichlet boundary conditions. Once you understand this case completely, the others (covered in Section 6.3) follow the same logic with minor variations.</p>
+        </section>
+
+        <section id="separation-idea">
+            <h2>2. The Separation of Variables Idea</h2>
+
+            <div class="theorem-box">
+                <strong>The Key Ansatz</strong>
+                <p>Assume the solution can be written as a <strong>product of two single-variable functions</strong>:</p>
+                $$u(x,t) = P(x)\,Q(t)$$
+                <p>where $P(x)$ depends <em>only</em> on $x$ and $Q(t)$ depends <em>only</em> on $t$.</p>
+            </div>
+
+            <p>This ansatz is bold: we are assuming the space and time parts "separate". Remarkably, for linear PDEs like the heat equation, it works &mdash; and gives us infinitely many such solutions, which we can combine to satisfy arbitrary initial data.</p>
+
+            <h3>Substituting into the Heat Equation</h3>
+
+            <p>Compute the derivatives:</p>
+
+            $$\frac{\partial u}{\partial t} = P(x)\,Q'(t), \qquad \frac{\partial^2 u}{\partial x^2} = P''(x)\,Q(t).$$
+
+            <p>Substituting both into $u_t = K u_{xx}$:</p>
+
+            $$P(x)\,Q'(t) = K\,P''(x)\,Q(t).$$
+
+            <div class="key-step">
+                <strong>Key Algebraic Step: Separate the Variables</strong>
+                <p>Divide both sides by $K\,P(x)\,Q(t)$ (assuming neither is zero):</p>
+                $$\frac{Q'(t)}{K\,Q(t)} = \frac{P''(x)}{P(x)}.$$
+                <p>The left side depends only on $t$; the right side depends only on $x$. The <em>only</em> way this can hold for all $(x,t)$ is if <strong>both sides equal the same constant</strong>. We call that constant $-\lambda$:</p>
+                $$\frac{Q'(t)}{K\,Q(t)} = \frac{P''(x)}{P(x)} = -\lambda.$$
+            </div>
+
+            <div class="tip-box">
+                <strong>Why the Minus Sign?</strong>
+                <p>The choice of $-\lambda$ (rather than $+\lambda$) is a convention that makes the final eigenvalues $\lambda$ come out <em>positive</em>. It has no mathematical consequence &mdash; the equations would be equivalent with the opposite sign.</p>
+            </div>
+
+            <h3>The Two ODEs</h3>
+
+            <p>The single PDE has now been replaced by <strong>two ordinary differential equations</strong>, coupled through the common constant $\lambda$:</p>
+
+            <div class="theorem-box">
+                <strong>Spatial ODE (for $P$)</strong>
+                $$P''(x) + \lambda\,P(x) = 0, \qquad 0 < x < L$$
+                <p>with the <strong>spatial boundary conditions</strong> inherited from $u(0,t) = u(L,t) = 0$:</p>
+                $$P(0) = 0, \qquad P(L) = 0.$$
+            </div>
+
+            <div class="theorem-box">
+                <strong>Temporal ODE (for $Q$)</strong>
+                $$Q'(t) + K\lambda\,Q(t) = 0, \qquad t > 0.$$
+                <p>This is a simple first-order linear ODE with solution $Q(t) = C\,e^{-K\lambda t}$ (once $\lambda$ is known).</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>Inherited Boundary Conditions &mdash; A Crucial Point</strong>
+                <p>Since $u(0,t) = P(0)\,Q(t) = 0$ must hold for all $t > 0$, we need $P(0) = 0$ (otherwise $Q(t) \equiv 0$ and the solution is trivially zero). Similarly $P(L) = 0$.</p>
+                <p>So the <em>boundary conditions migrate from the PDE to the spatial ODE</em>. This is why the spatial problem is a <strong>boundary value problem</strong> rather than an initial value problem.</p>
+            </div>
+        </section>
+
+        <section id="three-cases">
+            <h2>3. The Three-Case Analysis of $\lambda$</h2>
+
+            <p>We now solve the spatial BVP</p>
+            $$P''(x) + \lambda\,P(x) = 0, \qquad P(0) = 0,\quad P(L) = 0.$$
+
+            <p>The form of the general solution depends on the <strong>sign of $\lambda$</strong>. There are exactly three possibilities &mdash; $\lambda < 0$, $\lambda = 0$, or $\lambda > 0$ &mdash; and we <em>must analyse each one</em>. Only one of them will produce non-trivial solutions compatible with the boundary conditions.</p>
+
+            <!-- ========== CASE I ========== -->
+            <div class="case-box case-trivial">
+                <strong>Case I: $\lambda < 0$ &nbsp;(let $\lambda = -\alpha^2$ with $\alpha > 0$)</strong>
+
+                <p><strong>Step 1 &mdash; General solution.</strong> The ODE becomes</p>
+                $$P''(x) - \alpha^2\,P(x) = 0,$$
+                <p>a second-order linear ODE with constant coefficients whose characteristic equation $r^2 - \alpha^2 = 0$ has real roots $r = \pm\alpha$. The general solution is</p>
+                $$P(x) = C_1\,e^{\alpha x} + C_2\,e^{-\alpha x},$$
+                <p>or equivalently, using hyperbolic functions,</p>
+                $$P(x) = A\,\cosh(\alpha x) + B\,\sinh(\alpha x).$$
+
+                <p><strong>Step 2 &mdash; Apply $P(0) = 0$.</strong></p>
+                $$P(0) = A\,\cosh(0) + B\,\sinh(0) = A\cdot 1 + B\cdot 0 = A.$$
+                <p>So $A = 0$ and $P(x) = B\,\sinh(\alpha x)$.</p>
+
+                <p><strong>Step 3 &mdash; Apply $P(L) = 0$.</strong></p>
+                $$P(L) = B\,\sinh(\alpha L) = 0.$$
+                <p>Since $\alpha > 0$ and $L > 0$, we have $\alpha L > 0$, and $\sinh(\alpha L) > 0$ (it is zero only at zero). Therefore the only way to satisfy this is $B = 0$.</p>
+
+                <div style="background:#fef2f2; padding:0.75rem 1rem; border-radius:8px; border-left:3px solid var(--danger); margin-top:0.8rem;">
+                    <strong style="color:var(--danger);">Conclusion for Case I:</strong> $A = B = 0$, so $P(x) \equiv 0$ &mdash; only the <strong>trivial solution</strong>. No useful eigenfunctions from this case.
+                </div>
+            </div>
+
+            <!-- ========== CASE II ========== -->
+            <div class="case-box case-trivial">
+                <strong>Case II: $\lambda = 0$</strong>
+
+                <p><strong>Step 1 &mdash; General solution.</strong> The ODE becomes</p>
+                $$P''(x) = 0,$$
+                <p>which we integrate twice to get</p>
+                $$P(x) = C_1\,x + C_2.$$
+
+                <p><strong>Step 2 &mdash; Apply $P(0) = 0$.</strong></p>
+                $$P(0) = C_1\cdot 0 + C_2 = C_2 = 0,$$
+                <p>so $P(x) = C_1\,x$.</p>
+
+                <p><strong>Step 3 &mdash; Apply $P(L) = 0$.</strong></p>
+                $$P(L) = C_1\,L = 0 \implies C_1 = 0.$$
+
+                <div style="background:#fef2f2; padding:0.75rem 1rem; border-radius:8px; border-left:3px solid var(--danger); margin-top:0.8rem;">
+                    <strong style="color:var(--danger);">Conclusion for Case II:</strong> $C_1 = C_2 = 0$, so $P(x) \equiv 0$ &mdash; only the <strong>trivial solution</strong> again.
+                </div>
+            </div>
+
+            <!-- ========== CASE III ========== -->
+            <div class="case-box case-nontrivial">
+                <strong>Case III: $\lambda > 0$ &nbsp;(let $\lambda = \alpha^2$ with $\alpha > 0$)</strong>
+
+                <p><strong>Step 1 &mdash; General solution.</strong> The ODE becomes</p>
+                $$P''(x) + \alpha^2\,P(x) = 0,$$
+                <p>whose characteristic equation $r^2 + \alpha^2 = 0$ has complex roots $r = \pm i\alpha$. The general real solution is</p>
+                $$P(x) = A\,\cos(\alpha x) + B\,\sin(\alpha x).$$
+
+                <p><strong>Step 2 &mdash; Apply $P(0) = 0$.</strong></p>
+                $$P(0) = A\,\cos(0) + B\,\sin(0) = A\cdot 1 + B\cdot 0 = A.$$
+                <p>So $A = 0$ and $P(x) = B\,\sin(\alpha x)$.</p>
+
+                <p><strong>Step 3 &mdash; Apply $P(L) = 0$.</strong></p>
+                $$P(L) = B\,\sin(\alpha L) = 0.$$
+                <p>Here we have a <em>choice</em>: either $B = 0$ (trivial) or</p>
+                $$\sin(\alpha L) = 0.$$
+                <p>We insist on a <strong>non-trivial</strong> solution, so we demand $\sin(\alpha L) = 0$. This happens precisely when</p>
+                $$\alpha L = m\pi, \qquad m = 1,\,2,\,3,\,\ldots$$
+                <p>Hence $\alpha_m = \dfrac{m\pi}{L}$, and the eigenvalues are</p>
+                $$\boxed{\;\lambda_m = \alpha_m^2 = \left(\frac{m\pi}{L}\right)^2,\quad m = 1, 2, 3, \ldots\;}$$
+                <p>The corresponding non-trivial solutions (the <strong>eigenfunctions</strong>) are</p>
+                $$\boxed{\;P_m(x) = \sin\!\left(\frac{m\pi x}{L}\right),\quad m = 1, 2, 3, \ldots\;}$$
+
+                <div style="background:#f0fdf4; padding:0.75rem 1rem; border-radius:8px; border-left:3px solid var(--success); margin-top:0.8rem;">
+                    <strong style="color:var(--success);">Conclusion for Case III:</strong> <strong>Non-trivial solutions exist!</strong> We obtain an infinite family of eigenvalues $\lambda_m$ and eigenfunctions $\sin(m\pi x/L)$, indexed by positive integers $m$.
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Summary of the Three Cases</strong>
+                <table class="summary-table" style="margin-top:0.5rem;">
+                    <tr><th style="width:25%">Case</th><th style="width:40%">General Solution of $P$</th><th>Result under $P(0)=P(L)=0$</th></tr>
+                    <tr><td>I: $\lambda < 0$</td><td>$A\cosh(\alpha x)+B\sinh(\alpha x)$</td><td style="color:var(--danger);"><strong>Trivial only</strong></td></tr>
+                    <tr><td>II: $\lambda = 0$</td><td>$C_1\,x + C_2$</td><td style="color:var(--danger);"><strong>Trivial only</strong></td></tr>
+                    <tr><td>III: $\lambda > 0$</td><td>$A\cos(\alpha x)+B\sin(\alpha x)$</td><td style="color:var(--success);"><strong>$\sin(m\pi x/L)$ for $m=1,2,\ldots$</strong></td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="temporal">
+            <h2>4. Solving the Temporal ODE</h2>
+
+            <p>Now that we know $\lambda = \lambda_m = (m\pi/L)^2$, the temporal equation becomes</p>
+            $$Q'(t) + K\lambda_m\,Q(t) = 0,$$
+            <p>which is first-order linear and separable. Its solution is</p>
+            $$Q_m(t) = C\,e^{-K\lambda_m t} = C\,\exp\!\left[-K\left(\frac{m\pi}{L}\right)^2 t\right].$$
+
+            <div class="tip-box">
+                <strong>Physical Meaning of the Decay Rate</strong>
+                <p>The decay rate $K(m\pi/L)^2$ is <em>larger</em> for higher modes ($m$). High-frequency (wiggly) components of the temperature profile die out <strong>fastest</strong>, while low-frequency (smooth) components persist. This is why heat conduction always smooths out an initial temperature profile over time.</p>
+            </div>
+        </section>
+
+        <section id="general-solution">
+            <h2>5. Building the General Solution</h2>
+
+            <p>For each $m = 1, 2, 3, \ldots$ we have a product solution:</p>
+
+            $$u_m(x,t) = P_m(x)\,Q_m(t) = C_m\,\sin\!\left(\frac{m\pi x}{L}\right)\,\exp\!\left[-K\left(\frac{m\pi}{L}\right)^2 t\right].$$
+
+            <p>Because the heat equation is linear and homogeneous (and the boundary conditions are zero), <strong>any linear combination of solutions is again a solution</strong>. This is the principle of superposition. We therefore write the general solution as an infinite sum over all modes:</p>
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Homogeneous Heat Equation</strong>
+                $$\boxed{\;u(x,t) = \sum_{m=1}^{\infty} C_m\,\sin\!\left(\frac{m\pi x}{L}\right)\,\exp\!\left[-K\left(\frac{m\pi}{L}\right)^2 t\right]\;}$$
+                <p>The constants $C_m$ are chosen to match the initial condition $u(x,0) = f(x)$.</p>
+            </div>
+
+            <h3>Applying the Initial Condition &mdash; Fourier Sine Series</h3>
+
+            <p>Setting $t = 0$ in the general solution:</p>
+            $$u(x,0) = \sum_{m=1}^{\infty} C_m\,\sin\!\left(\frac{m\pi x}{L}\right) = f(x).$$
+
+            <p>This is exactly the <strong>Fourier sine series</strong> of $f(x)$ on the interval $[0, L]$. Using the orthogonality relation</p>
+            $$\int_0^L \sin\!\left(\frac{m\pi x}{L}\right)\sin\!\left(\frac{n\pi x}{L}\right)dx = \begin{cases}0 & m \neq n\\ L/2 & m = n\end{cases}$$
+
+            <p>we can extract the coefficients: multiply both sides by $\sin(n\pi x/L)$ and integrate from $0$ to $L$:</p>
+
+            <div class="theorem-box">
+                <strong>Fourier Sine Coefficients</strong>
+                $$\boxed{\;C_m = \frac{2}{L}\int_0^L f(x)\,\sin\!\left(\frac{m\pi x}{L}\right)dx,\qquad m = 1,2,3,\ldots\;}$$
+            </div>
+
+            <div class="key-step">
+                <strong>Shortcut: Comparison Method</strong>
+                <p>If $f(x)$ is <em>already</em> written as a finite sine series &mdash; e.g., $f(x) = 3\sin(2\pi x/L) - 5\sin(7\pi x/L)$ &mdash; you can read the coefficients off directly by matching: $C_2 = 3$, $C_7 = -5$, all others zero. <strong>No integration needed.</strong></p>
+            </div>
+        </section>
+
+        <section id="method-summary">
+            <h2>6. Method Summary (The 5-Step Procedure)</h2>
+
+            <ul class="step-list">
+                <li><strong>Separate variables.</strong> Assume $u(x,t) = P(x)Q(t)$ and substitute into $u_t = K u_{xx}$. Divide by $KPQ$ to obtain $Q'/(KQ) = P''/P = -\lambda$.</li>
+                <li><strong>Write the two ODEs</strong> with the spatial boundary conditions inherited from the PDE's BCs.</li>
+                <li><strong>Solve the spatial BVP</strong> by analysing all three cases $\lambda < 0$, $\lambda = 0$, $\lambda > 0$. For homogeneous Dirichlet BCs, only $\lambda > 0$ yields non-trivial solutions with eigenvalues $\lambda_m = (m\pi/L)^2$ and eigenfunctions $\sin(m\pi x/L)$.</li>
+                <li><strong>Solve the temporal ODE</strong> using the known $\lambda_m$: $Q_m(t) = C_m\,e^{-K\lambda_m t}$.</li>
+                <li><strong>Superpose and fit the initial condition</strong>: write $u = \sum C_m P_m Q_m$ and determine $C_m$ from $u(x,0) = f(x)$, either by comparison (if $f$ is already a sine sum) or by the Fourier sine coefficient formula.</li>
+            </ul>
+        </section>
+
+        <section id="examples">
+            <h2>7. Worked Examples</h2>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 1: $K=7$, $L=\pi$, $f(x) = 3\sin(2x) - 6\sin(5x)$ &mdash; comparison method</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = 7\,u_{xx}, \quad 0 < x < \pi,\; t > 0 \\[4pt] u(0,t) = u(\pi,t) = 0 \\[4pt] u(x,0) = 3\sin(2x) - 6\sin(5x) \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; Read parameters.</strong> $K = 7$, $L = \pi$. The general solution is</p>
+                    $$u(x,t) = \sum_{m=1}^{\infty} C_m\,\sin(mx)\,e^{-7 m^2 t}.$$
+                    <p>(Note that $m\pi/L = m\pi/\pi = m$, which is why the arguments of the sines are just $mx$.)</p>
+
+                    <p><strong>Step 2 &mdash; Apply IC by comparison.</strong> At $t=0$:</p>
+                    $$\sum_{m=1}^{\infty} C_m\,\sin(mx) = 3\sin(2x) - 6\sin(5x).$$
+                    <p>Matching coefficients: $C_2 = 3$, $C_5 = -6$, and $C_m = 0$ for all other $m$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = 3\,e^{-28 t}\,\sin(2x) - 6\,e^{-175 t}\,\sin(5x).$$
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 2: $K=4$, $L=4$, $f(x) = 5\sin(\pi x)$ &mdash; matching by index</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = 4\,u_{xx} \\[4pt] u(0,t) = u(4,t) = 0 \\[4pt] u(x,0) = 5\sin(\pi x) \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; General form.</strong> With $K=4$, $L=4$:</p>
+                    $$u(x,t) = \sum_{m=1}^{\infty} C_m\,\sin\!\left(\frac{m\pi x}{4}\right)\,e^{-4(m\pi/4)^2 t} = \sum_{m=1}^{\infty} C_m\,\sin\!\left(\frac{m\pi x}{4}\right)\,e^{-(m\pi)^2 t/4}.$$
+
+                    <p><strong>Step 2 &mdash; Match the IC.</strong> We need $\sum C_m \sin(m\pi x/4) = 5\sin(\pi x)$. Setting $m\pi/4 = \pi$ gives $m = 4$, so $C_4 = 5$, all other $C_m = 0$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = 5\,e^{-4\pi^2 t}\,\sin(\pi x).$$
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 3: $K=4$, $L=4$, $f(x) = x - 1$ &mdash; integration required</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = 4\,u_{xx}, \quad 0 < x < 4 \\[4pt] u(0,t) = u(4,t) = 0 \\[4pt] u(x,0) = x - 1 \end{cases}$$
+                    </div>
+
+                    <p>The initial condition is a polynomial, not a sine sum, so we must compute the Fourier sine coefficients by integration.</p>
+
+                    <p><strong>Step 1 &mdash; Set up the coefficient formula.</strong> With $L = 4$:</p>
+                    $$C_m = \frac{2}{4}\int_0^4 (x-1)\,\sin\!\left(\frac{m\pi x}{4}\right)\,dx = \frac{1}{2}\int_0^4 (x-1)\,\sin\!\left(\frac{m\pi x}{4}\right)\,dx.$$
+
+                    <p><strong>Step 2 &mdash; Integration by parts.</strong> Let $u = x - 1$, $dv = \sin(m\pi x/4)\,dx$, so $du = dx$, $v = -\dfrac{4}{m\pi}\cos(m\pi x/4)$. Then</p>
+                    $$\int_0^4 (x-1)\sin\!\left(\frac{m\pi x}{4}\right)dx = \left[-\frac{4(x-1)}{m\pi}\cos\!\left(\frac{m\pi x}{4}\right)\right]_0^4 + \frac{4}{m\pi}\int_0^4 \cos\!\left(\frac{m\pi x}{4}\right)dx.$$
+
+                    <p>The remaining integral is</p>
+                    $$\frac{4}{m\pi}\cdot\left[\frac{4}{m\pi}\sin\!\left(\frac{m\pi x}{4}\right)\right]_0^4 = 0$$
+                    <p>because $\sin(m\pi) = 0$ and $\sin(0) = 0$.</p>
+
+                    <p>Evaluating the boundary term:</p>
+                    $$\left[-\frac{4(x-1)}{m\pi}\cos\!\left(\frac{m\pi x}{4}\right)\right]_0^4 = -\frac{4\cdot 3}{m\pi}\cos(m\pi) + \frac{4\cdot(-1)}{m\pi}\cdot 1 = -\frac{12(-1)^m}{m\pi} - \frac{4}{m\pi}.$$
+
+                    <p>Therefore</p>
+                    $$C_m = \frac{1}{2}\left[-\frac{12(-1)^m + 4}{m\pi}\right] = -\frac{2}{m\pi}\left[1 + 3(-1)^m\right].$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \sum_{m=1}^{\infty} -\frac{2}{m\pi}\left[1 + 3(-1)^m\right]\,\sin\!\left(\frac{m\pi x}{4}\right)\,e^{-(m\pi)^2 t/4}.$$
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Sanity check on the coefficients</strong>
+                        <p>For $m$ even: $(-1)^m = 1$, so $C_m = -\dfrac{2}{m\pi}(1+3) = -\dfrac{8}{m\pi}$.</p>
+                        <p>For $m$ odd: $(-1)^m = -1$, so $C_m = -\dfrac{2}{m\pi}(1-3) = \dfrac{4}{m\pi}$.</p>
+                        <p>All non-zero, as expected for a non-symmetric initial condition.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example 4: Constant initial temperature $f(x) = 20$, homogeneous Dirichlet BCs</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = K u_{xx} \\[4pt] u(x,0) = 20, \quad u(0,t) = u(L,t) = 0 \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; Fourier sine coefficients.</strong></p>
+                    $$C_m = \frac{2}{L}\int_0^L 20\,\sin\!\left(\frac{m\pi x}{L}\right)dx = \frac{40}{L}\cdot\left[-\frac{L}{m\pi}\cos\!\left(\frac{m\pi x}{L}\right)\right]_0^L = \frac{40}{m\pi}\left[1 - (-1)^m\right].$$
+
+                    <p><strong>Step 2 &mdash; Simplify.</strong></p>
+                    <p>For $m$ even: $C_m = 0$.</p>
+                    <p>For $m$ odd: $C_m = \dfrac{80}{m\pi}$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \sum_{\substack{m=1\\m\,\text{odd}}}^{\infty} \frac{80}{m\pi}\,\sin\!\left(\frac{m\pi x}{L}\right)\,e^{-K(m\pi/L)^2 t}.$$
+                    </div>
+
+                    <p><strong>Physical interpretation:</strong> Starting from a uniform temperature $20$, the wire is held at zero at both ends. Heat flows out through the boundaries and the interior cools down, approaching zero everywhere as $t \to \infty$. The odd-$m$ eigenfunctions (symmetric about $x = L/2$) survive because they match the symmetry of the constant initial data.</p>
+                </div>
+            </div>
+        </section>
+        <div class="page-nav-bottom">
+            <a href="ch6-pde-intro.html">&larr; Overview</a>
+            <a href="ch6-bc-cases.html" class="next">Next: Boundary Condition Cases &rarr;</a>
+        </div>
+    </main>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+        });
+
+        function toggleExample(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                icon.textContent = '\u25B2';
+                renderMathInElement(content, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            } else {
+                icon.textContent = '\u25BC';
+            }
+        }
+    </script>
+</body>
+</html>

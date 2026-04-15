@@ -1070,16 +1070,53 @@
   <!-- Chapter 6 Detail -->
   <div class="ch1-detail" id="chapter6">
     <h2>Chapter 6 — Introduction to Partial Differential Equations</h2>
-    <p>From ODEs to PDEs: learn the fundamental techniques for solving the heat equation, wave equation, and Laplace's equation using separation of variables and Fourier series.</p>
+    <p>From ODEs to PDEs: learn the fundamental techniques for solving the heat equation, wave equation, and Laplace's equation using separation of variables and Fourier series. This chapter is organised into <strong>five focused pages</strong> for clarity.</p>
+
+    <!-- Overview (start here) -->
+    <a class="topic-card" href="ch6-pde-intro.html" style="margin-bottom:1.5rem; border:2px solid var(--primary); background:var(--primary-light);">
+      <div class="topic-icon" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">&#9733;</div>
+      <div>
+        <h4>Chapter 6 Overview — Start Here</h4>
+        <p>The big picture: definitions, classification of PDEs, the three classical equations (heat, wave, Laplace), and a roadmap of the chapter.</p>
+        <div class="math-preview">\(u_t = K\,u_{xx},\quad u_{tt} = a^2 u_{xx},\quad \nabla^2 u = 0\)</div>
+      </div>
+    </a>
 
     <div class="topic-grid">
 
-      <a class="topic-card" href="ch6-pde-intro.html">
-        <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">P</div>
+      <a class="topic-card" href="ch6-heat-separation.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #059669, #10b981);">H</div>
         <div>
-          <h4>6.1 — Introduction to PDEs</h4>
-          <p>Definition, classification, the three classical PDEs, separation of variables, Fourier series solutions, and boundary value problems.</p>
-          <div class="math-preview">\(u_t = K\,u_{xx}\)</div>
+          <h4>6.2 — Heat Eq. &amp; Separation of Variables</h4>
+          <p>Full derivation of separation of variables with the complete <strong>three-case analysis</strong> of the separation constant $\lambda$.</p>
+          <div class="math-preview">\(\lambda_m = (m\pi/L)^2\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch6-bc-cases.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">B</div>
+        <div>
+          <h4>6.3 — Three Types of Boundary Conditions</h4>
+          <p>Detailed case-by-case treatment: non-homogeneous Dirichlet, PDE with source term, and Neumann (where $\lambda=0$ becomes non-trivial).</p>
+          <div class="math-preview">\(u = V(x) + w(x,t)\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch6-wave-equation.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">W</div>
+        <div>
+          <h4>6.4 — The Wave Equation</h4>
+          <p>Same spatial three-case analysis, but second-order temporal ODE giving oscillations. Two initial conditions &mdash; displacement and velocity.</p>
+          <div class="math-preview">\(u_{tt} = a^2 u_{xx}\)</div>
+        </div>
+      </a>
+
+      <a class="topic-card" href="ch6-pde-practice.html">
+        <div class="topic-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">V</div>
+        <div>
+          <h4>6.5 — Visualizations &amp; Practice</h4>
+          <p>Interactive heat &amp; wave simulators, 6-question self-assessment quiz, summary table, and quick-reference card.</p>
+          <div class="math-preview">\(\text{interactive}\)</div>
         </div>
       </a>
 

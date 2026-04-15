@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: PDE Practice &amp; Visualizations | Dr. Mohamed Mabrok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-P9F00LPZD5');</script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --teal: #0891b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.65;
+            color: #1f2937;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        nav .container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+            flex-wrap: wrap;
+        }
+        nav h1 { font-size: 1.15rem; color: var(--primary); font-weight: 700; }
+        nav ul { display: flex; list-style: none; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        nav a {
+            color: #475569; text-decoration: none; font-weight: 500;
+            padding: 0.5rem 0.9rem; border-radius: 6px; transition: all 0.2s ease;
+            font-size: 0.92rem;
+        }
+        nav a:hover { background: #eff6ff; color: var(--primary); }
+        nav a.active { background: var(--primary); color: white; }
+
+        main { max-width: 1100px; margin: 90px auto 2rem; padding: 0 1.5rem; }
+
+        section { margin-bottom: 3rem; scroll-margin-top: 90px; }
+        section > h2 {
+            font-size: 1.9rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem; border-bottom: 3px solid var(--primary);
+        }
+        section > h3 { font-size: 1.3rem; color: #1e293b; margin: 1.8rem 0 1rem; }
+        section > h4 { font-size: 1.1rem; color: #374151; margin: 1.25rem 0 0.75rem; }
+        p, li { margin-bottom: 0.8rem; font-size: 0.97rem; }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box, .case-box {
+            background: white; border-left: 5px solid; border-radius: 12px;
+            padding: 1.2rem 1.4rem; margin: 1.2rem 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .definition-box { border-left-color: var(--primary); background: #eff6ff; }
+        .theorem-box { border-left-color: var(--accent); background: #f9f5ff; }
+        .example-box { border-left-color: var(--success); background: #f0fdf4; }
+        .warning-box { border-left-color: var(--warning); background: #fffbeb; }
+        .tip-box { border-left-color: var(--teal); background: #ecfeff; }
+        .case-box { border-left-color: #64748b; background: #f8fafc; }
+        .case-trivial { border-left-color: var(--danger); background: #fef2f2; }
+        .case-nontrivial { border-left-color: var(--success); background: #f0fdf4; }
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong, .case-box strong {
+            display: block; margin-bottom: 0.5rem; font-size: 1rem; color: #1e293b;
+        }
+
+        .key-step {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid var(--warning);
+            padding: 1rem 1.3rem;
+            margin: 1.2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
+        }
+        .key-step strong { display: block; color: #78350f; margin-bottom: 0.4rem; font-size: 1rem; }
+
+        .objectives { list-style: none; }
+        .objectives li { padding-left: 1.8rem; position: relative; margin-bottom: 0.6rem; }
+        .objectives li:before { content: "\2713"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        .step-list { list-style: none; counter-reset: step; padding-left: 0; }
+        .step-list > li {
+            counter-increment: step; padding-left: 3rem; position: relative;
+            margin-bottom: 1.2rem;
+        }
+        .step-list > li:before {
+            content: counter(step); position: absolute; left: 0; top: 0;
+            background: var(--primary); color: white; width: 2.1rem; height: 2.1rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.9rem;
+        }
+
+        .example-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin: 1.2rem 0; overflow: hidden; }
+        .example-header {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white; padding: 1rem 1.5rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; user-select: none; transition: background 0.3s ease;
+        }
+        .example-header:hover { background: linear-gradient(135deg, #047857, #059669); }
+        .example-header .katex { color: white; }
+        .example-content { padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .example-content.active { max-height: 8000px; padding: 1.5rem; }
+        .toggle-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+
+        .control-group {
+            background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .control-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 6px;
+            font-size: 0.9rem; font-family: 'Segoe UI', system-ui; margin-bottom: 1rem;
+        }
+        input[type="range"] { width: 100%; margin-bottom: 0.5rem; }
+        .slider-value {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-left: 0.5rem;
+        }
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 0.65rem 1.5rem; border-radius: 6px; cursor: pointer;
+            font-weight: 600; font-size: 0.92rem; transition: all 0.2s ease;
+        }
+        button:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+        .plot-container { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        .quiz-question { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e2e8f0; }
+        .quiz-question h4 { margin-bottom: 1rem; color: #1e293b; }
+        .quiz-choices { display: grid; grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 1rem; }
+        .choice-btn {
+            padding: 0.8rem 1rem; text-align: left; background: #f3f4f6;
+            border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; font-weight: 500; color: #1e293b;
+        }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex, .choice-btn.incorrect .katex { color: white; }
+        .choice-btn:hover { border-color: var(--primary); background: #eff6ff; }
+        .choice-btn.correct { border-color: var(--success); background: var(--success); color: white; }
+        .choice-btn.incorrect { border-color: var(--danger); background: var(--danger); color: white; }
+        .feedback { margin: 1rem 0; padding: 1rem; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
+        .feedback.incorrect { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
+        .progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+        .reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+        .reference-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .reference-card h4 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
+
+        .hero {
+            text-align: center; padding: 2.5rem 1rem 1.75rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f9f5ff 100%);
+            border-radius: 16px; margin-bottom: 2rem;
+        }
+        .hero h1 { font-size: 2.1rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .hero p { color: #64748b; font-size: 1.05rem; }
+        .hero .chapter-badge {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 1rem;
+        }
+
+        .page-link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .page-link {
+            display: block; padding: 1.2rem 1.3rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 12px;
+            text-decoration: none; color: inherit;
+            transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .page-link:hover {
+            border-color: var(--primary); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+        }
+        .page-link .page-num {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.25rem 0.65rem; border-radius: 6px; font-weight: 700;
+            font-size: 0.8rem; margin-bottom: 0.6rem; letter-spacing: 0.5px;
+        }
+        .page-link h3 { margin: 0 0 0.4rem; color: #1e293b; font-size: 1.1rem; }
+        .page-link p { font-size: 0.88rem; color: #64748b; margin: 0; }
+
+        .summary-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .summary-table th, .summary-table td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+        .summary-table th { background: var(--primary); color: white; font-weight: 600; }
+        .summary-table tr:nth-child(even) { background: #f8fafc; }
+
+        .page-nav-bottom {
+            display: flex; justify-content: space-between; gap: 1rem;
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;
+        }
+        .page-nav-bottom a {
+            flex: 1; padding: 1rem 1.25rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            text-decoration: none; color: var(--primary); font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .page-nav-bottom a:hover { background: var(--primary); color: white; }
+        .page-nav-bottom a.next { text-align: right; }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .hero h1 { font-size: 1.5rem; }
+            section > h2 { font-size: 1.5rem; }
+            main { padding: 0 1rem; }
+            .page-nav-bottom { flex-direction: column; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>Ch 6: PDEs</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch6-pde-intro.html">6.1 Overview</a></li>
+                <li><a href="ch6-heat-separation.html">6.2 Heat Eq.</a></li>
+                <li><a href="ch6-bc-cases.html">6.3 BC Cases</a></li>
+                <li><a href="ch6-wave-equation.html">6.4 Wave Eq.</a></li>
+                <li><a href="ch6-pde-practice.html" class="active">6.5 Practice</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+
+        <div class="hero">
+            <span class="chapter-badge">Section 6.5</span>
+            <h1>Visualizations &amp; Practice</h1>
+            <p>Interactive heat &amp; wave simulators &bull; 6-question quiz &bull; Summary &amp; reference</p>
+        </div>
+
+        <section id="visualize">
+            <h2>Interactive Visualizations</h2>
+
+            <h3>Heat Equation Simulator</h3>
+            <p>Watch an initial temperature profile evolve over time as heat diffuses. Adjust $K$, $L$, the number of Fourier terms, and the initial condition to explore different behaviours.</p>
+
+            <div class="control-group">
+                <label>Thermal Diffusivity $K$: <span class="slider-value" id="kVal">1.0</span></label>
+                <input type="range" id="kSlider" min="0.1" max="10" step="0.1" value="1.0" oninput="document.getElementById('kVal').textContent=this.value">
+
+                <label>Rod Length $L$: <span class="slider-value" id="lVal">4</span></label>
+                <input type="range" id="lSlider" min="1" max="10" step="1" value="4" oninput="document.getElementById('lVal').textContent=this.value">
+
+                <label>Number of Fourier Terms: <span class="slider-value" id="nVal">20</span></label>
+                <input type="range" id="nTerms" min="1" max="50" step="1" value="20" oninput="document.getElementById('nVal').textContent=this.value">
+
+                <label>Initial Condition:</label>
+                <select id="icSelect">
+                    <option value="x-1">$f(x) = x - 1$</option>
+                    <option value="sin">$f(x) = \sin(\pi x/L)$</option>
+                    <option value="constant">$f(x) = 20$ (constant)</option>
+                    <option value="triangle">$f(x)$ = triangle wave</option>
+                </select>
+
+                <button onclick="plotHeat()">Plot Heat Evolution</button>
+            </div>
+
+            <div class="plot-container" id="heatPlot" style="min-height:400px;"></div>
+
+            <div class="tip-box">
+                <strong>What to Observe</strong>
+                <ul style="margin-left:1.2rem;">
+                    <li>High-frequency wiggles in the initial profile die out first.</li>
+                    <li>Larger $K$ makes the solution smooth out faster.</li>
+                    <li>With homogeneous Dirichlet BCs, $u \to 0$ as $t \to \infty$.</li>
+                </ul>
+            </div>
+
+            <h3>Wave Equation Simulator</h3>
+            <p>See how a vibrating string (plucked from initial shape $f(x) = \sin(\pi x/L)$) oscillates. The wave equation preserves energy &mdash; solutions do <em>not</em> decay.</p>
+
+            <div class="control-group">
+                <label>Wave Speed $a$: <span class="slider-value" id="aVal">3</span></label>
+                <input type="range" id="aSlider" min="1" max="10" step="0.5" value="3" oninput="document.getElementById('aVal').textContent=this.value">
+
+                <button onclick="plotWave()">Plot Wave Motion</button>
+            </div>
+
+            <div class="plot-container" id="wavePlot" style="min-height:400px;"></div>
+        </section>
+
+        <section id="quiz">
+            <h2>Practice Quiz</h2>
+            <p>Test your understanding of the key ideas in Chapter 6. Click a choice to check your answer.</p>
+
+            <div class="quiz-question">
+                <h4>Q1: Which equation is the heat equation?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(1, 0)">(A) $\dfrac{\partial^2 u}{\partial t^2} = c^2 \dfrac{\partial^2 u}{\partial x^2}$</button>
+                    <button class="choice-btn" onclick="checkChoice(1, 1)">(B) $\dfrac{\partial u}{\partial t} = K \dfrac{\partial^2 u}{\partial x^2}$</button>
+                    <button class="choice-btn" onclick="checkChoice(1, 2)">(C) $\dfrac{\partial^2 u}{\partial x^2} + \dfrac{\partial^2 u}{\partial y^2} = 0$</button>
+                    <button class="choice-btn" onclick="checkChoice(1, 3)">(D) $\dfrac{\partial u}{\partial t} + u\dfrac{\partial u}{\partial x} = 0$</button>
+                </div>
+                <div class="feedback" id="feedback-1">
+                    <p><strong>Correct!</strong> The heat equation is $u_t = K u_{xx}$ &mdash; first-order in time, second-order in space.</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q2: For the heat equation on $[0, L]$ with <em>homogeneous Dirichlet</em> BCs, which three-case outcome holds?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(2, 0)">(A) Only $\lambda &lt; 0$ gives non-trivial solutions</button>
+                    <button class="choice-btn" onclick="checkChoice(2, 1)">(B) Only $\lambda &gt; 0$ gives non-trivial solutions; $\lambda_m = (m\pi/L)^2$</button>
+                    <button class="choice-btn" onclick="checkChoice(2, 2)">(C) Both $\lambda = 0$ and $\lambda &gt; 0$ give non-trivial solutions</button>
+                    <button class="choice-btn" onclick="checkChoice(2, 3)">(D) All three cases produce non-trivial solutions</button>
+                </div>
+                <div class="feedback" id="feedback-2">
+                    <p><strong>Correct!</strong> Cases $\lambda &lt; 0$ and $\lambda = 0$ both force the trivial solution. Only $\lambda &gt; 0$ with $\sin(\alpha L) = 0$ produces the family $\sin(m\pi x/L)$.</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q3: Solve $u_t = 7u_{xx}$ on $[0,\pi]$ with $u(0,t)=u(\pi,t)=0$ and $u(x,0) = 3\sin(2x) - 6\sin(5x)$.</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(3, 0)">(A) $u = 3e^{-14t}\sin(2x) - 6e^{-35t}\sin(5x)$</button>
+                    <button class="choice-btn" onclick="checkChoice(3, 1)">(B) $u = 3e^{-28t}\sin(2x) - 6e^{-175t}\sin(5x)$</button>
+                    <button class="choice-btn" onclick="checkChoice(3, 2)">(C) $u = 3\sin(2x) - 6\sin(5x)$</button>
+                    <button class="choice-btn" onclick="checkChoice(3, 3)">(D) $u = 3e^{-7t}\sin(2x) - 6e^{-7t}\sin(5x)$</button>
+                </div>
+                <div class="feedback" id="feedback-3">
+                    <p><strong>Correct!</strong> With $L = \pi$, the decay rate of mode $m$ is $K m^2 = 7 m^2$. So mode 2 decays at rate $28$ and mode 5 at rate $175$.</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q4: For non-homogeneous Dirichlet BCs $u(0,t) = T_1$, $u(L,t) = T_2$, the steady-state is:</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(4, 0)">(A) $V(x) = T_1 + \dfrac{T_2 - T_1}{L}\,x$</button>
+                    <button class="choice-btn" onclick="checkChoice(4, 1)">(B) $V(x) = T_1 e^{-x}$</button>
+                    <button class="choice-btn" onclick="checkChoice(4, 2)">(C) $V(x) = \dfrac{T_1 + T_2}{2}$</button>
+                    <button class="choice-btn" onclick="checkChoice(4, 3)">(D) $V(x) = T_1\cos(x) + T_2\sin(x)$</button>
+                </div>
+                <div class="feedback" id="feedback-4">
+                    <p><strong>Correct!</strong> $V$ satisfies $V''(x) = 0$, $V(0) = T_1$, $V(L) = T_2$, giving a linear interpolation.</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q5: With <em>Neumann</em> BCs ($u_x(0,t) = u_x(L,t) = 0$), how does the $\lambda = 0$ case behave?</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(5, 0)">(A) Only the trivial solution</button>
+                    <button class="choice-btn" onclick="checkChoice(5, 1)">(B) Gives a non-trivial constant eigenfunction $P_0 = 1$</button>
+                    <button class="choice-btn" onclick="checkChoice(5, 2)">(C) Gives $P(x) = x$</button>
+                    <button class="choice-btn" onclick="checkChoice(5, 3)">(D) Gives the same eigenfunctions as Dirichlet</button>
+                </div>
+                <div class="feedback" id="feedback-5">
+                    <p><strong>Correct!</strong> For Neumann BCs, $\lambda = 0$ is non-trivial: $P(x) = C_1 x + C_2$ with $P'(0) = P'(L) = 0$ gives $C_1 = 0$ and leaves $C_2$ free. This produces the constant (DC) mode which conserves the spatial average forever.</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>Q6: The wave equation $u_{tt} = a^2 u_{xx}$ differs from the heat equation because its temporal solution:</h4>
+                <div class="quiz-choices">
+                    <button class="choice-btn" onclick="checkChoice(6, 0)">(A) Decays exponentially</button>
+                    <button class="choice-btn" onclick="checkChoice(6, 1)">(B) Grows exponentially</button>
+                    <button class="choice-btn" onclick="checkChoice(6, 2)">(C) Oscillates (contains $\cos$ and $\sin$ in $t$)</button>
+                    <button class="choice-btn" onclick="checkChoice(6, 3)">(D) Is a polynomial in $t$</button>
+                </div>
+                <div class="feedback" id="feedback-6">
+                    <p><strong>Correct!</strong> The temporal ODE $Q'' + \omega^2 Q = 0$ has oscillatory solutions $A\cos(\omega t) + B\sin(\omega t)$. Energy is conserved.</p>
+                </div>
+            </div>
+
+            <div class="progress-bar" style="margin-top:1rem;">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText" style="text-align:center; margin-top:0.5rem; font-weight:600; color:var(--primary);">0 / 6 correct</p>
+        </section>
+
+        <section id="summary">
+            <h2>Summary of Problem Types</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Problem Type</th><th>BCs</th><th>Strategy</th><th>Eigenfunctions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Type 1:</strong> Homogeneous Dirichlet</td>
+                        <td>$u(0,t) = u(L,t) = 0$</td>
+                        <td>Direct separation of variables</td>
+                        <td>$\sin(m\pi x/L),\; m\geq 1$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Type 2:</strong> Non-Homogeneous Dirichlet</td>
+                        <td>$u(0,t) = T_1,\; u(L,t) = T_2$</td>
+                        <td>$u = V(x) + w$; $V = T_1 + \tfrac{T_2-T_1}{L}x$</td>
+                        <td>$\sin(m\pi x/L)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Type 3:</strong> Non-Homog. PDE with Source</td>
+                        <td>$u(0,t) = T_1,\; u(L,t) = T_2$</td>
+                        <td>$u = V(x) + w$; solve $KV'' + p(x) = 0$</td>
+                        <td>$\sin(m\pi x/L)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Type 4:</strong> Neumann (insulated)</td>
+                        <td>$u_x(0,t) = u_x(L,t) = 0$</td>
+                        <td>Direct separation; cosine series</td>
+                        <td>$1$ and $\cos(m\pi x/L)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Type 5:</strong> Wave equation</td>
+                        <td>$u(0,t) = u(L,t) = 0$, two ICs</td>
+                        <td>2nd-order temporal ODE; both $A_m$ and $B_m$</td>
+                        <td>$\sin(m\pi x/L)$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="reference">
+            <h2>Quick Reference Card</h2>
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h4>Heat Equation</h4>
+                    <p>$$\frac{\partial u}{\partial t} = K\frac{\partial^2 u}{\partial x^2}$$</p>
+                    <p>Decay factor: $e^{-K(m\pi/L)^2 t}$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Wave Equation</h4>
+                    <p>$$\frac{\partial^2 u}{\partial t^2} = a^2\frac{\partial^2 u}{\partial x^2}$$</p>
+                    <p>Oscillation factor: $\cos / \sin(\frac{m\pi a}{L}t)$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Laplace Equation</h4>
+                    <p>$$\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$$</p>
+                    <p>Steady-state; no time dependence</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Dirichlet Eigenfunctions</h4>
+                    <p>$$P_m(x) = \sin\!\left(\frac{m\pi x}{L}\right)$$</p>
+                    <p>Fourier Sine Series for $C_m$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Neumann Eigenfunctions</h4>
+                    <p>$$P_0 = 1,\quad P_m = \cos\!\left(\frac{m\pi x}{L}\right)$$</p>
+                    <p>Fourier Cosine Series (incl. DC)</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Non-Homog. Strategy</h4>
+                    <p>$$u(x,t) = V(x) + w(x,t)$$</p>
+                    <p>Reduce to homogeneous problem for $w$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Three-Case Rule</h4>
+                    <p><strong>Dirichlet:</strong> only $\lambda &gt; 0$ works.</p>
+                    <p><strong>Neumann:</strong> $\lambda = 0$ (constant) AND $\lambda &gt; 0$ work.</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Sine Coefficients</h4>
+                    <p>$$C_m = \frac{2}{L}\int_0^L f(x)\sin\!\left(\frac{m\pi x}{L}\right)dx$$</p>
+                </div>
+                <div class="reference-card">
+                    <h4>Cosine Coefficients</h4>
+                    <p>$$C_m = \frac{2}{L}\int_0^L f(x)\cos\!\left(\frac{m\pi x}{L}\right)dx$$</p>
+                </div>
+            </div>
+        </section>
+        <div class="page-nav-bottom">
+            <a href="ch6-wave-equation.html">&larr; Wave Equation</a>
+            <a href="index.html" class="next">Back to Home &rarr;</a>
+        </div>
+    </main>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
+
+    <script>
+        // KaTeX render
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+            setTimeout(function() { plotHeat(); plotWave(); }, 500);
+        });
+
+        // Quiz system
+        let quizAnswers = { 1: 1, 2: 1, 3: 1, 4: 0, 5: 1, 6: 2 };
+        let quizScores = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false };
+
+        function checkChoice(questionNum, choiceIdx) {
+            const correct = quizAnswers[questionNum] === choiceIdx;
+            const parent = document.querySelectorAll('.quiz-question')[questionNum - 1];
+            const buttons = parent.querySelectorAll('.choice-btn');
+            const feedback = document.getElementById('feedback-' + questionNum);
+
+            buttons.forEach((btn, idx) => {
+                if (idx === choiceIdx) {
+                    btn.classList.add(correct ? 'correct' : 'incorrect');
+                } else {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                }
+            });
+
+            feedback.classList.add('show', correct ? 'correct' : 'incorrect');
+            if (!correct) {
+                feedback.innerHTML = '<p><strong>Incorrect.</strong> Review the relevant section and try again by refreshing the page.</p>';
+            }
+            quizScores[questionNum] = correct;
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const correct = Object.values(quizScores).filter(v => v === true).length;
+            const percent = (correct / 6) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = correct + ' / 6 correct';
+        }
+
+        // Heat equation visualization
+        function plotHeat() {
+            const K = parseFloat(document.getElementById('kSlider').value);
+            const L = parseFloat(document.getElementById('lSlider').value);
+            const N = parseInt(document.getElementById('nTerms').value);
+            const ic = document.getElementById('icSelect').value;
+
+            const nx = 200;
+            const times = [0, 0.01, 0.05, 0.1, 0.3, 0.5, 1.0, 2.0];
+            const x = [];
+            for (let i = 0; i <= nx; i++) x.push(i * L / nx);
+
+            function getCm(m) {
+                const mp = m * Math.PI;
+                if (ic === 'x-1') {
+                    let integral = 0;
+                    const dx = L / 1000;
+                    for (let j = 0; j <= 1000; j++) {
+                        const xi = j * dx;
+                        integral += (xi - 1) * Math.sin(mp * xi / L) * dx;
+                    }
+                    return (2/L) * integral;
+                } else if (ic === 'sin') {
+                    return (m === 1) ? 1 : 0;
+                } else if (ic === 'constant') {
+                    return 40 / mp * (1 - Math.pow(-1, m));
+                } else if (ic === 'triangle') {
+                    if (m % 2 === 0) return 0;
+                    return 8 * L / (mp * mp) * Math.pow(-1, (m-1)/2);
+                }
+                return 0;
+            }
+
+            const traces = [];
+            const colors = ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0ea5e9','#64748b','#ec4899'];
+
+            times.forEach((t, ti) => {
+                const y = x.map(xi => {
+                    let val = 0;
+                    for (let m = 1; m <= N; m++) {
+                        const cm = getCm(m);
+                        val += cm * Math.sin(m * Math.PI * xi / L) * Math.exp(-K * Math.pow(m * Math.PI / L, 2) * t);
+                    }
+                    return val;
+                });
+                traces.push({
+                    x: x, y: y, mode: 'lines', name: 't = ' + t,
+                    line: { color: colors[ti % colors.length], width: 2 }
+                });
+            });
+
+            Plotly.newPlot('heatPlot', traces, {
+                title: 'Heat Equation: Temperature Evolution',
+                xaxis: { title: 'Position x' },
+                yaxis: { title: 'Temperature u(x,t)' },
+                legend: { orientation: 'h', y: -0.2 },
+                height: 450
+            }, { responsive: true });
+        }
+
+        // Wave equation visualization (plucked string)
+        function plotWave() {
+            const a = parseFloat(document.getElementById('aSlider').value);
+            const L = 4;
+            const N = 20;
+            const nx = 200;
+            const times = [0, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0, 1.5];
+            const x = [];
+            for (let i = 0; i <= nx; i++) x.push(i * L / nx);
+
+            const traces = [];
+            const colors = ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0ea5e9','#64748b','#ec4899'];
+
+            times.forEach((t, ti) => {
+                const y = x.map(xi => {
+                    let val = 0;
+                    for (let m = 1; m <= N; m++) {
+                        const Am = (m === 1) ? 1 : 0;
+                        val += Am * Math.cos(m * Math.PI * a * t / L) * Math.sin(m * Math.PI * xi / L);
+                    }
+                    return val;
+                });
+                traces.push({
+                    x: x, y: y, mode: 'lines', name: 't = ' + t,
+                    line: { color: colors[ti % colors.length], width: 2 }
+                });
+            });
+
+            Plotly.newPlot('wavePlot', traces, {
+                title: 'Wave Equation: String Vibration (f(x) = sin(pi*x/L), g(x) = 0)',
+                xaxis: { title: 'Position x' },
+                yaxis: { title: 'Displacement u(x,t)', range: [-1.5, 1.5] },
+                legend: { orientation: 'h', y: -0.2 },
+                height: 450
+            }, { responsive: true });
+        }
+    </script>
+</body>
+</html>

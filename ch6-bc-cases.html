@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 4: Boundary Condition Cases | Dr. Mohamed Mabrok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-P9F00LPZD5');</script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --teal: #0891b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.65;
+            color: #1f2937;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        nav .container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+            flex-wrap: wrap;
+        }
+        nav h1 { font-size: 1.15rem; color: var(--primary); font-weight: 700; }
+        nav ul { display: flex; list-style: none; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        nav a {
+            color: #475569; text-decoration: none; font-weight: 500;
+            padding: 0.5rem 0.9rem; border-radius: 6px; transition: all 0.2s ease;
+            font-size: 0.92rem;
+        }
+        nav a:hover { background: #eff6ff; color: var(--primary); }
+        nav a.active { background: var(--primary); color: white; }
+
+        main { max-width: 1100px; margin: 90px auto 2rem; padding: 0 1.5rem; }
+
+        section { margin-bottom: 3rem; scroll-margin-top: 90px; }
+        section > h2 {
+            font-size: 1.9rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem; border-bottom: 3px solid var(--primary);
+        }
+        section > h3 { font-size: 1.3rem; color: #1e293b; margin: 1.8rem 0 1rem; }
+        section > h4 { font-size: 1.1rem; color: #374151; margin: 1.25rem 0 0.75rem; }
+        p, li { margin-bottom: 0.8rem; font-size: 0.97rem; }
+
+        .definition-box, .theorem-box, .example-box, .warning-box, .tip-box, .case-box {
+            background: white; border-left: 5px solid; border-radius: 12px;
+            padding: 1.2rem 1.4rem; margin: 1.2rem 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .definition-box { border-left-color: var(--primary); background: #eff6ff; }
+        .theorem-box { border-left-color: var(--accent); background: #f9f5ff; }
+        .example-box { border-left-color: var(--success); background: #f0fdf4; }
+        .warning-box { border-left-color: var(--warning); background: #fffbeb; }
+        .tip-box { border-left-color: var(--teal); background: #ecfeff; }
+        .case-box { border-left-color: #64748b; background: #f8fafc; }
+        .case-trivial { border-left-color: var(--danger); background: #fef2f2; }
+        .case-nontrivial { border-left-color: var(--success); background: #f0fdf4; }
+        .definition-box strong, .theorem-box strong, .example-box strong,
+        .warning-box strong, .tip-box strong, .case-box strong {
+            display: block; margin-bottom: 0.5rem; font-size: 1rem; color: #1e293b;
+        }
+
+        .key-step {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid var(--warning);
+            padding: 1rem 1.3rem;
+            margin: 1.2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
+        }
+        .key-step strong { display: block; color: #78350f; margin-bottom: 0.4rem; font-size: 1rem; }
+
+        .objectives { list-style: none; }
+        .objectives li { padding-left: 1.8rem; position: relative; margin-bottom: 0.6rem; }
+        .objectives li:before { content: "\2713"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        .step-list { list-style: none; counter-reset: step; padding-left: 0; }
+        .step-list > li {
+            counter-increment: step; padding-left: 3rem; position: relative;
+            margin-bottom: 1.2rem;
+        }
+        .step-list > li:before {
+            content: counter(step); position: absolute; left: 0; top: 0;
+            background: var(--primary); color: white; width: 2.1rem; height: 2.1rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.9rem;
+        }
+
+        .example-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin: 1.2rem 0; overflow: hidden; }
+        .example-header {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white; padding: 1rem 1.5rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; user-select: none; transition: background 0.3s ease;
+        }
+        .example-header:hover { background: linear-gradient(135deg, #047857, #059669); }
+        .example-header .katex { color: white; }
+        .example-content { padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .example-content.active { max-height: 8000px; padding: 1.5rem; }
+        .toggle-icon { font-size: 1.2rem; transition: transform 0.3s ease; }
+
+        .control-group {
+            background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .control-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 6px;
+            font-size: 0.9rem; font-family: 'Segoe UI', system-ui; margin-bottom: 1rem;
+        }
+        input[type="range"] { width: 100%; margin-bottom: 0.5rem; }
+        .slider-value {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-left: 0.5rem;
+        }
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 0.65rem 1.5rem; border-radius: 6px; cursor: pointer;
+            font-weight: 600; font-size: 0.92rem; transition: all 0.2s ease;
+        }
+        button:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+        .plot-container { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        .quiz-question { background: white; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #e2e8f0; }
+        .quiz-question h4 { margin-bottom: 1rem; color: #1e293b; }
+        .quiz-choices { display: grid; grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 1rem; }
+        .choice-btn {
+            padding: 0.8rem 1rem; text-align: left; background: #f3f4f6;
+            border: 2px solid #d1d5db; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; font-weight: 500; color: #1e293b;
+        }
+        .choice-btn .katex { color: #1e293b; }
+        .choice-btn.correct .katex, .choice-btn.incorrect .katex { color: white; }
+        .choice-btn:hover { border-color: var(--primary); background: #eff6ff; }
+        .choice-btn.correct { border-color: var(--success); background: var(--success); color: white; }
+        .choice-btn.incorrect { border-color: var(--danger); background: var(--danger); color: white; }
+        .feedback { margin: 1rem 0; padding: 1rem; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #d1fae5; color: #065f46; border-left: 4px solid var(--success); }
+        .feedback.incorrect { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--danger); }
+        .progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 1rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+        .reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+        .reference-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .reference-card h4 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
+
+        .hero {
+            text-align: center; padding: 2.5rem 1rem 1.75rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f9f5ff 100%);
+            border-radius: 16px; margin-bottom: 2rem;
+        }
+        .hero h1 { font-size: 2.1rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .hero p { color: #64748b; font-size: 1.05rem; }
+        .hero .chapter-badge {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 1rem;
+        }
+
+        .page-link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .page-link {
+            display: block; padding: 1.2rem 1.3rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 12px;
+            text-decoration: none; color: inherit;
+            transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .page-link:hover {
+            border-color: var(--primary); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+        }
+        .page-link .page-num {
+            display: inline-block; background: var(--primary); color: white;
+            padding: 0.25rem 0.65rem; border-radius: 6px; font-weight: 700;
+            font-size: 0.8rem; margin-bottom: 0.6rem; letter-spacing: 0.5px;
+        }
+        .page-link h3 { margin: 0 0 0.4rem; color: #1e293b; font-size: 1.1rem; }
+        .page-link p { font-size: 0.88rem; color: #64748b; margin: 0; }
+
+        .summary-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .summary-table th, .summary-table td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+        .summary-table th { background: var(--primary); color: white; font-weight: 600; }
+        .summary-table tr:nth-child(even) { background: #f8fafc; }
+
+        .page-nav-bottom {
+            display: flex; justify-content: space-between; gap: 1rem;
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;
+        }
+        .page-nav-bottom a {
+            flex: 1; padding: 1rem 1.25rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            text-decoration: none; color: var(--primary); font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .page-nav-bottom a:hover { background: var(--primary); color: white; }
+        .page-nav-bottom a.next { text-align: right; }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .hero h1 { font-size: 1.5rem; }
+            section > h2 { font-size: 1.5rem; }
+            main { padding: 0 1rem; }
+            .page-nav-bottom { flex-direction: column; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>Ch 6: PDEs</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ch6-pde-intro.html">6.1 Overview</a></li>
+                <li><a href="ch6-heat-separation.html">6.2 Heat Eq.</a></li>
+                <li><a href="ch6-bc-cases.html" class="active">6.3 BC Cases</a></li>
+                <li><a href="ch6-wave-equation.html">6.4 Wave Eq.</a></li>
+                <li><a href="ch6-pde-practice.html">6.5 Practice</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+
+        <div class="hero">
+            <span class="chapter-badge">Section 6.3</span>
+            <h1>Three Types of Boundary Conditions</h1>
+            <p>Dirichlet (homogeneous &amp; non-homogeneous) &bull; Neumann &bull; Complete case analysis for each</p>
+        </div>
+
+        <section id="overview">
+            <h2>Overview: Why BCs Matter</h2>
+
+            <p>In Section 6.2 we solved the heat equation with <strong>homogeneous Dirichlet</strong> boundary conditions $u(0,t)=u(L,t)=0$. But real physical problems come with many different boundary situations. On this page we tackle three important cases:</p>
+
+            <div class="page-link-grid">
+                <div class="page-link" style="cursor:default;">
+                    <span class="page-num" style="background:var(--primary);">Case A</span>
+                    <h3>Non-Homogeneous Dirichlet</h3>
+                    <p>Ends held at prescribed temperatures $T_1, T_2$. Strategy: steady-state + transient.</p>
+                </div>
+                <div class="page-link" style="cursor:default;">
+                    <span class="page-num" style="background:var(--accent);">Case B</span>
+                    <h3>Non-Homog. BC with Source</h3>
+                    <p>Internal heat source $p(x)$ present. Steady state absorbs the source term.</p>
+                </div>
+                <div class="page-link" style="cursor:default;">
+                    <span class="page-num" style="background:var(--teal);">Case C</span>
+                    <h3>Neumann (insulated ends)</h3>
+                    <p>$u_x(0,t) = u_x(L,t) = 0$. Now $\lambda = 0$ is non-trivial &mdash; a constant mode!</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Central Theme</strong>
+                <p>For every boundary-condition type, we follow the same strategy: <strong>reduce the problem to one with homogeneous Dirichlet BCs</strong>, which we already know how to solve, or adapt the three-case analysis to the new boundary conditions. The three cases $\lambda &lt; 0$, $\lambda = 0$, $\lambda &gt; 0$ must be checked afresh whenever the BCs change.</p>
+            </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- CASE A: Non-Homogeneous Dirichlet                      -->
+        <!-- ====================================================== -->
+        <section id="nonhomog-dirichlet">
+            <h2>Case A: Non-Homogeneous Dirichlet Boundary Conditions</h2>
+
+            <div class="definition-box">
+                <strong>Problem Setup</strong>
+                $$\begin{cases} u_t = K\,u_{xx}, \qquad 0 < x < L,\; t > 0 \\[4pt] u(0,t) = T_1,\quad u(L,t) = T_2 \\[4pt] u(x,0) = f(x) \end{cases}$$
+                <p>where $T_1, T_2$ are constants (not both zero).</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>Why Can't We Use Separation Directly?</strong>
+                <p>If we try $u(x,t) = P(x)Q(t)$, the boundary condition $u(0,t) = T_1$ becomes $P(0)Q(t) = T_1$. For this to hold at every $t$, $Q(t)$ would have to be constant &mdash; which is incompatible with the temporal ODE $Q' + K\lambda Q = 0$ (except trivially). Separation only works for <em>homogeneous</em> BCs.</p>
+            </div>
+
+            <h3>The Decomposition Strategy</h3>
+
+            <div class="key-step">
+                <strong>Key Idea: Split the Solution</strong>
+                <p>Write the solution as the sum of a <strong>steady-state</strong> piece and a <strong>transient</strong> piece:</p>
+                $$u(x,t) = V(x) + w(x,t)$$
+                <p>where $V(x)$ is chosen to satisfy the <em>non-homogeneous BCs on its own</em>, leaving $w(x,t)$ to satisfy a problem with homogeneous BCs.</p>
+            </div>
+
+            <h3>Finding the Steady-State $V(x)$</h3>
+
+            <p>As $t \to \infty$, the transient should die out: $w \to 0$. So $u(x,t) \to V(x)$. The limiting profile satisfies the <strong>steady-state equation</strong> (no time derivative):</p>
+            $$0 = K\,V''(x) \implies V''(x) = 0$$
+            <p>with the non-homogeneous BCs $V(0) = T_1$, $V(L) = T_2$.</p>
+
+            <p>Integrating twice: $V(x) = A x + B$. Apply BCs:</p>
+            <ul style="margin-left:2rem;">
+                <li>$V(0) = B = T_1$</li>
+                <li>$V(L) = AL + T_1 = T_2 \implies A = (T_2 - T_1)/L$</li>
+            </ul>
+
+            <div class="theorem-box">
+                <strong>Steady-State Solution</strong>
+                $$\boxed{\;V(x) = T_1 + \frac{T_2 - T_1}{L}\,x\;}$$
+                <p>This is the straight line connecting $(0, T_1)$ to $(L, T_2)$ &mdash; the temperature profile once all transient behaviour has died out.</p>
+            </div>
+
+            <h3>The Transient Problem for $w$</h3>
+
+            <p>Substitute $u = V + w$ into the PDE:</p>
+            $$\underbrace{V_t}_{=0} + w_t = K(\underbrace{V_{xx}}_{=0} + w_{xx}) \implies w_t = K\,w_{xx}.$$
+
+            <p>Check the BCs for $w$:</p>
+            <ul style="margin-left:2rem;">
+                <li>$w(0,t) = u(0,t) - V(0) = T_1 - T_1 = 0$</li>
+                <li>$w(L,t) = u(L,t) - V(L) = T_2 - T_2 = 0$</li>
+            </ul>
+
+            <p>And the initial condition for $w$:</p>
+            $$w(x,0) = u(x,0) - V(x) = f(x) - V(x).$$
+
+            <div class="theorem-box">
+                <strong>Reduced Problem (Homogeneous BCs!)</strong>
+                $$\begin{cases} w_t = K\,w_{xx} \\[4pt] w(0,t) = w(L,t) = 0 \\[4pt] w(x,0) = f(x) - V(x) \end{cases}$$
+                <p>This is exactly the problem we solved in Section 6.2. The three-case analysis gives $\lambda_m = (m\pi/L)^2$ and $P_m(x) = \sin(m\pi x/L)$, and</p>
+                $$w(x,t) = \sum_{m=1}^{\infty} C_m\,\sin\!\left(\frac{m\pi x}{L}\right)\,e^{-K(m\pi/L)^2 t},$$
+                <p>with</p>
+                $$C_m = \frac{2}{L}\int_0^L \bigl[f(x) - V(x)\bigr]\,\sin\!\left(\frac{m\pi x}{L}\right)dx.$$
+            </div>
+
+            <div class="theorem-box">
+                <strong>Full Non-Homogeneous Dirichlet Solution</strong>
+                $$\boxed{\;u(x,t) = \underbrace{T_1 + \frac{T_2 - T_1}{L}\,x}_{\text{steady state}} + \underbrace{\sum_{m=1}^{\infty} C_m\,\sin\!\left(\frac{m\pi x}{L}\right)\,e^{-K(m\pi/L)^2 t}}_{\text{transient (decays to 0)}}\;}$$
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)">
+                    <span>Example A1: $K=4$, $L=4$, $T_1=3$, $T_2=7$, $f(x)=2x+2$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = 4\,u_{xx},\quad 0 < x < 4 \\[4pt] u(0,t) = 3,\quad u(4,t) = 7 \\[4pt] u(x,0) = 2x + 2 \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; Steady state.</strong></p>
+                    $$V(x) = 3 + \frac{7 - 3}{4}\,x = x + 3.$$
+                    <p>Check: $V(0) = 3\checkmark$, $V(4) = 7\checkmark$.</p>
+
+                    <p><strong>Step 2 &mdash; Transient initial condition.</strong></p>
+                    $$w(x,0) = f(x) - V(x) = (2x+2) - (x+3) = x - 1.$$
+                    <p>Exactly the Example 3 from Section 6.2.</p>
+
+                    <p><strong>Step 3 &mdash; Transient solution.</strong> From that example,</p>
+                    $$C_m = -\frac{2}{m\pi}\bigl[1 + 3(-1)^m\bigr].$$
+                    <p>Also $K(m\pi/L)^2 = 4(m\pi/4)^2 = (m\pi)^2/4$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = (x + 3) + \sum_{m=1}^{\infty} -\frac{2}{m\pi}\bigl[1 + 3(-1)^m\bigr]\,\sin\!\left(\frac{m\pi x}{4}\right)\,e^{-(m\pi)^2 t / 4}.$$
+                    </div>
+
+                    <p><strong>Physical check:</strong> As $t \to \infty$, the exponentials vanish and $u \to x + 3$ &mdash; the linear temperature profile matching the fixed endpoint temperatures. At $t = 0$, direct substitution recovers $u(x,0) = 2x + 2$.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- CASE B: Non-Homogeneous BC + Source Term               -->
+        <!-- ====================================================== -->
+        <section id="source-term">
+            <h2>Case B: Non-Homogeneous Dirichlet with Source Term</h2>
+
+            <div class="definition-box">
+                <strong>Problem Setup (PDE with Source)</strong>
+                $$\begin{cases} u_t = K\,u_{xx} + p(x),\qquad 0 < x < L \\[4pt] u(0,t) = T_1,\quad u(L,t) = T_2 \\[4pt] u(x,0) = f(x) \end{cases}$$
+                <p>where $p(x)$ is a prescribed <strong>internal source</strong> (time-independent heat generation per unit length).</p>
+            </div>
+
+            <h3>Modified Steady-State Equation</h3>
+
+            <p>Again let $u = V(x) + w(x,t)$ with $w \to 0$ as $t \to \infty$. Substituting:</p>
+            $$V_t + w_t = K(V_{xx} + w_{xx}) + p(x).$$
+            <p>For the steady-state part (time-independent), $V_t = 0$, so</p>
+
+            <div class="key-step">
+                <strong>Steady-State ODE (Modified)</strong>
+                $$K\,V''(x) + p(x) = 0, \qquad V(0) = T_1,\; V(L) = T_2.$$
+                <p>This is a <em>two-point BVP</em> for $V$. Solve by integrating twice and fitting the boundary data.</p>
+            </div>
+
+            <h3>Residual Equation for $w$</h3>
+
+            <p>Subtracting the steady-state equation from the full PDE leaves</p>
+            $$w_t = K\,w_{xx}, \qquad w(0,t) = w(L,t) = 0, \qquad w(x,0) = f(x) - V(x).$$
+
+            <p>Same homogeneous problem as before.</p>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">
+                    <span>Example B1: Source $p(x) = x$, $K=4$, $T_1=3$, $T_2=7$, $L=4$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = 4\,u_{xx} + x \\[4pt] u(0,t) = 3,\; u(4,t) = 7 \\[4pt] u(x,0) = -\dfrac{x^3}{24} + \dfrac{8x}{3} + 2 \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; Solve for $V(x)$.</strong> The steady-state ODE is</p>
+                    $$4\,V''(x) + x = 0 \implies V''(x) = -\frac{x}{4}.$$
+                    <p>Integrate once:</p>
+                    $$V'(x) = -\frac{x^2}{8} + A.$$
+                    <p>Integrate again:</p>
+                    $$V(x) = -\frac{x^3}{24} + A x + B.$$
+                    <p>Apply $V(0) = 3$: $B = 3$. Apply $V(4) = 7$:</p>
+                    $$-\frac{64}{24} + 4A + 3 = 7 \implies -\frac{8}{3} + 4A = 4 \implies 4A = \frac{20}{3} \implies A = \frac{5}{3}.$$
+                    $$\boxed{\;V(x) = -\frac{x^3}{24} + \frac{5x}{3} + 3\;}$$
+
+                    <p><strong>Step 2 &mdash; Transient IC.</strong></p>
+                    $$w(x,0) = \left(-\frac{x^3}{24} + \frac{8x}{3} + 2\right) - \left(-\frac{x^3}{24} + \frac{5x}{3} + 3\right) = x - 1.$$
+                    <p>Again the $x - 1$ profile from Example 3 of Section 6.2.</p>
+
+                    <p><strong>Step 3 &mdash; Transient solution.</strong> Same $C_m$ as before:</p>
+                    $$C_m = -\frac{2}{m\pi}\bigl[1 + 3(-1)^m\bigr], \qquad K(m\pi/L)^2 = (m\pi)^2/4.$$
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = -\frac{x^3}{24} + \frac{5x}{3} + 3 + \sum_{m=1}^{\infty} -\frac{2}{m\pi}\bigl[1 + 3(-1)^m\bigr]\,\sin\!\left(\frac{m\pi x}{4}\right)\,e^{-(m\pi)^2 t/4}.$$
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">
+                    <span>Example B2: $K=1/6$, $L=1$, source $p(x)=x$, $T_1=1$, $T_2=2$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = \tfrac{1}{6}\,u_{xx} + x \\[4pt] u(0,t) = 1,\quad u(1,t) = 2 \\[4pt] u(x,0) = 1 - x^3 \end{cases}$$
+                    </div>
+
+                    <p><strong>Step 1 &mdash; Solve for $V$.</strong> $\tfrac{1}{6}V''(x) + x = 0 \implies V''(x) = -6x$.</p>
+                    <p>Integrate: $V'(x) = -3x^2 + A$. Integrate again: $V(x) = -x^3 + Ax + B$.</p>
+                    <p>$V(0) = 1 \implies B = 1$. $V(1) = -1 + A + 1 = 2 \implies A = 2$.</p>
+                    $$V(x) = -x^3 + 2x + 1.$$
+
+                    <p><strong>Step 2 &mdash; Transient IC.</strong></p>
+                    $$w(x,0) = (1 - x^3) - (-x^3 + 2x + 1) = -2x.$$
+
+                    <p><strong>Step 3 &mdash; Compute $C_m$.</strong> With $L = 1$:</p>
+                    $$C_m = \frac{2}{1}\int_0^1 (-2x)\sin(m\pi x)\,dx = -4\int_0^1 x\sin(m\pi x)\,dx.$$
+                    <p>By parts ($u = x$, $dv = \sin(m\pi x)dx$):</p>
+                    $$\int_0^1 x\sin(m\pi x)\,dx = \left[-\frac{x\cos(m\pi x)}{m\pi}\right]_0^1 + \frac{1}{m\pi}\int_0^1 \cos(m\pi x)\,dx = -\frac{(-1)^m}{m\pi} + 0.$$
+                    <p>Therefore $C_m = -4\cdot\dfrac{-(-1)^m}{m\pi} = \dfrac{4(-1)^m}{m\pi}$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = (-x^3 + 2x + 1) + \sum_{m=1}^{\infty}\frac{4(-1)^m}{m\pi}\,\sin(m\pi x)\,e^{-m^2\pi^2 t/6}.$$
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- CASE C: NEUMANN BCs with full 3-case analysis          -->
+        <!-- ====================================================== -->
+        <section id="neumann">
+            <h2>Case C: Neumann Boundary Conditions (Insulated Ends)</h2>
+
+            <div class="definition-box">
+                <strong>Problem Setup (Neumann)</strong>
+                $$\begin{cases} u_t = K\,u_{xx},\qquad 0 < x < L,\; t > 0 \\[4pt] u_x(0,t) = 0,\quad u_x(L,t) = 0 \\[4pt] u(x,0) = f(x) \end{cases}$$
+                <p>Both ends are <strong>insulated</strong>: no heat flux in or out.</p>
+            </div>
+
+            <h3>Separation and Inherited BCs</h3>
+
+            <p>Same start as before: $u = P(x)Q(t)$ gives the same two ODEs. The difference is in the <em>spatial</em> boundary conditions. Since $u_x = P'(x)Q(t)$,</p>
+
+            $$u_x(0,t) = P'(0)\,Q(t) = 0 \implies P'(0) = 0,$$
+            $$u_x(L,t) = P'(L)\,Q(t) = 0 \implies P'(L) = 0.$$
+
+            <p>So now the spatial BVP is</p>
+            $$P''(x) + \lambda P(x) = 0, \qquad P'(0) = P'(L) = 0.$$
+
+            <h3>Three-Case Analysis &mdash; Watch Case II!</h3>
+
+            <p>We repeat the three-case analysis, but with derivative boundary conditions. <strong>The outcome for $\lambda = 0$ changes dramatically.</strong></p>
+
+            <!-- Case I -->
+            <div class="case-box case-trivial">
+                <strong>Case I: $\lambda < 0$, let $\lambda = -\alpha^2$ ($\alpha > 0$)</strong>
+                <p>General solution: $P(x) = A\cosh(\alpha x) + B\sinh(\alpha x)$.</p>
+                <p>Derivative: $P'(x) = A\alpha\sinh(\alpha x) + B\alpha\cosh(\alpha x)$.</p>
+                <p><strong>Apply $P'(0) = 0$:</strong> $P'(0) = A\alpha\cdot 0 + B\alpha\cdot 1 = B\alpha$. Since $\alpha \neq 0$, we get $B = 0$.</p>
+                <p><strong>Apply $P'(L) = 0$:</strong> $P'(L) = A\alpha\sinh(\alpha L)$. Since $\alpha > 0$ and $\sinh(\alpha L) > 0$, we need $A = 0$.</p>
+                <div style="background:#fef2f2; padding:0.75rem 1rem; border-radius:8px; border-left:3px solid var(--danger); margin-top:0.8rem;">
+                    <strong style="color:var(--danger);">Case I gives only the trivial solution.</strong>
+                </div>
+            </div>
+
+            <!-- Case II -->
+            <div class="case-box case-nontrivial">
+                <strong>Case II: $\lambda = 0$ &mdash; NOW NON-TRIVIAL!</strong>
+                <p>General solution: $P(x) = C_1 x + C_2$.</p>
+                <p>Derivative: $P'(x) = C_1$.</p>
+                <p><strong>Apply $P'(0) = 0$:</strong> $C_1 = 0$.</p>
+                <p><strong>Apply $P'(L) = 0$:</strong> $C_1 = 0$ &mdash; already satisfied, no new constraint.</p>
+                <p>So $P(x) = C_2$ &mdash; <strong>any non-zero constant</strong> is a valid eigenfunction. We conventionally set the zeroth eigenvalue and eigenfunction as</p>
+                $$\boxed{\;\lambda_0 = 0, \qquad P_0(x) = 1.\;}$$
+                <p>The corresponding temporal ODE $Q_0' + K\cdot 0\cdot Q_0 = 0$ gives $Q_0 = $ constant. The $m = 0$ mode is a <strong>steady, non-decaying average</strong>.</p>
+                <div style="background:#f0fdf4; padding:0.75rem 1rem; border-radius:8px; border-left:3px solid var(--success); margin-top:0.8rem;">
+                    <strong style="color:var(--success);">New result:</strong> With Neumann BCs, Case II ($\lambda = 0$) yields a non-trivial constant eigenfunction. This is the <strong>DC component</strong> of the solution.
+                </div>
+            </div>
+
+            <!-- Case III -->
+            <div class="case-box case-nontrivial">
+                <strong>Case III: $\lambda > 0$, let $\lambda = \alpha^2$ ($\alpha > 0$)</strong>
+                <p>General solution: $P(x) = A\cos(\alpha x) + B\sin(\alpha x)$.</p>
+                <p>Derivative: $P'(x) = -A\alpha\sin(\alpha x) + B\alpha\cos(\alpha x)$.</p>
+                <p><strong>Apply $P'(0) = 0$:</strong> $P'(0) = 0 + B\alpha = B\alpha$. Since $\alpha \neq 0$, we get $B = 0$.</p>
+                <p>So $P(x) = A\cos(\alpha x)$ and $P'(x) = -A\alpha\sin(\alpha x)$.</p>
+                <p><strong>Apply $P'(L) = 0$:</strong> $-A\alpha\sin(\alpha L) = 0$. Non-triviality demands $A \neq 0$, so</p>
+                $$\sin(\alpha L) = 0 \implies \alpha L = m\pi \implies \alpha_m = \frac{m\pi}{L}, \quad m = 1, 2, 3, \ldots$$
+                <p>Eigenvalues and eigenfunctions:</p>
+                $$\boxed{\;\lambda_m = \left(\frac{m\pi}{L}\right)^2, \qquad P_m(x) = \cos\!\left(\frac{m\pi x}{L}\right),\; m = 1, 2, 3, \ldots\;}$$
+            </div>
+
+            <div class="warning-box">
+                <strong>Complete Neumann Spectrum</strong>
+                <p>Combining both non-trivial cases:</p>
+                <ul style="margin-left:1.2rem;">
+                    <li><strong>$m = 0$:</strong> $\lambda_0 = 0$, $P_0 = 1$ (constant mode, does not decay)</li>
+                    <li><strong>$m = 1, 2, 3, \ldots$:</strong> $\lambda_m = (m\pi/L)^2$, $P_m = \cos(m\pi x/L)$ (decaying cosine modes)</li>
+                </ul>
+            </div>
+
+            <h3>General Solution with Neumann BCs</h3>
+
+            <div class="theorem-box">
+                <strong>General Solution &mdash; Neumann (Insulated) Heat Equation</strong>
+                $$\boxed{\;u(x,t) = \frac{C_0}{2} + \sum_{m=1}^{\infty} C_m\,\cos\!\left(\frac{m\pi x}{L}\right)\,e^{-K(m\pi/L)^2 t}\;}$$
+                <p>(The factor of $1/2$ on $C_0$ is the standard convention of the Fourier cosine series.)</p>
+                <p>The coefficients come from the <strong>Fourier cosine series</strong> of $f(x)$:</p>
+                $$C_m = \frac{2}{L}\int_0^L f(x)\,\cos\!\left(\frac{m\pi x}{L}\right)dx, \qquad m = 0, 1, 2, \ldots$$
+            </div>
+
+            <div class="tip-box">
+                <strong>Physical Interpretation</strong>
+                <p>The $m = 0$ term $C_0/2 = \dfrac{1}{L}\int_0^L f(x)\,dx$ is the <strong>spatial average</strong> of the initial temperature. Since no heat escapes through the insulated ends, this average is <em>conserved forever</em>. All the higher modes decay, but the average persists. As $t \to \infty$, the temperature approaches the initial average everywhere.</p>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,var(--teal),#06b6d4)">
+                    <span>Example C1: Neumann, $K=2$, $L=\pi$, $f(x) = 5 + 3\cos(2x)$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = 2\,u_{xx},\quad 0 < x < \pi \\[4pt] u_x(0,t) = u_x(\pi,t) = 0 \\[4pt] u(x,0) = 5 + 3\cos(2x) \end{cases}$$
+                    </div>
+
+                    <p><strong>General solution:</strong> With $L = \pi$, the cosine modes are $\cos(mx)$:</p>
+                    $$u(x,t) = \frac{C_0}{2} + \sum_{m=1}^{\infty} C_m\,\cos(mx)\,e^{-2 m^2 t}.$$
+
+                    <p><strong>Apply IC by comparison.</strong></p>
+                    $$\frac{C_0}{2} + \sum_{m=1}^{\infty} C_m\,\cos(mx) = 5 + 3\cos(2x).$$
+                    <p>Matching: $C_0/2 = 5 \Rightarrow C_0 = 10$, $C_2 = 3$, all others zero.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = 5 + 3\,e^{-8t}\,\cos(2x).$$
+                    </div>
+                    <p><strong>Physical check:</strong> As $t \to \infty$, $u \to 5$ &mdash; the spatial average of the initial data, conserved because of the insulated boundary.</p>
+                </div>
+            </div>
+
+            <div class="example-item">
+                <div class="example-header" onclick="toggleExample(this)" style="background:linear-gradient(135deg,var(--teal),#06b6d4)">
+                    <span>Example C2: Neumann with general IC $f(x) = x$, $K=1$, $L=\pi$</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </div>
+                <div class="example-content">
+                    <div class="definition-box">
+                        <strong>Problem</strong>
+                        $$\begin{cases} u_t = u_{xx},\; 0 < x < \pi \\[4pt] u_x(0,t) = u_x(\pi,t) = 0 \\[4pt] u(x,0) = x \end{cases}$$
+                    </div>
+
+                    <p><strong>Compute $C_0$ (the average):</strong></p>
+                    $$C_0 = \frac{2}{\pi}\int_0^\pi x\,dx = \frac{2}{\pi}\cdot\frac{\pi^2}{2} = \pi.$$
+                    <p>So the constant term is $C_0/2 = \pi/2$ &mdash; precisely the average of $x$ on $[0,\pi]$.</p>
+
+                    <p><strong>Compute $C_m$ for $m \geq 1$:</strong></p>
+                    $$C_m = \frac{2}{\pi}\int_0^\pi x\,\cos(mx)\,dx.$$
+                    <p>Integration by parts ($u = x$, $dv = \cos(mx)dx$):</p>
+                    $$\int_0^\pi x\,\cos(mx)\,dx = \left[\frac{x\sin(mx)}{m}\right]_0^\pi - \frac{1}{m}\int_0^\pi \sin(mx)\,dx = 0 - \frac{1}{m}\left[-\frac{\cos(mx)}{m}\right]_0^\pi.$$
+                    $$= \frac{1}{m^2}\bigl[\cos(m\pi) - 1\bigr] = \frac{(-1)^m - 1}{m^2}.$$
+                    <p>For even $m$: $(-1)^m = 1$, so $C_m = 0$. For odd $m$: $(-1)^m - 1 = -2$, so $C_m = \dfrac{2}{\pi}\cdot\dfrac{-2}{m^2} = -\dfrac{4}{\pi m^2}$.</p>
+
+                    <div class="example-box">
+                        <strong>Final Answer</strong>
+                        $$u(x,t) = \frac{\pi}{2} - \frac{4}{\pi}\sum_{\substack{m=1\\m\,\text{odd}}}^{\infty}\frac{1}{m^2}\,\cos(mx)\,e^{-m^2 t}.$$
+                    </div>
+                    <p>As $t \to \infty$, all cosine terms die and $u \to \pi/2$ &mdash; the average of the initial linear temperature.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="summary-bc">
+            <h2>Summary: How the Three Cases Play Out for Each BC Type</h2>
+
+            <table class="summary-table">
+                <thead>
+                    <tr><th>BCs</th><th>$\lambda &lt; 0$</th><th>$\lambda = 0$</th><th>$\lambda &gt; 0$</th><th>Eigenfunctions</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Dirichlet</strong><br>$P(0)=P(L)=0$</td>
+                        <td style="color:var(--danger);">Trivial</td>
+                        <td style="color:var(--danger);">Trivial</td>
+                        <td style="color:var(--success);">$\alpha = m\pi/L$</td>
+                        <td>$\sin(m\pi x/L)$, $m\geq 1$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neumann</strong><br>$P'(0)=P'(L)=0$</td>
+                        <td style="color:var(--danger);">Trivial</td>
+                        <td style="color:var(--success);"><strong>Constant!</strong></td>
+                        <td style="color:var(--success);">$\alpha = m\pi/L$</td>
+                        <td>$1$ and $\cos(m\pi x/L)$, $m\geq 1$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mixed</strong><br>$P(0)=0,\,P'(L)=0$</td>
+                        <td style="color:var(--danger);">Trivial</td>
+                        <td style="color:var(--danger);">Trivial</td>
+                        <td style="color:var(--success);">$\alpha = (2m-1)\pi/(2L)$</td>
+                        <td>$\sin((2m-1)\pi x/(2L))$, $m\geq 1$</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                <strong>How to Remember</strong>
+                <p><strong>Value-type BCs</strong> ($P=0$) select <strong>sines</strong> &mdash; sines vanish at $x=0$.</p>
+                <p><strong>Derivative-type BCs</strong> ($P'=0$) select <strong>cosines</strong> &mdash; cosines have zero slope at $x=0$.</p>
+                <p><strong>Mixing</strong> the two (value at one end, derivative at the other) gives <strong>half-integer</strong> modes.</p>
+            </div>
+        </section>
+        <div class="page-nav-bottom">
+            <a href="ch6-heat-separation.html">&larr; Heat Equation</a>
+            <a href="ch6-wave-equation.html" class="next">Next: Wave Equation &rarr;</a>
+        </div>
+    </main>
+
+    <footer style="text-align:center; padding:2rem; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; margin-top:2rem;">
+        Math 4: Mathematics for Engineering | Dr. Mohamed Mabrok | Qatar University
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+        });
+
+        function toggleExample(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            const icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                icon.textContent = '\u25B2';
+                renderMathInElement(content, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            } else {
+                icon.textContent = '\u25BC';
+            }
+        }
+    </script>
+</body>
+</html>
