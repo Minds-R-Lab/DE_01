@@ -52,6 +52,13 @@ function status_badge($a): string {
     Signed in as <?= h($user['email']) ?>. Role: <?= h($user['role']) ?>.
 </p>
 
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.75rem;" class="mb-3">
+    <a class="btn" href="/quizzes.php">&#129504; Take a quiz</a>
+    <a class="btn btn-secondary" href="#assignments">&#128196; My assignments</a>
+</div>
+
+<a id="assignments"></a>
+
 <?php if ($announcements): ?>
 <h2>Announcements</h2>
 <?php foreach ($announcements as $a): ?>

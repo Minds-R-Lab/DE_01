@@ -18,6 +18,7 @@ $__user  = is_logged_in() ? current_user() : null;
             <li><a href="<?= h(COURSE_URL) ?>">&larr; Course Site</a></li>
             <?php if ($__user): ?>
                 <li><a href="/dashboard.php">Dashboard</a></li>
+                <li><a href="/quizzes.php">Quizzes</a></li>
                 <?php if (in_array($__user['role'], ['instructor','admin'], true)): ?>
                     <li><a href="/instructor/index.php">Instructor</a></li>
                 <?php endif; ?>

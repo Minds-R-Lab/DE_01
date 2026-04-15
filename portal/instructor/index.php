@@ -42,6 +42,15 @@ require __DIR__ . '/../header.php';
 </div>
 
 <div class="flex-between mb-2">
+    <h2 style="margin:0;">Quick links</h2>
+</div>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.75rem;" class="mb-3">
+    <a class="btn" href="/instructor/quizzes.php">&#129504; Quizzes &amp; Exams</a>
+    <a class="btn btn-secondary" href="/instructor/questions.php">&#128221; Question Bank</a>
+    <a class="btn btn-secondary" href="/instructor/create-assignment.php">+ New homework assignment</a>
+</div>
+
+<div class="flex-between mb-2">
     <h2 style="margin:0;">Assignments</h2>
     <a class="btn" href="create-assignment.php">+ New assignment</a>
 </div>
