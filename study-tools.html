@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Toolkit | Differential Equations Course</title>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P9F00LPZD5');
+    </script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --primary-dark: #1e40af;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 14px;
+
+            /* Chapter colors */
+            --ch1: #3b82f6;
+            --ch2: #8b5cf6;
+            --ch3: #ec4899;
+            --ch4: #f59e0b;
+            --ch5: #10b981;
+            --ch6: #06b6d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        nav a {
+            padding: 1rem 0;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        nav a.brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-right: auto;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 25%, #3f51b5 50%, #7c3aed 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 1rem;
+            padding: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: white;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ===== TAB 1: WIZARD ===== */
+        .wizard-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-item {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+
+        .wizard-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            margin-bottom: 2rem;
+        }
+
+        .wizard-question {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .wizard-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-button {
+            padding: 1.2rem 1.5rem;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-align: left;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .option-button:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateX(4px);
+        }
+
+        .option-button.accent:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .option-button.success:hover {
+            border-color: var(--success);
+            background: var(--success-light);
+        }
+
+        .option-button.warning:hover {
+            border-color: var(--warning);
+            background: var(--warning-light);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            border-left: 6px solid var(--primary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-card.ch1 { border-left-color: var(--ch1); background: linear-gradient(135deg, #dbeafe, #ede9fe); }
+        .result-card.ch2 { border-left-color: var(--ch2); background: linear-gradient(135deg, #ede9fe, #f3e8ff); }
+        .result-card.ch3 { border-left-color: var(--ch3); background: linear-gradient(135deg, #fbcfe8, #f3e8ff); }
+        .result-card.ch4 { border-left-color: var(--ch4); background: linear-gradient(135deg, #fef3c7, #fbcfe8); }
+        .result-card.ch6 { border-left-color: var(--ch6); background: linear-gradient(135deg, #cffafe, #dbeafe); }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .result-description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        .result-link {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .result-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .start-over-btn {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .start-over-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* ===== TAB 2: NEWS ===== */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .news-card-icon {
+            font-size: 3rem;
+            padding: 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+        }
+
+        .news-card.ch1 .news-card-icon { background: linear-gradient(135deg, #dbeafe, #ede9fe); }
+        .news-card.ch2 .news-card-icon { background: linear-gradient(135deg, #ede9fe, #f3e8ff); }
+        .news-card.ch3 .news-card-icon { background: linear-gradient(135deg, #fbcfe8, #f3e8ff); }
+        .news-card.ch4 .news-card-icon { background: linear-gradient(135deg, #fef3c7, #fbcfe8); }
+        .news-card.ch5 .news-card-icon { background: linear-gradient(135deg, #d1fae5, #dbeafe); }
+        .news-card.ch6 .news-card-icon { background: linear-gradient(135deg, #cffafe, #dbeafe); }
+
+        .news-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+
+        .news-card-description {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .news-card-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tag.ch1 { background: rgba(59, 130, 246, 0.15); color: var(--ch1); }
+        .tag.ch2 { background: rgba(139, 92, 246, 0.15); color: var(--ch2); }
+        .tag.ch3 { background: rgba(236, 72, 153, 0.15); color: var(--ch3); }
+        .tag.ch4 { background: rgba(245, 158, 11, 0.15); color: var(--ch4); }
+        .tag.ch5 { background: rgba(16, 185, 129, 0.15); color: var(--ch5); }
+        .tag.ch6 { background: rgba(6, 182, 212, 0.15); color: var(--ch6); }
+
+        .news-card-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .news-card-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* ===== TAB 3: PLANNER ===== */
+        .progress-section {
+            margin-bottom: 2rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .week-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .week-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .week-card.midterm {
+            border-left-color: var(--warning);
+            background: linear-gradient(135deg, white, var(--warning-light));
+        }
+
+        .week-card.final {
+            border-left-color: var(--accent);
+            background: linear-gradient(135deg, white, var(--accent-light));
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .week-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .week-card.ch2 .week-number { background: var(--ch2); }
+        .week-card.ch3 .week-number { background: var(--ch3); }
+        .week-card.ch4 .week-number { background: var(--ch4); }
+        .week-card.ch5 .week-number { background: var(--ch5); }
+        .week-card.ch6 .week-number { background: var(--ch6); }
+        .week-card.midterm .week-number { background: var(--warning); }
+        .week-card.final .week-number { background: var(--accent); }
+
+        .week-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .week-info p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .week-tasks {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            transform: translateX(4px);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .task-checkbox:hover {
+            border-color: var(--primary);
+        }
+
+        .task-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .task-label {
+            font-size: 0.95rem;
+            color: var(--text);
+            flex-grow: 1;
+        }
+
+        .task-label.completed {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .week-links {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .week-link {
+            display: inline-block;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .week-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-verse {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .footer-credits {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                padding: 0.5rem;
+                gap: 0;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+                padding: 0.75rem 0.5rem;
+            }
+
+            nav a.brand {
+                flex-basis: 100%;
+                margin-right: 0;
+            }
+
+            .wizard-card {
+                padding: 1.5rem;
+            }
+
+            .wizard-question {
+                font-size: 1.3rem;
+            }
+
+            .result-title {
+                font-size: 1.5rem;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-nav {
+                padding: 1rem;
+                gap: 0.5rem;
+            }
+
+            .tab-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        /* Print-friendly */
+        @media print {
+            nav, .tab-nav, .hero {
+                display: none;
+            }
+
+            .tab-content {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="brand">DE Course</a>
+        <a href="index.html">Home</a>
+        <a href="skills.html">Skills</a>
+        <a href="mistakes.html">Common Mistakes</a>
+        <a href="study-tools.html" class="active">Study Tools</a>
+        <a href="exam-generator.html">Exam Generator</a>
+        <a href="videos.html">Videos</a>
+        <a href="projects.html">Projects</a>
+    </nav>
+
+    <!-- Hero Banner -->
+    <div class="hero">
+        <h1>Study Toolkit</h1>
+        <p>Three interactive tools to help you master differential equations: a method decision tree, real-world applications, and a 14-week study planner.</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-button active" onclick="switchTab(event, 'wizard')">
+            Which Method Do I Use?
+        </button>
+        <button class="tab-button" onclick="switchTab(event, 'news')">
+            DE in the News
+        </button>
+        <button class="tab-button" onclick="switchTab(event, 'planner')">
+            14-Week Study Planner
+        </button>
+    </div>
+
+    <!-- TAB 1: WIZARD -->
+    <div id="wizard" class="tab-content active">
+        <div class="container">
+            <div class="wizard-container">
+                <div class="breadcrumb" id="breadcrumb"></div>
+                <div id="wizard-display"></div>
+                <div id="restart-container" style="text-align: center; margin-top: 2rem;">
+                    <button class="start-over-btn" onclick="resetWizard()">Start Over</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: NEWS -->
+    <div id="news" class="tab-content">
+        <div class="container">
+            <div class="news-grid" id="news-grid"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: PLANNER -->
+    <div id="planner" class="tab-content">
+        <div class="container">
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>Progress</span>
+                    <span><span id="tasks-completed">0</span> / <span id="tasks-total">56</span> tasks completed</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="timeline" id="timeline"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-verse">
+                رَبِّ زِدْنِي عِلْمًا
+                <br>
+                <em>"My Lord, increase me in knowledge."</em>
+                <br>
+                (Quran 20:114)
+            </div>
+            <div class="footer-credits">
+                &copy; 2024 Differential Equations Course, Qatar University. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== WIZARD DATA =====
+        const wizardTree = {
+            step1: {
+                question: "What type of equation do you have?",
+                options: [
+                    { text: "First-order ODE", goto: "step2" },
+                    { text: "Second-order (or higher) ODE", goto: "step10" },
+                    { text: "System of ODEs", result: { title: "Systems of ODEs", description: "Use matrix methods, eigenvalues, and phase portraits from Chapter 4. Solve coupled equations simultaneously using linear algebra.", chapter: "ch4", chapter_full: "Chapter 4: Systems of ODEs" } },
+                    { text: "PDE (Partial Differential Equation)", result: { title: "Separation of Variables", description: "Use the separation of variables method from Chapter 6. Assume u(x,t) = X(x)·T(t), reduce to ODEs, solve, and apply boundary conditions.", chapter: "ch6", chapter_full: "Chapter 6: Partial Differential Equations" } }
+                ]
+            },
+            step2: {
+                question: "Is it linear? (Can you write it as y' + P(x)y = Q(x)?)",
+                options: [
+                    { text: "Yes, it's linear", goto: "step3" },
+                    { text: "No, it's nonlinear", goto: "step5" }
+                ]
+            },
+            step3: {
+                question: "What does Q(x) look like?",
+                options: [
+                    { text: "Q(x) = 0 (homogeneous)", result: { title: "Separable or Linear Homogeneous", description: "Separate variables: dy/y = -P(x)dx, then integrate both sides. Or use integrating factor μ = e^{∫P dx}.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
+                    { text: "Q(x) ≠ 0 (nonhomogeneous)", goto: "step4" }
+                ]
+            },
+            step4: {
+                question: "Does it have a y^n term? (y' + P(x)y = Q(x)y^n, n ≠ 0, 1)",
+                options: [
+                    { text: "No, standard form y' + P(x)y = Q(x)", result: { title: "Integrating Factor Method", description: "Multiply both sides by μ = e^{∫P(x)dx}. This makes the left side a perfect derivative: d/dx[μy] = μQ(x). Integrate to solve.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
+                    { text: "Yes, Bernoulli form with y^n", result: { title: "Bernoulli Substitution", description: "Substitute v = y^{1-n}, then dv/dx = (1-n)y^{-n}·dy/dx. Transform to linear form in v: v' + (1-n)P(x)v = (1-n)Q(x). Solve using integrating factor.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } }
+                ]
+            },
+            step5: {
+                question: "Can you separate all y terms on one side and all x terms on the other?",
+                options: [
+                    { text: "Yes, I can separate variables", result: { title: "Separable Equation", description: "Write as g(y)dy = f(x)dx. Integrate both sides: ∫g(y)dy = ∫f(x)dx. The simplest and most important method!", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
+                    { text: "No, can't separate", goto: "step6" }
+                ]
+            },
+            step6: {
+                question: "Is it in the form M(x,y)dx + N(x,y)dy = 0?",
+                options: [
+                    { text: "Yes, I can write it that way", goto: "step7" },
+                    { text: "No or I'm not sure", goto: "step8" }
+                ]
+            },
+            step7: {
+                question: "Check: does ∂M/∂y = ∂N/∂x?",
+                options: [
+                    { text: "Yes, they're equal (exact)", result: { title: "Exact Equation", description: "Find F(x,y) such that ∂F/∂x = M and ∂F/∂y = N. The solution is F(x,y) = C. Use partial integration.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
+                    { text: "No, they're not equal (non-exact)", result: { title: "Non-Exact Equation with Integrating Factor", description: "Find integrating factor μ(x) or μ(y) to make it exact. Check if (N_x - M_y)/M is function of y only, or (M_y - N_x)/N is function of x only.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } }
+                ]
+            },
+            step8: {
+                question: "Is it homogeneous? (Can you write dy/dx = F(y/x)?)",
+                options: [
+                    { text: "Yes, it's homogeneous", result: { title: "Homogeneous Substitution", description: "Let v = y/x, so y = vx and dy/dx = v + x·dv/dx. Substitute to get separable equation in v and x. Solve and back-substitute.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
+                    { text: "No or unsure", result: { title: "Consider Substitution or Numerical Methods", description: "Some equations require clever substitutions tailored to their form. Others cannot be solved analytically and require numerical methods (Euler, RK4) from Chapter 5.", chapter: "ch5", chapter_full: "Chapter 5: Series and Numerical Methods" } }
+                ]
+            },
+            step10: {
+                question: "Does it have constant coefficients? (a·y'' + b·y' + c·y = ...)",
+                options: [
+                    { text: "Yes, constant coefficients", goto: "step11" },
+                    { text: "No, variable coefficients", goto: "step14" }
+                ]
+            },
+            step11: {
+                question: "Is it homogeneous? (Right side = 0?)",
+                options: [
+                    { text: "Yes, homogeneous (y'' + py' + qy = 0)", result: { title: "Characteristic Equation", description: "Solve ar² + br + c = 0. Real distinct r₁, r₂ → y = c₁e^{r₁x} + c₂e^{r₂x}. Repeated r → y = (c₁+c₂x)e^{rx}. Complex α±βi → y = e^{αx}(c₁cos βx + c₂sin βx).", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
+                    { text: "No, nonhomogeneous (has forcing function)", goto: "step12" }
+                ]
+            },
+            step12: {
+                question: "What type of forcing function g(x)?",
+                options: [
+                    { text: "Polynomial, exponential, sin/cos (standard forms)", result: { title: "Undetermined Coefficients", description: "Guess y_p: polynomial → c_n·x^n + ..., exponential → Ae^{bx}, sin/cos → A·cos + B·sin. Substitute into ODE to find coefficients. If y_p matches y_h, multiply by x.", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
+                    { text: "Complex (tan x, ln x, 1/x, etc.)", result: { title: "Variation of Parameters", description: "Use y_p = u₁(x)y₁(x) + u₂(x)y₂(x) with formulas: u₁' = -y₂g/W, u₂' = y₁g/W, where W = y₁y₂' - y₂y₁' (Wronskian). Works for ANY g(x).", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
+                    { text: "Step function or impulse (discontinuous)", result: { title: "Laplace Transform", description: "Take ℒ{y''} + ... = ℒ{g}, solve for Y(s) algebraically, apply initial conditions, then invert. Handles step functions H(t), impulses δ(t), and piecewise functions elegantly.", chapter: "ch3", chapter_full: "Chapter 3: Laplace Transform" } }
+                ]
+            },
+            step14: {
+                question: "Is it an Euler-Cauchy equation? (ax²y'' + bxy' + cy = ...)",
+                options: [
+                    { text: "Yes, Euler-Cauchy form", result: { title: "Euler-Cauchy (Equidimensional)", description: "Try y = x^r. Substitute to get indicial equation ar(r-1) + br + c = 0 (for homogeneous case). Solve for r, apply cases: distinct real, repeated real, complex. For nonhomogeneous, use variation of parameters.", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
+                    { text: "No, general variable coefficients", result: { title: "Series Solutions (Power or Frobenius)", description: "Expand y = Σa_n·x^n at ordinary points (power series). At regular singular points, use Frobenius method: y = Σa_n·x^{r+n}. Chapter 5 details the indicial equation and recurrence relations.", chapter: "ch5", chapter_full: "Chapter 5: Series and Numerical Methods" } }
+                ]
+            }
+        };
+
+        let currentStep = "step1";
+        let path = [];
+
+        function renderWizard() {
+            const node = wizardTree[currentStep];
+            const display = document.getElementById("wizard-display");
+
+            if (node.result) {
+                // Show result
+                const res = node.result;
+                const chapterClass = res.chapter;
+                display.innerHTML = `
+                    <div class="result-card ${chapterClass}">
+                        <div class="result-title">${res.title}</div>
+                        <div class="result-description">${res.description}</div>
+                        <a href="index.html" class="result-link">📖 Go to ${res.chapter_full}</a>
+                    </div>
+                `;
+            } else {
+                // Show question
+                display.innerHTML = `
+                    <div class="wizard-card">
+                        <div class="wizard-question">${node.question}</div>
+                        <div class="wizard-buttons">
+                            ${node.options.map((opt, idx) => `
+                                <button class="option-button" onclick="wizardChoose(${idx})">
+                                    ${opt.text}
+                                </button>
+                            `).join("")}
+                        </div>
+                    </div>
+                `;
+            }
+
+            updateBreadcrumb();
+        }
+
+        function wizardChoose(idx) {
+            const node = wizardTree[currentStep];
+            const choice = node.options[idx];
+            path.push(choice.text);
+
+            if (choice.result) {
+                // We're at a result; don't advance further
+            } else {
+                currentStep = choice.goto;
+            }
+
+            renderWizard();
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById("breadcrumb");
+            if (path.length === 0) {
+                breadcrumb.innerHTML = '<div class="breadcrumb-item active">Start</div>';
+            } else {
+                breadcrumb.innerHTML = path.map((p, i) => `
+                    <div class="breadcrumb-item ${i === path.length - 1 ? 'active' : ''}">
+                        ${p}
+                    </div>
+                `).join('<span>→</span>');
+            }
+        }
+
+        function resetWizard() {
+            currentStep = "step1";
+            path = [];
+            renderWizard();
+        }
+
+        // ===== NEWS DATA =====
+        const newsData = [
+            {
+                icon: "🦠",
+                title: "COVID-19 Pandemic Modeling",
+                description: "The SIR model (dS/dt, dI/dt, dR/dt) uses coupled first-order ODEs to predict disease spread. Governments used these models to decide lockdown policies.",
+                chapters: ["ch1", "ch4"],
+                links: [
+                    { text: "Epidemiology Models", url: "https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology" }
+                ]
+            },
+            {
+                icon: "🚀",
+                title: "SpaceX Rocket Landing",
+                description: "Controlling a rocket's descent uses second-order ODEs for thrust, drag, and gravity. The feedback control system solves differential equations in real time to keep the rocket stable.",
+                chapters: ["ch2", "ch4"],
+                links: [
+                    { text: "Powered Descent Guidance", url: "https://en.wikipedia.org/wiki/Powered_descent_guidance" }
+                ]
+            },
+            {
+                icon: "🎧",
+                title: "Noise-Canceling Headphones",
+                description: "Active noise cancellation models sound waves using the wave equation (a PDE), then generates an inverse signal. The electronics solve these equations thousands of times per second.",
+                chapters: ["ch6"],
+                links: [
+                    { text: "Active Noise Control", url: "https://en.wikipedia.org/wiki/Active_noise_control" }
+                ]
+            },
+            {
+                icon: "🔋",
+                title: "Electric Vehicle Battery Design",
+                description: "Heat dissipation in lithium-ion batteries is modeled by the heat equation. Engineers solve this PDE to prevent thermal runaway and optimize charging speed.",
+                chapters: ["ch6"],
+                links: [
+                    { text: "Thermal Management", url: "https://en.wikipedia.org/wiki/Thermal_management_(electronics)" }
+                ]
+            },
+            {
+                icon: "🏢",
+                title: "Earthquake-Resistant Buildings",
+                description: "A building during an earthquake is modeled as a damped mass-spring system (second-order ODE). Engineers tune the damping to prevent resonance, which would cause collapse.",
+                chapters: ["ch2"],
+                links: [
+                    { text: "Tuned Mass Damper", url: "https://en.wikipedia.org/wiki/Tuned_mass_damper" }
+                ]
+            },
+            {
+                icon: "🛢️",
+                title: "Oil Reservoir Simulation",
+                description: "Flow through porous rock follows Darcy's law, leading to PDEs. Petroleum engineers solve these to predict oil recovery rates and plan drilling strategies.",
+                chapters: ["ch5", "ch6"],
+                links: [
+                    { text: "Reservoir Simulation", url: "https://en.wikipedia.org/wiki/Reservoir_simulation" }
+                ]
+            },
+            {
+                icon: "🧲",
+                title: "MRI Medical Imaging",
+                description: "MRI uses the Bloch equations (coupled first-order ODEs) to describe nuclear spin relaxation. The Fourier transform reconstructs the image from frequency data.",
+                chapters: ["ch1", "ch3"],
+                links: [
+                    { text: "Bloch Equations", url: "https://en.wikipedia.org/wiki/Bloch_equations" }
+                ]
+            },
+            {
+                icon: "🌉",
+                title: "Tacoma Narrows Bridge Collapse",
+                description: "The 1940 Tacoma Narrows Bridge collapsed due to resonance — the forcing frequency matched the bridge's natural frequency. A classic example of undamped forced oscillation.",
+                chapters: ["ch2"],
+                links: [
+                    { text: "Tacoma Narrows Bridge", url: "https://en.wikipedia.org/wiki/Tacoma_Narrows_Bridge_(1940)" }
+                ]
+            },
+            {
+                icon: "⚡",
+                title: "Power Grid Stability",
+                description: "When generators lose synchronization, the swing equation (a second-order ODE) determines whether the grid recovers or cascades into blackout.",
+                chapters: ["ch2", "ch4"],
+                links: [
+                    { text: "Swing Equation", url: "https://en.wikipedia.org/wiki/Swing_equation" }
+                ]
+            },
+            {
+                icon: "💧",
+                title: "Desalination & Water Treatment",
+                description: "Reverse osmosis membrane performance is modeled by mass-transfer DEs. Qatar's massive desalination plants use these models to minimize energy consumption.",
+                chapters: ["ch1", "ch6"],
+                links: [
+                    { text: "Reverse Osmosis", url: "https://en.wikipedia.org/wiki/Reverse_osmosis" }
+                ]
+            },
+            {
+                icon: "🛩️",
+                title: "Autopilot & Drone Flight Control",
+                description: "PID controllers in drones solve differential equations to maintain stable flight. The transfer function approach (Laplace transforms) designs the controller.",
+                chapters: ["ch3"],
+                links: [
+                    { text: "PID Controller", url: "https://en.wikipedia.org/wiki/PID_controller" }
+                ]
+            },
+            {
+                icon: "🌍",
+                title: "Climate Change Models",
+                description: "Global climate models solve coupled PDEs for heat transfer in oceans and atmosphere. The same heat equation from Ch 6, scaled to planetary size.",
+                chapters: ["ch6"],
+                links: [
+                    { text: "General Circulation Model", url: "https://en.wikipedia.org/wiki/General_circulation_model" }
+                ]
+            }
+        ];
+
+        function renderNews() {
+            const grid = document.getElementById("news-grid");
+            grid.innerHTML = newsData.map(item => `
+                <div class="news-card ${item.chapters[0]}">
+                    <div class="news-card-icon">${item.icon}</div>
+                    <div class="news-card-content">
+                        <div class="news-card-title">${item.title}</div>
+                        <div class="news-card-description">${item.description}</div>
+                        <div class="news-card-tags">
+                            ${item.chapters.map(ch => {
+                                const labels = { ch1: "Ch 1", ch2: "Ch 2", ch3: "Ch 3", ch4: "Ch 4", ch5: "Ch 5", ch6: "Ch 6" };
+                                return `<span class="tag ${ch}">${labels[ch]}</span>`;
+                            }).join("")}
+                        </div>
+                        <div>
+                            ${item.links.map(link => `
+                                <a href="${link.url}" target="_blank" class="news-card-link">→ ${link.text}</a>
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // ===== PLANNER DATA & STATE =====
+        const plannerData = [
+            {
+                week: 1,
+                title: "Introduction & Separable Equations",
+                description: "Master the fundamental method of separation of variables.",
+                chapter: "ch1",
+                tasks: [
+                    "Review integration techniques",
+                    "Solve 5 separable equations",
+                    "Take Ch1 self-assessment quiz"
+                ],
+                links: [
+                    { text: "Ch 1: Separable", url: "ch1-separable.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 2,
+                title: "Linear & Bernoulli Equations",
+                description: "Learn integrating factor method and Bernoulli substitution.",
+                chapter: "ch1",
+                tasks: [
+                    "Master integrating factor method",
+                    "Practice Bernoulli substitution",
+                    "Solve 5 mixed problems"
+                ],
+                links: [
+                    { text: "Ch 1: Linear", url: "ch1-linear.html" },
+                    { text: "Ch 1: Bernoulli", url: "ch1-bernoulli.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 3,
+                title: "Exact & Homogeneous Equations",
+                description: "Practice exactness test and non-exact integrating factors.",
+                chapter: "ch1",
+                tasks: [
+                    "Practice exactness test (∂M/∂y = ∂N/∂x)",
+                    "Learn integrating factors for non-exact",
+                    "Solve 5 mixed first-order problems"
+                ],
+                links: [
+                    { text: "Ch 1: Exact", url: "ch1-exact.html" },
+                    { text: "Ch 1: Non-Exact", url: "ch1-nonexact.html" },
+                    { text: "Ch 1: Homogeneous", url: "ch1-homogeneous.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 4,
+                title: "Second-Order Homogeneous (Constant Coefficients)",
+                description: "Master the characteristic equation and three root cases.",
+                chapter: "ch2",
+                tasks: [
+                    "Master characteristic equation",
+                    "Solve 8 problems (3 root cases)",
+                    "Review complex numbers"
+                ],
+                links: [
+                    { text: "Ch 2: Overview", url: "ch2-overview.html" },
+                    { text: "Ch 2: Homogeneous", url: "ch2-homogeneous-const.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 5,
+                title: "Undetermined Coefficients & Variation of Parameters",
+                description: "Master nonhomogeneous second-order equations.",
+                chapter: "ch2",
+                tasks: [
+                    "Practice guessing y_p",
+                    "Learn when to multiply by x",
+                    "Solve 6 nonhomogeneous problems"
+                ],
+                links: [
+                    { text: "Ch 2: Undetermined", url: "ch2-undetermined.html" },
+                    { text: "Ch 2: Variation", url: "ch2-variation.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 6,
+                title: "Euler-Cauchy & Applications",
+                description: "Solve variable-coefficient equations and model real systems.",
+                chapter: "ch2",
+                tasks: [
+                    "Solve Euler-Cauchy equations",
+                    "Model a mass-spring system",
+                    "Complete practice exam"
+                ],
+                links: [
+                    { text: "Ch 2: Euler-Cauchy", url: "ch2-euler.html" },
+                    { text: "Ch 2: Mass-Spring", url: "ch2-mass-spring.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 7,
+                title: "MIDTERM EXAM REVIEW",
+                description: "Comprehensive review of Chapters 1-2. Use the decision tree!",
+                chapter: "ch2",
+                tasks: [
+                    "Review Common Mistakes page",
+                    "Use Which Method? decision tree",
+                    "Generate 3 practice exams",
+                    "Review all Ch 1-2 formulas"
+                ],
+                links: [
+                    { text: "Common Mistakes", url: "mistakes.html" }
+                ],
+                special: "midterm"
+            },
+            {
+                week: 8,
+                title: "Laplace Transform: Definition & Properties",
+                description: "Learn Laplace transforms and shift theorems.",
+                chapter: "ch3",
+                tasks: [
+                    "Memorize basic Laplace pairs",
+                    "Practice first & second shift theorems",
+                    "Solve 5 transform problems"
+                ],
+                links: [
+                    { text: "Ch 3: Overview", url: "ch3-overview.html" },
+                    { text: "Ch 3: Definition", url: "ch3-definition.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 9,
+                title: "Inverse Laplace & Solving IVPs",
+                description: "Master inverse Laplace and solving initial value problems.",
+                chapter: "ch3",
+                tasks: [
+                    "Master partial fractions",
+                    "Solve 5 IVPs using Laplace",
+                    "Practice step functions"
+                ],
+                links: [
+                    { text: "Ch 3: Inverse", url: "ch3-inverse.html" },
+                    { text: "Ch 3: Solving ODEs", url: "ch3-solving-odes.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 10,
+                title: "Systems of ODEs",
+                description: "Solve 2×2 linear systems using eigenvalues.",
+                chapter: "ch4",
+                tasks: [
+                    "Review eigenvalue computation",
+                    "Solve 2×2 systems",
+                    "Practice matrix exponentials"
+                ],
+                links: [
+                    { text: "Ch 4: Overview", url: "ch4-overview.html" },
+                    { text: "Ch 4: Homogeneous", url: "ch4-homogeneous.html" },
+                    { text: "Ch 4: Matrices", url: "ch4-matrices.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 11,
+                title: "Phase Portraits & Applications",
+                description: "Classify equilibrium points and sketch phase portraits.",
+                chapter: "ch4",
+                tasks: [
+                    "Classify equilibrium points",
+                    "Sketch phase portraits",
+                    "Model a two-tank system"
+                ],
+                links: [
+                    { text: "Ch 4: Phase Portraits", url: "ch4-phase-portraits.html" },
+                    { text: "Ch 4: Two-Tank", url: "ch4-two-tank.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 12,
+                title: "Series Solutions & Numerical Methods",
+                description: "Power series and Frobenius solutions for special points.",
+                chapter: "ch5",
+                tasks: [
+                    "Practice index shifting",
+                    "Solve 3 series problems",
+                    "Identify singular vs ordinary points"
+                ],
+                links: [
+                    { text: "Ch 5: Overview", url: "ch5-overview.html" },
+                    { text: "Ch 5: Power Series", url: "ch5-power-series.html" },
+                    { text: "Ch 5: Frobenius", url: "ch5-frobenius.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 13,
+                title: "Numerical Methods & Intro to PDEs",
+                description: "Euler and RK4 methods, PDE classification.",
+                chapter: "ch5",
+                tasks: [
+                    "Run Euler's method by hand",
+                    "Compare with RK4",
+                    "Read PDE classification"
+                ],
+                links: [
+                    { text: "Ch 5: Euler Method", url: "ch5-euler-method.html" },
+                    { text: "Ch 5: Runge-Kutta", url: "ch5-runge-kutta.html" },
+                    { text: "Ch 6: PDE Intro", url: "ch6-pde-intro.html" }
+                ],
+                special: ""
+            },
+            {
+                week: 14,
+                title: "PDEs: Heat, Wave & Final Review",
+                description: "Separation of variables for heat and wave equations.",
+                chapter: "ch6",
+                tasks: [
+                    "Solve a heat equation problem",
+                    "Solve a wave equation problem",
+                    "Review final exam topics",
+                    "Generate final practice exams"
+                ],
+                links: [
+                    { text: "Ch 6: Heat Equation", url: "ch6-heat-separation.html" },
+                    { text: "Ch 6: Wave Equation", url: "ch6-wave-equation.html" }
+                ],
+                special: "final"
+            }
+        ];
+
+        // State: track checked tasks
+        const taskState = {};
+        plannerData.forEach((w, widx) => {
+            taskState[widx] = Array(w.tasks.length).fill(false);
+        });
+
+        function renderPlanner() {
+            const timeline = document.getElementById("timeline");
+            const chapterColors = {
+                ch1: "ch1", ch2: "ch2", ch3: "ch3", ch4: "ch4", ch5: "ch5", ch6: "ch6"
+            };
+
+            timeline.innerHTML = plannerData.map((week, widx) => `
+                <div class="week-card ${chapterColors[week.chapter]} ${week.special}">
+                    <div class="week-header">
+                        <div class="week-number">${week.week}</div>
+                        <div class="week-info">
+                            <h3>${week.title}</h3>
+                            <p>${week.description}</p>
+                        </div>
+                    </div>
+                    <div class="week-tasks">
+                        ${week.tasks.map((task, tidx) => `
+                            <div class="task-item" onclick="toggleTask(${widx}, ${tidx})">
+                                <div class="task-checkbox ${taskState[widx][tidx] ? 'checked' : ''}" id="check-${widx}-${tidx}">
+                                    ${taskState[widx][tidx] ? '✓' : ''}
+                                </div>
+                                <div class="task-label ${taskState[widx][tidx] ? 'completed' : ''}">
+                                    ${task}
+                                </div>
+                            </div>
+                        `).join("")}
+                    </div>
+                    <div class="week-links">
+                        ${week.links.map(link => `
+                            <a href="${link.url}" class="week-link">${link.text}</a>
+                        `).join("")}
+                    </div>
+                </div>
+            `).join("");
+
+            updateProgress();
+        }
+
+        function toggleTask(widx, tidx) {
+            taskState[widx][tidx] = !taskState[widx][tidx];
+            const checkbox = document.getElementById(`check-${widx}-${tidx}`);
+            checkbox.classList.toggle("checked");
+            checkbox.textContent = taskState[widx][tidx] ? "✓" : "";
+
+            // Update label
+            checkbox.parentElement.querySelector(".task-label").classList.toggle("completed");
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let completed = 0;
+            let total = 0;
+            for (let w of taskState) {
+                for (let t of w) {
+                    total++;
+                    if (t) completed++;
+                }
+            }
+            document.getElementById("tasks-completed").textContent = completed;
+            document.getElementById("tasks-total").textContent = total;
+            const pct = total > 0 ? (completed / total) * 100 : 0;
+            document.getElementById("progress-fill").style.width = pct + "%";
+        }
+
+        // ===== TAB SWITCHING =====
+        function switchTab(evt, tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll(".tab-content");
+            tabs.forEach(t => t.classList.remove("active"));
+
+            // Remove active class from all buttons
+            document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+
+            // Show the clicked tab
+            document.getElementById(tabName).classList.add("active");
+            evt.target.classList.add("active");
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener("DOMContentLoaded", () => {
+            renderWizard();
+            renderNews();
+            renderPlanner();
+        });
+    </script>
+</body>
+</html>
