@@ -1201,8 +1201,19 @@
                 properties: []
             };
 
-            // ========== Detect PDE ==========
-            if (/∂|partial|du\/dt|du\/dx|d2u|∂u/.test(eq)) {
+            // ===============================
+            // STEP 0: Normalize the input
+            // ===============================
+            let norm = eq;
+            norm = norm.replace(/d\s*²\s*y\s*\/\s*d\s*x\s*²/g, "y''");
+            norm = norm.replace(/d2y\s*\/\s*dx2/g, "y''");
+            norm = norm.replace(/d\^2y\s*\/\s*dx\^2/g, "y''");
+            norm = norm.replace(/dy\s*\/\s*dx/g, "y'");
+
+            // ===============================
+            // STEP 1: Detect PDE
+            // ===============================
+            if (/∂|partial|du\/dt|du\/dx|∂u|∂²/.test(eq)) {
                 result.order = 2;
                 result.type = 'Partial Differential Equation (PDE)';
                 result.subtype = 'PDE';
@@ -1217,38 +1228,66 @@
                 return result;
             }
 
-            // ========== Detect order ==========
-            if (/y''''|y\^\(4\)|d4y/.test(eq)) result.order = 4;
-            else if (/y'''|d3y/.test(eq)) result.order = 3;
-            else if (/y''|d2y|d²y/.test(eq)) result.order = 2;
-            else if (/y'|dy\/dx|dy/.test(eq)) result.order = 1;
-            else throw new Error("No derivative detected. Make sure to include y' or y'' in your equation.");
+            // ===============================
+            // STEP 2: Detect differential form M dx + N dy = 0
+            // Only match TRUE differential forms, NOT dy/dx
+            // ===============================
+            const hasDxDy = /\bdx\b/.test(norm) && /\bdy\b/.test(norm);
+            const hasDyOverDx = /dy\s*\/\s*dx/.test(eq);
+            const isDiffForm = hasDxDy && !hasDyOverDx;
+
+            if (isDiffForm && !/y'|y''/.test(norm)) {
+                result.order = 1;
+                result.type = 'Differential Form — Test for Exactness';
+                result.subtype = 'exact';
+                result.chapter = 'ch1';
+                result.chapterFull = 'Chapter 1: First-Order ODEs';
+                result.icon = '📝';
+                result.method = 'Exactness Test → Exact or Integrating Factor';
+                result.methodSteps = 'Write as M(x,y)dx + N(x,y)dy = 0. Compute ∂M/∂y and ∂N/∂x. If equal → exact: find F(x,y) with F_x=M, F_y=N, then F(x,y)=C. If not equal → find an integrating factor μ(x) or μ(y) to make it exact.';
+                result.link = 'ch1-exact.html';
+                result.properties.push({label: 'Order', value: '1st'});
+                result.properties.push({label: 'Form', value: 'M(x,y)dx + N(x,y)dy = 0'});
+                result.properties.push({label: 'Test', value: 'Check ∂M/∂y vs ∂N/∂x'});
+                return result;
+            }
+
+            // ===============================
+            // STEP 3: Detect order
+            // ===============================
+            if (/y''''/.test(norm)) result.order = 4;
+            else if (/y'''/.test(norm)) result.order = 3;
+            else if (/y''/.test(norm)) result.order = 2;
+            else if (/y'/.test(norm)) result.order = 1;
+            else throw new Error("No derivative detected. Use y' for first derivative, y'' for second, or dy/dx notation.");
 
             result.properties.push({label: 'Order', value: ordinal(result.order)});
 
-            // ========== Detect differential form M dx + N dy = 0 ==========
-            const diffFormMatch = /\)?\s*dx\s*\+|\)?\s*dy\s*=\s*0|dx\s*\+.*dy/.test(eq);
+            // Split on =
+            const eqParts = norm.split('=');
+            const lhs = eqParts[0] ? eqParts[0].trim() : '';
+            const rhs = eqParts.length > 1 ? eqParts[1].trim() : '0';
 
-            // ========== HIGHER ORDER (2+) ==========
+            // ===============================
+            // STEP 4: HIGHER ORDER (order >= 2)
+            // ===============================
             if (result.order >= 2) {
                 result.icon = '📐';
 
-                // Check Euler-Cauchy: x^2*y'' + x*y' + y = ...
-                const isEulerCauchy = /x\s*\^\s*2\s*\*?\s*y''|x\s*\^2\s*\*?\s*y''|x\^2\s*y''/.test(eq) &&
-                                      /x\s*\*?\s*y'[^']/.test(eq);
+                // Euler-Cauchy: x^2*y'' + x*y' + y = ...
+                const hasX2Ypp = /x\s*\^\s*2\s*\*?\s*y''|x\^2\s*\*?\s*y''/.test(lhs);
+                const hasXYp = /(?:^|[+\-\s])x\s*\*?\s*y'(?!')/.test(lhs);
+                const isEulerCauchy = hasX2Ypp && hasXYp;
 
-                // Check constant coefficients: no x multiplying y terms
-                // Remove forcing function (right of =) and check left side
-                const sides = eq.split('=');
-                const lhs = sides[0];
-
-                // Look for x multiplying y, y', y''
-                const hasVarCoeffs = /[xt]\s*\*?\s*y'|[xt]\s*\*?\s*y[^'a-z]|x\s*\^\s*\d+\s*\*?\s*y/.test(lhs);
+                // Constant vs variable coefficients
+                const lhsTokenized = lhs.replace(/y''/g, '#').replace(/y'/g, '@').replace(/y(?![a-z'])/g, '%');
+                const hasVarCoeffs = /x[^+\-=]*#|x[^+\-=]*@|x[^+\-=]*%/.test(lhsTokenized) ||
+                                     /x\s*\^\s*\d[^+\-=]*#|x\s*\^\s*\d[^+\-=]*@/.test(lhsTokenized);
                 result.hasConstantCoeffs = !hasVarCoeffs;
 
-                // Check if homogeneous (RHS = 0 or no RHS)
-                const rhs = sides.length > 1 ? sides[1].trim() : '0';
-                result.isHomogeneous = (rhs === '0' || rhs === '' || rhs === '0');
+                // Homogeneous?
+                const rhsClean = rhs.replace(/\s/g, '');
+                result.isHomogeneous = (rhsClean === '0' || rhsClean === '');
 
                 result.properties.push({label: 'Coefficients', value: result.hasConstantCoeffs ? 'Constant' : 'Variable'});
                 result.properties.push({label: 'Homogeneous', value: result.isHomogeneous ? 'Yes (RHS = 0)' : 'No (has forcing function)'});
@@ -1259,207 +1298,196 @@
                     result.chapter = 'ch2';
                     result.chapterFull = 'Chapter 2: Second-Order ODEs';
                     result.method = 'Euler-Cauchy Method';
-                    result.methodSteps = 'Try y = x^r. Substitute to get the indicial equation ar(r−1) + br + c = 0. Solve for r. Three cases: distinct real roots, repeated root (add ln x), complex roots (use cos/sin of ln x).';
+                    result.methodSteps = "Try y = x^r. Substitute to get the indicial equation ar(r\u22121) + br + c = 0. Three cases: distinct real roots, repeated root (add ln x), complex roots (use cos/sin of ln x).";
                     result.link = 'ch2-euler.html';
-                    result.properties.push({label: 'Pattern', value: 'ax²y\'\' + bxy\' + cy = ...'});
-                } else if (result.hasConstantCoeffs && result.isHomogeneous) {
+                    result.properties.push({label: 'Pattern', value: "ax\u00B2y'' + bxy' + cy = ..."});
+                    return result;
+                }
+
+                if (result.hasConstantCoeffs && result.isHomogeneous) {
                     result.type = 'Constant-Coefficient Homogeneous ODE';
                     result.subtype = 'const-homo';
                     result.chapter = 'ch2';
                     result.chapterFull = 'Chapter 2: Second-Order ODEs';
                     result.method = 'Characteristic Equation';
-                    result.methodSteps = 'Replace y with e^{rx}: get ar² + br + c = 0. Solve the quadratic. Distinct real roots → c₁e^{r₁x} + c₂e^{r₂x}. Repeated root → (c₁+c₂x)e^{rx}. Complex α±βi → e^{αx}(c₁cos βx + c₂sin βx).';
+                    result.methodSteps = "Assume y = e^{rx}: get ar\u00B2 + br + c = 0. Distinct real r\u2081,r\u2082 \u2192 c\u2081e^{r\u2081x} + c\u2082e^{r\u2082x}. Repeated r \u2192 (c\u2081+c\u2082x)e^{rx}. Complex \u03B1\u00B1\u03B2i \u2192 e^{\u03B1x}(c\u2081cos\u03B2x + c\u2082sin\u03B2x).";
                     result.link = 'ch2-homogeneous-const.html';
-                } else if (result.hasConstantCoeffs && !result.isHomogeneous) {
-                    // Check forcing function type
-                    const forcing = rhs;
-                    const isStandardForcing = /sin|cos|e\^|polynomial|\d+\*?x/.test(forcing) &&
-                                              !/tan|sec|csc|cot|ln|log|1\//.test(forcing);
-                    const isDiscontinuous = /step|delta|heaviside|u\(|h\(/.test(forcing);
+                    return result;
+                }
 
-                    if (isDiscontinuous) {
-                        result.type = 'Constant-Coefficient ODE with Discontinuous Forcing';
+                if (result.hasConstantCoeffs && !result.isHomogeneous) {
+                    result.properties.push({label: 'Forcing function', value: rhs});
+                    const hasDiscontinuous = /step|delta|heaviside|u\(|h\(|dirac/.test(rhs);
+                    const hasNonStandard = /tan\(|sec\(|csc\(|cot\(|ln\(|log\(|1\//.test(rhs);
+
+                    if (hasDiscontinuous) {
+                        result.type = 'ODE with Discontinuous/Impulse Forcing';
                         result.subtype = 'laplace';
                         result.chapter = 'ch3';
                         result.chapterFull = 'Chapter 3: Laplace Transforms';
                         result.method = 'Laplace Transform';
-                        result.methodSteps = 'Take ℒ of both sides. Use ℒ{y\'\'} = s²Y − sy(0) − y\'(0). Solve for Y(s) algebraically, decompose with partial fractions, then invert using the Laplace table.';
+                        result.methodSteps = "Take \u2112 of both sides. Use \u2112{y''} = s\u00B2Y \u2212 sy(0) \u2212 y'(0). Solve for Y(s), decompose with partial fractions, then invert.";
                         result.link = 'ch3-overview.html';
-                    } else if (isStandardForcing || /\d/.test(forcing)) {
-                        result.type = 'Constant-Coefficient Nonhomogeneous ODE';
-                        result.subtype = 'undetermined';
-                        result.chapter = 'ch2';
-                        result.chapterFull = 'Chapter 2: Second-Order ODEs';
-                        result.method = 'Undetermined Coefficients';
-                        result.methodSteps = 'First find y_h from the characteristic equation. Then guess y_p matching the form of g(x): polynomial → Ax^n+..., exponential → Ae^{bx}, trig → Acos(bx)+Bsin(bx). If y_p overlaps y_h, multiply by x. Substitute and solve for coefficients.';
-                        result.link = 'ch2-undetermined.html';
-                        result.properties.push({label: 'Forcing function', value: rhs});
-                    } else {
+                    } else if (hasNonStandard) {
                         result.type = 'Constant-Coefficient Nonhomogeneous ODE';
                         result.subtype = 'variation';
                         result.chapter = 'ch2';
                         result.chapterFull = 'Chapter 2: Second-Order ODEs';
                         result.method = 'Variation of Parameters';
-                        result.methodSteps = 'Find y_h = c₁y₁ + c₂y₂ first. Then y_p = u₁y₁ + u₂y₂ with u₁\' = −y₂g/W, u₂\' = y₁g/W, where W is the Wronskian. This works for ANY forcing function g(x).';
+                        result.methodSteps = "Find y_h = c\u2081y\u2081 + c\u2082y\u2082. Then y_p = u\u2081y\u2081 + u\u2082y\u2082 with u\u2081' = \u2212y\u2082g/W, u\u2082' = y\u2081g/W, where W is the Wronskian. Works for ANY g(x).";
                         result.link = 'ch2-variation.html';
-                        result.properties.push({label: 'Forcing function', value: rhs + ' (non-standard → use VoP)'});
+                    } else {
+                        result.type = 'Constant-Coefficient Nonhomogeneous ODE';
+                        result.subtype = 'undetermined';
+                        result.chapter = 'ch2';
+                        result.chapterFull = 'Chapter 2: Second-Order ODEs';
+                        result.method = 'Undetermined Coefficients';
+                        result.methodSteps = "Find y_h from the characteristic equation. Guess y_p matching g(x): polynomial \u2192 Ax^n+..., exponential \u2192 Ae^{bx}, trig \u2192 Acos(bx)+Bsin(bx). If y_p overlaps y_h, multiply by x.";
+                        result.link = 'ch2-undetermined.html';
                     }
-                } else {
-                    // Variable coefficients, not Euler-Cauchy
-                    result.type = 'Variable-Coefficient ODE';
-                    result.subtype = 'series';
-                    result.chapter = 'ch5';
-                    result.chapterFull = 'Chapter 5: Series & Numerical Methods';
-                    result.icon = '📊';
-                    result.method = 'Series Solution (Power Series or Frobenius)';
-                    result.methodSteps = 'Check if the point is ordinary or singular. Ordinary point → use y = Σaₙxⁿ. Regular singular point → use Frobenius method y = Σaₙx^{n+r}. Find r from the indicial equation, then compute coefficients via the recurrence relation.';
-                    result.link = 'ch5-power-series.html';
+                    return result;
                 }
 
+                // Variable coefficients
+                result.type = 'Variable-Coefficient ODE';
+                result.subtype = 'series';
+                result.chapter = 'ch5';
+                result.chapterFull = 'Chapter 5: Series & Numerical Methods';
+                result.icon = '📊';
+                result.method = 'Series Solution (Power Series or Frobenius)';
+                result.methodSteps = "Check if the point is ordinary or singular. Ordinary \u2192 power series y = \u03A3a\u2099x\u207F. Regular singular \u2192 Frobenius y = \u03A3a\u2099x^{n+r}.";
+                result.link = 'ch5-power-series.html';
                 return result;
             }
 
-            // ========== FIRST ORDER ==========
+            // ===============================
+            // STEP 5: FIRST ORDER
+            // ===============================
             result.icon = '📝';
             result.chapter = 'ch1';
             result.chapterFull = 'Chapter 1: First-Order ODEs';
 
-            // Normalize: try to get into y' = f(x,y) or y' + P(x)y = Q(x) form
-            const sides = eq.split('=');
-            const lhs = sides[0] ? sides[0].trim() : '';
-            const rhs = sides.length > 1 ? sides[1].trim() : '0';
+            // Linearity check
+            const withoutDeriv = norm.replace(/y'/g, '');
+            const hasYPower = /y\s*\^\s*[2-9]|y\s*\*\s*y|y\^[2-9]/.test(withoutDeriv);
+            const hasYTimesDeriv = /y\s*\*\s*y'|y'\s*\*\s*y/.test(norm);
+            const hasTrigOfY = /sin\s*\(\s*y|cos\s*\(\s*y|tan\s*\(\s*y|e\s*\^\s*y|e\^\(?y/.test(norm);
+            // y in denominator makes it nonlinear: e.g. (x+y)/(x-y)
+            const hasYInDenom = /\/\s*\([^)]*\by\b/.test(norm) || /\/\s*y\b/.test(rhs);
+            result.isLinear = !hasYPower && !hasYTimesDeriv && !hasTrigOfY && !hasYInDenom;
 
-            // ---------- Differential form: M dx + N dy = 0 ----------
-            if (diffFormMatch) {
-                result.type = 'Exact / Non-Exact Equation';
+            // Bernoulli: y' + P(x)y = Q(x)y^n
+            const bernoulliN = norm.match(/y\s*\^\s*(\d+)/);
+            const isBernoulli = bernoulliN && parseInt(bernoulliN[1]) >= 2 && /y'/.test(norm);
 
-                // Try to extract M and N
-                result.properties.push({label: 'Form', value: 'M(x,y)dx + N(x,y)dy = 0'});
-                result.properties.push({label: 'Test', value: 'Check ∂M/∂y vs ∂N/∂x'});
+            // Separable check
+            const isSeparable = checkSeparable(norm, lhs, rhs);
 
-                result.method = 'Exactness Test → Exact or Integrating Factor';
-                result.methodSteps = 'Compute ∂M/∂y and ∂N/∂x. If equal → exact: find F(x,y) with F_x=M, F_y=N. If not equal → find integrating factor μ(x) or μ(y) to make it exact, then solve.';
-                result.link = 'ch1-exact.html';
-                result.subtype = 'exact';
+            // Homogeneous (v=y/x) check
+            const isHomoSub = checkHomogeneous(norm, rhs);
+
+            // RHS zero?
+            const rhsClean = rhs.replace(/\s/g, '');
+            const isRHSZero = (rhsClean === '0' || rhsClean === '');
+
+            // Check if RHS has ONLY y-terms (e.g. y' = x*y means y' - xy = 0, homogeneous)
+            const rhsTerms = rhs.split(/(?=[+\-])/);
+            const rhsAllYTerms = /\by\b/.test(rhs) && rhsTerms.every(function(t) { return /\by\b/.test(t); });
+            const isEffectivelyHomogeneous = isRHSZero || rhsAllYTerms;
+
+            result.properties.push({label: 'Linear', value: result.isLinear ? 'Yes' : 'No'});
+
+            // Priority: Bernoulli > Linear > Separable > Homogeneous > General
+            if (isBernoulli) {
+                const n = bernoulliN[1];
+                const sub = 1 - parseInt(n);
+                result.type = 'Bernoulli Equation';
+                result.subtype = 'bernoulli';
+                result.isLinear = false;
+                result.method = 'Bernoulli Substitution';
+                result.methodSteps = "This is y' + P(x)y = Q(x)y^" + n + ". Substitute v = y^{" + sub + "}. Transform to linear ODE in v, solve with integrating factor, then back-substitute.";
+                result.link = 'ch1-bernoulli.html';
+                result.properties = [{label: 'Order', value: '1st'}, {label: 'Linear', value: 'No (reducible via substitution)'}, {label: 'Bernoulli exponent n', value: n}];
                 return result;
             }
 
-            // ---------- Check for Bernoulli: y' + P(x)y = Q(x)y^n ----------
-            const bernoulliMatch = /y\s*\^\s*(\d+)/.test(rhs) || /y\s*\^\s*(\d+)/.test(eq);
-            const hasBernoulliForm = /y'.*[+=].*y\s*\^|y\s*\^.*y'/.test(eq);
-
-            // ---------- Check linearity ----------
-            // Linear means y and y' appear to first power only, no y*y', no y^2, etc.
-            const hasYSquared = /y\s*\^\s*[2-9]|y\s*\*\s*y|y\^2|y\^3/.test(eq);
-            const hasYTimesYPrime = /y\s*\*?\s*y'|y'\s*\*?\s*y/.test(eq);
-            const hasTrigY = /sin\s*\(\s*y\s*\)|cos\s*\(\s*y\s*\)|tan\s*\(\s*y\s*\)/.test(eq);
-
-            result.isLinear = !hasYSquared && !hasYTimesYPrime && !hasTrigY;
-            result.properties.push({label: 'Linear', value: result.isLinear ? 'Yes' : 'No'});
-
-            // ---------- Check if separable ----------
-            // Separable if can be written as g(y)dy = f(x)dx or y' = f(x)*g(y)
-            // Heuristic: RHS is product of function of x only and function of y only
-            const isSeparable = checkSeparable(eq, lhs, rhs);
-
-            // ---------- Check homogeneous (y/x substitution) ----------
-            // f(x,y) where f(tx,ty) = f(x,y), often ratios like (x+y)/(x-y)
-            const isHomogeneous = checkHomogeneous(eq, rhs);
-
-            // ---------- Classify ----------
-            if (hasBernoulliForm || (bernoulliMatch && !result.isLinear)) {
-                const nMatch = eq.match(/y\s*\^\s*(\d+)/);
-                const n = nMatch ? nMatch[1] : 'n';
-                result.type = 'Bernoulli Equation';
-                result.subtype = 'bernoulli';
-                result.method = 'Bernoulli Substitution';
-                result.methodSteps = `Substitute v = y^{1−${n}}. Transform into a linear ODE in v, solve with integrating factor, then back-substitute y = v^{1/(1−${n})}.`;
-                result.link = 'ch1-bernoulli.html';
-                result.properties.push({label: 'Bernoulli exponent n', value: n});
-            } else if (result.isLinear) {
-                // Check if homogeneous linear
-                const linearRHS = rhs.replace(/\s/g, '');
-                const isHomoLinear = linearRHS === '0' || !rhs;
-
-                if (isHomoLinear || (lhs.includes("y'") && !rhs)) {
-                    result.type = 'Linear Homogeneous (also Separable)';
+            if (result.isLinear) {
+                if (isEffectivelyHomogeneous) {
+                    result.type = 'Linear Homogeneous — also Separable';
                     result.subtype = 'separable-linear';
                     result.isHomogeneous = true;
                     result.method = 'Separation of Variables or Integrating Factor';
-                    result.methodSteps = 'This equation is both separable AND linear. Separate: dy/y = −P(x)dx, integrate both sides. Or use integrating factor μ = e^{∫P dx}. Both approaches give the same answer.';
+                    result.methodSteps = "Both methods work! Separate: dy/y = \u2212P(x)dx, integrate both sides. Or: integrating factor \u03BC = e^{\u222BP dx}. Both give y = Ce^{\u2212\u222BP dx}.";
                     result.link = 'ch1-separable.html';
+                    result.properties.push({label: 'Homogeneous', value: 'Yes'});
+                    result.properties.push({label: 'Also', value: 'Separable'});
                 } else {
                     result.type = 'Linear First-Order ODE';
                     result.subtype = 'linear';
                     result.method = 'Integrating Factor';
-                    result.methodSteps = 'Write as y\' + P(x)y = Q(x). Compute μ(x) = e^{∫P(x)dx}. Multiply both sides by μ: d/dx[μy] = μQ. Integrate: μy = ∫μQ dx + C. Solve for y.';
+                    result.methodSteps = "Write as y' + P(x)y = Q(x). Compute \u03BC = e^{\u222BP(x)dx}. Multiply: d/dx[\u03BCy] = \u03BCQ. Integrate: \u03BCy = \u222B\u03BCQ dx + C. Solve for y.";
                     result.link = 'ch1-linear.html';
+                    result.properties.push({label: 'Homogeneous', value: 'No'});
+                    if (isSeparable) result.properties.push({label: 'Also', value: 'Separable'});
                 }
-                result.properties.push({label: 'Homogeneous', value: isHomoLinear ? 'Yes' : 'No'});
-            } else if (isSeparable) {
+                return result;
+            }
+
+            if (isSeparable) {
                 result.type = 'Separable Equation';
                 result.subtype = 'separable';
                 result.method = 'Separation of Variables';
-                result.methodSteps = 'Rearrange to g(y)dy = f(x)dx. Integrate both sides: ∫g(y)dy = ∫f(x)dx + C. Don\'t forget the constant! Also check if dividing by anything eliminates a valid solution (like y=0).';
+                result.methodSteps = "Rearrange to g(y)dy = f(x)dx. Integrate: \u222Bg(y)dy = \u222Bf(x)dx + C. Check if dividing lost a solution (e.g. y=0).";
                 result.link = 'ch1-separable.html';
-            } else if (isHomogeneous) {
+                return result;
+            }
+
+            if (isHomoSub) {
                 result.type = 'Homogeneous First-Order ODE';
                 result.subtype = 'homogeneous';
                 result.method = 'Substitution v = y/x';
-                result.methodSteps = 'Let v = y/x, so y = vx and y\' = v + xv\'. Substitute — the equation becomes separable in v and x. Solve, then back-substitute y = vx.';
+                result.methodSteps = "RHS is F(y/x). Let v = y/x, so y = vx, y' = v + xv'. Get separable ODE in v and x. Solve, then y = vx.";
                 result.link = 'ch1-homogeneous.html';
-                result.properties.push({label: 'Form', value: 'dy/dx = F(y/x)'});
-            } else {
-                // Default: try exact/non-exact or suggest methods
-                result.type = 'Nonlinear First-Order ODE';
-                result.subtype = 'general';
-                result.method = 'Try Exact Test or Substitution';
-                result.methodSteps = 'Rewrite as M dx + N dy = 0 and test for exactness (∂M/∂y = ∂N/∂x?). If not exact, look for an integrating factor. Also try substitutions like v = y/x (homogeneous) or v = ax+by (special forms). If nothing works, use numerical methods.';
-                result.link = 'ch1-exact.html';
-                result.properties.push({label: 'Tip', value: 'Try rewriting in differential form and testing exactness'});
+                result.properties.push({label: 'Form', value: "dy/dx = F(y/x)"});
+                return result;
             }
 
+            // Default
+            result.type = 'Nonlinear First-Order ODE';
+            result.subtype = 'general';
+            result.method = 'Rewrite as M dx + N dy = 0, Test Exactness';
+            result.methodSteps = "Rearrange to M dx + N dy = 0. Check \u2202M/\u2202y vs \u2202N/\u2202x. If equal \u2192 exact. If not \u2192 integrating factor. Also try v = y/x substitution or numerical methods.";
+            result.link = 'ch1-exact.html';
+            result.properties.push({label: 'Suggestion', value: 'Try differential form and exactness test'});
             return result;
         }
 
-        function checkSeparable(eq, lhs, rhs) {
-            // Simple heuristic: if RHS has y but not mixed with x, it might be separable
-            // y' = f(x)*g(y) patterns: x*y, x^2*y, x/y, y/x (not x+y, x*y+x)
-            if (!rhs) return false;
-
-            // If RHS is purely x (no y) or purely y (no x), it's separable
-            const rhsHasX = /[x]/.test(rhs);
-            const rhsHasY = /[y]/.test(rhs);
-
-            if (!rhsHasX || !rhsHasY) return true;
-
-            // Check if it's a product: f(x)*g(y)
-            // Patterns like x*y, x^2*y^3, etc.
-            if (/^[^+\-]*\*[^+\-]*$/.test(rhs)) {
-                // Single product — check if separable
-                const parts = rhs.split('*');
-                const xParts = parts.filter(p => /x/.test(p) && !/y/.test(p));
-                const yParts = parts.filter(p => /y/.test(p) && !/x/.test(p));
-                if (xParts.length + yParts.length === parts.length) return true;
+        function checkSeparable(norm, lhs, rhs) {
+            if (!rhs || rhs.trim() === '0') return false;
+            const r = rhs.trim();
+            const hasX = /\bx\b/.test(r);
+            const hasY = /\by\b/.test(r);
+            if (!hasX || !hasY) return true;
+            // Product form only (no + or -)
+            if (!/[+\-]/.test(r)) {
+                const parts = r.split(/[*/]/);
+                const mixed = parts.filter(p => /x/.test(p) && /y/.test(p));
+                if (mixed.length === 0) return true;
             }
-
-            // y' = f(x) * y  (linear separable)
-            if (/^[^y]+\*\s*y\s*$/.test(rhs) || /^\s*y\s*\*[^y]+$/.test(rhs)) return true;
-
             return false;
         }
 
-        function checkHomogeneous(eq, rhs) {
+        function checkHomogeneous(norm, rhs) {
             if (!rhs) return false;
-            // Check for ratios like (x+y)/(x-y), (y/x), (x^2+y^2)/(x*y)
-            if (/\(.*x.*[+\-].*y.*\)\s*\/\s*\(.*x.*[+\-].*y.*\)/.test(rhs)) return true;
-            if (/\(.*y.*[+\-].*x.*\)\s*\/\s*\(.*x.*[+\-].*y.*\)/.test(rhs)) return true;
-            // y/x or x/y patterns
-            if (/^\s*y\s*\/\s*x\s*$/.test(rhs) || /^\s*x\s*\/\s*y\s*$/.test(rhs)) return true;
-            // (x+y)/x type
-            if (/\(.*x.*y.*\)\s*\/\s*x/.test(rhs)) return true;
+            const r = rhs.trim();
+            if (/\([^)]*x[^)]*[+\-][^)]*y[^)]*\)\s*\/\s*\([^)]*[xy]/.test(r)) return true;
+            if (/\([^)]*y[^)]*[+\-][^)]*x[^)]*\)\s*\/\s*\([^)]*[xy]/.test(r)) return true;
+            if (/^\s*y\s*\/\s*x\s*$/.test(r) || /^\s*x\s*\/\s*y\s*$/.test(r)) return true;
+            if (/\([^)]*[xy][^)]*\)\s*\/\s*x\b/.test(r)) return true;
+            if (/\([^)]*[xy][^)]*\)\s*\/\s*y\b/.test(r)) return true;
             return false;
         }
+
 
         function ordinal(n) {
             const s = ['th', 'st', 'nd', 'rd'];
