@@ -1099,7 +1099,17 @@ ${learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge 
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'update_profile',
-      messages: messages.slice(-10).map(m => ({ role: m.role, content: m.content })),
+      messages: messages
+        .filter(m => m.content && m.role) // remove empty
+        .slice(-10)
+        .map(m => ({ role: m.role, content: m.content }))
+        .reduce((acc, m, i) => {
+          // Ensure first message is 'user' and no consecutive same-role messages
+          if (i === 0 && m.role !== 'user') return acc;
+          if (acc.length > 0 && acc[acc.length - 1].role === m.role) return acc;
+          acc.push(m);
+          return acc;
+        }, []),
       system: profilePrompt,
       student: {
         name: studentProfile.name,
