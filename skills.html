@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Skills & Growth | Math 4 — Dr. Mohamed Mabrok</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+  --primary-dark: #1e40af;
+  --accent: #7c3aed;
+  --accent-light: #ede9fe;
+  --success: #059669;
+  --success-light: #d1fae5;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --danger: #dc2626;
+  --teal: #0891b2;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+}
+
+/* Navigation */
+nav {
+  position:fixed;top:0;left:0;right:0;
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);z-index:1000;
+  padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;
+}
+nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+nav a:hover{color:var(--primary);}
+nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+nav .active{color:var(--accent);font-weight:700;}
+
+/* Hero Banner */
+.hero-banner {
+  margin-top: 42px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 35%, #3b82f6 65%, #7c3aed 100%);
+  color: #fff; padding: 3.5rem 2rem 3rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero-banner::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 50%, rgba(59,130,246,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 80% 40%, rgba(124,58,237,0.15) 0%, transparent 70%);
+}
+.hero-banner .inner { position:relative; z-index:2; max-width:800px; margin:0 auto; }
+.hero-banner h1 {
+  font-size: 2.6rem; font-weight: 800; margin-bottom: 0.6rem;
+  line-height: 1.2; letter-spacing: -0.02em;
+}
+.hero-banner .subtitle {
+  font-size: 1.15rem; opacity: 0.85; max-width: 600px; margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Container */
+.container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem 3rem; }
+
+/* Intro */
+.intro-text {
+  font-size: 1.1rem; color: var(--text-muted); max-width: 750px;
+  margin: 0 auto 3rem; text-align: center; line-height: 1.8;
+}
+
+/* ---- Journey Timeline ---- */
+.journey {
+  position: relative;
+  padding-left: 0;
+}
+
+/* Vertical line */
+.journey::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 40px;
+  bottom: 40px;
+  width: 3px;
+  background: linear-gradient(to bottom, #059669, #2563eb, #7c3aed, #d97706, #dc2626, #0891b2);
+  border-radius: 3px;
+}
+
+/* Each skill node */
+.skill-node {
+  position: relative;
+  padding-left: 72px;
+  margin-bottom: 2.8rem;
+}
+
+/* Timeline dot */
+.skill-node .dot {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  color: #fff; font-weight: 700;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--border);
+  z-index: 2;
+}
+
+/* Skill card */
+.skill-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.8rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid transparent;
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.skill-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateX(4px);
+}
+
+.skill-card .skill-header {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+.skill-card .skill-icon {
+  font-size: 1.6rem; flex-shrink: 0;
+}
+.skill-card h3 {
+  font-size: 1.2rem; font-weight: 700; color: var(--text);
+  line-height: 1.3;
+}
+
+.skill-card .description {
+  font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Chapter connections */
+.chapter-connections {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.ch-tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+  text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+}
+.ch-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.ch-tag.ch1 { background: #d1fae5; color: #065f46; }
+.ch-tag.ch2 { background: #dbeafe; color: #1e40af; }
+.ch-tag.ch3 { background: #ede9fe; color: #5b21b6; }
+.ch-tag.ch4 { background: #fef3c7; color: #92400e; }
+.ch-tag.ch5 { background: #fee2e2; color: #991b1b; }
+.ch-tag.ch6 { background: #cffafe; color: #155e75; }
+
+/* Growth example quote */
+.growth-quote {
+  background: #f8fafc;
+  border-left: 3px solid var(--border);
+  padding: 0.6rem 1rem;
+  font-size: 0.88rem; color: var(--text-muted);
+  font-style: italic;
+  border-radius: 0 8px 8px 0;
+  margin-top: 0.4rem;
+}
+
+/* Color themes per skill */
+.skill-node.mathematical-maturity .dot { background: var(--success); }
+.skill-node.mathematical-maturity .skill-card { border-left-color: var(--success); }
+
+.skill-node.critical-thinking .dot { background: var(--primary); }
+.skill-node.critical-thinking .skill-card { border-left-color: var(--primary); }
+
+.skill-node.modeling .dot { background: var(--accent); }
+.skill-node.modeling .skill-card { border-left-color: var(--accent); }
+
+.skill-node.problem-decomposition .dot { background: var(--warning); }
+.skill-node.problem-decomposition .skill-card { border-left-color: var(--warning); }
+
+.skill-node.persistence .dot { background: var(--danger); }
+.skill-node.persistence .skill-card { border-left-color: var(--danger); }
+
+.skill-node.computational .dot { background: var(--teal); }
+.skill-node.computational .skill-card { border-left-color: var(--teal); }
+
+.skill-node.appreciation .dot { background: #8b5cf6; }
+.skill-node.appreciation .skill-card { border-left-color: #8b5cf6; }
+
+.skill-node.communication .dot { background: #ec4899; }
+.skill-node.communication .skill-card { border-left-color: #ec4899; }
+
+/* The "big picture" section at the end */
+.big-picture {
+  margin-top: 3rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #7c3aed 100%);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  color: #fff;
+  text-align: center;
+}
+.big-picture h2 {
+  font-size: 1.6rem; font-weight: 800; margin-bottom: 0.8rem;
+}
+.big-picture p {
+  font-size: 1.05rem; opacity: 0.9; max-width: 650px; margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* Quranic verse */
+.quran-verse {
+  margin-top: 2.5rem;
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.quran-verse .arabic {
+  font-size: 1.5rem;
+  line-height: 2;
+  color: var(--text);
+  font-family: 'Traditional Arabic', 'Amiri', serif;
+  direction: rtl;
+  margin-bottom: 0.5rem;
+}
+.quran-verse .translation {
+  font-size: 0.95rem; color: var(--text-muted); font-style: italic;
+}
+.quran-verse .reference {
+  font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;
+}
+
+/* Back link */
+.back-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--primary); font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; margin-top: 2rem;
+}
+.back-link:hover { text-decoration: underline; }
+
+footer {
+  text-align: center; padding: 1.5rem; color: var(--text-muted);
+  font-size: 0.85rem; border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .hero-banner h1 { font-size: 1.8rem; }
+  .skill-node { padding-left: 56px; }
+  .journey::before { left: 20px; }
+  .skill-node .dot { left: 8px; width: 24px; height: 24px; font-size: 0.75rem; }
+  .skill-card { padding: 1.2rem; }
+  .chapter-connections { gap: 0.35rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html">Home</a>
+  <a href="skills.html" class="active">Skills</a>
+  <a href="exam-generator.html">Exam Generator</a>
+  <a href="videos.html">Videos</a>
+  <a href="projects.html">Projects</a>
+</nav>
+
+<div class="hero-banner">
+  <div class="inner">
+    <h1>Your Growth Journey</h1>
+    <p class="subtitle">Differential Equations is not just about solving equations &mdash; it is about developing a way of thinking that will serve you throughout your engineering career and beyond.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <p class="intro-text">
+    Every chapter you work through builds more than technical knowledge. Below are the deep, transferable skills you develop as you progress through this course &mdash; and where each skill is cultivated most.
+  </p>
+
+  <!-- ===== JOURNEY TIMELINE ===== -->
+  <div class="journey">
+
+    <!-- SKILL 1: Mathematical Maturity -->
+    <div class="skill-node mathematical-maturity">
+      <div class="dot">1</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F9E0;</span>
+          <h3>Mathematical Maturity</h3>
+        </div>
+        <p class="description">
+          You learn to read and write mathematics with confidence. Concepts like functions, limits, and infinity become familiar friends rather than abstract fears. You begin to see statements like "for all \(\epsilon > 0\)" not as intimidating notation, but as precise language for precise ideas. You grow comfortable with multiple representations of the same object &mdash; a solution can be a formula, a graph, a series, or a numerical table.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch1-separable.html" class="ch-tag ch1">Ch 1 &middot; First-Order ODEs</a>
+          <a href="ch2-overview.html" class="ch-tag ch2">Ch 2 &middot; Higher-Order ODEs</a>
+          <a href="ch5-power-series.html" class="ch-tag ch5">Ch 5 &middot; Series Solutions</a>
+        </div>
+        <div class="growth-quote">
+          "At first I couldn't follow any proof. By the end, I was constructing my own arguments about why a method works."
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 2: Critical Thinking & Strategy Selection -->
+    <div class="skill-node critical-thinking">
+      <div class="dot">2</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F50D;</span>
+          <h3>Critical Thinking & Strategy Selection</h3>
+        </div>
+        <p class="description">
+          Given an equation, you don't just apply a memorized recipe &mdash; you analyze its structure, classify it, and choose the right approach. Is it separable? Linear? Exact? Could a clever substitution transform it? This skill of examining a problem before diving in, weighing multiple approaches, and selecting the best strategy is one of the most valuable thinking habits you can develop.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch1-separable.html" class="ch-tag ch1">Ch 1 &middot; Separable vs Linear vs Exact</a>
+          <a href="ch2-undetermined.html" class="ch-tag ch2">Ch 2 &middot; Undetermined Coefficients vs Variation</a>
+          <a href="ch3-overview.html" class="ch-tag ch3">Ch 3 &middot; Laplace Transform Methods</a>
+          <a href="ch5-overview.html" class="ch-tag ch5">Ch 5 &middot; Analytical vs Numerical</a>
+        </div>
+        <div class="growth-quote">
+          "Before this course, math was about following steps. Now I stop and ask: what kind of problem is this?"
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 3: Mathematical Modeling & Abstraction -->
+    <div class="skill-node modeling">
+      <div class="dot">3</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F3D7;&#xFE0F;</span>
+          <h3>Mathematical Modeling & Abstraction</h3>
+        </div>
+        <p class="description">
+          You learn to translate real-world phenomena into mathematical language. A vibrating beam becomes a differential equation; heat flowing through a wall becomes a boundary value problem. This power of abstraction &mdash; stripping a complex situation to its essential mathematical structure &mdash; is the core of what engineers do. You also learn the reverse: interpreting solutions back into physical meaning.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch2-mass-spring.html" class="ch-tag ch2">Ch 2 &middot; Mass-Spring Systems</a>
+          <a href="ch4-two-tank.html" class="ch-tag ch4">Ch 4 &middot; Two-Tank Mixing</a>
+          <a href="ch6-heat-separation.html" class="ch-tag ch6">Ch 6 &middot; Heat & Wave Equations</a>
+        </div>
+        <div class="growth-quote">
+          "I never realized how much of engineering is about translating physical situations into equations. This course gave me that lens."
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 4: Problem Decomposition -->
+    <div class="skill-node problem-decomposition">
+      <div class="dot">4</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F9E9;</span>
+          <h3>Problem Decomposition</h3>
+        </div>
+        <p class="description">
+          Complex problems are rarely solved in one step. You learn to break them into manageable pieces: separate variables, reduce the order, decompose a function into partial fractions, split a PDE into spatial and temporal parts. This "divide and conquer" mindset transfers directly to engineering design, software architecture, and scientific research &mdash; any domain where large problems must be tamed piece by piece.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch1-separable.html" class="ch-tag ch1">Ch 1 &middot; Separation of Variables</a>
+          <a href="ch3-solving-odes.html" class="ch-tag ch3">Ch 3 &middot; Partial Fractions & Inverse Laplace</a>
+          <a href="ch4-overview.html" class="ch-tag ch4">Ch 4 &middot; Systems Decomposition</a>
+          <a href="ch6-heat-separation.html" class="ch-tag ch6">Ch 6 &middot; PDE Separation of Variables</a>
+        </div>
+        <div class="growth-quote">
+          "Separation of variables taught me something bigger than math &mdash; it taught me that hard problems become easy when you split them right."
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 5: Persistence & Comfort with Difficulty -->
+    <div class="skill-node persistence">
+      <div class="dot">5</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F3CB;&#xFE0F;</span>
+          <h3>Persistence & Comfort with Difficulty</h3>
+        </div>
+        <p class="description">
+          Differential equations demand patience. A single problem might require ten steps; an eigenvalue analysis might yield three cases that each need separate treatment. You learn that feeling stuck is a normal part of mathematical work, not a sign of failure. Over time, you build intellectual stamina and the confidence to push through difficulty &mdash; a skill that distinguishes successful engineers and researchers.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch2-variation.html" class="ch-tag ch2">Ch 2 &middot; Variation of Parameters</a>
+          <a href="ch5-frobenius.html" class="ch-tag ch5">Ch 5 &middot; Frobenius Method</a>
+          <a href="ch6-bc-cases.html" class="ch-tag ch6">Ch 6 &middot; Eigenvalue Case Analysis</a>
+        </div>
+        <div class="growth-quote">
+          "The three-case eigenvalue analysis was the hardest thing I've done in math. Finishing it felt like climbing a mountain."
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 6: Computational & Numerical Thinking -->
+    <div class="skill-node computational">
+      <div class="dot">6</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F4BB;</span>
+          <h3>Computational & Numerical Thinking</h3>
+        </div>
+        <p class="description">
+          Not every equation has a closed-form solution &mdash; and that's okay. You learn to think about approximation, convergence, error bounds, and when to trust (or distrust) a numerical answer. Whether you are running Euler's method by hand or understanding why Runge-Kutta is more accurate, you develop the judgement to know when an analytical solution is possible and when computation is the right tool.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch5-euler-method.html" class="ch-tag ch5">Ch 5 &middot; Euler's Method</a>
+          <a href="ch5-runge-kutta.html" class="ch-tag ch5">Ch 5 &middot; Runge-Kutta Methods</a>
+          <a href="ch5-power-series.html" class="ch-tag ch5">Ch 5 &middot; Power Series Approximation</a>
+        </div>
+        <div class="growth-quote">
+          "I used to think math was only about exact answers. Now I understand why engineers need numerical methods &mdash; and when they're enough."
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 7: Appreciation & Belief in Mathematics -->
+    <div class="skill-node appreciation">
+      <div class="dot">7</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x2728;</span>
+          <h3>Appreciation & Belief in Mathematics</h3>
+        </div>
+        <p class="description">
+          Perhaps the most profound shift is emotional: you begin to trust that mathematics works, that elegant structures underlie messy-looking phenomena. When you see Fourier series reconstruct a jagged function, or watch Laplace transforms convert an impossible integral equation into simple algebra, something clicks. You stop seeing math as an obstacle and start seeing it as a language of nature &mdash; beautiful, powerful, and deeply reliable.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch3-overview.html" class="ch-tag ch3">Ch 3 &middot; Laplace Transforms</a>
+          <a href="ch4-phase-portraits.html" class="ch-tag ch4">Ch 4 &middot; Phase Portraits & Stability</a>
+          <a href="ch6-pde-practice.html" class="ch-tag ch6">Ch 6 &middot; PDE Solutions & Simulators</a>
+        </div>
+        <div class="growth-quote">
+          "Watching the Fourier series converge on screen &mdash; that's when I realized math isn't just rules. It's truth."
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL 8: Mathematical Communication -->
+    <div class="skill-node communication">
+      <div class="dot">8</div>
+      <div class="skill-card">
+        <div class="skill-header">
+          <span class="skill-icon">&#x1F4DD;</span>
+          <h3>Mathematical Communication</h3>
+        </div>
+        <p class="description">
+          Writing mathematics is a skill of its own. Through worked examples, homework, and exams, you learn to present solutions clearly: stating what is given, showing each logical step, justifying simplifications, and interpreting results. Clear mathematical writing is essential in engineering reports, research papers, and technical discussions. You learn that a correct answer poorly presented is almost as useless as a wrong one.
+        </p>
+        <div class="chapter-connections">
+          <a href="ch1-separable.html" class="ch-tag ch1">Ch 1 &middot; Solution Write-ups</a>
+          <a href="ch2-overview.html" class="ch-tag ch2">Ch 2 &middot; Multi-step Derivations</a>
+          <a href="ch6-heat-separation.html" class="ch-tag ch6">Ch 6 &middot; Full PDE Derivations</a>
+        </div>
+        <div class="growth-quote">
+          "I learned that 'I got the right answer' is not enough. How you get there &mdash; and how you explain it &mdash; matters."
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end journey -->
+
+  <!-- Big Picture -->
+  <div class="big-picture">
+    <h2>The Big Picture</h2>
+    <p>
+      By the end of this course, you will have solved dozens of differential equations &mdash; but the real takeaway is bigger than any formula. You will think more clearly, analyze more carefully, model more confidently, and persist more bravely. These are the skills that will define your career, long after the specific equations fade from memory.
+    </p>
+  </div>
+
+  <!-- Quranic Verse -->
+  <div class="quran-verse">
+    <div class="arabic">&#x0631;&#x0628;&#x0651;&#x0650; &#x0632;&#x0650;&#x062F;&#x0652;&#x0646;&#x0650;&#x064A; &#x0639;&#x0650;&#x0644;&#x0652;&#x0645;&#x064B;&#x0627;</div>
+    <div class="translation">"My Lord, increase me in knowledge."</div>
+    <div class="reference">Quran 20:114</div>
+  </div>
+
+  <a href="index.html" class="back-link">&larr; Back to Course Home</a>
+
+</div>
+
+<footer>
+  Math 4: Mathematics for Engineering &nbsp;|&nbsp; Dr. Mohamed Mabrok &nbsp;|&nbsp; Department of Mathematics and Statistics, Qatar University
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  });
+
+  // Animate skills appearing on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.skill-node').forEach(node => {
+    node.style.opacity = '0';
+    node.style.transform = 'translateY(30px)';
+    node.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(node);
+  });
+});
+</script>
+
+</body>
+</html>
