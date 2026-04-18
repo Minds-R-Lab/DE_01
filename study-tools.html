@@ -172,133 +172,206 @@
 
         /* ===== TAB 1: WIZARD ===== */
         .wizard-container {
-            max-width: 800px;
+            max-width: 750px;
             margin: 0 auto;
         }
 
-        .breadcrumb {
-            display: flex;
-            gap: 0.5rem;
+        .wizard-intro {
+            text-align: center;
             margin-bottom: 2rem;
-            flex-wrap: wrap;
-            align-items: center;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .breadcrumb-item {
+            padding: 1.5rem;
             background: var(--primary-light);
-            color: var(--primary-dark);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid #bfdbfe;
+        }
+        .wizard-intro h3 {
+            font-size: 1.15rem; font-weight: 700; color: var(--primary-dark);
+            margin-bottom: 0.3rem;
+        }
+        .wizard-intro p {
+            font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;
         }
 
-        .breadcrumb-item.active {
-            background: var(--primary);
-            color: white;
+        /* Step counter */
+        .wizard-step-counter {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 1.2rem; font-size: 0.85rem; color: var(--text-muted);
+        }
+        .wizard-step-counter .step-dots {
+            display: flex; gap: 0.35rem;
+        }
+        .wizard-step-counter .dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--border); transition: all 0.3s;
+        }
+        .wizard-step-counter .dot.active {
+            background: var(--primary); transform: scale(1.2);
+        }
+        .wizard-step-counter .dot.done {
+            background: var(--success);
         }
 
-        .breadcrumb span {
-            margin: 0 0.5rem;
+        /* Path summary (replaces old breadcrumb) */
+        .wizard-path {
+            display: flex; flex-direction: column; gap: 0.4rem;
+            margin-bottom: 1.5rem;
+        }
+        .wizard-path-step {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; color: var(--text-muted);
+            padding: 0.35rem 0.7rem;
+            background: #f1f5f9; border-radius: 8px;
+            animation: slideIn 0.3s ease;
+        }
+        .wizard-path-step .path-q { color: var(--primary); font-weight: 600; }
+        .wizard-path-step .path-arrow { color: var(--success); font-weight: 700; }
+        .wizard-path-step .path-a { color: var(--text); font-weight: 500; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .wizard-card {
             background: white;
             border-radius: var(--radius);
-            padding: 3rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-            margin-bottom: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            animation: fadeUp 0.4s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .wizard-question {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 2rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
             line-height: 1.4;
+        }
+
+        .wizard-hint {
+            font-size: 0.9rem; color: var(--text-muted);
+            margin-bottom: 1.5rem; line-height: 1.5;
+            padding: 0.6rem 0.8rem;
+            background: #fffbeb; border-left: 3px solid var(--warning);
+            border-radius: 0 8px 8px 0;
         }
 
         .wizard-buttons {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.75rem;
         }
 
         .option-button {
-            padding: 1.2rem 1.5rem;
+            padding: 1rem 1.3rem;
             border: 2px solid var(--border);
             background: white;
-            border-radius: var(--radius);
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             text-align: left;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             font-weight: 500;
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .option-button .opt-letter {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+            transition: all 0.25s;
         }
 
         .option-button:hover {
             border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateX(4px);
+            background: #f8faff;
+            transform: translateX(6px);
+        }
+        .option-button:hover .opt-letter {
+            background: var(--primary); color: white;
         }
 
-        .option-button.accent:hover {
-            border-color: var(--accent);
-            background: var(--accent-light);
-        }
-
-        .option-button.success:hover {
-            border-color: var(--success);
-            background: var(--success-light);
-        }
-
-        .option-button.warning:hover {
-            border-color: var(--warning);
-            background: var(--warning-light);
-        }
-
+        /* ---- RESULT CARD ---- */
         .result-card {
-            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
-            border-left: 6px solid var(--primary);
+            background: white;
             border-radius: var(--radius);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 2px solid var(--success);
+            margin-bottom: 1.5rem;
+            animation: resultPop 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .result-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 5px;
+        }
+        .result-card.ch1::before { background: linear-gradient(90deg, #059669, #10b981); }
+        .result-card.ch2::before { background: linear-gradient(90deg, #2563eb, #8b5cf6); }
+        .result-card.ch3::before { background: linear-gradient(90deg, #7c3aed, #ec4899); }
+        .result-card.ch4::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+        .result-card.ch5::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .result-card.ch6::before { background: linear-gradient(90deg, #0891b2, #06b6d4); }
+
+        @keyframes resultPop {
+            0% { opacity: 0; transform: scale(0.95); }
+            50% { transform: scale(1.01); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        .result-card.ch1 { border-left-color: var(--ch1); background: linear-gradient(135deg, #dbeafe, #ede9fe); }
-        .result-card.ch2 { border-left-color: var(--ch2); background: linear-gradient(135deg, #ede9fe, #f3e8ff); }
-        .result-card.ch3 { border-left-color: var(--ch3); background: linear-gradient(135deg, #fbcfe8, #f3e8ff); }
-        .result-card.ch4 { border-left-color: var(--ch4); background: linear-gradient(135deg, #fef3c7, #fbcfe8); }
-        .result-card.ch6 { border-left-color: var(--ch6); background: linear-gradient(135deg, #cffafe, #dbeafe); }
+        .result-badge {
+            display: inline-block;
+            background: var(--success-light); color: var(--success);
+            padding: 0.3rem 0.9rem; border-radius: 20px;
+            font-size: 0.82rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.04em;
+            margin-bottom: 0.8rem;
+        }
 
         .result-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.6rem;
+        }
+
+        .result-chapter {
+            font-size: 0.9rem; color: var(--text-muted);
+            margin-bottom: 1rem; font-weight: 600;
         }
 
         .result-description {
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.8;
             color: var(--text);
             margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .result-actions {
+            display: flex; gap: 0.8rem; flex-wrap: wrap;
         }
 
         .result-link {
-            display: inline-block;
+            display: inline-flex; align-items: center; gap: 0.4rem;
             background: var(--primary);
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
+            padding: 0.65rem 1.3rem;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 600; font-size: 0.95rem;
             transition: all 0.3s ease;
-            margin-right: 0.5rem;
         }
 
         .result-link:hover {
@@ -308,19 +381,20 @@
         }
 
         .start-over-btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
             background: white;
-            color: var(--text);
+            color: var(--text-muted);
             border: 2px solid var(--border);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
+            padding: 0.65rem 1.3rem;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 600; font-size: 0.95rem;
             transition: all 0.3s ease;
         }
 
         .start-over-btn:hover {
-            border-color: var(--danger);
-            color: var(--danger);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         /* ===== TAB 2: NEWS ===== */
@@ -722,11 +796,13 @@
     <div id="wizard" class="tab-content active">
         <div class="container">
             <div class="wizard-container">
-                <div class="breadcrumb" id="breadcrumb"></div>
-                <div id="wizard-display"></div>
-                <div id="restart-container" style="text-align: center; margin-top: 2rem;">
-                    <button class="start-over-btn" onclick="resetWizard()">Start Over</button>
+                <div class="wizard-intro">
+                    <h3>Answer a few questions about your equation</h3>
+                    <p>This tool will guide you step by step to the right solution method. Just answer each question honestly &mdash; even "I'm not sure" is a valid answer!</p>
                 </div>
+                <div id="wizard-step-counter" class="wizard-step-counter"></div>
+                <div id="wizard-path" class="wizard-path"></div>
+                <div id="wizard-display"></div>
             </div>
         </div>
     </div>
@@ -775,137 +851,174 @@
         const wizardTree = {
             step1: {
                 question: "What type of equation do you have?",
+                hint: "Look at how many independent variables and what derivatives appear.",
                 options: [
-                    { text: "First-order ODE", goto: "step2" },
-                    { text: "Second-order (or higher) ODE", goto: "step10" },
-                    { text: "System of ODEs", result: { title: "Systems of ODEs", description: "Use matrix methods, eigenvalues, and phase portraits from Chapter 4. Solve coupled equations simultaneously using linear algebra.", chapter: "ch4", chapter_full: "Chapter 4: Systems of ODEs" } },
-                    { text: "PDE (Partial Differential Equation)", result: { title: "Separation of Variables", description: "Use the separation of variables method from Chapter 6. Assume u(x,t) = X(x)·T(t), reduce to ODEs, solve, and apply boundary conditions.", chapter: "ch6", chapter_full: "Chapter 6: Partial Differential Equations" } }
+                    { text: "First-order ODE (involves y' only)", goto: "step2" },
+                    { text: "Second-order or higher ODE (involves y'' etc.)", goto: "step10" },
+                    { text: "System of ODEs (multiple unknown functions)", result: { title: "Systems of ODEs — Matrix & Eigenvalue Methods", description: "Write the system as X' = AX. Find eigenvalues and eigenvectors of A. The general solution combines eigenvector solutions e^{λt}v. For repeated or complex eigenvalues, use generalized eigenvectors or convert to real form.", chapter: "ch4", chapter_full: "Chapter 4: Systems of ODEs", link: "ch4-overview.html" } },
+                    { text: "PDE (partial derivatives ∂u/∂t, ∂²u/∂x², etc.)", result: { title: "Separation of Variables for PDEs", description: "Assume u(x,t) = X(x)·T(t). Substitute into the PDE to separate into two ODEs. Solve the spatial ODE with boundary conditions to find eigenvalues, then solve the temporal ODE. Combine with Fourier series.", chapter: "ch6", chapter_full: "Chapter 6: Partial Differential Equations", link: "ch6-pde-intro.html" } }
                 ]
             },
             step2: {
-                question: "Is it linear? (Can you write it as y' + P(x)y = Q(x)?)",
+                question: "Is it linear?",
+                hint: "Can you write it in the form y' + P(x)y = Q(x)? No y², y³, sin(y), yy', etc. on the left side.",
                 options: [
-                    { text: "Yes, it's linear", goto: "step3" },
+                    { text: "Yes, it's linear (or I can rearrange it to be)", goto: "step3" },
                     { text: "No, it's nonlinear", goto: "step5" }
                 ]
             },
             step3: {
-                question: "What does Q(x) look like?",
+                question: "What does the right side Q(x) look like?",
+                hint: "In y' + P(x)y = Q(x), look at Q(x).",
                 options: [
-                    { text: "Q(x) = 0 (homogeneous)", result: { title: "Separable or Linear Homogeneous", description: "Separate variables: dy/y = -P(x)dx, then integrate both sides. Or use integrating factor μ = e^{∫P dx}.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
-                    { text: "Q(x) ≠ 0 (nonhomogeneous)", goto: "step4" }
+                    { text: "Q(x) = 0 (homogeneous linear)", result: { title: "Separable & Linear — Two Methods Work!", description: "This is both separable AND linear. Separate: dy/y = −P(x)dx → integrate both sides. Or use integrating factor: μ = e^{∫P dx}, then d/dx[μy] = 0. Both give y = Ce^{−∫P dx}.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-separable.html" } },
+                    { text: "Q(x) ≠ 0 (something on the right side)", goto: "step4" }
                 ]
             },
             step4: {
-                question: "Does it have a y^n term? (y' + P(x)y = Q(x)y^n, n ≠ 0, 1)",
+                question: "Does it have a yⁿ term multiplied with Q(x)?",
+                hint: "Bernoulli form looks like: y' + P(x)y = Q(x)yⁿ where n ≠ 0, 1.",
                 options: [
-                    { text: "No, standard form y' + P(x)y = Q(x)", result: { title: "Integrating Factor Method", description: "Multiply both sides by μ = e^{∫P(x)dx}. This makes the left side a perfect derivative: d/dx[μy] = μQ(x). Integrate to solve.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
-                    { text: "Yes, Bernoulli form with y^n", result: { title: "Bernoulli Substitution", description: "Substitute v = y^{1-n}, then dv/dx = (1-n)y^{-n}·dy/dx. Transform to linear form in v: v' + (1-n)P(x)v = (1-n)Q(x). Solve using integrating factor.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } }
+                    { text: "No — standard linear: y' + P(x)y = Q(x)", result: { title: "Integrating Factor Method", description: "Multiply both sides by μ(x) = e^{∫P(x)dx}. The left side becomes d/dx[μ·y]. Then integrate: μ·y = ∫μ·Q dx + C. Finally divide by μ to get y.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-linear.html" } },
+                    { text: "Yes — Bernoulli form: y' + P(x)y = Q(x)yⁿ", result: { title: "Bernoulli Substitution", description: "Substitute v = y^{1−n}. Then v' = (1−n)y^{−n}y', which transforms the equation into a standard linear ODE in v: v' + (1−n)P(x)v = (1−n)Q(x). Solve with integrating factor, then back-substitute y = v^{1/(1−n)}.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-bernoulli.html" } }
                 ]
             },
             step5: {
-                question: "Can you separate all y terms on one side and all x terms on the other?",
+                question: "Can you separate all y-terms on one side and all x-terms on the other?",
+                hint: "Try to write it as g(y)dy = f(x)dx. If y and x are tangled together (like xy + y²x'), it's not separable.",
                 options: [
-                    { text: "Yes, I can separate variables", result: { title: "Separable Equation", description: "Write as g(y)dy = f(x)dx. Integrate both sides: ∫g(y)dy = ∫f(x)dx. The simplest and most important method!", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
-                    { text: "No, can't separate", goto: "step6" }
+                    { text: "Yes, I can separate them", result: { title: "Separation of Variables", description: "Write as g(y)dy = f(x)dx. Integrate both sides: ∫g(y)dy = ∫f(x)dx + C. This is the simplest and most fundamental method. Don't forget +C and check if dividing by anything set a solution to zero.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-separable.html" } },
+                    { text: "No, x and y are tangled together", goto: "step6" }
                 ]
             },
             step6: {
-                question: "Is it in the form M(x,y)dx + N(x,y)dy = 0?",
+                question: "Can you write it as M(x,y)dx + N(x,y)dy = 0?",
+                hint: "Most first-order ODEs can be rearranged into this form. Try moving all terms to one side.",
                 options: [
-                    { text: "Yes, I can write it that way", goto: "step7" },
-                    { text: "No or I'm not sure", goto: "step8" }
+                    { text: "Yes", goto: "step7" },
+                    { text: "Not sure — let me try another approach", goto: "step8" }
                 ]
             },
             step7: {
-                question: "Check: does ∂M/∂y = ∂N/∂x?",
+                question: "Check: does ∂M/∂y equal ∂N/∂x?",
+                hint: "Compute both partial derivatives and compare. If equal, the equation is exact.",
                 options: [
-                    { text: "Yes, they're equal (exact)", result: { title: "Exact Equation", description: "Find F(x,y) such that ∂F/∂x = M and ∂F/∂y = N. The solution is F(x,y) = C. Use partial integration.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
-                    { text: "No, they're not equal (non-exact)", result: { title: "Non-Exact Equation with Integrating Factor", description: "Find integrating factor μ(x) or μ(y) to make it exact. Check if (N_x - M_y)/M is function of y only, or (M_y - N_x)/N is function of x only.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } }
+                    { text: "Yes, ∂M/∂y = ∂N/∂x (exact!)", result: { title: "Exact Equation", description: "Find F(x,y) such that ∂F/∂x = M and ∂F/∂y = N. Integrate M with respect to x: F = ∫M dx + g(y). Then differentiate F with respect to y, set equal to N, and solve for g(y). The solution is F(x,y) = C.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-exact.html" } },
+                    { text: "No, they're different (non-exact)", result: { title: "Non-Exact — Find an Integrating Factor", description: "Find μ to make it exact. Check: if (M_y − N_x)/N depends only on x → μ(x) = e^{∫(M_y−N_x)/N dx}. If (N_x − M_y)/M depends only on y → μ(y) = e^{∫(N_x−M_y)/M dy}. Multiply through by μ, then solve as exact.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-nonexact.html" } }
                 ]
             },
             step8: {
-                question: "Is it homogeneous? (Can you write dy/dx = F(y/x)?)",
+                question: "Is it homogeneous? Can you write dy/dx = F(y/x)?",
+                hint: "Replace every y with (vx) and see if x cancels out. If M(tx,ty) = t^n M(x,y) for both M and N with the same n, it's homogeneous.",
                 options: [
-                    { text: "Yes, it's homogeneous", result: { title: "Homogeneous Substitution", description: "Let v = y/x, so y = vx and dy/dx = v + x·dv/dx. Substitute to get separable equation in v and x. Solve and back-substitute.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs" } },
-                    { text: "No or unsure", result: { title: "Consider Substitution or Numerical Methods", description: "Some equations require clever substitutions tailored to their form. Others cannot be solved analytically and require numerical methods (Euler, RK4) from Chapter 5.", chapter: "ch5", chapter_full: "Chapter 5: Series and Numerical Methods" } }
+                    { text: "Yes, it's homogeneous", result: { title: "Homogeneous Substitution (v = y/x)", description: "Let v = y/x, so y = vx and dy/dx = v + x·dv/dx. Substitute into the ODE — all x's cancel, leaving a separable equation in v and x. Solve, then back-substitute y = vx.", chapter: "ch1", chapter_full: "Chapter 1: First-Order ODEs", link: "ch1-homogeneous.html" } },
+                    { text: "No, or I'm not sure", result: { title: "Try a Substitution or Use Numerical Methods", description: "Some special equations need clever substitutions (like v = ax+by+c). If no analytical method works, use numerical methods from Chapter 5: Euler's method for quick approximation, or Runge-Kutta (RK4) for high accuracy.", chapter: "ch5", chapter_full: "Chapter 5: Series & Numerical Methods", link: "ch5-overview.html" } }
                 ]
             },
             step10: {
-                question: "Does it have constant coefficients? (a·y'' + b·y' + c·y = ...)",
+                question: "Does it have constant coefficients?",
+                hint: "Are a, b, c all just numbers (not functions of x)? Like 2y'' − 3y' + y = ... is constant. But x²y'' + xy' = ... is NOT.",
                 options: [
-                    { text: "Yes, constant coefficients", goto: "step11" },
-                    { text: "No, variable coefficients", goto: "step14" }
+                    { text: "Yes, constant coefficients (ay'' + by' + cy = ...)", goto: "step11" },
+                    { text: "No, variable coefficients (functions of x multiply y, y', y'')", goto: "step14" }
                 ]
             },
             step11: {
-                question: "Is it homogeneous? (Right side = 0?)",
+                question: "Is the right side zero (homogeneous)?",
+                hint: "ay'' + by' + cy = 0 is homogeneous. ay'' + by' + cy = g(x) with g(x) ≠ 0 is nonhomogeneous.",
                 options: [
-                    { text: "Yes, homogeneous (y'' + py' + qy = 0)", result: { title: "Characteristic Equation", description: "Solve ar² + br + c = 0. Real distinct r₁, r₂ → y = c₁e^{r₁x} + c₂e^{r₂x}. Repeated r → y = (c₁+c₂x)e^{rx}. Complex α±βi → y = e^{αx}(c₁cos βx + c₂sin βx).", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
-                    { text: "No, nonhomogeneous (has forcing function)", goto: "step12" }
+                    { text: "Yes, right side = 0 (homogeneous)", result: { title: "Characteristic Equation", description: "Replace y→e^{rx}: get ar² + br + c = 0. Three cases: (1) Two distinct real roots r₁, r₂ → y = c₁e^{r₁x} + c₂e^{r₂x}. (2) Repeated root r → y = (c₁ + c₂x)e^{rx}. (3) Complex roots α±βi → y = e^{αx}(c₁cos βx + c₂sin βx).", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs", link: "ch2-homogeneous-const.html" } },
+                    { text: "No, there's a forcing function g(x) on the right", goto: "step12" }
                 ]
             },
             step12: {
-                question: "What type of forcing function g(x)?",
+                question: "What kind of forcing function g(x)?",
+                hint: "This determines whether you can use the simpler method (undetermined coefficients) or need the general method (variation of parameters).",
                 options: [
-                    { text: "Polynomial, exponential, sin/cos (standard forms)", result: { title: "Undetermined Coefficients", description: "Guess y_p: polynomial → c_n·x^n + ..., exponential → Ae^{bx}, sin/cos → A·cos + B·sin. Substitute into ODE to find coefficients. If y_p matches y_h, multiply by x.", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
-                    { text: "Complex (tan x, ln x, 1/x, etc.)", result: { title: "Variation of Parameters", description: "Use y_p = u₁(x)y₁(x) + u₂(x)y₂(x) with formulas: u₁' = -y₂g/W, u₂' = y₁g/W, where W = y₁y₂' - y₂y₁' (Wronskian). Works for ANY g(x).", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
-                    { text: "Step function or impulse (discontinuous)", result: { title: "Laplace Transform", description: "Take ℒ{y''} + ... = ℒ{g}, solve for Y(s) algebraically, apply initial conditions, then invert. Handles step functions H(t), impulses δ(t), and piecewise functions elegantly.", chapter: "ch3", chapter_full: "Chapter 3: Laplace Transform" } }
+                    { text: "Polynomial, exponential, sin, cos, or combinations", result: { title: "Undetermined Coefficients", description: "First solve the homogeneous part for y_h. Then guess y_p: polynomial → Ax^n+..., exponential → Ae^{bx}, trig → Acos(bx)+Bsin(bx). If your guess overlaps with y_h, multiply by x. Substitute y_p into the ODE and solve for the unknown coefficients.", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs", link: "ch2-undetermined.html" } },
+                    { text: "Something messier (tan x, sec x, ln x, 1/x, etc.)", result: { title: "Variation of Parameters", description: "Works for ANY g(x). Find y_h = c₁y₁ + c₂y₂ first. Then y_p = u₁y₁ + u₂y₂ where: u₁' = −y₂g/W, u₂' = y₁g/W, and W = y₁y₂' − y₂y₁' is the Wronskian. Integrate to find u₁, u₂.", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs", link: "ch2-variation.html" } },
+                    { text: "Discontinuous, piecewise, step, or impulse function", result: { title: "Laplace Transform Method", description: "Take the Laplace transform of both sides: ℒ{y''} = s²Y − sy(0) − y'(0). Solve for Y(s) algebraically, then invert using partial fractions and the Laplace table. Handles step functions u(t−a), impulses δ(t−a), and piecewise forcing naturally.", chapter: "ch3", chapter_full: "Chapter 3: Laplace Transforms", link: "ch3-overview.html" } }
                 ]
             },
             step14: {
-                question: "Is it an Euler-Cauchy equation? (ax²y'' + bxy' + cy = ...)",
+                question: "Is it an Euler-Cauchy equation?",
+                hint: "Euler-Cauchy has the special form ax²y'' + bxy' + cy = 0. The key: each term has x raised to the same power as the derivative order.",
                 options: [
-                    { text: "Yes, Euler-Cauchy form", result: { title: "Euler-Cauchy (Equidimensional)", description: "Try y = x^r. Substitute to get indicial equation ar(r-1) + br + c = 0 (for homogeneous case). Solve for r, apply cases: distinct real, repeated real, complex. For nonhomogeneous, use variation of parameters.", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs" } },
-                    { text: "No, general variable coefficients", result: { title: "Series Solutions (Power or Frobenius)", description: "Expand y = Σa_n·x^n at ordinary points (power series). At regular singular points, use Frobenius method: y = Σa_n·x^{r+n}. Chapter 5 details the indicial equation and recurrence relations.", chapter: "ch5", chapter_full: "Chapter 5: Series and Numerical Methods" } }
+                    { text: "Yes, Euler-Cauchy form (ax²y'' + bxy' + cy = ...)", result: { title: "Euler-Cauchy (Equidimensional) Equation", description: "Try y = x^r. Substituting gives the indicial equation: ar(r−1) + br + c = 0. Same three cases as constant-coefficient: distinct real r₁,r₂ → x^{r₁}, x^{r₂}; repeated r → x^r, x^r ln x; complex α±βi → x^α cos(β ln x), x^α sin(β ln x).", chapter: "ch2", chapter_full: "Chapter 2: Second-Order ODEs", link: "ch2-euler.html" } },
+                    { text: "No, general variable coefficients", result: { title: "Series Solution (Power Series or Frobenius)", description: "Check if the point is ordinary or singular. At an ordinary point: expand y = Σaₙxⁿ, substitute, match coefficients to find a recurrence relation. At a regular singular point: use Frobenius method y = Σaₙx^{n+r}, first find r from the indicial equation.", chapter: "ch5", chapter_full: "Chapter 5: Series & Numerical Methods", link: "ch5-power-series.html" } }
                 ]
             }
         };
 
         let currentStep = "step1";
-        let path = [];
+        let pathHistory = [];  // [{question, answer, stepId}]
+        let activeResult = null;
+        const MAX_DEPTH = 5;
 
         function renderWizard() {
-            const node = wizardTree[currentStep];
             const display = document.getElementById("wizard-display");
 
-            if (node.result) {
-                // Show result
-                const res = node.result;
-                const chapterClass = res.chapter;
+            // If we have a result to show
+            if (activeResult) {
+                const res = activeResult;
                 display.innerHTML = `
-                    <div class="result-card ${chapterClass}">
+                    <div class="result-card ${res.chapter}" style="animation: resultPop 0.5s ease;">
+                        <div class="result-badge">✓ Method Found</div>
                         <div class="result-title">${res.title}</div>
+                        <div class="result-chapter">${res.chapter_full}</div>
                         <div class="result-description">${res.description}</div>
-                        <a href="index.html" class="result-link">📖 Go to ${res.chapter_full}</a>
-                    </div>
-                `;
-            } else {
-                // Show question
-                display.innerHTML = `
-                    <div class="wizard-card">
-                        <div class="wizard-question">${node.question}</div>
-                        <div class="wizard-buttons">
-                            ${node.options.map((opt, idx) => `
-                                <button class="option-button" onclick="wizardChoose(${idx})">
-                                    ${opt.text}
-                                </button>
-                            `).join("")}
+                        <div class="result-actions">
+                            <a href="${res.link}" class="result-link">📖 Open ${res.chapter_full}</a>
+                            <button class="start-over-btn" onclick="resetWizard()">↩ Try Another Equation</button>
                         </div>
                     </div>
                 `;
+                updateStepCounter(true);
+                updatePath();
+                return;
             }
 
-            updateBreadcrumb();
+            const node = wizardTree[currentStep];
+            const letters = ['A', 'B', 'C', 'D'];
+            const optionsHtml = node.options.map((opt, idx) => `
+                <button class="option-button" onclick="wizardChoose(${idx})">
+                    <span class="opt-letter">${letters[idx]}</span>
+                    ${opt.text}
+                </button>
+            `).join("");
+
+            const hintHtml = node.hint
+                ? `<div class="wizard-hint">💡 ${node.hint}</div>`
+                : '';
+
+            display.innerHTML = `
+                <div class="wizard-card">
+                    <div class="wizard-question">${node.question}</div>
+                    ${hintHtml}
+                    <div class="wizard-buttons">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+
+            updateStepCounter(false);
+            updatePath();
         }
 
         function wizardChoose(idx) {
             const node = wizardTree[currentStep];
             const choice = node.options[idx];
-            path.push(choice.text);
+
+            // Record this step in history
+            pathHistory.push({
+                question: node.question.replace(/<[^>]+>/g, ''),
+                answer: choice.text,
+                stepId: currentStep
+            });
 
             if (choice.result) {
-                // We're at a result; don't advance further
+                // Terminal node — show result
+                activeResult = choice.result;
             } else {
                 currentStep = choice.goto;
             }
@@ -913,22 +1026,44 @@
             renderWizard();
         }
 
-        function updateBreadcrumb() {
-            const breadcrumb = document.getElementById("breadcrumb");
-            if (path.length === 0) {
-                breadcrumb.innerHTML = '<div class="breadcrumb-item active">Start</div>';
-            } else {
-                breadcrumb.innerHTML = path.map((p, i) => `
-                    <div class="breadcrumb-item ${i === path.length - 1 ? 'active' : ''}">
-                        ${p}
-                    </div>
-                `).join('<span>→</span>');
+        function updateStepCounter(isResult) {
+            const counter = document.getElementById("wizard-step-counter");
+            const stepsDone = pathHistory.length;
+            let dots = '';
+            for (let i = 0; i < MAX_DEPTH; i++) {
+                if (i < stepsDone) {
+                    dots += '<div class="dot done"></div>';
+                } else if (i === stepsDone && !isResult) {
+                    dots += '<div class="dot active"></div>';
+                } else {
+                    dots += '<div class="dot"></div>';
+                }
             }
+            const label = isResult
+                ? `<span style="color:var(--success);font-weight:600;">✓ Done — ${stepsDone} question${stepsDone !== 1 ? 's' : ''} answered</span>`
+                : `Step ${stepsDone + 1}`;
+            counter.innerHTML = `${label} <div class="step-dots">${dots}</div>`;
+        }
+
+        function updatePath() {
+            const pathEl = document.getElementById("wizard-path");
+            if (pathHistory.length === 0) {
+                pathEl.innerHTML = '';
+                return;
+            }
+            pathEl.innerHTML = pathHistory.map((p, i) => `
+                <div class="wizard-path-step">
+                    <span class="path-q">${p.question.substring(0, 50)}${p.question.length > 50 ? '...' : ''}</span>
+                    <span class="path-arrow">→</span>
+                    <span class="path-a">${p.answer.substring(0, 50)}${p.answer.length > 50 ? '...' : ''}</span>
+                </div>
+            `).join('');
         }
 
         function resetWizard() {
             currentStep = "step1";
-            path = [];
+            pathHistory = [];
+            activeResult = null;
             renderWizard();
         }
 
