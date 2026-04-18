@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Common Mistakes to Avoid | Math 4 — Dr. Mohamed Mabrok</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+  --accent: #7c3aed;
+  --accent-light: #ede9fe;
+  --success: #059669;
+  --success-light: #d1fae5;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --danger: #dc2626;
+  --danger-light: #fee2e2;
+  --teal: #0891b2;
+  --teal-light: #cffafe;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+}
+
+nav {
+  position:fixed;top:0;left:0;right:0;
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);z-index:1000;
+  padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;
+}
+nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+nav a:hover{color:var(--primary);}
+nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+nav .active{color:var(--accent);font-weight:700;}
+
+.hero-banner {
+  margin-top: 42px;
+  background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 40%, #f97316 80%, #fbbf24 100%);
+  color: #fff; padding: 3.5rem 2rem 3rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero-banner::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 500px 400px at 25% 50%, rgba(255,255,255,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 80% 40%, rgba(0,0,0,0.1) 0%, transparent 70%);
+}
+.hero-banner .inner { position:relative; z-index:2; max-width:800px; margin:0 auto; }
+.hero-banner h1 {
+  font-size: 2.6rem; font-weight: 800; margin-bottom: 0.6rem;
+  line-height: 1.2; letter-spacing: -0.02em;
+}
+.hero-banner .subtitle {
+  font-size: 1.15rem; opacity: 0.9; max-width: 620px; margin: 0 auto; line-height: 1.6;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 3rem; }
+
+.intro-text {
+  font-size: 1.05rem; color: var(--text-muted); max-width: 720px;
+  margin: 0 auto 2.5rem; text-align: center; line-height: 1.8;
+}
+
+/* ---- Chapter Section ---- */
+.chapter-section {
+  margin-bottom: 2.5rem;
+}
+.chapter-heading {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  color: #fff; font-weight: 700; font-size: 1.1rem;
+  cursor: pointer; user-select: none;
+  transition: filter 0.2s;
+}
+.chapter-heading:hover { filter: brightness(1.1); }
+.chapter-heading .ch-num {
+  background: rgba(255,255,255,0.25);
+  padding: 0.15rem 0.6rem; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 800;
+}
+.chapter-heading .toggle-icon {
+  margin-left: auto; font-size: 1.2rem; transition: transform 0.3s;
+}
+.chapter-heading.open .toggle-icon { transform: rotate(180deg); }
+
+.ch1-bg { background: linear-gradient(135deg, #059669, #10b981); }
+.ch2-bg { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.ch3-bg { background: linear-gradient(135deg, #5b21b6, #8b5cf6); }
+.ch4-bg { background: linear-gradient(135deg, #92400e, #f59e0b); }
+.ch5-bg { background: linear-gradient(135deg, #991b1b, #ef4444); }
+.ch6-bg { background: linear-gradient(135deg, #155e75, #06b6d4); }
+
+.mistakes-list {
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease;
+}
+.mistakes-list.open {
+  max-height: 5000px;
+}
+
+/* ---- Mistake Card ---- */
+.mistake-card {
+  padding: 1.2rem 1.4rem;
+  background: var(--card);
+  border-bottom: 1px solid #f1f5f9;
+}
+.mistake-card:last-child { border-bottom: none; }
+
+.mistake-title {
+  font-size: 1rem; font-weight: 700; color: var(--text);
+  margin-bottom: 0.5rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.mistake-title .mistake-num {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  background: var(--danger-light); color: var(--danger);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800; margin-top: 1px;
+}
+
+/* Wrong / Right boxes */
+.wrong-right {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;
+  margin-top: 0.6rem;
+}
+@media (max-width: 600px) {
+  .wrong-right { grid-template-columns: 1fr; }
+}
+
+.wrong-box, .right-box {
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.wrong-box {
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+}
+.wrong-box .label {
+  font-weight: 700; color: #dc2626; font-size: 0.78rem;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+.right-box {
+  background: #f0fdf4;
+  border-left: 3px solid #059669;
+}
+.right-box .label {
+  font-weight: 700; color: #059669; font-size: 0.78rem;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+/* Tip box */
+.tip-box {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  background: #fffbeb;
+  border-left: 3px solid #d97706;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.85rem; color: #92400e;
+}
+.tip-box strong { color: #b45309; }
+
+/* Quranic verse */
+.quran-verse {
+  margin-top: 2.5rem;
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.quran-verse .arabic {
+  font-size: 1.5rem; line-height: 2; color: var(--text);
+  font-family: 'Traditional Arabic', 'Amiri', serif;
+  direction: rtl; margin-bottom: 0.5rem;
+}
+.quran-verse .translation {
+  font-size: 0.95rem; color: var(--text-muted); font-style: italic;
+}
+.quran-verse .reference {
+  font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;
+}
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--primary); font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; margin-top: 2rem;
+}
+.back-link:hover { text-decoration: underline; }
+
+footer {
+  text-align: center; padding: 1.5rem; color: var(--text-muted);
+  font-size: 0.85rem; border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+@media (max-width: 700px) {
+  .hero-banner h1 { font-size: 1.8rem; }
+  .mistake-card { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html">Home</a>
+  <a href="skills.html">Skills</a>
+  <a href="mistakes.html" class="active">Common Mistakes</a>
+  <a href="exam-generator.html">Exam Generator</a>
+  <a href="videos.html">Videos</a>
+  <a href="projects.html">Projects</a>
+</nav>
+
+<div class="hero-banner">
+  <div class="inner">
+    <h1>Common Mistakes to Avoid</h1>
+    <p class="subtitle">Learn from the errors that trip up most students. Spotting these pitfalls early will save you marks on exams and build real understanding.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <p class="intro-text">
+    Every mistake here has been seen hundreds of times in student work. Each one is shown with the <strong style="color:#dc2626;">wrong</strong> approach and the <strong style="color:#059669;">correct</strong> approach side by side, so the fix is immediately clear.
+  </p>
+
+  <!-- ======================================================== -->
+  <!-- CHAPTER 1: First-Order ODEs -->
+  <!-- ======================================================== -->
+  <div class="chapter-section">
+    <div class="chapter-heading ch1-bg open" onclick="toggleChapter(this)">
+      <span class="ch-num">Ch 1</span>
+      First-Order ODEs
+      <span class="toggle-icon">&#x25B2;</span>
+    </div>
+    <div class="mistakes-list open">
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">1</span>
+          Forgetting the constant of integration after separating
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\displaystyle \int \frac{dy}{y} = \int x\,dx \implies \ln|y| = \frac{x^2}{2}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(\displaystyle \ln|y| = \frac{x^2}{2} + C\)
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Always add \(+C\) immediately when you integrate. Missing it gives a single curve instead of the full family of solutions.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">2</span>
+          Dividing by \(y\) without checking \(y=0\)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\displaystyle y' = xy^2 \implies \frac{y'}{y^2} = x\) &nbsp;(no comment about \(y=0\))
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Note that \(y=0\) is a solution. For \(y\neq 0\), divide by \(y^2\) and proceed.
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Whenever you divide by an expression involving \(y\), check whether that expression being zero gives a valid (possibly singular) solution.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">3</span>
+          Forgetting the integrating factor in linear equations
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(y' + 2y = e^x \implies\) integrate both sides directly: \(y = e^x + C\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Multiply by \(\mu = e^{\int 2\,dx} = e^{2x}\). Then \((e^{2x}y)' = e^{3x}\), so \(y = \frac{1}{3}e^x + Ce^{-2x}\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> A linear ODE \(y'+P(x)y=Q(x)\) is <em>never</em> solved by "just integrating." You must use the integrating factor \(\mu = e^{\int P\,dx}\).</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">4</span>
+          Wrong substitution in Bernoulli equations
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(y' + y = y^3\) &mdash; substituting \(v = y\) or \(v = y^3\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            For \(y' + Py = Qy^n\) with \(n=3\): use \(v = y^{1-n} = y^{-2}\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> The Bernoulli substitution is always \(v = y^{1-n}\). Memorize the formula, don't guess.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">5</span>
+          Confusing exact equations with separable ones
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \((2xy + 3)\,dx + (x^2 + 4y)\,dy = 0\) &mdash; trying to separate \(x\) and \(y\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Check: \(\frac{\partial M}{\partial y} = 2x = \frac{\partial N}{\partial x}\). It's exact &mdash; find \(F(x,y)\) such that \(F_x = M,\; F_y = N\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Before choosing a method, classify the equation. Check separable &rarr; linear &rarr; exact &rarr; Bernoulli in order.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">6</span>
+          Dropping the absolute value in \(\ln|y|\)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\ln y = x + C \implies y = e^{x+C}\) &nbsp;(only positive \(y\))
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(\ln|y| = x + C \implies y = \pm e^C \cdot e^x = Ae^x\) where \(A\) can be positive or negative.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CHAPTER 2: Higher-Order ODEs -->
+  <!-- ======================================================== -->
+  <div class="chapter-section">
+    <div class="chapter-heading ch2-bg" onclick="toggleChapter(this)">
+      <span class="ch-num">Ch 2</span>
+      Higher-Order Linear ODEs
+      <span class="toggle-icon">&#x25B2;</span>
+    </div>
+    <div class="mistakes-list">
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">1</span>
+          Wrong form of \(y_p\) when it overlaps with \(y_h\)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(y'' - 3y' + 2y = e^{2x}\). Guessing \(y_p = Ae^{2x}\) &mdash; but \(e^{2x}\) is already in \(y_h\)!
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Since \(e^{2x}\) solves the homogeneous equation, multiply by \(x\): try \(y_p = Axe^{2x}\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Always find \(y_h\) first. If your \(y_p\) guess duplicates any term in \(y_h\), multiply by \(x\) (or \(x^2\) if needed) until no overlap.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">2</span>
+          Forgetting to include all terms in the particular guess
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            For \(g(x) = 3x^2\), guessing \(y_p = Ax^2\) only
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Guess \(y_p = Ax^2 + Bx + C\) &mdash; include all lower-degree terms.
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> In undetermined coefficients, if \(g(x)\) contains \(x^n\), your guess must include \(x^n, x^{n-1}, \ldots, x^0\).</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">3</span>
+          Writing the wrong characteristic equation
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(y'' + 5y' + 6y = 0 \implies r^2 + 5r + 6y = 0\) &nbsp;(leftover \(y\))
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Replace \(y''\to r^2\), \(y'\to r\), \(y\to 1\): \(r^2 + 5r + 6 = 0\).
+          </div>
+        </div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">4</span>
+          Mishandling complex roots
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Roots \(r = 2 \pm 3i\) &mdash; writing \(y = c_1 e^{(2+3i)x} + c_2 e^{(2-3i)x}\) as the final answer
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(y = e^{2x}(c_1\cos 3x + c_2\sin 3x)\)
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> For roots \(\alpha \pm \beta i\), always convert to the real form \(e^{\alpha x}(c_1\cos\beta x + c_2\sin\beta x)\).</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">5</span>
+          Using undetermined coefficients when the ODE has variable coefficients
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(x^2 y'' + xy' - y = x^3\) &mdash; trying to guess \(y_p = Ax^3\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Undetermined coefficients only works for <em>constant</em>-coefficient equations. Use variation of parameters instead.
+          </div>
+        </div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">6</span>
+          Euler-Cauchy: substituting \(y=e^{rx}\) instead of \(y=x^r\)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(x^2y'' + 3xy' + y = 0 \implies\) try \(y = e^{rx}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            For Euler-Cauchy equations \(ax^2y'' + bxy' + cy = 0\), use \(y = x^r\).
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CHAPTER 3: Laplace Transforms -->
+  <!-- ======================================================== -->
+  <div class="chapter-section">
+    <div class="chapter-heading ch3-bg" onclick="toggleChapter(this)">
+      <span class="ch-num">Ch 3</span>
+      Laplace Transforms
+      <span class="toggle-icon">&#x25B2;</span>
+    </div>
+    <div class="mistakes-list">
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">1</span>
+          Forgetting initial conditions in the transform of \(y''\)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\mathcal{L}\{y''\} = s^2 Y(s)\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(\mathcal{L}\{y''\} = s^2 Y(s) - sy(0) - y'(0)\)
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> The whole point of Laplace transforms is to absorb initial conditions. \(\mathcal{L}\{y'\} = sY - y(0)\) and \(\mathcal{L}\{y''\} = s^2Y - sy(0) - y'(0)\). Never drop these terms.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">2</span>
+          Wrong partial-fraction setup
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\frac{1}{(s-1)(s^2+1)} = \frac{A}{s-1} + \frac{B}{s^2+1}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(\frac{1}{(s-1)(s^2+1)} = \frac{A}{s-1} + \frac{Bs + C}{s^2+1}\)
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> An irreducible quadratic \(s^2+as+b\) in the denominator needs \(\frac{Bs+C}{s^2+as+b}\), not just a single constant.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">3</span>
+          Confusing \(\mathcal{L}\{e^{at}f(t)\}\) with \(e^{as}F(s)\)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\mathcal{L}\{e^{2t}\sin t\} = e^{2s}\cdot\frac{1}{s^2+1}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            First shift theorem: \(\mathcal{L}\{e^{at}f(t)\} = F(s-a)\). So \(\mathcal{L}\{e^{2t}\sin t\} = \frac{1}{(s-2)^2+1}\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> \(e^{at}\) in the <em>time domain</em> shifts \(s\) &rarr; \(s-a\). The factor \(e^{-as}\) in the <em>s-domain</em> is a <em>time delay</em> (second shift theorem). Don't mix them up.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">4</span>
+          Ignoring the unit step in the second shift theorem
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(\mathcal{L}^{-1}\{e^{-3s}\cdot\frac{1}{s^2}\} = (t-3)^2\)  (missing step function, wrong power)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(\mathcal{L}^{-1}\!\left\{\frac{1}{s^2}\right\} = t\), so \(\mathcal{L}^{-1}\!\left\{e^{-3s}\cdot\frac{1}{s^2}\right\} = (t-3)\,u(t-3)\).
+          </div>
+        </div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">5</span>
+          Applying Laplace to a non-IVP without adjusting
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Using Laplace on a boundary value problem \(y(0)=1, y(\pi)=0\) as if both conditions are at \(t=0\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Laplace transforms require initial conditions at \(t=0\). For BVPs, use other methods (eigenvalue, shooting, etc.).
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CHAPTER 4: Systems of ODEs -->
+  <!-- ======================================================== -->
+  <div class="chapter-section">
+    <div class="chapter-heading ch4-bg" onclick="toggleChapter(this)">
+      <span class="ch-num">Ch 4</span>
+      Systems of ODEs
+      <span class="toggle-icon">&#x25B2;</span>
+    </div>
+    <div class="mistakes-list">
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">1</span>
+          Using wrong eigenvectors (row-reducing incorrectly)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            For \(A = \begin{pmatrix}2 & 1\\0 & 3\end{pmatrix}\), eigenvalue \(\lambda=2\): solving \((A-2I)\mathbf{v}=0\) and picking \(\mathbf{v}=\begin{pmatrix}1\\1\end{pmatrix}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(A-2I = \begin{pmatrix}0 & 1\\0 & 1\end{pmatrix}\), giving \(v_2=0\). So \(\mathbf{v}=\begin{pmatrix}1\\0\end{pmatrix}\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> After finding \(\lambda\), always verify by checking \(A\mathbf{v} = \lambda\mathbf{v}\).</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">2</span>
+          Forgetting the \(te^{\lambda t}\) term for repeated eigenvalues
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Repeated \(\lambda\): writing \(\mathbf{x} = c_1\mathbf{v}e^{\lambda t} + c_2\mathbf{v}e^{\lambda t}\) (same thing twice)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(\mathbf{x} = c_1\mathbf{v}e^{\lambda t} + c_2(\mathbf{v}t + \mathbf{w})e^{\lambda t}\) where \((A-\lambda I)\mathbf{w} = \mathbf{v}\).
+          </div>
+        </div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">3</span>
+          Misreading phase portrait stability
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Eigenvalues \(\lambda = -1, 3\) &mdash; calling it a "stable node"
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            One positive, one negative &rarr; <strong>saddle point</strong> (unstable). Both must be negative for a stable node.
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Stable node: both \(\lambda < 0\). Unstable node: both \(\lambda > 0\). Saddle: opposite signs. Spiral: complex \(\lambda\).</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">4</span>
+          Writing complex eigenvector solutions without converting to real form
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Leaving the answer as \(\mathbf{x} = c_1\begin{pmatrix}1\\i\end{pmatrix}e^{(2+3i)t} + c_2\begin{pmatrix}1\\-i\end{pmatrix}e^{(2-3i)t}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Decompose into real and imaginary parts to get solutions involving \(e^{2t}\cos 3t\) and \(e^{2t}\sin 3t\) with real vectors.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CHAPTER 5: Series & Numerical Methods -->
+  <!-- ======================================================== -->
+  <div class="chapter-section">
+    <div class="chapter-heading ch5-bg" onclick="toggleChapter(this)">
+      <span class="ch-num">Ch 5</span>
+      Series &amp; Numerical Methods
+      <span class="toggle-icon">&#x25B2;</span>
+    </div>
+    <div class="mistakes-list">
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">1</span>
+          Wrong index shift when substituting power series
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(y = \sum_{n=0}^{\infty} a_n x^n \implies y'' = \sum_{n=0}^{\infty} n(n-1)a_n x^{n-2}\) &mdash; starting at \(n=0\) without re-indexing
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(y'' = \sum_{n=2}^{\infty} n(n-1)a_n x^{n-2}\). To align powers, let \(m=n-2\): \(\sum_{m=0}^{\infty}(m+2)(m+1)a_{m+2}x^m\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> When combining series, every sum must have the same power of \(x\) and the same starting index. Re-index carefully.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">2</span>
+          Using ordinary power series at a singular point
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(x^2y'' + xy' + y = 0\) &mdash; assuming \(y = \sum a_n x^n\) around \(x=0\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(x=0\) is a regular singular point. Use the <strong>Frobenius method</strong>: \(y = \sum a_n x^{n+r}\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Always check: is the point ordinary or singular? If \(P(x_0)=0\) in the standard form, you need Frobenius.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">3</span>
+          Using a step size that is too large in Euler's method
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(h = 1.0\) for \(y' = -10y\) &mdash; solution blows up (instability)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Use \(h < 0.2\) (stability requires \(|1 + h\lambda| < 1\)). Smaller \(h\) = more stable, more accurate.
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> For stiff equations (large \(|\lambda|\)), Euler's method needs very small \(h\). Runge-Kutta 4 is much more forgiving.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">4</span>
+          Confusing the indicial equation with the recurrence relation
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Setting the \(n=0\) coefficient equation to find \(a_1\) instead of \(r\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            The lowest-power coefficient gives the <strong>indicial equation</strong> for \(r\). Only after finding \(r\) do you use higher-power equations as the recurrence for \(a_n\).
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CHAPTER 6: PDEs -->
+  <!-- ======================================================== -->
+  <div class="chapter-section">
+    <div class="chapter-heading ch6-bg" onclick="toggleChapter(this)">
+      <span class="ch-num">Ch 6</span>
+      Partial Differential Equations
+      <span class="toggle-icon">&#x25B2;</span>
+    </div>
+    <div class="mistakes-list">
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">1</span>
+          Applying separation of variables to non-homogeneous BCs directly
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(u(0,t) = 0,\; u(L,t) = T_1 \neq 0\) &mdash; directly writing \(u(x,t) = X(x)T(t)\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            First find the steady-state \(u_s(x)\). Then let \(v = u - u_s\), which satisfies <em>homogeneous</em> BCs. Apply separation to \(v\).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Separation of variables only works with homogeneous boundary conditions. Always subtract the steady-state first.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">2</span>
+          Dismissing \(\lambda = 0\) in the eigenvalue analysis without checking
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            "Case 1: \(\lambda = 0\) gives trivial solution" &mdash; always, for any BC type
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            For <strong>Neumann BCs</strong> \((X'(0)=0, X'(L)=0)\), the case \(\lambda=0\) gives \(X(x) = 1\) (a constant), which is <em>non-trivial</em>. This is the DC mode.
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Always work through all three cases (\(\lambda=0\), \(\lambda<0\), \(\lambda>0\)) for every BC type. What's trivial for Dirichlet may be non-trivial for Neumann.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">3</span>
+          Using \(\sin\) eigenfunctions with Neumann BCs (or \(\cos\) with Dirichlet)
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Dirichlet BCs \(u(0,t)=0, u(L,t)=0\) &mdash; writing \(X_n = \cos\frac{n\pi x}{L}\)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Dirichlet \((X(0)=X(L)=0)\) &rarr; \(\sin\). Neumann \((X'(0)=X'(L)=0)\) &rarr; \(\cos\). Each BC type selects its own eigenfunction family.
+          </div>
+        </div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">4</span>
+          Confusing the heat equation solution structure with the wave equation
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            Wave equation: writing \(T_n(t) = e^{-\alpha n^2 \pi^2 t/L^2}\) (exponential decay)
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            Heat: \(T_n(t) = e^{-k\lambda_n t}\) (decay). Wave: \(T_n(t) = A_n\cos(c\lambda_n t) + B_n\sin(c\lambda_n t)\) (oscillation).
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> Heat dissipates (exponential decay). Waves oscillate (sin/cos in time). The spatial eigenfunctions are the same; only the temporal part differs.</div>
+      </div>
+
+      <div class="mistake-card">
+        <div class="mistake-title">
+          <span class="mistake-num">5</span>
+          Computing Fourier coefficients with the wrong integral
+        </div>
+        <div class="wrong-right">
+          <div class="wrong-box">
+            <div class="label">Wrong</div>
+            \(B_n = \int_0^L f(x)\sin\frac{n\pi x}{L}\,dx\)  (missing the \(\frac{2}{L}\))
+          </div>
+          <div class="right-box">
+            <div class="label">Correct</div>
+            \(B_n = \frac{2}{L}\int_0^L f(x)\sin\frac{n\pi x}{L}\,dx\)
+          </div>
+        </div>
+        <div class="tip-box"><strong>Tip:</strong> The \(\frac{2}{L}\) factor comes from the orthogonality integral \(\int_0^L \sin^2\frac{n\pi x}{L}\,dx = \frac{L}{2}\). Never forget it.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Quranic Verse -->
+  <div class="quran-verse">
+    <div class="arabic">&#x0648;&#x064E;&#x0642;&#x064F;&#x0644; &#x0631;&#x064E;&#x0628;&#x0651;&#x0650; &#x0632;&#x0650;&#x062F;&#x0652;&#x0646;&#x0650;&#x064A; &#x0639;&#x0650;&#x0644;&#x0652;&#x0645;&#x064B;&#x0627;</div>
+    <div class="translation">"And say: My Lord, increase me in knowledge."</div>
+    <div class="reference">Quran 20:114</div>
+  </div>
+
+  <a href="index.html" class="back-link">&larr; Back to Course Home</a>
+
+</div>
+
+<footer>
+  Math 4: Mathematics for Engineering &nbsp;|&nbsp; Dr. Mohamed Mabrok &nbsp;|&nbsp; Department of Mathematics and Statistics, Qatar University
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  });
+});
+
+function toggleChapter(heading) {
+  heading.classList.toggle('open');
+  const list = heading.nextElementSibling;
+  list.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
