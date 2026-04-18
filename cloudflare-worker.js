@@ -53,10 +53,60 @@ export default {
 
     try {
       const body = await request.json();
-      const { messages, system, student } = body;
+      const { messages, system, student, action } = body;
 
       if (!messages || !Array.isArray(messages)) {
         return jsonResponse({ error: 'Invalid request: messages array required' }, 400, origin);
+      }
+
+      // ==========================================
+      // PROFILE UPDATE REQUEST (lightweight, separate path)
+      // ==========================================
+      if (action === 'update_profile') {
+        const profileResponse = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: CLAUDE_MODEL,
+            max_tokens: 250,  // Profiles are short
+            system: system,
+            messages: messages.slice(-10)
+          })
+        });
+
+        if (!profileResponse.ok) {
+          return jsonResponse({ error: 'Profile update failed' }, 502, origin);
+        }
+
+        const profileData = await profileResponse.json();
+        const profileContent = profileData.content
+          .filter(block => block.type === 'text')
+          .map(block => block.text)
+          .join('\n');
+
+        // Log profile update to sheet
+        if (env.GOOGLE_SHEET_WEBHOOK) {
+          ctx.waitUntil(
+            logToSheet(env.GOOGLE_SHEET_WEBHOOK, {
+              timestamp: new Date().toISOString(),
+              studentName: student?.name || 'Unknown',
+              studentEmail: student?.email || '',
+              studentId: student?.id || '',
+              major: student?.major || '',
+              chapter: 'PROFILE UPDATE',
+              studentMessage: '[Profile updated]',
+              aiResponse: profileContent,
+              inputTokens: profileData.usage?.input_tokens || 0,
+              outputTokens: profileData.usage?.output_tokens || 0
+            })
+          );
+        }
+
+        return jsonResponse({ content: profileContent }, 200, origin);
       }
 
       // ==========================================

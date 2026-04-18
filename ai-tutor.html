@@ -130,6 +130,23 @@
     color: var(--primary-dark);
   }
 
+  .learner-badge {
+    margin: 0 1.5rem 0.5rem;
+    padding: 0.35rem 0.8rem;
+    background: linear-gradient(135deg, var(--success-light), #a7f3d0);
+    color: var(--success);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .learner-badge:hover {
+    background: linear-gradient(135deg, #a7f3d0, var(--success-light));
+    transform: scale(1.02);
+  }
+
   /* Chapter selector */
   .chapter-section {
     padding: 1rem 1.5rem;
@@ -787,6 +804,7 @@
       </div>
       <button class="edit-profile-btn" id="editProfileBtn" title="Edit profile">⚙️</button>
     </div>
+    <div id="learnerBadge" class="learner-badge" style="display:none" title="Click to view your learner profile">Personalized</div>
 
     <!-- Chapter Selector -->
     <div class="chapter-section">
@@ -1038,6 +1056,67 @@ document.getElementById('editProfileBtn').addEventListener('click', () => {
   document.getElementById('studentMajor').value = studentProfile.major;
   showRegistrationModal();
 });
+
+// Learner profile — persists across sessions
+let learnerProfile = localStorage.getItem('de_learner_profile') || '';
+let messageCountSinceProfileUpdate = 0;
+const PROFILE_UPDATE_INTERVAL = 5; // Update profile every N exchanges
+
+function saveLearnerProfile(profile) {
+  learnerProfile = profile;
+  localStorage.setItem('de_learner_profile', profile);
+  updateProfileBadge();
+}
+
+function updateProfileBadge() {
+  const badge = document.getElementById('learnerBadge');
+  if (badge) {
+    if (learnerProfile) {
+      badge.style.display = 'block';
+      badge.textContent = 'Personalized';
+      badge.title = learnerProfile;
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+function requestProfileUpdate(messages) {
+  // Ask Claude to summarize what it learned about this student
+  const profilePrompt = `You are analyzing a tutoring conversation to build a concise learner profile. Based on the conversation below, create or update a student profile in EXACTLY this format (one short line each, skip any you can't determine):
+
+Strengths: ...
+Weaknesses: ...
+Common mistakes: ...
+Learning style: ...
+Topics covered: ...
+Notes: ...
+
+${learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge new observations with existing profile. Keep it under 150 words total.' : 'Create a new profile. Keep it under 150 words.'}`;
+
+  fetch(PROXY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'update_profile',
+      messages: messages.slice(-10).map(m => ({ role: m.role, content: m.content })),
+      system: profilePrompt,
+      student: {
+        name: studentProfile.name,
+        email: studentProfile.email,
+        id: studentProfile.id,
+        major: studentProfile.major
+      }
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.content && !data.error) {
+      saveLearnerProfile(data.content);
+    }
+  })
+  .catch(() => {}); // Silent fail — profile update is not critical
+}
 
 // Chat state management
 let currentConversation = null;
@@ -1320,7 +1399,7 @@ function sendMessage() {
 }
 
 function buildSystemPrompt(chapter) {
-  return `You are a concise AI tutor for a Differential Equations course at Qatar University (Dr. Mohamed Mabrok). Student: ${studentProfile.name} (${studentProfile.major}).
+  let prompt = `You are a concise AI tutor for a Differential Equations course at Qatar University (Dr. Mohamed Mabrok). Student: ${studentProfile.name} (${studentProfile.major}).
 Topic: ${chapter.title} — ${chapter.topics}.
 
 Rules:
@@ -1330,6 +1409,17 @@ Rules:
 - Use markdown: **bold**, headers (##), lists, code blocks.
 - Keep responses short unless the student asks for detailed explanation.
 - If a concept is simple, a 2-3 sentence answer is fine.`;
+
+  if (learnerProfile) {
+    prompt += `
+
+Learner Profile (from previous sessions — use this to personalize your teaching):
+${learnerProfile}
+
+Use this profile to: focus on their weak areas, avoid over-explaining topics they've mastered, use examples from their major (${studentProfile.major}), and adapt to their learning style. Don't mention the profile explicitly.`;
+  }
+
+  return prompt;
 }
 
 function sendToAPI(systemPrompt, messages) {
@@ -1363,6 +1453,13 @@ function sendToAPI(systemPrompt, messages) {
       addMessageToDisplay('assistant', data.content);
       currentConversation.updated = Date.now();
       saveChatHistory();
+
+      // Trigger learner profile update every N exchanges
+      messageCountSinceProfileUpdate++;
+      if (messageCountSinceProfileUpdate >= PROFILE_UPDATE_INTERVAL && currentConversation.messages.length >= 4) {
+        messageCountSinceProfileUpdate = 0;
+        requestProfileUpdate(currentConversation.messages);
+      }
     } else {
       addMessageToDisplay('assistant', 'Sorry, I encountered an error. Please try again.');
     }
@@ -1415,9 +1512,18 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   }
 });
 
+// Learner badge click — show profile
+document.getElementById('learnerBadge').addEventListener('click', () => {
+  if (learnerProfile) {
+    const display = learnerProfile.replace(/\n/g, '\n');
+    alert('Your Learner Profile:\n\n' + display + '\n\nThis helps the AI tutor personalize its responses to your learning style.');
+  }
+});
+
 // Initialize
 function initializeChat() {
   loadChatHistory();
+  updateProfileBadge();
   newConversation();
   updateChatHeader();
   input.focus();
