@@ -5,22 +5,20 @@
  * SETUP INSTRUCTIONS:
  *
  * 1. Go to https://dash.cloudflare.com → Workers & Pages → Create Worker
- * 2. Name it something like "de-ai-tutor"
- * 3. Paste this entire file into the editor
- * 4. Click "Deploy"
- * 5. Go to Settings → Variables → Add Secrets:
- *    - ANTHROPIC_API_KEY: your Claude API key (https://console.anthropic.com)
- *    - GOOGLE_SHEET_WEBHOOK: your Google Apps Script web app URL (see google-apps-script.js)
- * 6. Copy your Worker URL (e.g., https://de-ai-tutor.YOUR-SUBDOMAIN.workers.dev)
- * 7. In ai-tutor.html, replace 'YOUR_CLOUDFLARE_WORKER_URL' with your Worker URL
+ * 2. Paste this file → Deploy
+ * 3. Settings → Variables → Add Secrets:
+ *    - ANTHROPIC_API_KEY: your Claude API key
+ *    - GOOGLE_SHEET_WEBHOOK: your Apps Script web app URL
+ * 4. Create a KV Namespace for rate limiting:
+ *    - Go to Workers & Pages → KV → Create a namespace → name it "STUDENT_USAGE"
+ *    - Go to your Worker → Settings → Bindings → Add binding
+ *    - Variable name: USAGE    KV namespace: STUDENT_USAGE
+ * 5. Update PROXY_URL in ai-tutor.html
  *
- * CHAT LOGGING:
- *   Every student question + AI response is logged to a Google Sheet
- *   via a Google Apps Script webhook. Logging is non-blocking — it
- *   runs in the background after the response is sent to the student.
- *   If GOOGLE_SHEET_WEBHOOK is not set, logging is silently skipped.
- *
- * FREE TIER LIMITS: 100,000 requests/day — more than enough for a class of 40.
+ * RATE LIMITING:
+ *   Each student gets a daily token budget (default: 50,000 tokens/day).
+ *   Usage resets at midnight UTC. Students see a friendly message when
+ *   they hit the limit. Change DAILY_TOKEN_LIMIT below to adjust.
  */
 
 const ALLOWED_ORIGINS = [
@@ -32,19 +30,21 @@ const ALLOWED_ORIGINS = [
 const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 700;
 
+// ==========================================
+// RATE LIMITING CONFIG — adjust as needed
+// ==========================================
+const DAILY_TOKEN_LIMIT = 50000;   // tokens per student per day
+const DAILY_REQUEST_LIMIT = 50;    // max messages per student per day
+
 export default {
   async fetch(request, env, ctx) {
-    // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return handleCORS(request);
     }
-
-    // Only allow POST
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
 
-    // Check origin
     const origin = request.headers.get('Origin') || '';
     const isAllowed = ALLOWED_ORIGINS.some(o => origin.startsWith(o));
     if (!isAllowed && origin !== '') {
@@ -59,10 +59,40 @@ export default {
         return jsonResponse({ error: 'Invalid request: messages array required' }, 400, origin);
       }
 
-      // Get the student's latest message (the one they just sent)
+      // ==========================================
+      // RATE LIMIT CHECK
+      // ==========================================
+      const studentKey = student?.id || student?.email || 'anonymous';
+      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const usageKey = `usage:${studentKey}:${today}`;
+
+      let usage = { tokens: 0, requests: 0 };
+      if (env.USAGE) {
+        const stored = await env.USAGE.get(usageKey, 'json');
+        if (stored) usage = stored;
+      }
+
+      if (usage.tokens >= DAILY_TOKEN_LIMIT) {
+        return jsonResponse({
+          content: `You've reached your daily token limit (${DAILY_TOKEN_LIMIT.toLocaleString()} tokens). Your limit resets at midnight UTC. This helps ensure fair access for all students.\n\nIn the meantime, try reviewing your notes, the course materials, or the Study Tools page!`,
+          limited: true,
+          usage: { daily_tokens_used: usage.tokens, daily_limit: DAILY_TOKEN_LIMIT }
+        }, 200, origin);
+      }
+
+      if (usage.requests >= DAILY_REQUEST_LIMIT) {
+        return jsonResponse({
+          content: `You've reached your daily message limit (${DAILY_REQUEST_LIMIT} messages). Your limit resets at midnight UTC.\n\nTip: Try asking more detailed questions to get more value from each message!`,
+          limited: true,
+          usage: { daily_requests_used: usage.requests, daily_limit: DAILY_REQUEST_LIMIT }
+        }, 200, origin);
+      }
+
+      // ==========================================
+      // CALL CLAUDE API
+      // ==========================================
       const studentMessage = messages[messages.length - 1];
 
-      // Call Claude API
       const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -89,13 +119,30 @@ export default {
 
       const claudeData = await claudeResponse.json();
 
-      // Extract the text content
       const content = claudeData.content
         .filter(block => block.type === 'text')
         .map(block => block.text)
         .join('\n');
 
-      // Log to Google Sheet in background (non-blocking)
+      const inputTokens = claudeData.usage?.input_tokens || 0;
+      const outputTokens = claudeData.usage?.output_tokens || 0;
+
+      // ==========================================
+      // UPDATE USAGE (non-blocking)
+      // ==========================================
+      if (env.USAGE) {
+        usage.tokens += inputTokens + outputTokens;
+        usage.requests += 1;
+        ctx.waitUntil(
+          env.USAGE.put(usageKey, JSON.stringify(usage), {
+            expirationTtl: 86400  // auto-delete after 24h
+          })
+        );
+      }
+
+      // ==========================================
+      // LOG TO GOOGLE SHEET (non-blocking)
+      // ==========================================
       if (env.GOOGLE_SHEET_WEBHOOK) {
         ctx.waitUntil(
           logToSheet(env.GOOGLE_SHEET_WEBHOOK, {
@@ -107,16 +154,26 @@ export default {
             chapter: extractChapter(system),
             studentMessage: studentMessage?.content || '',
             aiResponse: content,
-            inputTokens: claudeData.usage?.input_tokens || 0,
-            outputTokens: claudeData.usage?.output_tokens || 0
+            inputTokens: inputTokens,
+            outputTokens: outputTokens
           })
         );
       }
 
-      // Return response with usage info
+      // ==========================================
+      // RESPOND
+      // ==========================================
+      const remaining = DAILY_TOKEN_LIMIT - usage.tokens;
       return jsonResponse({
         content: content,
-        usage: claudeData.usage || {}
+        usage: claudeData.usage || {},
+        daily: {
+          tokens_used: usage.tokens,
+          tokens_limit: DAILY_TOKEN_LIMIT,
+          tokens_remaining: remaining > 0 ? remaining : 0,
+          requests_used: usage.requests,
+          requests_limit: DAILY_REQUEST_LIMIT
+        }
       }, 200, origin);
 
     } catch (err) {
@@ -126,10 +183,6 @@ export default {
   }
 };
 
-/**
- * Log a chat exchange to Google Sheets via Apps Script webhook.
- * Runs in background via ctx.waitUntil() — does not delay the response.
- */
 async function logToSheet(webhookUrl, data) {
   try {
     const res = await fetch(webhookUrl, {
@@ -145,9 +198,6 @@ async function logToSheet(webhookUrl, data) {
   }
 }
 
-/**
- * Extract chapter name from system prompt for logging.
- */
 function extractChapter(system) {
   if (!system) return 'General';
   const match = system.match(/Topic:\s*([^\n—]+)/);

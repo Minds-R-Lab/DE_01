@@ -1366,6 +1366,12 @@ function sendToAPI(systemPrompt, messages) {
     } else {
       addMessageToDisplay('assistant', 'Sorry, I encountered an error. Please try again.');
     }
+    // Update daily usage display
+    if (data.daily) {
+      const pct = Math.round((data.daily.tokens_used / data.daily.tokens_limit) * 100);
+      document.getElementById('tokenUsage').textContent =
+        'Today: ' + data.daily.requests_used + '/' + data.daily.requests_limit + ' msgs · ' + pct + '% tokens used';
+    }
   })
   .catch(err => {
     removeTypingIndicator();
