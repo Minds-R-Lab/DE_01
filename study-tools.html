@@ -170,6 +170,201 @@
             padding: 2rem;
         }
 
+        
+        /* ===== TAB 0: EQUATION CLASSIFIER ===== */
+        .classifier-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .classifier-input-area {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .classifier-input-area h3 {
+            font-size: 1.2rem; font-weight: 700; color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .classifier-input-area .sub {
+            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.2rem;
+        }
+
+        .eq-input-wrapper {
+            display: flex; gap: 0.8rem; margin-bottom: 1rem;
+        }
+        .eq-input-wrapper input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            font-size: 1.15rem;
+            font-family: 'Courier New', monospace;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+            background: #f8fafc;
+        }
+        .eq-input-wrapper input:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+        .eq-input-wrapper button {
+            padding: 0.9rem 1.8rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .eq-input-wrapper button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+
+        .eq-examples {
+            display: flex; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .eq-examples span {
+            font-size: 0.82rem; color: var(--text-muted); font-weight: 600;
+            padding-top: 0.2rem;
+        }
+        .eq-example-btn {
+            padding: 0.3rem 0.75rem;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+        .eq-example-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        /* Rendered equation preview */
+        .eq-preview {
+            min-height: 50px;
+            padding: 0.8rem 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        .eq-preview.visible { display: block; }
+
+        /* Classification results */
+        .classify-result {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 2px solid var(--success);
+            animation: resultPop 0.5s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .classify-result-header {
+            padding: 1.5rem 2rem;
+            color: white;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .classify-result-header.ch1 { background: linear-gradient(135deg, #059669, #10b981); }
+        .classify-result-header.ch2 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .classify-result-header.ch3 { background: linear-gradient(135deg, #5b21b6, #8b5cf6); }
+        .classify-result-header.ch4 { background: linear-gradient(135deg, #92400e, #f59e0b); }
+        .classify-result-header.ch5 { background: linear-gradient(135deg, #991b1b, #ef4444); }
+        .classify-result-header.ch6 { background: linear-gradient(135deg, #155e75, #06b6d4); }
+
+        .classify-result-header .type-icon {
+            font-size: 2rem;
+        }
+        .classify-result-header h3 {
+            font-size: 1.5rem; font-weight: 800;
+        }
+        .classify-result-header .type-subtitle {
+            font-size: 0.9rem; opacity: 0.9;
+        }
+
+        .classify-result-body {
+            padding: 1.5rem 2rem;
+        }
+
+        .classify-props {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+        @media (max-width: 600px) {
+            .classify-props { grid-template-columns: 1fr; }
+        }
+
+        .classify-prop {
+            padding: 0.7rem 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+        }
+        .classify-prop .prop-label {
+            font-size: 0.75rem; color: var(--text-muted);
+            text-transform: uppercase; font-weight: 700;
+            letter-spacing: 0.04em; margin-bottom: 0.15rem;
+        }
+        .classify-prop .prop-value {
+            font-size: 0.95rem; font-weight: 600; color: var(--text);
+        }
+
+        .classify-method {
+            padding: 1.2rem;
+            background: var(--success-light);
+            border-radius: 12px;
+            border: 1px solid #a7f3d0;
+            margin-bottom: 1.2rem;
+        }
+        .classify-method h4 {
+            color: var(--success); font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+        .classify-method p {
+            color: var(--text); font-size: 0.95rem; line-height: 1.7;
+        }
+
+        .classify-actions {
+            display: flex; gap: 0.8rem; flex-wrap: wrap;
+        }
+
+        .classify-error {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.3s ease;
+        }
+        .classify-error h4 {
+            color: var(--danger); font-size: 1rem; margin-bottom: 0.4rem;
+        }
+        .classify-error p {
+            color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;
+        }
+
         /* ===== TAB 1: WIZARD ===== */
         .wizard-container {
             max-width: 750px;
@@ -797,13 +992,16 @@
     <!-- Hero Banner -->
     <div class="hero">
         <h1>Study Toolkit</h1>
-        <p>Three interactive tools to help you master differential equations: a method decision tree, real-world applications, and a 14-week study planner.</p>
+        <p>Interactive tools to help you master differential equations — classify equations instantly, explore decision trees, see real-world applications, and plan your study.</p>
     </div>
 
     <!-- Tab Navigation -->
     <div class="tab-nav">
-        <button class="tab-button active" onclick="switchTab(event, 'wizard')">
-            Which Method Do I Use?
+        <button class="tab-button active" onclick="switchTab(event, 'classifier')">
+            Equation Classifier
+        </button>
+        <button class="tab-button" onclick="switchTab(event, 'wizard')">
+            Which Method?
         </button>
         <button class="tab-button" onclick="switchTab(event, 'news')">
             DE in the News
@@ -813,8 +1011,37 @@
         </button>
     </div>
 
-    <!-- TAB 1: WIZARD -->
-    <div id="wizard" class="tab-content active">
+    <!-- TAB 0: EQUATION CLASSIFIER -->
+    <div id="classifier" class="tab-content active">
+        <div class="container">
+            <div class="classifier-container">
+                <div class="classifier-input-area">
+                    <h3>Type your differential equation</h3>
+                    <p class="sub">Enter the equation using standard notation. Use <code>y'</code> for dy/dx, <code>y''</code> for d²y/dx², <code>^</code> for powers, and <code>*</code> for multiplication.</p>
+                    <div class="eq-input-wrapper">
+                        <input type="text" id="eq-input" placeholder="e.g. y' + 2*x*y = x^3" autocomplete="off" spellcheck="false">
+                        <button onclick="classifyEquation()">Classify</button>
+                    </div>
+                    <div class="eq-preview" id="eq-preview"></div>
+                    <div class="eq-examples">
+                        <span>Try:</span>
+                        <button class="eq-example-btn" onclick="tryExample(this)">y' = x*y</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">y' + 2*y = e^x</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">y' + y = x*y^3</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">(2*x*y)dx + (x^2+1)dy = 0</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">y' = (x+y)/(x-y)</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">y'' - 3*y' + 2*y = 0</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">y'' + 4*y = sin(2*x)</button>
+                        <button class="eq-example-btn" onclick="tryExample(this)">x^2*y'' + x*y' + y = 0</button>
+                    </div>
+                </div>
+                <div id="classify-output"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 1b: WIZARD -->
+    <div id="wizard" class="tab-content">
         <div class="container">
             <div class="wizard-container">
                 <div class="wizard-intro">
@@ -873,6 +1100,407 @@
     </footer>
 
     <script>
+        
+        // ===== EQUATION CLASSIFIER =====
+
+        function tryExample(btn) {
+            document.getElementById('eq-input').value = btn.textContent;
+            classifyEquation();
+        }
+
+        // Allow Enter key to trigger classification
+        document.addEventListener('DOMContentLoaded', () => {
+            const inp = document.getElementById('eq-input');
+            if (inp) {
+                inp.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') classifyEquation();
+                });
+                inp.addEventListener('input', () => {
+                    // Live LaTeX preview
+                    const val = inp.value.trim();
+                    const preview = document.getElementById('eq-preview');
+                    if (val.length > 2) {
+                        try {
+                            const latex = toLatex(val);
+                            preview.innerHTML = '';
+                            katex.render(latex, preview, { throwOnError: false, displayMode: true });
+                            preview.classList.add('visible');
+                        } catch(e) {
+                            preview.classList.remove('visible');
+                        }
+                    } else {
+                        preview.classList.remove('visible');
+                    }
+                });
+            }
+        });
+
+        function toLatex(eq) {
+            let s = eq;
+            // Replace common patterns with LaTeX
+            s = s.replace(/y''''/g, "y^{(4)}");
+            s = s.replace(/y'''/g, "y'''");
+            s = s.replace(/y''/g, "y''");
+            s = s.replace(/\bdy\/dx\b/gi, "\\frac{dy}{dx}");
+            s = s.replace(/\bd2y\/dx2\b/gi, "\\frac{d^2y}{dx^2}");
+            s = s.replace(/\*\*/g, "^");
+            s = s.replace(/\*/g, " \\cdot ");
+            s = s.replace(/\bsqrt\(([^)]+)\)/g, "\\sqrt{$1}");
+            s = s.replace(/\be\^([a-zA-Z0-9]+)/g, "e^{$1}");
+            s = s.replace(/\be\^\(([^)]+)\)/g, "e^{$1}");
+            s = s.replace(/\bsin\(/g, "\\sin(");
+            s = s.replace(/\bcos\(/g, "\\cos(");
+            s = s.replace(/\btan\(/g, "\\tan(");
+            s = s.replace(/\bln\(/g, "\\ln(");
+            s = s.replace(/\blog\(/g, "\\log(");
+            s = s.replace(/\^(\d+)/g, "^{$1}");
+            s = s.replace(/\^([a-zA-Z])/g, "^{$1}");
+            s = s.replace(/\bdx\b/g, "\\,dx");
+            s = s.replace(/\bdy\b/g, "\\,dy");
+            return s;
+        }
+
+        function classifyEquation() {
+            const raw = document.getElementById('eq-input').value.trim();
+            const output = document.getElementById('classify-output');
+
+            if (!raw) {
+                output.innerHTML = '';
+                return;
+            }
+
+            const eq = raw.toLowerCase().replace(/\s+/g, ' ');
+
+            try {
+                const result = analyzeEquation(eq, raw);
+                output.innerHTML = renderClassification(result, raw);
+            } catch(err) {
+                output.innerHTML = `
+                    <div class="classify-error">
+                        <h4>Could not parse this equation</h4>
+                        <p>${err.message || "Make sure you're using standard notation: y' for derivatives, ^ for powers, * for multiplication."}</p>
+                        <p style="margin-top:0.5rem;">Examples: <code>y' + 2*y = x</code>, <code>y'' - y = sin(x)</code>, <code>(2*x*y)dx + (x^2)dy = 0</code></p>
+                    </div>`;
+            }
+        }
+
+        function analyzeEquation(eq, raw) {
+            const result = {
+                order: 0,
+                type: '',
+                subtype: '',
+                chapter: 'ch1',
+                chapterFull: 'Chapter 1: First-Order ODEs',
+                icon: '',
+                isLinear: false,
+                isHomogeneous: false,
+                hasConstantCoeffs: false,
+                method: '',
+                methodSteps: '',
+                link: '',
+                properties: []
+            };
+
+            // ========== Detect PDE ==========
+            if (/∂|partial|du\/dt|du\/dx|d2u|∂u/.test(eq)) {
+                result.order = 2;
+                result.type = 'Partial Differential Equation (PDE)';
+                result.subtype = 'PDE';
+                result.chapter = 'ch6';
+                result.chapterFull = 'Chapter 6: Partial Differential Equations';
+                result.icon = '🌊';
+                result.method = 'Separation of Variables';
+                result.methodSteps = 'Assume u(x,t) = X(x)·T(t). Substitute into the PDE, separate variables, solve the resulting ODEs with boundary conditions, and combine using Fourier series.';
+                result.link = 'ch6-pde-intro.html';
+                result.properties.push({label: 'Type', value: 'Partial Differential Equation'});
+                result.properties.push({label: 'Method', value: 'Separation of Variables'});
+                return result;
+            }
+
+            // ========== Detect order ==========
+            if (/y''''|y\^\(4\)|d4y/.test(eq)) result.order = 4;
+            else if (/y'''|d3y/.test(eq)) result.order = 3;
+            else if (/y''|d2y|d²y/.test(eq)) result.order = 2;
+            else if (/y'|dy\/dx|dy/.test(eq)) result.order = 1;
+            else throw new Error("No derivative detected. Make sure to include y' or y'' in your equation.");
+
+            result.properties.push({label: 'Order', value: ordinal(result.order)});
+
+            // ========== Detect differential form M dx + N dy = 0 ==========
+            const diffFormMatch = /\)?\s*dx\s*\+|\)?\s*dy\s*=\s*0|dx\s*\+.*dy/.test(eq);
+
+            // ========== HIGHER ORDER (2+) ==========
+            if (result.order >= 2) {
+                result.icon = '📐';
+
+                // Check Euler-Cauchy: x^2*y'' + x*y' + y = ...
+                const isEulerCauchy = /x\s*\^\s*2\s*\*?\s*y''|x\s*\^2\s*\*?\s*y''|x\^2\s*y''/.test(eq) &&
+                                      /x\s*\*?\s*y'[^']/.test(eq);
+
+                // Check constant coefficients: no x multiplying y terms
+                // Remove forcing function (right of =) and check left side
+                const sides = eq.split('=');
+                const lhs = sides[0];
+
+                // Look for x multiplying y, y', y''
+                const hasVarCoeffs = /[xt]\s*\*?\s*y'|[xt]\s*\*?\s*y[^'a-z]|x\s*\^\s*\d+\s*\*?\s*y/.test(lhs);
+                result.hasConstantCoeffs = !hasVarCoeffs;
+
+                // Check if homogeneous (RHS = 0 or no RHS)
+                const rhs = sides.length > 1 ? sides[1].trim() : '0';
+                result.isHomogeneous = (rhs === '0' || rhs === '' || rhs === '0');
+
+                result.properties.push({label: 'Coefficients', value: result.hasConstantCoeffs ? 'Constant' : 'Variable'});
+                result.properties.push({label: 'Homogeneous', value: result.isHomogeneous ? 'Yes (RHS = 0)' : 'No (has forcing function)'});
+
+                if (isEulerCauchy) {
+                    result.type = 'Euler-Cauchy (Equidimensional) Equation';
+                    result.subtype = 'euler-cauchy';
+                    result.chapter = 'ch2';
+                    result.chapterFull = 'Chapter 2: Second-Order ODEs';
+                    result.method = 'Euler-Cauchy Method';
+                    result.methodSteps = 'Try y = x^r. Substitute to get the indicial equation ar(r−1) + br + c = 0. Solve for r. Three cases: distinct real roots, repeated root (add ln x), complex roots (use cos/sin of ln x).';
+                    result.link = 'ch2-euler.html';
+                    result.properties.push({label: 'Pattern', value: 'ax²y\'\' + bxy\' + cy = ...'});
+                } else if (result.hasConstantCoeffs && result.isHomogeneous) {
+                    result.type = 'Constant-Coefficient Homogeneous ODE';
+                    result.subtype = 'const-homo';
+                    result.chapter = 'ch2';
+                    result.chapterFull = 'Chapter 2: Second-Order ODEs';
+                    result.method = 'Characteristic Equation';
+                    result.methodSteps = 'Replace y with e^{rx}: get ar² + br + c = 0. Solve the quadratic. Distinct real roots → c₁e^{r₁x} + c₂e^{r₂x}. Repeated root → (c₁+c₂x)e^{rx}. Complex α±βi → e^{αx}(c₁cos βx + c₂sin βx).';
+                    result.link = 'ch2-homogeneous-const.html';
+                } else if (result.hasConstantCoeffs && !result.isHomogeneous) {
+                    // Check forcing function type
+                    const forcing = rhs;
+                    const isStandardForcing = /sin|cos|e\^|polynomial|\d+\*?x/.test(forcing) &&
+                                              !/tan|sec|csc|cot|ln|log|1\//.test(forcing);
+                    const isDiscontinuous = /step|delta|heaviside|u\(|h\(/.test(forcing);
+
+                    if (isDiscontinuous) {
+                        result.type = 'Constant-Coefficient ODE with Discontinuous Forcing';
+                        result.subtype = 'laplace';
+                        result.chapter = 'ch3';
+                        result.chapterFull = 'Chapter 3: Laplace Transforms';
+                        result.method = 'Laplace Transform';
+                        result.methodSteps = 'Take ℒ of both sides. Use ℒ{y\'\'} = s²Y − sy(0) − y\'(0). Solve for Y(s) algebraically, decompose with partial fractions, then invert using the Laplace table.';
+                        result.link = 'ch3-overview.html';
+                    } else if (isStandardForcing || /\d/.test(forcing)) {
+                        result.type = 'Constant-Coefficient Nonhomogeneous ODE';
+                        result.subtype = 'undetermined';
+                        result.chapter = 'ch2';
+                        result.chapterFull = 'Chapter 2: Second-Order ODEs';
+                        result.method = 'Undetermined Coefficients';
+                        result.methodSteps = 'First find y_h from the characteristic equation. Then guess y_p matching the form of g(x): polynomial → Ax^n+..., exponential → Ae^{bx}, trig → Acos(bx)+Bsin(bx). If y_p overlaps y_h, multiply by x. Substitute and solve for coefficients.';
+                        result.link = 'ch2-undetermined.html';
+                        result.properties.push({label: 'Forcing function', value: rhs});
+                    } else {
+                        result.type = 'Constant-Coefficient Nonhomogeneous ODE';
+                        result.subtype = 'variation';
+                        result.chapter = 'ch2';
+                        result.chapterFull = 'Chapter 2: Second-Order ODEs';
+                        result.method = 'Variation of Parameters';
+                        result.methodSteps = 'Find y_h = c₁y₁ + c₂y₂ first. Then y_p = u₁y₁ + u₂y₂ with u₁\' = −y₂g/W, u₂\' = y₁g/W, where W is the Wronskian. This works for ANY forcing function g(x).';
+                        result.link = 'ch2-variation.html';
+                        result.properties.push({label: 'Forcing function', value: rhs + ' (non-standard → use VoP)'});
+                    }
+                } else {
+                    // Variable coefficients, not Euler-Cauchy
+                    result.type = 'Variable-Coefficient ODE';
+                    result.subtype = 'series';
+                    result.chapter = 'ch5';
+                    result.chapterFull = 'Chapter 5: Series & Numerical Methods';
+                    result.icon = '📊';
+                    result.method = 'Series Solution (Power Series or Frobenius)';
+                    result.methodSteps = 'Check if the point is ordinary or singular. Ordinary point → use y = Σaₙxⁿ. Regular singular point → use Frobenius method y = Σaₙx^{n+r}. Find r from the indicial equation, then compute coefficients via the recurrence relation.';
+                    result.link = 'ch5-power-series.html';
+                }
+
+                return result;
+            }
+
+            // ========== FIRST ORDER ==========
+            result.icon = '📝';
+            result.chapter = 'ch1';
+            result.chapterFull = 'Chapter 1: First-Order ODEs';
+
+            // Normalize: try to get into y' = f(x,y) or y' + P(x)y = Q(x) form
+            const sides = eq.split('=');
+            const lhs = sides[0] ? sides[0].trim() : '';
+            const rhs = sides.length > 1 ? sides[1].trim() : '0';
+
+            // ---------- Differential form: M dx + N dy = 0 ----------
+            if (diffFormMatch) {
+                result.type = 'Exact / Non-Exact Equation';
+
+                // Try to extract M and N
+                result.properties.push({label: 'Form', value: 'M(x,y)dx + N(x,y)dy = 0'});
+                result.properties.push({label: 'Test', value: 'Check ∂M/∂y vs ∂N/∂x'});
+
+                result.method = 'Exactness Test → Exact or Integrating Factor';
+                result.methodSteps = 'Compute ∂M/∂y and ∂N/∂x. If equal → exact: find F(x,y) with F_x=M, F_y=N. If not equal → find integrating factor μ(x) or μ(y) to make it exact, then solve.';
+                result.link = 'ch1-exact.html';
+                result.subtype = 'exact';
+                return result;
+            }
+
+            // ---------- Check for Bernoulli: y' + P(x)y = Q(x)y^n ----------
+            const bernoulliMatch = /y\s*\^\s*(\d+)/.test(rhs) || /y\s*\^\s*(\d+)/.test(eq);
+            const hasBernoulliForm = /y'.*[+=].*y\s*\^|y\s*\^.*y'/.test(eq);
+
+            // ---------- Check linearity ----------
+            // Linear means y and y' appear to first power only, no y*y', no y^2, etc.
+            const hasYSquared = /y\s*\^\s*[2-9]|y\s*\*\s*y|y\^2|y\^3/.test(eq);
+            const hasYTimesYPrime = /y\s*\*?\s*y'|y'\s*\*?\s*y/.test(eq);
+            const hasTrigY = /sin\s*\(\s*y\s*\)|cos\s*\(\s*y\s*\)|tan\s*\(\s*y\s*\)/.test(eq);
+
+            result.isLinear = !hasYSquared && !hasYTimesYPrime && !hasTrigY;
+            result.properties.push({label: 'Linear', value: result.isLinear ? 'Yes' : 'No'});
+
+            // ---------- Check if separable ----------
+            // Separable if can be written as g(y)dy = f(x)dx or y' = f(x)*g(y)
+            // Heuristic: RHS is product of function of x only and function of y only
+            const isSeparable = checkSeparable(eq, lhs, rhs);
+
+            // ---------- Check homogeneous (y/x substitution) ----------
+            // f(x,y) where f(tx,ty) = f(x,y), often ratios like (x+y)/(x-y)
+            const isHomogeneous = checkHomogeneous(eq, rhs);
+
+            // ---------- Classify ----------
+            if (hasBernoulliForm || (bernoulliMatch && !result.isLinear)) {
+                const nMatch = eq.match(/y\s*\^\s*(\d+)/);
+                const n = nMatch ? nMatch[1] : 'n';
+                result.type = 'Bernoulli Equation';
+                result.subtype = 'bernoulli';
+                result.method = 'Bernoulli Substitution';
+                result.methodSteps = `Substitute v = y^{1−${n}}. Transform into a linear ODE in v, solve with integrating factor, then back-substitute y = v^{1/(1−${n})}.`;
+                result.link = 'ch1-bernoulli.html';
+                result.properties.push({label: 'Bernoulli exponent n', value: n});
+            } else if (result.isLinear) {
+                // Check if homogeneous linear
+                const linearRHS = rhs.replace(/\s/g, '');
+                const isHomoLinear = linearRHS === '0' || !rhs;
+
+                if (isHomoLinear || (lhs.includes("y'") && !rhs)) {
+                    result.type = 'Linear Homogeneous (also Separable)';
+                    result.subtype = 'separable-linear';
+                    result.isHomogeneous = true;
+                    result.method = 'Separation of Variables or Integrating Factor';
+                    result.methodSteps = 'This equation is both separable AND linear. Separate: dy/y = −P(x)dx, integrate both sides. Or use integrating factor μ = e^{∫P dx}. Both approaches give the same answer.';
+                    result.link = 'ch1-separable.html';
+                } else {
+                    result.type = 'Linear First-Order ODE';
+                    result.subtype = 'linear';
+                    result.method = 'Integrating Factor';
+                    result.methodSteps = 'Write as y\' + P(x)y = Q(x). Compute μ(x) = e^{∫P(x)dx}. Multiply both sides by μ: d/dx[μy] = μQ. Integrate: μy = ∫μQ dx + C. Solve for y.';
+                    result.link = 'ch1-linear.html';
+                }
+                result.properties.push({label: 'Homogeneous', value: isHomoLinear ? 'Yes' : 'No'});
+            } else if (isSeparable) {
+                result.type = 'Separable Equation';
+                result.subtype = 'separable';
+                result.method = 'Separation of Variables';
+                result.methodSteps = 'Rearrange to g(y)dy = f(x)dx. Integrate both sides: ∫g(y)dy = ∫f(x)dx + C. Don\'t forget the constant! Also check if dividing by anything eliminates a valid solution (like y=0).';
+                result.link = 'ch1-separable.html';
+            } else if (isHomogeneous) {
+                result.type = 'Homogeneous First-Order ODE';
+                result.subtype = 'homogeneous';
+                result.method = 'Substitution v = y/x';
+                result.methodSteps = 'Let v = y/x, so y = vx and y\' = v + xv\'. Substitute — the equation becomes separable in v and x. Solve, then back-substitute y = vx.';
+                result.link = 'ch1-homogeneous.html';
+                result.properties.push({label: 'Form', value: 'dy/dx = F(y/x)'});
+            } else {
+                // Default: try exact/non-exact or suggest methods
+                result.type = 'Nonlinear First-Order ODE';
+                result.subtype = 'general';
+                result.method = 'Try Exact Test or Substitution';
+                result.methodSteps = 'Rewrite as M dx + N dy = 0 and test for exactness (∂M/∂y = ∂N/∂x?). If not exact, look for an integrating factor. Also try substitutions like v = y/x (homogeneous) or v = ax+by (special forms). If nothing works, use numerical methods.';
+                result.link = 'ch1-exact.html';
+                result.properties.push({label: 'Tip', value: 'Try rewriting in differential form and testing exactness'});
+            }
+
+            return result;
+        }
+
+        function checkSeparable(eq, lhs, rhs) {
+            // Simple heuristic: if RHS has y but not mixed with x, it might be separable
+            // y' = f(x)*g(y) patterns: x*y, x^2*y, x/y, y/x (not x+y, x*y+x)
+            if (!rhs) return false;
+
+            // If RHS is purely x (no y) or purely y (no x), it's separable
+            const rhsHasX = /[x]/.test(rhs);
+            const rhsHasY = /[y]/.test(rhs);
+
+            if (!rhsHasX || !rhsHasY) return true;
+
+            // Check if it's a product: f(x)*g(y)
+            // Patterns like x*y, x^2*y^3, etc.
+            if (/^[^+\-]*\*[^+\-]*$/.test(rhs)) {
+                // Single product — check if separable
+                const parts = rhs.split('*');
+                const xParts = parts.filter(p => /x/.test(p) && !/y/.test(p));
+                const yParts = parts.filter(p => /y/.test(p) && !/x/.test(p));
+                if (xParts.length + yParts.length === parts.length) return true;
+            }
+
+            // y' = f(x) * y  (linear separable)
+            if (/^[^y]+\*\s*y\s*$/.test(rhs) || /^\s*y\s*\*[^y]+$/.test(rhs)) return true;
+
+            return false;
+        }
+
+        function checkHomogeneous(eq, rhs) {
+            if (!rhs) return false;
+            // Check for ratios like (x+y)/(x-y), (y/x), (x^2+y^2)/(x*y)
+            if (/\(.*x.*[+\-].*y.*\)\s*\/\s*\(.*x.*[+\-].*y.*\)/.test(rhs)) return true;
+            if (/\(.*y.*[+\-].*x.*\)\s*\/\s*\(.*x.*[+\-].*y.*\)/.test(rhs)) return true;
+            // y/x or x/y patterns
+            if (/^\s*y\s*\/\s*x\s*$/.test(rhs) || /^\s*x\s*\/\s*y\s*$/.test(rhs)) return true;
+            // (x+y)/x type
+            if (/\(.*x.*y.*\)\s*\/\s*x/.test(rhs)) return true;
+            return false;
+        }
+
+        function ordinal(n) {
+            const s = ['th', 'st', 'nd', 'rd'];
+            const v = n % 100;
+            return n + (s[(v-20)%10] || s[v] || s[0]);
+        }
+
+        function renderClassification(result, raw) {
+            const propsHtml = result.properties.map(p => `
+                <div class="classify-prop">
+                    <div class="prop-label">${p.label}</div>
+                    <div class="prop-value">${p.value}</div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="classify-result">
+                    <div class="classify-result-header ${result.chapter}">
+                        <span class="type-icon">${result.icon}</span>
+                        <div>
+                            <h3>${result.type}</h3>
+                            <div class="type-subtitle">${result.chapterFull}</div>
+                        </div>
+                    </div>
+                    <div class="classify-result-body">
+                        <div class="classify-props">
+                            ${propsHtml}
+                        </div>
+                        <div class="classify-method">
+                            <h4>Recommended Method: ${result.method}</h4>
+                            <p>${result.methodSteps}</p>
+                        </div>
+                        <div class="classify-actions">
+                            <a href="${result.link}" class="result-link">📖 Open ${result.chapterFull}</a>
+                            <button class="start-over-btn" onclick="document.getElementById('eq-input').value='';document.getElementById('classify-output').innerHTML='';document.getElementById('eq-preview').classList.remove('visible');document.getElementById('eq-input').focus();">↩ Clear</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         // ===== WIZARD DATA =====
         const wizardTree = {
             step1: {
