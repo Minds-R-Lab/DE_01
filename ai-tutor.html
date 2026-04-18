@@ -792,6 +792,25 @@
   </div>
 </div>
 
+<!-- Learner Profile Modal -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal" style="max-width:500px">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--success),#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;">🧠</div>
+      <div>
+        <h2 style="margin:0;font-size:1.15rem;">Your Learner Profile</h2>
+        <p style="margin:0;font-size:0.8rem;color:var(--text-muted);">Built from your conversations — updates as you learn</p>
+      </div>
+    </div>
+    <div id="profileModalContent" style="background:var(--bg);border-radius:10px;padding:1.2rem;line-height:1.8;font-size:0.9rem;max-height:350px;overflow-y:auto;"></div>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.8rem;">This profile helps the AI tutor personalize its teaching to your strengths and areas for improvement.</p>
+    <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+      <button onclick="document.getElementById('profileModal').classList.remove('show')" class="btn-submit" style="flex:1;">Close</button>
+      <button onclick="if(confirm('Reset your learner profile? The AI will start learning about you from scratch.')){saveLearnerProfile('');document.getElementById('profileModal').classList.remove('show');}" style="flex:0;padding:0.6rem 1rem;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer;font-size:0.85rem;color:var(--text-muted);">Reset</button>
+    </div>
+  </div>
+</div>
+
 <div class="main-wrapper">
   <!-- Sidebar -->
   <div class="sidebar">
@@ -1545,11 +1564,12 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   }
 });
 
-// Learner badge click — show profile
+// Learner badge click — show profile modal
 document.getElementById('learnerBadge').addEventListener('click', () => {
   if (learnerProfile) {
-    const display = learnerProfile.replace(/\n/g, '\n');
-    alert('Your Learner Profile:\n\n' + display + '\n\nThis helps the AI tutor personalize its responses to your learning style.');
+    const html = renderMarkdown(learnerProfile);
+    document.getElementById('profileModalContent').innerHTML = html;
+    document.getElementById('profileModal').classList.add('show');
   }
 });
 
