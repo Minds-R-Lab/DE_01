@@ -1059,8 +1059,8 @@ document.getElementById('editProfileBtn').addEventListener('click', () => {
 
 // Learner profile — persists across sessions
 let learnerProfile = localStorage.getItem('de_learner_profile') || '';
-let messageCountSinceProfileUpdate = 0;
-const PROFILE_UPDATE_INTERVAL = 5; // Update profile every N exchanges
+let messageCountSinceProfileUpdate = parseInt(localStorage.getItem('de_profile_msg_count') || '0');
+const PROFILE_UPDATE_INTERVAL = 4; // Update profile every N exchanges
 
 function saveLearnerProfile(profile) {
   learnerProfile = profile;
@@ -1109,13 +1109,21 @@ ${learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge 
       }
     })
   })
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) throw new Error('Server returned ' + res.status);
+    return res.json();
+  })
   .then(data => {
     if (data.content && !data.error) {
       saveLearnerProfile(data.content);
+      console.log('Learner profile updated successfully');
+    } else {
+      console.warn('Profile update: no content returned', data);
     }
   })
-  .catch(() => {}); // Silent fail — profile update is not critical
+  .catch(err => {
+    console.error('Profile update failed:', err.message);
+  });
 }
 
 // Chat state management
@@ -1456,8 +1464,10 @@ function sendToAPI(systemPrompt, messages) {
 
       // Trigger learner profile update every N exchanges
       messageCountSinceProfileUpdate++;
+      localStorage.setItem('de_profile_msg_count', messageCountSinceProfileUpdate.toString());
       if (messageCountSinceProfileUpdate >= PROFILE_UPDATE_INTERVAL && currentConversation.messages.length >= 4) {
         messageCountSinceProfileUpdate = 0;
+        localStorage.setItem('de_profile_msg_count', '0');
         requestProfileUpdate(currentConversation.messages);
       }
     } else {
