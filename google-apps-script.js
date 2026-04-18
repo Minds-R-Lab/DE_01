@@ -56,6 +56,7 @@ function setupSheet() {
   var headers = [
     'Timestamp',
     'Student Name',
+    'Email',
     'Student ID',
     'Major',
     'Chapter',
@@ -75,13 +76,14 @@ function setupSheet() {
   // Set column widths
   logs.setColumnWidth(1, 160);  // Timestamp
   logs.setColumnWidth(2, 140);  // Name
-  logs.setColumnWidth(3, 100);  // ID
-  logs.setColumnWidth(4, 120);  // Major
-  logs.setColumnWidth(5, 180);  // Chapter
-  logs.setColumnWidth(6, 400);  // Student Message
-  logs.setColumnWidth(7, 400);  // AI Response
-  logs.setColumnWidth(8, 100);  // Input Tokens
-  logs.setColumnWidth(9, 110);  // Output Tokens
+  logs.setColumnWidth(3, 200);  // Email
+  logs.setColumnWidth(4, 100);  // ID
+  logs.setColumnWidth(5, 120);  // Major
+  logs.setColumnWidth(6, 180);  // Chapter
+  logs.setColumnWidth(7, 400);  // Student Message
+  logs.setColumnWidth(8, 400);  // AI Response
+  logs.setColumnWidth(9, 100);  // Input Tokens
+  logs.setColumnWidth(10, 110); // Output Tokens
 
   // Freeze header row
   logs.setFrozenRows(1);
@@ -106,8 +108,8 @@ function setupSheet() {
   // Formulas referencing Chat Logs
   dash.getRange('B5').setFormula('=COUNTA(\'Chat Logs\'!A:A)-1');
   dash.getRange('B6').setFormula('=IFERROR(COUNTA(UNIQUE(\'Chat Logs\'!B2:B)),0)');
-  dash.getRange('B7').setFormula('=SUM(\'Chat Logs\'!H:H)+SUM(\'Chat Logs\'!I:I)');
-  dash.getRange('B8').setFormula('=ROUND(SUM(\'Chat Logs\'!H:H)*0.25/1000000 + SUM(\'Chat Logs\'!I:I)*1.25/1000000, 4)');
+  dash.getRange('B7').setFormula('=SUM(\'Chat Logs\'!I:I)+SUM(\'Chat Logs\'!J:J)');
+  dash.getRange('B8').setFormula('=ROUND(SUM(\'Chat Logs\'!I:I)*0.25/1000000 + SUM(\'Chat Logs\'!J:J)*1.25/1000000, 4)');
 
   dash.getRange('A10').setValue('Messages by Chapter');
   dash.getRange('A10').setFontWeight('bold').setFontSize(12);
@@ -120,10 +122,10 @@ function setupSheet() {
   for (var i = 0; i < 8; i++) {
     var row = 12 + i;
     dash.getRange('A' + row).setFormula(
-      '=IFERROR(INDEX(QUERY(\'Chat Logs\'!E2:E, "SELECT E, COUNT(E) WHERE E IS NOT NULL GROUP BY E ORDER BY COUNT(E) DESC LABEL COUNT(E) \'\'", 0), ' + (i+1) + ', 1), "")'
+      '=IFERROR(INDEX(QUERY(\'Chat Logs\'!F2:F, "SELECT F, COUNT(F) WHERE F IS NOT NULL GROUP BY F ORDER BY COUNT(F) DESC LABEL COUNT(F) \'\'", 0), ' + (i+1) + ', 1), "")'
     );
     dash.getRange('B' + row).setFormula(
-      '=IFERROR(INDEX(QUERY(\'Chat Logs\'!E2:E, "SELECT E, COUNT(E) WHERE E IS NOT NULL GROUP BY E ORDER BY COUNT(E) DESC LABEL COUNT(E) \'\'", 0), ' + (i+1) + ', 2), "")'
+      '=IFERROR(INDEX(QUERY(\'Chat Logs\'!F2:F, "SELECT F, COUNT(F) WHERE F IS NOT NULL GROUP BY F ORDER BY COUNT(F) DESC LABEL COUNT(F) \'\'", 0), ' + (i+1) + ', 2), "")'
     );
   }
 
@@ -194,6 +196,7 @@ function doPost(e) {
     logs.appendRow([
       timestamp,
       data.studentName || 'Unknown',
+      data.studentEmail || '',
       data.studentId || '',
       data.major || '',
       data.chapter || 'General',

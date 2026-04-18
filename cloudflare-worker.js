@@ -101,6 +101,7 @@ export default {
           logToSheet(env.GOOGLE_SHEET_WEBHOOK, {
             timestamp: new Date().toISOString(),
             studentName: student?.name || 'Unknown',
+            studentEmail: student?.email || '',
             studentId: student?.id || '',
             major: student?.major || '',
             chapter: extractChapter(system),
