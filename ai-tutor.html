@@ -1049,6 +1049,15 @@ function loadChatHistory() {
 }
 
 function saveChatHistory() {
+  // Make sure current conversation is in allConversations
+  if (currentConversation && currentConversation.messages.length > 1) {
+    const idx = allConversations.findIndex(c => c.id === currentConversation.id);
+    if (idx >= 0) {
+      allConversations[idx] = currentConversation;
+    } else {
+      allConversations.unshift(currentConversation);
+    }
+  }
   localStorage.setItem('de_chat_history', JSON.stringify(allConversations));
   renderHistoryList();
 }
@@ -1072,6 +1081,18 @@ function renderHistoryList() {
 }
 
 function newConversation() {
+  // Save previous conversation if it has real messages (more than just welcome)
+  if (currentConversation && currentConversation.messages.length > 1) {
+    // Check if already in allConversations
+    const idx = allConversations.findIndex(c => c.id === currentConversation.id);
+    if (idx >= 0) {
+      allConversations[idx] = currentConversation;
+    } else {
+      allConversations.unshift(currentConversation);
+    }
+    saveChatHistory();
+  }
+
   currentConversation = {
     id: 'conv_' + Date.now(),
     chapter: currentChapter,
