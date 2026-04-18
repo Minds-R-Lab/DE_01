@@ -1081,35 +1081,39 @@ function updateProfileBadge() {
   }
 }
 
-function requestProfileUpdate(messages) {
-  // Ask Claude to summarize what it learned about this student
-  const profilePrompt = `You are analyzing a tutoring conversation to build a concise learner profile. Based on the conversation below, create or update a student profile in EXACTLY this format (one short line each, skip any you can't determine):
+function requestProfileUpdate(allMessages) {
+  console.log('[Profile] Requesting update with ' + allMessages.length + ' total messages...');
 
-Strengths: ...
-Weaknesses: ...
-Common mistakes: ...
-Learning style: ...
-Topics covered: ...
-Notes: ...
+  // Build a single user message that summarizes the conversation for Claude
+  var summary = 'Here is the tutoring conversation to analyze:\n\n';
+  var count = 0;
+  // Take last 16 messages, skip welcome messages
+  var recent = allMessages.filter(function(m) {
+    return m.content && m.role && m.content.indexOf("I'm your AI tutor") === -1;
+  }).slice(-16);
 
-${learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge new observations with existing profile. Keep it under 150 words total.' : 'Create a new profile. Keep it under 150 words.'}`;
+  recent.forEach(function(m) {
+    summary += (m.role === 'user' ? 'STUDENT: ' : 'TUTOR: ') + m.content.substring(0, 300) + '\n\n';
+    count++;
+  });
 
+  if (count < 2) {
+    console.log('[Profile] Not enough messages to build profile, skipping');
+    return;
+  }
+
+  var profilePrompt = 'You are analyzing a tutoring conversation to build a concise learner profile. ' +
+    'Create a student profile in EXACTLY this format (one short line each, skip any you cannot determine):\n\n' +
+    'Strengths: ...\nWeaknesses: ...\nCommon mistakes: ...\nLearning style: ...\nTopics covered: ...\nNotes: ...\n\n' +
+    (learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge new observations. Keep under 150 words.' : 'Create new profile. Keep under 150 words.');
+
+  // Send as a single user message to avoid role-ordering issues
   fetch(PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'update_profile',
-      messages: messages
-        .filter(m => m.content && m.role) // remove empty
-        .slice(-10)
-        .map(m => ({ role: m.role, content: m.content }))
-        .reduce((acc, m, i) => {
-          // Ensure first message is 'user' and no consecutive same-role messages
-          if (i === 0 && m.role !== 'user') return acc;
-          if (acc.length > 0 && acc[acc.length - 1].role === m.role) return acc;
-          acc.push(m);
-          return acc;
-        }, []),
+      messages: [{ role: 'user', content: summary }],
       system: profilePrompt,
       student: {
         name: studentProfile.name,
@@ -1119,20 +1123,22 @@ ${learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge 
       }
     })
   })
-  .then(res => {
+  .then(function(res) {
+    console.log('[Profile] Response status: ' + res.status);
     if (!res.ok) throw new Error('Server returned ' + res.status);
     return res.json();
   })
-  .then(data => {
+  .then(function(data) {
+    console.log('[Profile] Response data:', data);
     if (data.content && !data.error) {
       saveLearnerProfile(data.content);
-      console.log('Learner profile updated successfully');
+      console.log('[Profile] SUCCESS — profile saved!');
     } else {
-      console.warn('Profile update: no content returned', data);
+      console.warn('[Profile] No content in response:', data);
     }
   })
-  .catch(err => {
-    console.error('Profile update failed:', err.message);
+  .catch(function(err) {
+    console.error('[Profile] FAILED:', err.message);
   });
 }
 
@@ -1472,13 +1478,20 @@ function sendToAPI(systemPrompt, messages) {
       currentConversation.updated = Date.now();
       saveChatHistory();
 
-      // Trigger learner profile update every N exchanges
+      // Trigger learner profile update
       messageCountSinceProfileUpdate++;
-      localStorage.setItem('de_profile_msg_count', messageCountSinceProfileUpdate.toString());
-      if (messageCountSinceProfileUpdate >= PROFILE_UPDATE_INTERVAL && currentConversation.messages.length >= 4) {
+      localStorage.setItem('de_profile_msg_count', String(messageCountSinceProfileUpdate));
+      console.log('[Profile] Message count: ' + messageCountSinceProfileUpdate + '/' + PROFILE_UPDATE_INTERVAL);
+      if (messageCountSinceProfileUpdate >= PROFILE_UPDATE_INTERVAL) {
         messageCountSinceProfileUpdate = 0;
         localStorage.setItem('de_profile_msg_count', '0');
-        requestProfileUpdate(currentConversation.messages);
+        // Gather ALL messages from ALL conversations for richer profile
+        var allMsgs = [];
+        allConversations.forEach(function(c) {
+          c.messages.forEach(function(m) { allMsgs.push(m); });
+        });
+        currentConversation.messages.forEach(function(m) { allMsgs.push(m); });
+        requestProfileUpdate(allMsgs);
       }
     } else {
       addMessageToDisplay('assistant', 'Sorry, I encountered an error. Please try again.');
