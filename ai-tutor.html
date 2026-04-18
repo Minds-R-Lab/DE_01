@@ -848,6 +848,106 @@
 // Configuration
 const PROXY_URL = 'https://de01.m-a-mabrok.workers.dev';
 
+// Markdown renderer
+function renderMarkdown(text) {
+  // Protect code blocks first
+  const codeBlocks = [];
+  text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, function(m, lang, code) {
+    codeBlocks.push('<pre><code>' + code.replace(/</g,'&lt;').replace(/>/g,'&gt;').trim() + '</code></pre>');
+    return '\x00CB' + (codeBlocks.length - 1) + '\x00';
+  });
+
+  // Protect inline code
+  const inlineCodes = [];
+  text = text.replace(/`([^`]+)`/g, function(m, code) {
+    inlineCodes.push('<code>' + code.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</code>');
+    return '\x00IC' + (inlineCodes.length - 1) + '\x00';
+  });
+
+  // Split into lines for block-level processing
+  const lines = text.split('\n');
+  const out = [];
+  let inList = false;
+  let listType = '';
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+
+    // Horizontal rule
+    if (/^\s*([-*_])\s*\1\s*\1[\s\1]*$/.test(line)) {
+      if (inList) { out.push(listType === 'ul' ? '</ul>' : '</ol>'); inList = false; }
+      out.push('<hr>');
+      continue;
+    }
+
+    // Headers
+    const hMatch = line.match(/^(#{1,4})\s+(.+)$/);
+    if (hMatch) {
+      if (inList) { out.push(listType === 'ul' ? '</ul>' : '</ol>'); inList = false; }
+      const level = hMatch[1].length;
+      out.push('<h' + (level + 2) + ' style="margin:0.8rem 0 0.3rem;font-size:' + (1.15 - level * 0.05) + 'rem">' + inlineFormat(hMatch[2]) + '</h' + (level + 2) + '>');
+      continue;
+    }
+
+    // Unordered list
+    const ulMatch = line.match(/^\s*[-*+]\s+(.+)$/);
+    if (ulMatch) {
+      if (!inList || listType !== 'ul') {
+        if (inList) out.push(listType === 'ul' ? '</ul>' : '</ol>');
+        out.push('<ul style="margin:0.3rem 0 0.3rem 1.2rem">');
+        inList = true; listType = 'ul';
+      }
+      out.push('<li>' + inlineFormat(ulMatch[1]) + '</li>');
+      continue;
+    }
+
+    // Ordered list
+    const olMatch = line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if (olMatch) {
+      if (!inList || listType !== 'ol') {
+        if (inList) out.push(listType === 'ul' ? '</ul>' : '</ol>');
+        out.push('<ol style="margin:0.3rem 0 0.3rem 1.2rem">');
+        inList = true; listType = 'ol';
+      }
+      out.push('<li>' + inlineFormat(olMatch[1]) + '</li>');
+      continue;
+    }
+
+    // Close list if non-list line
+    if (inList) {
+      out.push(listType === 'ul' ? '</ul>' : '</ol>');
+      inList = false;
+    }
+
+    // Empty line = paragraph break
+    if (line.trim() === '') {
+      out.push('<br>');
+    } else {
+      out.push(inlineFormat(line));
+      // Add <br> if next line exists and isn't a block element
+      if (i < lines.length - 1 && lines[i+1].trim() !== '' && !/^[#\-*+\d]/.test(lines[i+1].trim())) {
+        out.push('<br>');
+      }
+    }
+  }
+  if (inList) out.push(listType === 'ul' ? '</ul>' : '</ol>');
+
+  let result = out.join('\n');
+
+  // Restore code blocks and inline codes
+  result = result.replace(/\x00CB(\d+)\x00/g, function(m, idx) { return codeBlocks[parseInt(idx)]; });
+  result = result.replace(/\x00IC(\d+)\x00/g, function(m, idx) { return inlineCodes[parseInt(idx)]; });
+  return result;
+}
+
+function inlineFormat(text) {
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  text = text.replace(/_(.+?)_/g, '<em>$1</em>');
+  return text;
+}
+
 // Chapter details for system prompts
 const CHAPTER_DETAILS = {
   general: {
@@ -1032,11 +1132,7 @@ function renderMessages() {
     const div = document.createElement('div');
     div.className = 'message ' + msg.role;
 
-    let content = msg.content;
-    // Basic markdown rendering
-    content = content.replace(/\n/g, '<br>');
-    content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
+    let content = renderMarkdown(msg.content);
 
     div.innerHTML = `
       <div class="message-icon">${msg.role === 'assistant' ? '🤖' : '👤'}</div>
@@ -1085,10 +1181,7 @@ function addMessageToDisplay(role, content) {
   const div = document.createElement('div');
   div.className = 'message ' + role;
 
-  let displayContent = content;
-  displayContent = displayContent.replace(/\n/g, '<br>');
-  displayContent = displayContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  displayContent = displayContent.replace(/`([^`]+)`/g, '<code>$1</code>');
+  let displayContent = renderMarkdown(content);
 
   div.innerHTML = `
     <div class="message-icon">${role === 'assistant' ? '🤖' : '👤'}</div>
@@ -1200,24 +1293,16 @@ function sendMessage() {
 }
 
 function buildSystemPrompt(chapter) {
-  return `You are an AI tutor for a Differential Equations course at Qatar University, taught by Dr. Mohamed Mabrok.
+  return `You are a concise AI tutor for a Differential Equations course at Qatar University (Dr. Mohamed Mabrok). Student: ${studentProfile.name} (${studentProfile.major}).
+Topic: ${chapter.title} — ${chapter.topics}.
 
-Student Profile:
-- Name: ${studentProfile.name}
-- Major: ${studentProfile.major}
-- Student ID: ${studentProfile.id || 'N/A'}
-
-Current Topic: ${chapter.title}
-Topics covered: ${chapter.topics}
-
-Teaching Guidelines:
-- Be encouraging, patient, and pedagogical
-- Guide students through problems step-by-step rather than giving direct answers
-- Use LaTeX notation with $ delimiters for math expressions (e.g., $y' + 2y = 0$)
-- If the student seems stuck, offer hints before solutions
-- Keep responses focused on differential equations and related mathematics
-- Provide clear explanations suitable for engineering students
-- Use examples from real-world applications when appropriate`;
+Rules:
+- Be concise. No filler or unnecessary repetition. Get to the math quickly.
+- Guide step-by-step with hints before full solutions.
+- Use $ for inline LaTeX, $$ for display math.
+- Use markdown: **bold**, headers (##), lists, code blocks.
+- Keep responses short unless the student asks for detailed explanation.
+- If a concept is simple, a 2-3 sentence answer is fine.`;
 }
 
 function sendToAPI(systemPrompt, messages) {

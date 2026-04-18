@@ -29,7 +29,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';  // Fast & cheap; change to claude-sonnet-4-5-20250514 for smarter responses
-const MAX_TOKENS = 1024;
+const MAX_TOKENS = 700;  // Keeps responses focused; increase if students need longer explanations
 
 export default {
   async fetch(request, env) {
