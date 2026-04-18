@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tutor — Differential Equations Course</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-dark: #1e40af;
+    --accent: #7c3aed;
+    --accent-light: #ede9fe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow: hidden;
+  }
+
+  /* Top Navigation */
+  nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:1000;padding:0.6rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:0.9rem;}
+  nav a{text-decoration:none;color:var(--text-muted);font-weight:500;transition:color 0.2s;}
+  nav a:hover{color:var(--primary);}
+  nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing:-0.02em;}
+  nav .active{color:var(--accent);font-weight:700;}
+
+  /* Main container - offset for navbar */
+  .main-wrapper {
+    display: flex;
+    height: calc(100vh - 60px);
+    margin-top: 60px;
+    overflow: hidden;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .profile-card {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .profile-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .profile-info .name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .profile-info .major {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+    word-break: break-word;
+  }
+
+  .edit-profile-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .edit-profile-btn:hover {
+    color: var(--primary-dark);
+  }
+
+  /* Chapter selector */
+  .chapter-section {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .chapter-section label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .chapter-select {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .chapter-select:hover,
+  .chapter-select:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+
+  /* Conversation history */
+  .history-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .history-header {
+    padding: 1rem 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .history-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  .history-item {
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .history-item:hover {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .history-item.active {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+
+  .history-item-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .history-item-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  /* Sidebar buttons */
+  .sidebar-buttons {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn-new-chat {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+  }
+
+  .btn-new-chat:hover {
+    background: #6d28d9;
+  }
+
+  .btn-clear-all {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+
+  .btn-clear-all:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  .token-usage {
+    padding: 0 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  /* Main chat area */
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 35%, #3b82f6 65%, #7c3aed 100%);
+    color: white;
+    padding: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .chat-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .chat-header p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+
+  /* Messages area */
+  .messages-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .message {
+    display: flex;
+    gap: 1rem;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .message.user {
+    justify-content: flex-end;
+  }
+
+  .message-content {
+    max-width: 70%;
+    padding: 1rem;
+    border-radius: 12px;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .message.assistant .message-content {
+    background: #f0f4f9;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .message.user .message-content {
+    background: var(--primary);
+    color: white;
+  }
+
+  .message-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 0.5rem;
+  }
+
+  .message.assistant .message-icon {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+  }
+
+  .message.user .message-icon {
+    background: var(--primary);
+    color: white;
+  }
+
+  .message-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .message:hover .message-time {
+    opacity: 1;
+  }
+
+  /* KaTeX rendering in messages */
+  .message-content .katex {
+    font-size: 1em;
+  }
+
+  .message-content code {
+    background: rgba(0,0,0,0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+
+  .message.user code {
+    background: rgba(0,0,0,0.2);
+  }
+
+  .message-content pre {
+    background: rgba(0,0,0,0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+    font-size: 0.85em;
+    line-height: 1.4;
+  }
+
+  .message.user pre {
+    background: rgba(0,0,0,0.2);
+  }
+
+  .message-content strong {
+    font-weight: 700;
+  }
+
+  .message.user strong {
+    color: white;
+  }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    padding: 1rem;
+    background: #f0f4f9;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+
+  .typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    animation: bounce 1.4s infinite;
+  }
+
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+  }
+
+  /* Input area */
+  .input-area {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  .input-wrapper {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .input-text-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #message-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    resize: none;
+    transition: border-color 0.2s;
+    max-height: 120px;
+    line-height: 1.4;
+  }
+
+  #message-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+
+  #message-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    font-style: italic;
+  }
+
+  .input-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+  }
+
+  .btn-send {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    height: 42px;
+  }
+
+  .btn-send:hover:not(:disabled) {
+    background: var(--primary-dark);
+  }
+
+  .btn-send:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .char-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    text-align: right;
+  }
+
+  /* Error message */
+  .error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--danger);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  .error-message a {
+    color: var(--danger);
+    text-decoration: underline;
+  }
+
+  /* Registration Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
+
+  .modal-overlay.show {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .modal p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+
+  .form-group input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+  }
+
+  .btn-submit:hover {
+    background: var(--primary-dark);
+  }
+
+  .btn-submit:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .main-wrapper {
+      flex-direction: column;
+      height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 100%;
+      max-height: 35%;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-container {
+      max-height: 65%;
+    }
+
+    .message-content {
+      max-width: 85%;
+    }
+
+    nav {
+      padding: 0.6rem 1rem;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+
+    nav .brand {
+      font-size: 0.95rem;
+    }
+
+    .chat-header {
+      padding: 1.5rem;
+    }
+
+    .chat-header h2 {
+      font-size: 1.25rem;
+    }
+
+    .messages-area {
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+
+    .modal {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .profile-card {
+      padding: 1rem;
+    }
+
+    .message-content {
+      max-width: 90%;
+    }
+
+    .messages-area {
+      padding: 1rem;
+    }
+
+    .input-area {
+      padding: 1rem;
+    }
+
+    .modal {
+      width: 95%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">DE Course</a>
+  <a href="index.html">Home</a>
+  <a href="skills.html">Skills</a>
+  <a href="mistakes.html">Common Mistakes</a>
+  <a href="study-tools.html">Study Tools</a>
+  <a href="ai-tutor.html" class="active">AI Tutor</a>
+  <a href="exam-generator.html">Exam Generator</a>
+  <a href="videos.html">Videos</a>
+  <a href="projects.html">Projects</a>
+</nav>
+
+<!-- Registration Modal -->
+<div class="modal-overlay" id="registrationModal">
+  <div class="modal">
+    <h2>Welcome to AI Tutor</h2>
+    <p>Please tell us a bit about yourself to get started.</p>
+    <form id="registrationForm">
+      <div class="form-group">
+        <label for="studentName">Name *</label>
+        <input type="text" id="studentName" name="name" placeholder="Your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="studentID">Student ID</label>
+        <input type="text" id="studentID" name="id" placeholder="Optional">
+      </div>
+      <div class="form-group">
+        <label for="studentMajor">Major/Specialty *</label>
+        <select id="studentMajor" name="major" required>
+          <option value="">Select your major...</option>
+          <option value="Electrical">Electrical Engineering</option>
+          <option value="Mechanical">Mechanical Engineering</option>
+          <option value="Computer">Computer Engineering</option>
+          <option value="Civil">Civil Engineering</option>
+          <option value="Industrial">Industrial Engineering</option>
+          <option value="Mechatronics">Mechatronics</option>
+          <option value="Education">Education</option>
+          <option value="Mathematics">Mathematics</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-submit">Start Learning</button>
+    </form>
+  </div>
+</div>
+
+<div class="main-wrapper">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-avatar" id="profileAvatar">A</div>
+      <div class="profile-info">
+        <div class="name" id="profileName">Student</div>
+        <div class="major" id="profileMajor">Major</div>
+      </div>
+      <button class="edit-profile-btn" id="editProfileBtn" title="Edit profile">⚙️</button>
+    </div>
+
+    <!-- Chapter Selector -->
+    <div class="chapter-section">
+      <label for="chapterSelect">Chapter</label>
+      <select id="chapterSelect" class="chapter-select">
+        <option value="general">General DE Questions</option>
+        <option value="ch1">Chapter 1: First-Order ODEs</option>
+        <option value="ch2">Chapter 2: Second-Order ODEs</option>
+        <option value="ch3">Chapter 3: Laplace Transforms</option>
+        <option value="ch4">Chapter 4: Systems of ODEs</option>
+        <option value="ch5">Chapter 5: Series & Numerical Methods</option>
+        <option value="ch6">Chapter 6: Partial Differential Equations</option>
+        <option value="exam">Exam Preparation</option>
+      </select>
+    </div>
+
+    <!-- Conversation History -->
+    <div class="history-section">
+      <div class="history-header">Recent Conversations</div>
+      <ul class="history-list" id="historyList"></ul>
+    </div>
+
+    <!-- Sidebar Buttons -->
+    <div class="sidebar-buttons">
+      <button class="btn-new-chat" id="newChatBtn">+ New Chat</button>
+      <button class="btn-clear-all" id="clearAllBtn">Clear All History</button>
+      <div class="token-usage" id="tokenUsage">Tokens: ~0</div>
+    </div>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="chat-container">
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <h2 id="chatTitle">Differential Equations AI Tutor</h2>
+      <p id="chatGreeting">Welcome to your personalized learning companion</p>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="messages-area" id="messagesArea">
+      <div style="text-align: center; color: var(--text-muted); margin: auto;">
+        <p style="font-size: 0.95rem;">Start a new conversation or select one from your history.</p>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <div class="input-text-wrapper">
+          <textarea id="message-input" placeholder="Ask about differential equations... (Shift+Enter for new line)" rows="1"></textarea>
+          <div class="input-hint">Press Enter to send, Shift+Enter for new line</div>
+        </div>
+        <div class="input-actions">
+          <button class="btn-send" id="sendBtn" title="Send message">→</button>
+        </div>
+      </div>
+      <div class="char-count" id="charCount"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Configuration
+const PROXY_URL = 'YOUR_CLOUDFLARE_WORKER_URL'; // User will replace this
+
+// Chapter details for system prompts
+const CHAPTER_DETAILS = {
+  general: {
+    title: 'General DE Questions',
+    topics: 'General differential equations concepts and problem-solving'
+  },
+  ch1: {
+    title: 'Chapter 1: First-Order ODEs',
+    topics: 'Separable equations, linear equations, exact equations, Bernoulli equations, homogeneous equations, special methods'
+  },
+  ch2: {
+    title: 'Chapter 2: Second-Order ODEs',
+    topics: 'Linear equations with constant coefficients, homogeneous and non-homogeneous equations, method of undetermined coefficients, variation of parameters, Cauchy-Euler equations'
+  },
+  ch3: {
+    title: 'Chapter 3: Laplace Transforms',
+    topics: 'Definition and properties of Laplace transforms, inverse transforms, solving ODEs using Laplace transforms, convolution, step functions'
+  },
+  ch4: {
+    title: 'Chapter 4: Systems of ODEs',
+    topics: 'Systems of linear ODEs, matrices and eigenvalues, phase portraits, homogeneous and non-homogeneous systems, applications'
+  },
+  ch5: {
+    title: 'Chapter 5: Series & Numerical Methods',
+    topics: 'Power series solutions, Frobenius method, Euler method, Runge-Kutta method, numerical approximations'
+  },
+  ch6: {
+    title: 'Chapter 6: Partial Differential Equations',
+    topics: 'Heat equation, wave equation, Laplace equation, separation of variables, boundary conditions, applications'
+  },
+  exam: {
+    title: 'Exam Preparation',
+    topics: 'Review of all chapters, practice problems, exam strategies, common mistakes, comprehensive problem-solving'
+  }
+};
+
+// Student profile management
+let studentProfile = null;
+
+function loadOrCreateProfile() {
+  const stored = localStorage.getItem('de_student_profile');
+  if (stored) {
+    studentProfile = JSON.parse(stored);
+    updateProfileDisplay();
+  } else {
+    showRegistrationModal();
+  }
+}
+
+function showRegistrationModal() {
+  document.getElementById('registrationModal').classList.add('show');
+}
+
+function hideRegistrationModal() {
+  document.getElementById('registrationModal').classList.remove('show');
+}
+
+document.getElementById('registrationForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('studentName').value;
+  const id = document.getElementById('studentID').value;
+  const major = document.getElementById('studentMajor').value;
+
+  studentProfile = { name, id, major };
+  localStorage.setItem('de_student_profile', JSON.stringify(studentProfile));
+  updateProfileDisplay();
+  hideRegistrationModal();
+  initializeChat();
+});
+
+function updateProfileDisplay() {
+  if (!studentProfile) return;
+  const nameAbbr = studentProfile.name.split(' ').map(n => n[0]).join('').toUpperCase();
+  document.getElementById('profileAvatar').textContent = nameAbbr || 'A';
+  document.getElementById('profileName').textContent = studentProfile.name;
+  document.getElementById('profileMajor').textContent = studentProfile.major || 'Student';
+}
+
+document.getElementById('editProfileBtn').addEventListener('click', () => {
+  document.getElementById('studentName').value = studentProfile.name;
+  document.getElementById('studentID').value = studentProfile.id || '';
+  document.getElementById('studentMajor').value = studentProfile.major;
+  showRegistrationModal();
+});
+
+// Chat state management
+let currentConversation = null;
+let allConversations = [];
+let currentChapter = 'general';
+
+function loadChatHistory() {
+  const stored = localStorage.getItem('de_chat_history');
+  if (stored) {
+    allConversations = JSON.parse(stored);
+  } else {
+    allConversations = [];
+  }
+  renderHistoryList();
+}
+
+function saveChatHistory() {
+  localStorage.setItem('de_chat_history', JSON.stringify(allConversations));
+  renderHistoryList();
+}
+
+function renderHistoryList() {
+  const list = document.getElementById('historyList');
+  list.innerHTML = '';
+  allConversations.forEach((conv, idx) => {
+    const li = document.createElement('li');
+    li.className = 'history-item';
+    if (currentConversation && conv.id === currentConversation.id) {
+      li.classList.add('active');
+    }
+    li.innerHTML = `
+      <div class="history-item-title">${conv.title || 'Untitled'}</div>
+      <div class="history-item-time">${new Date(conv.updated).toLocaleDateString()}</div>
+    `;
+    li.addEventListener('click', () => loadConversation(idx));
+    list.appendChild(li);
+  });
+}
+
+function newConversation() {
+  currentConversation = {
+    id: 'conv_' + Date.now(),
+    chapter: currentChapter,
+    title: 'New conversation',
+    created: Date.now(),
+    updated: Date.now(),
+    messages: []
+  };
+  clearMessagesDisplay();
+  showWelcomeMessage();
+  updateChatHeader();
+}
+
+function loadConversation(idx) {
+  currentConversation = allConversations[idx];
+  currentChapter = currentConversation.chapter;
+  document.getElementById('chapterSelect').value = currentChapter;
+  renderMessages();
+  updateChatHeader();
+}
+
+function clearMessagesDisplay() {
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = '';
+}
+
+function showWelcomeMessage() {
+  const chapter = CHAPTER_DETAILS[currentChapter];
+  const greeting = currentChapter === 'general'
+    ? `Hi ${studentProfile.name}! I'm your AI tutor for Differential Equations. I'm here to help you understand concepts, work through problems, and prepare for exams. What would you like to work on today?`
+    : `Hi ${studentProfile.name}! I see you're studying ${chapter.title}. What would you like to work on?`;
+
+  const msg = {
+    role: 'assistant',
+    content: greeting,
+    time: Date.now()
+  };
+  currentConversation.messages = [msg];
+  renderMessages();
+}
+
+function updateChatHeader() {
+  const chapter = CHAPTER_DETAILS[currentChapter];
+  document.getElementById('chatTitle').textContent = chapter.title;
+  document.getElementById('chatGreeting').textContent = `Studying: ${chapter.topics}`;
+}
+
+function renderMessages() {
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = '';
+
+  if (!currentConversation || currentConversation.messages.length === 0) {
+    area.innerHTML = '<div style="text-align: center; color: var(--text-muted); margin: auto;"><p>Start a new conversation or select one from your history.</p></div>';
+    return;
+  }
+
+  currentConversation.messages.forEach(msg => {
+    const div = document.createElement('div');
+    div.className = 'message ' + msg.role;
+
+    let content = msg.content;
+    // Basic markdown rendering
+    content = content.replace(/\n/g, '<br>');
+    content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    div.innerHTML = `
+      <div class="message-icon">${msg.role === 'assistant' ? '🤖' : '👤'}</div>
+      <div>
+        <div class="message-content">${content}</div>
+        <div class="message-time">${new Date(msg.time).toLocaleTimeString()}</div>
+      </div>
+    `;
+
+    area.appendChild(div);
+
+    // Render LaTeX
+    if (window.renderMathInElement) {
+      renderMathInElement(div, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    }
+  });
+
+  area.scrollTop = area.scrollHeight;
+}
+
+function addMessageToDisplay(role, content) {
+  const area = document.getElementById('messagesArea');
+
+  // Clear welcome message if first user message
+  if (role === 'user' && currentConversation.messages.length === 1 && currentConversation.messages[0].role === 'assistant') {
+    // Keep welcome, just add user message
+  }
+
+  const msg = {
+    role: role,
+    content: content,
+    time: Date.now()
+  };
+
+  if (!currentConversation) {
+    newConversation();
+  }
+
+  currentConversation.messages.push(msg);
+
+  const div = document.createElement('div');
+  div.className = 'message ' + role;
+
+  let displayContent = content;
+  displayContent = displayContent.replace(/\n/g, '<br>');
+  displayContent = displayContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  displayContent = displayContent.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  div.innerHTML = `
+    <div class="message-icon">${role === 'assistant' ? '🤖' : '👤'}</div>
+    <div>
+      <div class="message-content">${displayContent}</div>
+      <div class="message-time">${new Date(msg.time).toLocaleTimeString()}</div>
+    </div>
+  `;
+
+  area.appendChild(div);
+
+  // Render LaTeX
+  if (window.renderMathInElement) {
+    renderMathInElement(div, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });
+  }
+
+  area.scrollTop = area.scrollHeight;
+  updateTokenCount();
+}
+
+function showTypingIndicator() {
+  const area = document.getElementById('messagesArea');
+  const div = document.createElement('div');
+  div.className = 'message assistant';
+  div.id = 'typingIndicator';
+  div.innerHTML = `
+    <div class="message-icon">🤖</div>
+    <div class="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  const indicator = document.getElementById('typingIndicator');
+  if (indicator) {
+    indicator.remove();
+  }
+}
+
+// Message sending
+const input = document.getElementById('message-input');
+const sendBtn = document.getElementById('sendBtn');
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+  if (e.key === 'Escape') {
+    newConversation();
+  }
+});
+
+input.addEventListener('input', () => {
+  // Auto-resize textarea
+  input.style.height = 'auto';
+  const newHeight = Math.min(input.scrollHeight, 120);
+  input.style.height = newHeight + 'px';
+
+  // Show char count if > 500
+  const charCount = input.value.length;
+  const countEl = document.getElementById('charCount');
+  if (charCount > 500) {
+    countEl.textContent = `${charCount} characters`;
+  } else {
+    countEl.textContent = '';
+  }
+});
+
+sendBtn.addEventListener('click', sendMessage);
+
+function sendMessage() {
+  const text = input.value.trim();
+  if (!text || !studentProfile) return;
+
+  addMessageToDisplay('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+  sendBtn.disabled = true;
+
+  // Update conversation title from first message
+  if (currentConversation.messages.length === 2) { // Welcome + first user message
+    currentConversation.title = text.substring(0, 50) + (text.length > 50 ? '...' : '');
+  }
+
+  showTypingIndicator();
+
+  // Build system prompt
+  const chapter = CHAPTER_DETAILS[currentChapter];
+  const systemPrompt = buildSystemPrompt(chapter);
+
+  // Get last 20 messages for context
+  const recentMessages = currentConversation.messages
+    .slice(-20)
+    .map(m => ({ role: m.role, content: m.content }));
+
+  // Send to API
+  sendToAPI(systemPrompt, recentMessages);
+}
+
+function buildSystemPrompt(chapter) {
+  return `You are an AI tutor for a Differential Equations course at Qatar University, taught by Dr. Mohamed Mabrok.
+
+Student Profile:
+- Name: ${studentProfile.name}
+- Major: ${studentProfile.major}
+- Student ID: ${studentProfile.id || 'N/A'}
+
+Current Topic: ${chapter.title}
+Topics covered: ${chapter.topics}
+
+Teaching Guidelines:
+- Be encouraging, patient, and pedagogical
+- Guide students through problems step-by-step rather than giving direct answers
+- Use LaTeX notation with $ delimiters for math expressions (e.g., $y' + 2y = 0$)
+- If the student seems stuck, offer hints before solutions
+- Keep responses focused on differential equations and related mathematics
+- Provide clear explanations suitable for engineering students
+- Use examples from real-world applications when appropriate`;
+}
+
+function sendToAPI(systemPrompt, messages) {
+  if (PROXY_URL === 'YOUR_CLOUDFLARE_WORKER_URL') {
+    removeTypingIndicator();
+    const errorMsg = 'AI Tutor is not configured yet. Please set up the Cloudflare Worker URL in the page source (PROXY_URL variable).';
+    addMessageToDisplay('assistant', errorMsg);
+    saveChatHistory();
+    sendBtn.disabled = false;
+    return;
+  }
+
+  fetch(PROXY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: messages,
+      system: systemPrompt,
+      student: {
+        name: studentProfile.name,
+        id: studentProfile.id,
+        major: studentProfile.major
+      }
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    removeTypingIndicator();
+    if (data.content) {
+      addMessageToDisplay('assistant', data.content);
+      currentConversation.updated = Date.now();
+      saveChatHistory();
+    } else {
+      addMessageToDisplay('assistant', 'Sorry, I encountered an error. Please try again.');
+    }
+  })
+  .catch(err => {
+    removeTypingIndicator();
+    addMessageToDisplay('assistant', 'Connection error: ' + err.message);
+  })
+  .finally(() => {
+    sendBtn.disabled = false;
+    input.focus();
+  });
+}
+
+function updateTokenCount() {
+  // Rough estimate: ~4 characters per token
+  let totalChars = 0;
+  if (currentConversation) {
+    currentConversation.messages.forEach(m => {
+      totalChars += m.content.length;
+    });
+  }
+  const estimate = Math.ceil(totalChars / 4);
+  document.getElementById('tokenUsage').textContent = `Tokens: ~${estimate}`;
+}
+
+// Chapter change
+document.getElementById('chapterSelect').addEventListener('change', (e) => {
+  currentChapter = e.target.value;
+  newConversation();
+});
+
+// New chat button
+document.getElementById('newChatBtn').addEventListener('click', () => {
+  newConversation();
+});
+
+// Clear all history
+document.getElementById('clearAllBtn').addEventListener('click', () => {
+  if (confirm('Are you sure you want to clear all conversation history? This cannot be undone.')) {
+    allConversations = [];
+    saveChatHistory();
+    newConversation();
+  }
+});
+
+// Initialize
+function initializeChat() {
+  loadChatHistory();
+  newConversation();
+  updateChatHeader();
+  input.focus();
+}
+
+// Start
+loadOrCreateProfile();
+if (studentProfile) {
+  initializeChat();
+}
+</script>
+
+</body>
+</html>
