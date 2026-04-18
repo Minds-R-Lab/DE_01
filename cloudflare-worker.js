@@ -8,18 +8,19 @@
  * 2. Name it something like "de-ai-tutor"
  * 3. Paste this entire file into the editor
  * 4. Click "Deploy"
- * 5. Go to Settings → Variables → Add Environment Variable:
- *    - Name: ANTHROPIC_API_KEY
- *    - Value: your Claude API key (get one at https://console.anthropic.com)
- *    - Click "Encrypt" to keep it secret
+ * 5. Go to Settings → Variables → Add Secrets:
+ *    - ANTHROPIC_API_KEY: your Claude API key (https://console.anthropic.com)
+ *    - GOOGLE_SHEET_WEBHOOK: your Google Apps Script web app URL (see google-apps-script.js)
  * 6. Copy your Worker URL (e.g., https://de-ai-tutor.YOUR-SUBDOMAIN.workers.dev)
  * 7. In ai-tutor.html, replace 'YOUR_CLOUDFLARE_WORKER_URL' with your Worker URL
  *
- * FREE TIER LIMITS: 100,000 requests/day — more than enough for a class of 40.
+ * CHAT LOGGING:
+ *   Every student question + AI response is logged to a Google Sheet
+ *   via a Google Apps Script webhook. Logging is non-blocking — it
+ *   runs in the background after the response is sent to the student.
+ *   If GOOGLE_SHEET_WEBHOOK is not set, logging is silently skipped.
  *
- * COST ESTIMATE (Claude 3.5 Haiku):
- *   ~$0.25/MTok input, ~$1.25/MTok output
- *   40 students × 10 messages/day × 500 tokens/msg ≈ $0.25/day ≈ $7.50/month
+ * FREE TIER LIMITS: 100,000 requests/day — more than enough for a class of 40.
  */
 
 const ALLOWED_ORIGINS = [
@@ -28,11 +29,11 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1'
 ];
 
-const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';  // Fast & cheap; change to claude-sonnet-4-5-20250514 for smarter responses
-const MAX_TOKENS = 700;  // Keeps responses focused; increase if students need longer explanations
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
+const MAX_TOKENS = 700;
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return handleCORS(request);
@@ -58,8 +59,8 @@ export default {
         return jsonResponse({ error: 'Invalid request: messages array required' }, 400, origin);
       }
 
-      // Rate limiting by student ID (simple in-memory, resets on worker restart)
-      // For production, use Cloudflare KV or D1
+      // Get the student's latest message (the one they just sent)
+      const studentMessage = messages[messages.length - 1];
 
       // Call Claude API
       const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
@@ -73,7 +74,7 @@ export default {
           model: CLAUDE_MODEL,
           max_tokens: MAX_TOKENS,
           system: system || 'You are a helpful differential equations tutor.',
-          messages: messages.slice(-20) // Last 20 messages to control costs
+          messages: messages.slice(-20)
         })
       });
 
@@ -94,6 +95,23 @@ export default {
         .map(block => block.text)
         .join('\n');
 
+      // Log to Google Sheet in background (non-blocking)
+      if (env.GOOGLE_SHEET_WEBHOOK) {
+        ctx.waitUntil(
+          logToSheet(env.GOOGLE_SHEET_WEBHOOK, {
+            timestamp: new Date().toISOString(),
+            studentName: student?.name || 'Unknown',
+            studentId: student?.id || '',
+            major: student?.major || '',
+            chapter: extractChapter(system),
+            studentMessage: studentMessage?.content || '',
+            aiResponse: content,
+            inputTokens: claudeData.usage?.input_tokens || 0,
+            outputTokens: claudeData.usage?.output_tokens || 0
+          })
+        );
+      }
+
       // Return response with usage info
       return jsonResponse({
         content: content,
@@ -106,6 +124,34 @@ export default {
     }
   }
 };
+
+/**
+ * Log a chat exchange to Google Sheets via Apps Script webhook.
+ * Runs in background via ctx.waitUntil() — does not delay the response.
+ */
+async function logToSheet(webhookUrl, data) {
+  try {
+    const res = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      console.error('Sheet log failed:', res.status, await res.text());
+    }
+  } catch (err) {
+    console.error('Sheet log error:', err.message);
+  }
+}
+
+/**
+ * Extract chapter name from system prompt for logging.
+ */
+function extractChapter(system) {
+  if (!system) return 'General';
+  const match = system.match(/Topic:\s*([^\n—]+)/);
+  return match ? match[1].trim() : 'General';
+}
 
 function handleCORS(request) {
   const origin = request.headers.get('Origin') || '';
