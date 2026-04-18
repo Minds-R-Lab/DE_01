@@ -518,6 +518,27 @@
             transition: width 0.3s ease;
         }
 
+        .download-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.25s;
+            border: 2px solid var(--primary);
+            background: var(--primary); color: white;
+        }
+        .download-btn:hover {
+            background: var(--primary-dark); transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+        .download-btn.secondary {
+            background: white; color: var(--text-muted);
+            border-color: var(--border);
+        }
+        .download-btn.secondary:hover {
+            border-color: var(--primary); color: var(--primary);
+            background: var(--primary-light);
+        }
+
         .timeline {
             position: relative;
         }
@@ -824,6 +845,11 @@
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div style="display:flex;gap:0.8rem;margin-top:1rem;flex-wrap:wrap;">
+                    <button class="download-btn" onclick="downloadReport()">📄 Download Progress Report</button>
+                    <button class="download-btn secondary" onclick="checkAllWeek()">✅ Check All This Week</button>
+                    <button class="download-btn secondary" onclick="uncheckAll()">↩ Reset All</button>
                 </div>
             </div>
             <div class="timeline" id="timeline"></div>
@@ -1435,11 +1461,8 @@
             }
         ];
 
-        // State: track checked tasks
-        const taskState = {};
-        plannerData.forEach((w, widx) => {
-            taskState[widx] = Array(w.tasks.length).fill(false);
-        });
+        // State: track checked tasks (use array so for...of works)
+        const taskState = plannerData.map(w => Array(w.tasks.length).fill(false));
 
         function renderPlanner() {
             const timeline = document.getElementById("timeline");
@@ -1504,6 +1527,85 @@
             document.getElementById("tasks-total").textContent = total;
             const pct = total > 0 ? (completed / total) * 100 : 0;
             document.getElementById("progress-fill").style.width = pct + "%";
+        }
+
+        function checkAllWeek() {
+            // Find the first week that has unchecked tasks
+            for (let widx = 0; widx < taskState.length; widx++) {
+                const hasUnchecked = taskState[widx].some(t => !t);
+                if (hasUnchecked) {
+                    taskState[widx] = taskState[widx].map(() => true);
+                    renderPlanner();
+                    // Scroll to that week
+                    const card = document.querySelectorAll('.week-card')[widx];
+                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+            }
+        }
+
+        function uncheckAll() {
+            for (let widx = 0; widx < taskState.length; widx++) {
+                taskState[widx] = taskState[widx].map(() => false);
+            }
+            renderPlanner();
+        }
+
+        function downloadReport() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            let totalDone = 0, totalAll = 0;
+            for (const w of taskState) {
+                for (const t of w) {
+                    totalAll++;
+                    if (t) totalDone++;
+                }
+            }
+            const pct = totalAll > 0 ? Math.round((totalDone / totalAll) * 100) : 0;
+
+            let report = '';
+            report += '═══════════════════════════════════════════════════\n';
+            report += '    DIFFERENTIAL EQUATIONS — STUDY PROGRESS REPORT\n';
+            report += '    Math 4: Mathematics for Engineering\n';
+            report += '    Dr. Mohamed Mabrok — Qatar University\n';
+            report += '═══════════════════════════════════════════════════\n\n';
+            report += `Date: ${dateStr} at ${timeStr}\n`;
+            report += `Overall Progress: ${totalDone} / ${totalAll} tasks (${pct}%)\n`;
+            report += `${'█'.repeat(Math.round(pct / 2))}${'░'.repeat(50 - Math.round(pct / 2))} ${pct}%\n`;
+            report += '\n───────────────────────────────────────────────────\n\n';
+
+            plannerData.forEach((week, widx) => {
+                const weekDone = taskState[widx].filter(t => t).length;
+                const weekTotal = taskState[widx].length;
+                const weekPct = Math.round((weekDone / weekTotal) * 100);
+                const status = weekDone === weekTotal ? '✅ COMPLETE' : weekDone > 0 ? '🔄 IN PROGRESS' : '⬜ NOT STARTED';
+
+                report += `Week ${week.week}: ${week.title}\n`;
+                report += `  Status: ${status} (${weekDone}/${weekTotal} — ${weekPct}%)\n`;
+
+                week.tasks.forEach((task, tidx) => {
+                    const check = taskState[widx][tidx] ? '[✓]' : '[ ]';
+                    report += `  ${check} ${task}\n`;
+                });
+                report += '\n';
+            });
+
+            report += '───────────────────────────────────────────────────\n';
+            report += `Generated from: DE Course Study Toolkit\n`;
+            report += `Website: https://minds-r-lab.github.io/DE_01/study-tools.html\n`;
+
+            // Create and trigger download
+            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `DE_Progress_Report_${now.toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // ===== TAB SWITCHING =====
