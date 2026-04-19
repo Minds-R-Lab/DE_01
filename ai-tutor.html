@@ -398,7 +398,13 @@
 
   /* KaTeX rendering in messages */
   .message-content .katex {
-    font-size: 1em;
+    font-size: 1.05em;
+  }
+  .message-content .katex-display {
+    margin: 0.6rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.3rem 0;
   }
 
   .message-content code {
@@ -898,6 +904,33 @@ function renderMarkdown(text) {
     return '\x00CB' + (codeBlocks.length - 1) + '\x00';
   });
 
+  // Protect LaTeX BEFORE any markdown processing
+  // Display math: $$...$$ (may span multiple lines)
+  const mathBlocks = [];
+  text = text.replace(/\$\$([\s\S]*?)\$\$/g, function(m) {
+    mathBlocks.push(m); // Keep original $$...$$ intact for KaTeX
+    return '\x00MB' + (mathBlocks.length - 1) + '\x00';
+  });
+
+  // Display math: \[...\] (may span multiple lines)
+  text = text.replace(/\\\[([\s\S]*?)\\\]/g, function(m) {
+    mathBlocks.push(m);
+    return '\x00MB' + (mathBlocks.length - 1) + '\x00';
+  });
+
+  // Inline math: $...$ (single line, non-greedy)
+  const inlineMath = [];
+  text = text.replace(/\$([^\$\n]+?)\$/g, function(m) {
+    inlineMath.push(m); // Keep original $...$ intact for KaTeX
+    return '\x00IM' + (inlineMath.length - 1) + '\x00';
+  });
+
+  // Inline math: \(...\)
+  text = text.replace(/\\\((.+?)\\\)/g, function(m) {
+    inlineMath.push(m);
+    return '\x00IM' + (inlineMath.length - 1) + '\x00';
+  });
+
   // Protect inline code
   const inlineCodes = [];
   text = text.replace(/`([^`]+)`/g, function(m, code) {
@@ -975,17 +1008,22 @@ function renderMarkdown(text) {
 
   let result = out.join('\n');
 
-  // Restore code blocks and inline codes
+  // Restore protected blocks (order matters: code first, then math)
   result = result.replace(/\x00CB(\d+)\x00/g, function(m, idx) { return codeBlocks[parseInt(idx)]; });
   result = result.replace(/\x00IC(\d+)\x00/g, function(m, idx) { return inlineCodes[parseInt(idx)]; });
+  result = result.replace(/\x00MB(\d+)\x00/g, function(m, idx) { return mathBlocks[parseInt(idx)]; });
+  result = result.replace(/\x00IM(\d+)\x00/g, function(m, idx) { return inlineMath[parseInt(idx)]; });
   return result;
 }
 
 function inlineFormat(text) {
+  // Skip lines that are just math placeholders
+  if (/^\x00(MB|IM)\d+\x00$/.test(text.trim())) return text;
   text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
   text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  text = text.replace(/_(.+?)_/g, '<em>$1</em>');
+  // Only apply underscore italics when surrounded by spaces/start/end (avoid mangling LaTeX subscripts)
+  text = text.replace(/(^|\s)_([^\s_][^_]*?)_(\s|$)/g, '$1<em>$2</em>$3');
   return text;
 }
 
@@ -1298,8 +1336,11 @@ function renderMessages() {
       renderMathInElement(div, {
         delimiters: [
           {left: '$$', right: '$$', display: true},
-          {left: '$', right: '$', display: false}
-        ]
+          {left: '\\[', right: '\\]', display: true},
+          {left: '$', right: '$', display: false},
+          {left: '\\(', right: '\\)', display: false}
+        ],
+      throwOnError: false
       });
     }
   });
