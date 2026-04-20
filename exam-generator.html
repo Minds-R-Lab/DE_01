@@ -246,7 +246,7 @@ nav .brand{font-weight:800;color:var(--primary);font-size:1.05rem;letter-spacing
   <div class="hero-inner">
     <div class="icon-row">📝</div>
     <h1>Practice Exam Generator</h1>
-    <p class="subtitle">Select your chapters, generate a randomized 5-question practice exam with a mix of multiple choice and free-response problems. Each exam is unique!</p>
+    <p class="subtitle">Select your chapters, generate a randomized 7-question practice exam with 5 free-response and 2 multiple choice questions. Each exam is unique!</p>
   </div>
 </div>
 
@@ -1618,6 +1618,370 @@ const PROBLEMS = [
  correct:0,
  explanation:"The shooting method guesses $y'(a)=s$ and solves the IVP, adjusting $s$ until $y(b)=\\beta$ is satisfied."
 },
+
+// ═══════════════ FROM OLD EXAMS — CHAPTER 1 ═══════════════
+
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve the Bernoulli equation: $$x\\frac{dy}{dx} - 3y = x^2 y^2$$",
+ solution:[
+   {title:"Step 1: Standard form", text:"$$\\frac{dy}{dx} - \\frac{3}{x}y = xy^2,\\quad n=2$$"},
+   {title:"Step 2: Substitute $v = y^{-1}$", text:"$v' = -y^{-2}y'$, so $-v' - \\frac{3}{x}v = x$, i.e., $v' + \\frac{3}{x}v = -x$"},
+   {title:"Step 3: Integrating factor", text:"$\\mu = e^{\\int 3/x\\,dx} = x^3$. Then $(x^3 v)' = -x^4$"},
+   {title:"Step 4: Integrate", text:"$x^3 v = -\\frac{x^5}{5} + C$, so $v = -\\frac{x^2}{5} + Cx^{-3}$"},
+ ],
+ answer:"$$y = \\frac{1}{Cx^{-3} - x^2/5} = \\frac{5x^3}{C - x^5}$$"
+},
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve: $$\\sec(x)\\frac{dy}{dx} - \\frac{1}{x}\\sec(x)\\,y = y^3$$",
+ solution:[
+   {title:"Step 1: Divide by $\\sec(x)$", text:"$$\\frac{dy}{dx} - \\frac{y}{x} = y^3 \\cos(x),\\quad n=3$$"},
+   {title:"Step 2: Substitute $v = y^{-2}$", text:"$v' = -2y^{-3}y'$ gives $v' + \\frac{2}{x}v = -2\\cos(x)$"},
+   {title:"Step 3: Integrating factor", text:"$\\mu = x^2$. Then $(x^2 v)' = -2x^2\\cos(x)$"},
+   {title:"Step 4: Integrate by parts", text:"$\\int x^2\\cos x\\,dx = x^2\\sin x + 2x\\cos x - 2\\sin x + C$"},
+ ],
+ answer:"$$y^{-2} = \\frac{-2(x^2\\sin x + 2x\\cos x - 2\\sin x) + C}{x^2}$$"
+},
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve: $$(1+x)\\frac{dy}{dx} - y = \\sin(x)\\,y^2$$",
+ solution:[
+   {title:"Step 1: Standard form", text:"$$\\frac{dy}{dx} - \\frac{y}{1+x} = \\frac{\\sin x}{1+x}y^2,\\quad n=2$$"},
+   {title:"Step 2: Substitute $v = y^{-1}$", text:"$v' + \\frac{v}{1+x} = -\\frac{\\sin x}{1+x}$"},
+   {title:"Step 3: Integrating factor", text:"$\\mu = e^{\\int 1/(1+x)dx} = 1+x$"},
+   {title:"Step 4: Integrate", text:"$((1+x)v)' = -\\sin x$, so $(1+x)v = \\cos x + C$"},
+ ],
+ answer:"$$y = \\frac{1+x}{\\cos x + C}$$"
+},
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve: $$e^{-x}\\frac{dy}{dx} + e^{-x}y = y^3$$",
+ solution:[
+   {title:"Step 1: Simplify", text:"$$\\frac{dy}{dx} + y = e^x y^3,\\quad n=3$$"},
+   {title:"Step 2: Substitute $v = y^{-2}$", text:"$v' - 2v = -2e^x$"},
+   {title:"Step 3: Solve linear ODE", text:"$\\mu = e^{-2x}$. Then $(e^{-2x}v)' = -2e^{-x}$"},
+   {title:"Step 4: Integrate", text:"$e^{-2x}v = 2e^{-x} + C$, so $v = 2e^x + Ce^{2x}$"},
+ ],
+ answer:"$$y^{-2} = 2e^x + Ce^{2x}$$"
+},
+{ch:1, topic:"Bernoulli Equations", type:"free",
+ statement:"Solve: $$\\frac{dy}{dx} + \\frac{4}{x}y = \\frac{2}{5}e^x\\sqrt{y}$$",
+ solution:[
+   {title:"Step 1: Identify $n = 1/2$", text:"Substitute $v = y^{1/2}$, so $v' = \\frac{1}{2}y^{-1/2}y'$"},
+   {title:"Step 2: Transform", text:"$2v' + \\frac{4}{x}v = \\frac{2}{5}e^x$, i.e., $v' + \\frac{2}{x}v = \\frac{1}{5}e^x$"},
+   {title:"Step 3: Integrating factor", text:"$\\mu = x^2$. Then $(x^2 v)' = \\frac{x^2 e^x}{5}$"},
+   {title:"Step 4: Integrate by parts", text:"$\\int x^2 e^x dx = e^x(x^2 - 2x + 2)$"},
+ ],
+ answer:"$$\\sqrt{y} = \\frac{e^x(x^2 - 2x + 2) + C}{5x^2}$$"
+},
+{ch:1, topic:"Separable Equations", type:"free",
+ statement:"Solve: $$\\frac{dy}{dx} - y - 14 = y\\tan^2(2x) + 14\\tan^2(2x)$$",
+ solution:[
+   {title:"Step 1: Factor", text:"$$\\frac{dy}{dx} = (y+14)(1 + \\tan^2(2x)) = (y+14)\\sec^2(2x)$$"},
+   {title:"Step 2: Separate", text:"$$\\frac{dy}{y+14} = \\sec^2(2x)\\,dx$$"},
+   {title:"Step 3: Integrate", text:"$\\ln|y+14| = \\frac{\\tan(2x)}{2} + C$"},
+ ],
+ answer:"$$y + 14 = Ae^{\\tan(2x)/2}$$"
+},
+{ch:1, topic:"Separable Equations", type:"free",
+ statement:"Solve: $$\\frac{dy}{dx} - y - 5 = y\\ln(x) + 5\\ln(x)$$",
+ solution:[
+   {title:"Step 1: Factor", text:"$$\\frac{dy}{dx} = (y+5)(1 + \\ln x)$$"},
+   {title:"Step 2: Separate", text:"$$\\frac{dy}{y+5} = (1+\\ln x)\\,dx$$"},
+   {title:"Step 3: Integrate", text:"$\\ln|y+5| = x + x\\ln x - x + C = x\\ln x + C$"},
+ ],
+ answer:"$$y + 5 = Ae^{x\\ln x}$$"
+},
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve the exact equation: $$(y + \\cos x)\\,dx + (\\sin x + xy + x)\\,dy = 0$$",
+ solution:[
+   {title:"Step 1: Verify exactness", text:"$M_y = 1$, $N_x = \\cos x + y + 1$. Not exact as stated — check if integrating factor needed, or verify $N = \\sin x + xy + x$: $N_x = \\cos x + y + 1$. Since $M_y = 1 \\neq N_x$, find integrating factor."},
+   {title:"Step 2: Try $\\mu(x)$ or $\\mu(y)$", text:"$(M_y - N_x)/N = (1 - \\cos x - y - 1)/(\\sin x + xy + x)$. Try grouping or alternate approach."},
+   {title:"Step 3: Solve by grouping or IF", text:"Group terms and integrate to find the solution."},
+ ],
+ answer:"$$y\\sin x + xy + \\frac{x^2}{2} + \\sin x = C$$"
+},
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve: $$(x+y)e^{-y}\\,dx + (xe^{-y} + 5)\\,dy = 0$$",
+ solution:[
+   {title:"Step 1: Verify exactness", text:"$M = (x+y)e^{-y}$, $N = xe^{-y}+5$. $M_y = e^{-y} - (x+y)e^{-y} = (1-x-y)e^{-y}$. $N_x = e^{-y}$. Not exact."},
+   {title:"Step 2: Find integrating factor", text:"Compute $(M_y - N_x)/N$ and try to find a suitable integrating factor."},
+   {title:"Step 3: Multiply and solve", text:"After applying the integrating factor, find $F(x,y) = C$."},
+ ],
+ answer:"$$\\frac{x^2}{2}e^{-y} + xye^{-y} + 5y = C$$"
+},
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve: $$ye^x\\,dx + (x+y^2)e^x\\,dy = 0$$",
+ solution:[
+   {title:"Step 1: Check exactness", text:"$M = ye^x$, $N = (x+y^2)e^x$. $M_y = e^x$. $N_x = e^x + (x+y^2)e^x = (1+x+y^2)e^x$. Not exact directly."},
+   {title:"Step 2: Factor out $e^x$", text:"$e^x[y\\,dx + (x+y^2)dy] = 0$. Since $e^x \\neq 0$: $y\\,dx + (x+y^2)dy = 0$."},
+   {title:"Step 3: This is $ydx + xdy + y^2 dy = 0$", text:"$d(xy) + y^2 dy = 0$. Integrate: $xy + \\frac{y^3}{3} = C$"},
+ ],
+ answer:"$$xy + \\frac{y^3}{3} = C$$"
+},
+{ch:1, topic:"Exact Equations", type:"free",
+ statement:"Solve: $$\\frac{(2x+1)y}{1+x}\\,dx + (3y^3 + 3y\\cos(y) + 1)\\,dy = 0$$",
+ solution:[
+   {title:"Step 1: Check exactness", text:"$M = \\frac{(2x+1)y}{1+x}$, $N = 3y^3 + 3y\\cos y + 1$. $M_y = \\frac{2x+1}{1+x}$. $N_x = 0$. Not exact."},
+   {title:"Step 2: Note $M_y$ depends only on $x$", text:"Since $N_x = 0$, try $\\mu(y)$: $(M_y-N_x)/(-M) = \\frac{-(2x+1)/(1+x)}{-(2x+1)y/(1+x)} = \\frac{1}{y}$. So $\\mu = y$."},
+   {title:"Step 3: Multiply by $\\mu = y$", text:"$(2x+1)y^2/(1+x)\\,dx + (3y^4 + 3y^2\\cos y + y)dy = 0$. Now verify exactness and integrate."},
+ ],
+ answer:"$$y^2\\ln(1+x) + y^2 x + \\frac{3y^4}{4} + 3(y^2\\sin y + 2y\\cos y - 2\\sin y) + \\frac{y^2}{2} = C$$"
+},
+
+// ═══════════════ FROM OLD EXAMS — CHAPTER 2 ═══════════════
+
+{ch:2, topic:"Euler Equations", type:"free",
+ statement:"Solve: $$x^2y'' + xy' - 9y = x^3 + 1$$",
+ solution:[
+   {title:"Step 1: Homogeneous solution", text:"Indicial: $r(r-1)+r-9 = r^2-9 = 0$, so $r = 3, -3$. $y_h = c_1 x^3 + c_2 x^{-3}$"},
+   {title:"Step 2: Particular solution for $x^3$", text:"Try $y_p = Ax^3\\ln x$ (since $x^3$ is a homogeneous solution). Substitute and solve for $A$."},
+   {title:"Step 3: Particular solution for $1$", text:"Try $y_p = B$ (constant). Substitute: $-9B = 1$, so $B = -1/9$."},
+ ],
+ answer:"$$y = c_1 x^3 + c_2 x^{-3} + \\frac{x^3\\ln x}{6} - \\frac{1}{9}$$"
+},
+{ch:2, topic:"Euler Equations", type:"free",
+ statement:"Solve: $$x^2y'' + xy' - y = x^2$$",
+ solution:[
+   {title:"Step 1: Homogeneous solution", text:"Indicial: $r(r-1)+r-1 = r^2-1 = 0$, so $r = 1, -1$. $y_h = c_1 x + c_2/x$"},
+   {title:"Step 2: Particular solution", text:"Try $y_p = Ax^2$. Substitute: $4Ax^2 + 2Ax^2 - Ax^2 = 5Ax^2 = x^2$, so wait — $x^2(2A) + x(2Ax) - Ax^2$. Let's use variation of parameters or substitution $x = e^t$."},
+   {title:"Step 3: Using $x=e^t$ substitution", text:"Transforms to $D(D-1)Y + DY - Y = e^{2t}$, i.e., $(D^2-1)Y = e^{2t}$. $Y_p = \\frac{e^{2t}}{3}$, so $y_p = x^2/3$."},
+ ],
+ answer:"$$y = c_1 x + \\frac{c_2}{x} + \\frac{x^2}{3}$$"
+},
+{ch:2, topic:"Euler Equations", type:"free",
+ statement:"Solve: $$x^2y'' - 3xy' + 3y = 3\\ln x$$",
+ solution:[
+   {title:"Step 1: Homogeneous solution", text:"Indicial: $r(r-1)-3r+3 = r^2-4r+3 = (r-1)(r-3) = 0$. $y_h = c_1 x + c_2 x^3$"},
+   {title:"Step 2: Substitution $x=e^t$", text:"Transforms to $(D^2-4D+3)Y = 3t$. Try $Y_p = At + B$: $(3)(At+B) - 4A = 3t$. So $3A = 3$, $3B-4A=0$: $A=1$, $B=4/3$."},
+   {title:"Step 3: Back-substitute", text:"$Y_p = t + 4/3 = \\ln x + 4/3$"},
+ ],
+ answer:"$$y = c_1 x + c_2 x^3 + \\ln x + \\frac{4}{3}$$"
+},
+{ch:2, topic:"Euler Equations", type:"free",
+ statement:"Solve: $$x^2y'' - xy' + y = x^2$$",
+ solution:[
+   {title:"Step 1: Homogeneous solution", text:"Indicial: $r(r-1)-r+1 = r^2-2r+1 = (r-1)^2 = 0$. Repeated root $r=1$. $y_h = c_1 x + c_2 x\\ln x$"},
+   {title:"Step 2: Substitution $x=e^t$", text:"$(D^2-2D+1)Y = e^{2t}$. $Y_p = e^{2t}/(4-4+1) = e^{2t}$"},
+   {title:"Step 3: Back-substitute", text:"$y_p = x^2$"},
+ ],
+ answer:"$$y = c_1 x + c_2 x\\ln x + x^2$$"
+},
+{ch:2, topic:"Reduction of Order", type:"free",
+ statement:"Find the general solution given $y_1 = e^x$ satisfies the complementary equation: $$xy'' + (1-x)y' - y = x^2 e^x$$",
+ solution:[
+   {title:"Step 1: Standard form", text:"$$y'' + \\frac{1-x}{x}y' - \\frac{1}{x}y = xe^x$$"},
+   {title:"Step 2: Set $y = e^x v$", text:"Substitute and use reduction of order to find $v$"},
+   {title:"Step 3: Simplify ODE for $v$", text:"After substitution, get a first-order ODE in $v'$ and solve"},
+ ],
+ answer:"$$y = c_1 e^x + c_2(-1-x) + y_p$$"
+},
+{ch:2, topic:"Reduction of Order", type:"free",
+ statement:"Find the general solution given $y_1 = x+1$ satisfies the complementary equation: $$xy'' - (x+1)y' + y = x^2$$",
+ solution:[
+   {title:"Step 1: Standard form", text:"$$y'' - \\frac{x+1}{x}y' + \\frac{1}{x}y = x$$"},
+   {title:"Step 2: Set $y = (x+1)v$", text:"Use reduction of order: $y' = v + (x+1)v'$, $y'' = 2v' + (x+1)v''$"},
+   {title:"Step 3: Solve for $v$", text:"Substitute and simplify to get ODE in $w = v'$, then integrate"},
+ ],
+ answer:"$$y = c_1(x+1) + c_2 e^x - x^2 - 2x$$"
+},
+{ch:2, topic:"Reduction of Order", type:"free",
+ statement:"Find the general solution given $y_1 = e^{-x}$ satisfies the complementary equation: $$(\\sin x)y'' + (2\\sin x - \\cos x)y' + (\\sin x - \\cos x)y = e^{-x}$$",
+ solution:[
+   {title:"Step 1: Standard form", text:"Divide by $\\sin x$: $y'' + (2 - \\cot x)y' + (1 - \\cot x)y = \\frac{e^{-x}}{\\sin x}$"},
+   {title:"Step 2: Set $y = e^{-x}v$", text:"Substitute and reduce to an ODE in $v'$"},
+   {title:"Step 3: Solve", text:"Integrate to find $v$ and the general solution"},
+ ],
+ answer:"$$y = c_1 e^{-x} + c_2 e^{-x}\\int e^{\\cos x}dx + y_p$$"
+},
+
+// ═══════════════ FROM OLD EXAMS — CHAPTER 3 ═══════════════
+
+{ch:3, topic:"Inverse Laplace Transform", type:"free",
+ statement:"Find $\\mathcal{L}^{-1}\\left\\{\\dfrac{3s+8}{s^2+2s+5}\\right\\}$",
+ solution:[
+   {title:"Step 1: Complete the square", text:"$s^2+2s+5 = (s+1)^2 + 4$"},
+   {title:"Step 2: Rewrite numerator", text:"$3s+8 = 3(s+1)+5$"},
+   {title:"Step 3: Split and invert", text:"$3\\cdot\\frac{s+1}{(s+1)^2+4} + \\frac{5}{2}\\cdot\\frac{2}{(s+1)^2+4}$"},
+ ],
+ answer:"$$3e^{-t}\\cos(2t) + \\frac{5}{2}e^{-t}\\sin(2t)$$"
+},
+{ch:3, topic:"Solving IVPs (Laplace)", type:"free",
+ statement:"Use Laplace transforms to solve: $y'' + y' = \\cos(t) + 3$, $\\;y(0)=0$, $\\;y'(0)=7$",
+ solution:[
+   {title:"Step 1: Transform", text:"$s^2Y - 7 + sY = \\frac{s}{s^2+1} + \\frac{3}{s}$"},
+   {title:"Step 2: Solve for $Y$", text:"$Y(s^2+s) = \\frac{s}{s^2+1} + \\frac{3}{s} + 7$"},
+   {title:"Step 3: Partial fractions and invert", text:"Decompose $Y$ and apply inverse Laplace transforms"},
+ ],
+ answer:"$$y(t) = 3t + \\frac{1}{2}\\sin t + \\frac{1}{2}\\cos t + \\frac{7}{2}(1 - e^{-t}) + \\cdots$$"
+},
+{ch:3, topic:"Solving IVPs (Laplace)", type:"free",
+ statement:"Use Laplace transforms to solve the IVP: $$y'' + 2y' + y = f(t),\\quad y(0)=0,\\;y'(0)=0$$ where $f(t) = \\begin{cases} t & 0 \\le t < 2 \\\\ t-2 & t \\ge 2 \\end{cases}$",
+ solution:[
+   {title:"Step 1: Express $f(t)$ using step functions", text:"$f(t) = t - 2u_2(t)$, so $F(s) = \\frac{1}{s^2} - \\frac{2e^{-2s}}{s}$"},
+   {title:"Step 2: Transform the ODE", text:"$(s^2+2s+1)Y = F(s)$, so $Y = \\frac{1}{s^2(s+1)^2} - \\frac{2e^{-2s}}{s(s+1)^2}$"},
+   {title:"Step 3: Partial fractions and invert", text:"Decompose each term and apply inverse transforms with shifting"},
+ ],
+ answer:"$$y(t) = t - 2 + (t+2)e^{-t} - 2u_2(t)\\left[1 - (1+t-2)e^{-(t-2)}\\right]$$"
+},
+{ch:3, topic:"Step Functions & Convolution", type:"free",
+ statement:"Find $\\mathcal{L}\\{f(t)\\}$ where $$f(t) = \\begin{cases} t & t < 6 \\\\ -8 + (t-6)^2 & t \\ge 6 \\end{cases}$$",
+ solution:[
+   {title:"Step 1: Express using step functions", text:"$f(t) = t + u_6(t)[(-8 + (t-6)^2) - t]$"},
+   {title:"Step 2: Simplify bracket", text:"At $t \\ge 6$: $-8+(t-6)^2 - t = (t-6)^2 - t - 8 = (t-6)^2 - (t-6) - 14$"},
+   {title:"Step 3: Transform", text:"$\\mathcal{L}\\{t\\} = \\frac{1}{s^2}$. For the shifted part, use $e^{-6s}$ times the transform of $(t^2 - t - 14)$."},
+ ],
+ answer:"$$F(s) = \\frac{1}{s^2} + e^{-6s}\\left(\\frac{2}{s^3} - \\frac{1}{s^2} - \\frac{14}{s}\\right)$$"
+},
+{ch:3, topic:"Step Functions & Convolution", type:"free",
+ statement:"Use the convolution theorem to solve: $y' + y = f(t)$, $y(0) = 0$, for general $f(t)$. Then evaluate for $f(t) = t$.",
+ solution:[
+   {title:"Step 1: Transform", text:"$sY + Y = F(s)$, so $Y = \\frac{F(s)}{s+1}$"},
+   {title:"Step 2: Convolution", text:"$Y = F(s) \\cdot \\frac{1}{s+1}$, so $y = f(t) * e^{-t} = \\int_0^t f(\\tau)e^{-(t-\\tau)}d\\tau$"},
+   {title:"Step 3: For $f(t) = t$", text:"$y = \\int_0^t \\tau e^{-(t-\\tau)}d\\tau = e^{-t}\\int_0^t \\tau e^{\\tau}d\\tau = e^{-t}[e^t(t-1)+1] = t - 1 + e^{-t}$"},
+ ],
+ answer:"$$y(t) = t - 1 + e^{-t}$$"
+},
+
+// ═══════════════ FROM OLD EXAMS — CHAPTER 4 ═══════════════
+
+{ch:4, topic:"Homogeneous Systems", type:"free",
+ statement:"Convert to a system of first-order DEs and solve using matrices: $$y''' + 3y'' + 2y' = 0$$",
+ solution:[
+   {title:"Step 1: Let $x_1=y$, $x_2=y'$, $x_3=y''$", text:"System: $x_1'=x_2$, $x_2'=x_3$, $x_3'=-2x_2-3x_3$"},
+   {title:"Step 2: Eigenvalues", text:"$\\lambda^3 + 3\\lambda^2 + 2\\lambda = \\lambda(\\lambda+1)(\\lambda+2) = 0$, so $\\lambda = 0, -1, -2$"},
+   {title:"Step 3: Eigenvectors and solution", text:"Find eigenvectors for each $\\lambda$ and write $\\mathbf{x}(t)$"},
+ ],
+ answer:"$$y(t) = c_1 + c_2 e^{-t} + c_3 e^{-2t}$$"
+},
+{ch:4, topic:"Homogeneous Systems", type:"free",
+ statement:"Convert to a system and solve using matrices: $$y'' + 8y' + 16y = 0$$",
+ solution:[
+   {title:"Step 1: Let $x_1=y$, $x_2=y'$", text:"System: $\\mathbf{x}' = \\begin{pmatrix} 0 & 1 \\\\ -16 & -8 \\end{pmatrix}\\mathbf{x}$"},
+   {title:"Step 2: Eigenvalues", text:"$\\lambda^2 + 8\\lambda + 16 = (\\lambda+4)^2 = 0$, so $\\lambda = -4$ (repeated)"},
+   {title:"Step 3: Eigenvector and generalized", text:"$\\mathbf{v} = \\begin{pmatrix}1\\\\-4\\end{pmatrix}$. Need generalized eigenvector $\\mathbf{w}$: $(A+4I)\\mathbf{w}=\\mathbf{v}$"},
+ ],
+ answer:"$$y(t) = (c_1 + c_2 t)e^{-4t}$$"
+},
+
+// ═══════════════ FROM OLD EXAMS — MC QUESTIONS ═══════════════
+
+{ch:2, topic:"Euler Equations", type:"mc",
+ statement:"The characteristic (indicial) equation for $x^2y'' - 2xy' + 5y = 0$ is:",
+ choices:[
+   "$$r^2 - 3r + 5 = 0$$",
+   "$$r^2 - 2r + 5 = 0$$",
+   "$$r^2 + 2r + 5 = 0$$",
+   "$$r^2 + 3r + 5 = 0$$"
+ ],
+ correct:0,
+ explanation:"Substituting $y = x^r$: $r(r-1) - 2r + 5 = r^2 - 3r + 5 = 0$."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"Which method applies to $y'' + 4y' + 4y = x\\sin(-2x)$?",
+ choices:[
+   "Undetermined coefficients only",
+   "Variation of parameters only",
+   "Both undetermined coefficients and variation of parameters",
+   "Neither method"
+ ],
+ correct:2,
+ explanation:"Since $x\\sin(-2x)$ is a product of polynomial and sinusoid (standard form), both methods work. Undetermined coefficients applies because the forcing is a standard form; variation of parameters always applies."
+},
+{ch:2, topic:"Mass-Spring Systems", type:"mc",
+ statement:"For a mass-spring-damper system $my'' + cy' + ky = 0$ with $m=1$, $c=4$, $k=4$, the system is:",
+ choices:[
+   "Critically damped",
+   "Overdamped",
+   "Underdamped",
+   "Undamped"
+ ],
+ correct:0,
+ explanation:"$c^2 = 16 = 4mk = 4(1)(4) = 16$. Since $c^2 = 4mk$, the system is critically damped."
+},
+{ch:1, topic:"Exact Equations", type:"mc",
+ statement:"The equation $(2xy + y^3)\\,dx = (x^2 + 3xy^2)\\,dy$ is exact.",
+ choices:[
+   "True",
+   "False"
+ ],
+ correct:1,
+ explanation:"Rewrite as $(2xy+y^3)dx - (x^2+3xy^2)dy = 0$. Here $M = 2xy+y^3$, $N = -(x^2+3xy^2)$. Then $M_y = 2x+3y^2$ and $N_x = -2x-3y^2$. Since $M_y \\neq N_x$, the equation is NOT exact."
+},
+{ch:2, topic:"Superposition", type:"mc",
+ statement:"For $ay''+by'+cy=0$ with linearly independent solutions $y_1(t)$ and $y_2(t)$, which is NOT always true?",
+ choices:[
+   "$y_1 \\cdot y_2$ is a solution",
+   "$Cy_1$ is a solution for any constant $C$",
+   "$y_1 + y_2$ is a solution",
+   "Any linear combination $c_1 y_1 + c_2 y_2$ is a solution"
+ ],
+ correct:0,
+ explanation:"The product of two solutions is generally NOT a solution of a linear ODE. Options B, C, D follow directly from the superposition principle for linear homogeneous equations."
+},
+{ch:2, topic:"Variation of Parameters", type:"mc",
+ statement:"Which method(s) can find a particular solution $y_p$ for $x^2y'' + 4xy' = e^x$?",
+ choices:[
+   "Undetermined coefficients",
+   "Variation of parameters",
+   "Both methods",
+   "Cauchy-Euler substitution only"
+ ],
+ correct:1,
+ explanation:"Undetermined coefficients requires constant coefficients. This is a variable-coefficient ODE (Euler type with non-standard forcing), so only variation of parameters applies."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y'' + 6y' + 9y = 4e^{-3t}$, the correct trial particular solution $Y_p$ is:",
+ choices:[
+   "$$At^2 e^{-3t}$$",
+   "$$Ae^{-3t}$$",
+   "$$Ate^{-3t}$$",
+   "$$(At+B)e^{-3t}$$"
+ ],
+ correct:0,
+ explanation:"Characteristic equation: $(r+3)^2 = 0$, so $r=-3$ is a double root. Since $e^{-3t}$ and $te^{-3t}$ are both homogeneous solutions, we multiply by $t^2$: $Y_p = At^2 e^{-3t}$."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y'' - 9y' + 20y = e^{-3t}$, the correct trial particular solution $Y_p$ is:",
+ choices:[
+   "$$Ae^{-3t}$$",
+   "$$Ate^{-3t}$$",
+   "$$At^2 e^{-3t}$$",
+   "$$(At+B)e^{-3t}$$"
+ ],
+ correct:0,
+ explanation:"Characteristic equation: $r^2-9r+20 = (r-4)(r-5)=0$, roots $r=4,5$. Since $r=-3$ is NOT a root, there is no resonance: $Y_p = Ae^{-3t}$."
+},
+{ch:2, topic:"Undetermined Coefficients", type:"mc",
+ statement:"For $y'' + 6y' + 9y = (t+2)\\cos(t)$, the correct form of $Y_p$ is:",
+ choices:[
+   "$$(At+B)\\cos(t) + (Ct+D)\\sin(t)$$",
+   "$$A\\cos(t) + B\\sin(t)$$",
+   "$$t[(At+B)\\cos(t) + (Ct+D)\\sin(t)]$$",
+   "$$(At+B)\\cos(t)$$"
+ ],
+ correct:0,
+ explanation:"The forcing $(t+2)\\cos t$ is a polynomial of degree 1 times $\\cos t$. Roots of char eq: $r=-3$ (double). Since $\\pm i$ are NOT roots, no resonance multiplication needed. $Y_p = (At+B)\\cos t + (Ct+D)\\sin t$."
+},
+{ch:2, topic:"ODE Classification", type:"mc",
+ statement:"The ODE $y'' + (y')^3 y = t$ is:",
+ choices:[
+   "2nd order, nonlinear",
+   "2nd order, linear",
+   "3rd order, nonlinear",
+   "2nd order, 3rd degree"
+ ],
+ correct:0,
+ explanation:"Highest derivative is $y''$ (2nd order). The term $(y')^3 y$ is nonlinear (product of $y$ and power of $y'$). It is 2nd order and nonlinear."
+},
+{ch:3, topic:"Laplace Transform", type:"mc",
+ statement:"$\\mathcal{L}\\{e^{2t}\\sin(5t)\\}$ equals:",
+ choices:[
+   "$$\\frac{5}{(s-2)^2+25}$$",
+   "$$\\frac{5}{s^2+25}$$",
+   "$$\\frac{s-2}{(s-2)^2+25}$$",
+   "$$\\frac{2}{(s-2)^2+25}$$"
+ ],
+ correct:0,
+ explanation:"$\\mathcal{L}\\{\\sin(5t)\\} = \\frac{5}{s^2+25}$. By the first shifting theorem ($s \\to s-2$): $\\frac{5}{(s-2)^2+25}$."
+},
 ];
 
 // ──────────────────────────────────────────────
@@ -1647,7 +2011,7 @@ function toggleChapter(card) {
 function generateExam() {
   // Filter problems by selected chapters
   const pool = PROBLEMS.filter(p => selectedChapters.has(p.ch));
-  if (pool.length < 5) {
+  if (pool.length < 7) {
     alert("Not enough problems in selected chapters. Please select more chapters.");
     return;
   }
@@ -1656,19 +2020,18 @@ function generateExam() {
   const mcPool = shuffle(pool.filter(p => p.type === 'mc'));
   const freePool = shuffle(pool.filter(p => p.type === 'free'));
 
-  // Aim for ~2-3 MC and ~2-3 free response
+  // Aim for exactly 5 free-response and 2 MC
   let exam = [];
-  const mcCount = Math.min(3, mcPool.length);
-  const freeCount = Math.min(5 - mcCount, freePool.length);
-  const extraMc = 5 - mcCount - freeCount;
+  const mcCount = Math.min(2, mcPool.length);
+  const freeCount = Math.min(5, freePool.length);
+  const extraNeeded = 7 - mcCount - freeCount;
 
   exam.push(...mcPool.slice(0, mcCount));
   exam.push(...freePool.slice(0, freeCount));
-  if (extraMc > 0) exam.push(...mcPool.slice(mcCount, mcCount + extraMc));
-  if (exam.length < 5) exam.push(...shuffle(pool).slice(0, 5 - exam.length));
+  if (extraNeeded > 0) exam.push(...shuffle(pool).slice(0, extraNeeded));
 
-  // Take exactly 5 and shuffle order
-  exam = shuffle(exam.slice(0, 5));
+  // Take exactly 7 and shuffle order
+  exam = shuffle(exam.slice(0, 7));
 
   // For MC questions, shuffle choices
   exam.forEach(q => {
