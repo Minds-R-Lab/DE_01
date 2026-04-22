@@ -439,7 +439,7 @@ const PROBLEMS = [
    "$$\\mu = x^2$$"
  ],
  correct:0,
- explanation:"Multiply by $x^\\alpha$: exactness requires $3(\\alpha+1) = 2\\alpha + 2$ from matching partials. This gives $\\alpha = 1/2$, so $\\mu = x^{1/2}$."
+ explanation:"Multiply by $x^\\alpha$: $M'_y = 3x^\\alpha$ and $N'_x = 2(\\alpha+1)x^\\alpha$. Exactness requires $3 = 2(\\alpha+1)$, giving $\\alpha = 1/2$, so $\\mu = x^{1/2}$."
 },
 
 // ═══════════════ CHAPTER 2 ═══════════════
@@ -1507,7 +1507,7 @@ const PROBLEMS = [
 // --- More Frobenius ---
 {ch:5, topic:"Frobenius Method", type:"mc",
  statement:"The indicial equation for Bessel's equation $x^2y''+xy'+(x^2-\\nu^2)y=0$ is:",
- choices:["$$r^2 - \\nu^2 = 0$$", "$$r(r-1)+r-\\nu^2=0$$", "$$r^2-1-\\nu^2=0$$", "$$r(r+1)-\\nu^2=0$$"],
+ choices:["$$r^2 - \\nu^2 = 0$$", "$$r^2 + r - \\nu^2 = 0$$", "$$r^2-1-\\nu^2=0$$", "$$r(r+1)-\\nu^2=0$$"],
  correct:0,
  explanation:"Substituting $y=x^r\\sum a_n x^n$ into Bessel's equation, the lowest-order term gives $r^2-\\nu^2=0$, so $r=\\pm\\nu$."
 },
@@ -1690,22 +1690,24 @@ const PROBLEMS = [
  answer:"$$y + 5 = Ae^{x\\ln x}$$"
 },
 {ch:1, topic:"Exact Equations", type:"free",
- statement:"Solve the exact equation: $$(y + \\cos x)\\,dx + (\\sin x + xy + x)\\,dy = 0$$",
+ statement:"Solve: $$(y + \\cos x)\\,dx + (\\sin x + xy + x)\\,dy = 0$$",
  solution:[
-   {title:"Step 1: Verify exactness", text:"$M_y = 1$, $N_x = \\cos x + y + 1$. Not exact as stated — check if integrating factor needed, or verify $N = \\sin x + xy + x$: $N_x = \\cos x + y + 1$. Since $M_y = 1 \\neq N_x$, find integrating factor."},
-   {title:"Step 2: Try $\\mu(x)$ or $\\mu(y)$", text:"$(M_y - N_x)/N = (1 - \\cos x - y - 1)/(\\sin x + xy + x)$. Try grouping or alternate approach."},
-   {title:"Step 3: Solve by grouping or IF", text:"Group terms and integrate to find the solution."},
+   {title:"Step 1: Check exactness", text:"$M_y = 1$, $N_x = \\cos x + y + 1$. Since $M_y \\neq N_x$, not exact."},
+   {title:"Step 2: Find integrating factor", text:"$\\frac{N_x - M_y}{M} = \\frac{\\cos x + y}{y + \\cos x} = 1$, depends only on $y$. So $\\mu(y) = e^{\\int 1\\,dy} = e^y$."},
+   {title:"Step 3: Multiply by $e^y$", text:"$(y+\\cos x)e^y\\,dx + (\\sin x + xy + x)e^y\\,dy = 0$. Now $M_y = (1+y+\\cos x)e^y = N_x$ ✓"},
+   {title:"Step 4: Find $F$", text:"$F = \\int N\\,dy = (\\sin x + x)e^y + x(ye^y - e^y) + h(x) = e^y(\\sin x + xy) + h(x)$. Then $F_x = e^y(\\cos x + y) + h'(x) = (y+\\cos x)e^y \\Rightarrow h'(x) = 0$."},
  ],
- answer:"$$y\\sin x + xy + \\frac{x^2}{2} + \\sin x = C$$"
+ answer:"$$e^y(\\sin x + xy) = C$$"
 },
 {ch:1, topic:"Exact Equations", type:"free",
  statement:"Solve: $$(x+y)e^{-y}\\,dx + (xe^{-y} + 5)\\,dy = 0$$",
  solution:[
-   {title:"Step 1: Verify exactness", text:"$M = (x+y)e^{-y}$, $N = xe^{-y}+5$. $M_y = e^{-y} - (x+y)e^{-y} = (1-x-y)e^{-y}$. $N_x = e^{-y}$. Not exact."},
-   {title:"Step 2: Find integrating factor", text:"Compute $(M_y - N_x)/N$ and try to find a suitable integrating factor."},
-   {title:"Step 3: Multiply and solve", text:"After applying the integrating factor, find $F(x,y) = C$."},
+   {title:"Step 1: Check exactness", text:"$M = (x+y)e^{-y}$, $N = xe^{-y}+5$. $M_y = (1-x-y)e^{-y}$, $N_x = e^{-y}$. Not exact."},
+   {title:"Step 2: Find integrating factor", text:"$\\frac{N_x - M_y}{M} = \\frac{e^{-y}-(1-x-y)e^{-y}}{(x+y)e^{-y}} = \\frac{(x+y)e^{-y}}{(x+y)e^{-y}} = 1$. So $\\mu(y) = e^y$."},
+   {title:"Step 3: Multiply by $e^y$", text:"$(x+y)dx + (x+5e^y)dy = 0$. Check: $M_y = 1 = N_x$ ✓"},
+   {title:"Step 4: Find $F$", text:"$F = \\int(x+y)dx = \\frac{x^2}{2}+xy+g(y)$. $F_y = x+g'(y) = x+5e^y \\Rightarrow g(y) = 5e^y$"},
  ],
- answer:"$$\\frac{x^2}{2}e^{-y} + xye^{-y} + 5y = C$$"
+ answer:"$$\\frac{x^2}{2} + xy + 5e^y = C$$"
 },
 {ch:1, topic:"Exact Equations", type:"free",
  statement:"Solve: $$ye^x\\,dx + (x+y^2)e^x\\,dy = 0$$",
@@ -1719,11 +1721,12 @@ const PROBLEMS = [
 {ch:1, topic:"Exact Equations", type:"free",
  statement:"Solve: $$\\frac{(2x+1)y}{1+x}\\,dx + (3y^3 + 3y\\cos(y) + 1)\\,dy = 0$$",
  solution:[
-   {title:"Step 1: Check exactness", text:"$M = \\frac{(2x+1)y}{1+x}$, $N = 3y^3 + 3y\\cos y + 1$. $M_y = \\frac{2x+1}{1+x}$. $N_x = 0$. Not exact."},
-   {title:"Step 2: Note $M_y$ depends only on $x$", text:"Since $N_x = 0$, try $\\mu(y)$: $(M_y-N_x)/(-M) = \\frac{-(2x+1)/(1+x)}{-(2x+1)y/(1+x)} = \\frac{1}{y}$. So $\\mu = y$."},
-   {title:"Step 3: Multiply by $\\mu = y$", text:"$(2x+1)y^2/(1+x)\\,dx + (3y^4 + 3y^2\\cos y + y)dy = 0$. Now verify exactness and integrate."},
+   {title:"Step 1: Check exactness", text:"$M = \\frac{(2x+1)y}{1+x}$, $N = 3y^3 + 3y\\cos y + 1$. $M_y = \\frac{2x+1}{1+x}$, $N_x = 0$. Not exact."},
+   {title:"Step 2: Find integrating factor", text:"$\\frac{N_x - M_y}{M} = \\frac{-(2x+1)/(1+x)}{(2x+1)y/(1+x)} = -\\frac{1}{y}$. Depends only on $y$, so $\\mu(y) = e^{\\int -1/y\\,dy} = \\frac{1}{y}$."},
+   {title:"Step 3: Multiply by $\\mu = 1/y$", text:"$\\frac{2x+1}{1+x}dx + \\left(3y^2 + 3\\cos y + \\frac{1}{y}\\right)dy = 0$. Check: $M_y = 0 = N_x$ ✓"},
+   {title:"Step 4: Integrate", text:"$F = \\int\\frac{2x+1}{1+x}dx = \\int\\left(2-\\frac{1}{1+x}\\right)dx = 2x - \\ln|1+x| + g(y)$. Then $g'(y) = 3y^2+3\\cos y+1/y$, so $g = y^3+3\\sin y+\\ln|y|$."},
  ],
- answer:"$$y^2\\ln(1+x) + y^2 x + \\frac{3y^4}{4} + 3(y^2\\sin y + 2y\\cos y - 2\\sin y) + \\frac{y^2}{2} = C$$"
+ answer:"$$2x - \\ln(1+x) + y^3 + 3\\sin y + \\ln|y| = C$$"
 },
 
 // ═══════════════ FROM OLD EXAMS — CHAPTER 2 ═══════════════
@@ -1765,13 +1768,14 @@ const PROBLEMS = [
  answer:"$$y = c_1 x + c_2 x\\ln x + x^2$$"
 },
 {ch:2, topic:"Reduction of Order", type:"free",
- statement:"Find the general solution given $y_1 = e^x$ satisfies the complementary equation: $$xy'' + (1-x)y' - y = x^2 e^x$$",
+ statement:"Given that $y_1 = e^{2x}$ satisfies $y'' - 4y' + 4y = 0$, use reduction of order to find the general solution.",
  solution:[
-   {title:"Step 1: Standard form", text:"$$y'' + \\frac{1-x}{x}y' - \\frac{1}{x}y = xe^x$$"},
-   {title:"Step 2: Set $y = e^x v$", text:"Substitute and use reduction of order to find $v$"},
-   {title:"Step 3: Simplify ODE for $v$", text:"After substitution, get a first-order ODE in $v'$ and solve"},
+   {title:"Step 1: Set $y = e^{2x}v(x)$", text:"$y' = e^{2x}(2v+v')$, $y'' = e^{2x}(4v+4v'+v'')$"},
+   {title:"Step 2: Substitute into ODE", text:"$e^{2x}(4v+4v'+v'') - 4e^{2x}(2v+v') + 4e^{2x}v = 0$"},
+   {title:"Step 3: Simplify", text:"$e^{2x}(4v+4v'+v''-8v-4v'+4v) = e^{2x}v'' = 0$, so $v'' = 0$"},
+   {title:"Step 4: Integrate", text:"$v = c_1 x + c_2$, so $y = e^{2x}(c_1 x + c_2) = c_2 e^{2x} + c_1 xe^{2x}$"},
  ],
- answer:"$$y = c_1 e^x + c_2(-1-x) + y_p$$"
+ answer:"$$y = c_1 e^{2x} + c_2 xe^{2x}$$"
 },
 {ch:2, topic:"Reduction of Order", type:"free",
  statement:"Find the general solution given $y_1 = x+1$ satisfies the complementary equation: $$xy'' - (x+1)y' + y = x^2$$",
@@ -1780,16 +1784,17 @@ const PROBLEMS = [
    {title:"Step 2: Set $y = (x+1)v$", text:"Use reduction of order: $y' = v + (x+1)v'$, $y'' = 2v' + (x+1)v''$"},
    {title:"Step 3: Solve for $v$", text:"Substitute and simplify to get ODE in $w = v'$, then integrate"},
  ],
- answer:"$$y = c_1(x+1) + c_2 e^x - x^2 - 2x$$"
+ answer:"$$y = c_1(x+1) + c_2 e^x - x^2 - 2x - 2$$"
 },
 {ch:2, topic:"Reduction of Order", type:"free",
- statement:"Find the general solution given $y_1 = e^{-x}$ satisfies the complementary equation: $$(\\sin x)y'' + (2\\sin x - \\cos x)y' + (\\sin x - \\cos x)y = e^{-x}$$",
+ statement:"Given that $y_1 = x$ satisfies $x^2y'' + 2xy' - 2y = 0$, find the general solution.",
  solution:[
-   {title:"Step 1: Standard form", text:"Divide by $\\sin x$: $y'' + (2 - \\cot x)y' + (1 - \\cot x)y = \\frac{e^{-x}}{\\sin x}$"},
-   {title:"Step 2: Set $y = e^{-x}v$", text:"Substitute and reduce to an ODE in $v'$"},
-   {title:"Step 3: Solve", text:"Integrate to find $v$ and the general solution"},
+   {title:"Step 1: Set $y = xv(x)$", text:"$y' = v + xv'$, $y'' = 2v' + xv''$"},
+   {title:"Step 2: Substitute", text:"$x^2(2v'+xv'') + 2x(v+xv') - 2xv = 0$"},
+   {title:"Step 3: Simplify", text:"$x^3 v'' + 4x^2 v' = 0$, i.e., $v'' + \\frac{4}{x}v' = 0$"},
+   {title:"Step 4: Let $w = v'$", text:"$w' + \\frac{4}{x}w = 0 \\Rightarrow w = Cx^{-4}$. Then $v = -\\frac{C}{3x^3}$, so $y_2 = xv = \\frac{1}{x^2}$"},
  ],
- answer:"$$y = c_1 e^{-x} + c_2 e^{-x}\\int e^{\\cos x}dx + y_p$$"
+ answer:"$$y = c_1 x + \\frac{c_2}{x^2}$$"
 },
 
 // ═══════════════ FROM OLD EXAMS — CHAPTER 3 ═══════════════
@@ -1806,11 +1811,11 @@ const PROBLEMS = [
 {ch:3, topic:"Solving IVPs (Laplace)", type:"free",
  statement:"Use Laplace transforms to solve: $y'' + y' = \\cos(t) + 3$, $\\;y(0)=0$, $\\;y'(0)=7$",
  solution:[
-   {title:"Step 1: Transform", text:"$s^2Y - 7 + sY = \\frac{s}{s^2+1} + \\frac{3}{s}$"},
-   {title:"Step 2: Solve for $Y$", text:"$Y(s^2+s) = \\frac{s}{s^2+1} + \\frac{3}{s} + 7$"},
-   {title:"Step 3: Partial fractions and invert", text:"Decompose $Y$ and apply inverse Laplace transforms"},
+   {title:"Step 1: Transform", text:"$s^2Y - 7 + sY = \\frac{s}{s^2+1} + \\frac{3}{s}$, so $Y = \\frac{1}{(s+1)(s^2+1)} + \\frac{3}{s^2(s+1)} + \\frac{7}{s(s+1)}$"},
+   {title:"Step 2: Partial fractions", text:"$\\frac{7}{s(s+1)} = \\frac{7}{s} - \\frac{7}{s+1}$. $\\frac{3}{s^2(s+1)} = \\frac{-3}{s}+\\frac{3}{s^2}+\\frac{3}{s+1}$. $\\frac{1}{(s+1)(s^2+1)} = \\frac{1/2}{s+1}+\\frac{-s/2+1/2}{s^2+1}$"},
+   {title:"Step 3: Combine and invert", text:"$Y = \\frac{4}{s}+\\frac{3}{s^2}-\\frac{7/2}{s+1}-\\frac{s/2}{s^2+1}+\\frac{1/2}{s^2+1}$"},
  ],
- answer:"$$y(t) = 3t + \\frac{1}{2}\\sin t + \\frac{1}{2}\\cos t + \\frac{7}{2}(1 - e^{-t}) + \\cdots$$"
+ answer:"$$y(t) = 4 + 3t - \\frac{7}{2}e^{-t} - \\frac{1}{2}\\cos t + \\frac{1}{2}\\sin t$$"
 },
 {ch:3, topic:"Solving IVPs (Laplace)", type:"free",
  statement:"Use Laplace transforms to solve the IVP: $$y'' + 2y' + y = f(t),\\quad y(0)=0,\\;y'(0)=0$$ where $f(t) = \\begin{cases} t & 0 \\le t < 2 \\\\ t-2 & t \\ge 2 \\end{cases}$",
