@@ -28,12 +28,12 @@ const ALLOWED_ORIGINS = [
 ];
 
 const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
-const MAX_TOKENS = 700;
+const MAX_TOKENS = 1500;
 
 // ==========================================
 // RATE LIMITING CONFIG — adjust as needed
 // ==========================================
-const DAILY_TOKEN_LIMIT = 50000;   // tokens per student per day
+const DAILY_TOKEN_LIMIT = 100000;  // tokens per student per day
 const DAILY_REQUEST_LIMIT = 50;    // max messages per student per day
 
 export default {
@@ -72,7 +72,7 @@ export default {
           },
           body: JSON.stringify({
             model: CLAUDE_MODEL,
-            max_tokens: 250,  // Profiles are short
+            max_tokens: 600,  // Richer profiles
             system: system,
             messages: messages.slice(-10)
           })

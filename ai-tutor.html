@@ -816,8 +816,8 @@
         <p style="margin:0;font-size:0.8rem;color:var(--text-muted);">Built from your conversations — updates as you learn</p>
       </div>
     </div>
-    <div id="profileModalContent" style="background:var(--bg);border-radius:10px;padding:1.2rem;line-height:1.8;font-size:0.9rem;max-height:350px;overflow-y:auto;"></div>
-    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.8rem;">This profile helps the AI tutor personalize its teaching to your strengths and areas for improvement.</p>
+    <div id="profileModalContent" style="background:var(--bg);border-radius:10px;padding:1.2rem;line-height:1.7;font-size:0.88rem;max-height:450px;overflow-y:auto;"></div>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.8rem;">Your AI tutor builds this profile as you interact. It tracks what you've mastered, where you need practice, and how you learn best — so every response is tailored to you.</p>
     <div style="display:flex;gap:0.5rem;margin-top:1rem;">
       <button onclick="document.getElementById('profileModal').classList.remove('show')" class="btn-submit" style="flex:1;">Close</button>
       <button onclick="if(confirm('Reset your learner profile? The AI will start learning about you from scratch.')){saveLearnerProfile('');document.getElementById('profileModal').classList.remove('show');}" style="flex:0;padding:0.6rem 1rem;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer;font-size:0.85rem;color:var(--text-muted);">Reset</button>
@@ -1139,8 +1139,8 @@ function updateProfileBadge() {
   if (badge) {
     if (learnerProfile) {
       badge.style.display = 'block';
-      badge.textContent = 'Personalized';
-      badge.title = learnerProfile;
+      badge.textContent = '\uD83E\uDDE0 View My Learning Profile';
+      badge.title = 'Click to see your personalized learning profile';
     } else {
       badge.style.display = 'none';
     }
@@ -1150,16 +1150,16 @@ function updateProfileBadge() {
 function requestProfileUpdate(allMessages) {
   console.log('[Profile] Requesting update with ' + allMessages.length + ' total messages...');
 
-  // Build a single user message that summarizes the conversation for Claude
-  var summary = 'Here is the tutoring conversation to analyze:\n\n';
+  // Build a rich summary from conversation — take last 24 messages, more context = better profile
+  var summary = 'Student name: ' + studentProfile.name + '\nMajor: ' + studentProfile.major + '\nCurrent chapter: ' + currentChapter + '\n\n';
+  summary += 'CONVERSATION LOG:\n\n';
   var count = 0;
-  // Take last 16 messages, skip welcome messages
   var recent = allMessages.filter(function(m) {
     return m.content && m.role && m.content.indexOf("I'm your AI tutor") === -1;
-  }).slice(-16);
+  }).slice(-24);
 
   recent.forEach(function(m) {
-    summary += (m.role === 'user' ? 'STUDENT: ' : 'TUTOR: ') + m.content.substring(0, 300) + '\n\n';
+    summary += (m.role === 'user' ? 'STUDENT: ' : 'TUTOR: ') + m.content.substring(0, 500) + '\n\n';
     count++;
   });
 
@@ -1168,12 +1168,37 @@ function requestProfileUpdate(allMessages) {
     return;
   }
 
-  var profilePrompt = 'You are analyzing a tutoring conversation to build a concise learner profile. ' +
-    'Create a student profile in EXACTLY this format (one short line each, skip any you cannot determine):\n\n' +
-    'Strengths: ...\nWeaknesses: ...\nCommon mistakes: ...\nLearning style: ...\nTopics covered: ...\nNotes: ...\n\n' +
-    (learnerProfile ? 'Current profile to update:\n' + learnerProfile + '\n\nMerge new observations. Keep under 150 words.' : 'Create new profile. Keep under 150 words.');
+  var profilePrompt = `You are an expert educational psychologist analyzing a differential equations tutoring conversation for ${studentProfile.name}.
 
-  // Send as a single user message to avoid role-ordering issues
+Your job is to build a DETAILED, SPECIFIC learner profile that will help personalize future tutoring. Generic observations are useless — be concrete.
+
+Write the profile in this structure:
+
+## Mastery Map
+For each topic discussed, rate as: solid / developing / struggling
+Be specific (e.g., "separable equations: solid", "integrating factors for exact equations: struggling")
+
+## Conceptual Gaps
+What specific concepts does ${studentProfile.name} misunderstand or confuse? Give concrete examples from the conversation.
+(e.g., "Confuses the test for exactness M_y = N_x with the integrating factor formula", "Forgets to check if equation is separable before trying more complex methods")
+
+## Problem-Solving Patterns
+How does ${studentProfile.name} approach problems? What steps do they skip or get stuck on?
+(e.g., "Jumps to solution methods without classifying the ODE type first", "Strong at setting up integrals but makes algebra errors when simplifying")
+
+## What Helps ${studentProfile.name} Learn Best
+Based on how they respond to different explanations — what works? What doesn't?
+(e.g., "Responds well to worked examples with explicit steps", "Gets confused by abstract notation, prefers concrete numbers first")
+
+## Encouragement & Next Steps
+Write 2-3 sentences addressed TO ${studentProfile.name} (using their name) that:
+- Acknowledge specific progress they've made
+- Suggest exactly what to practice next
+- Be warm and motivating, but specific (not generic praise)
+
+${learnerProfile ? 'EXISTING PROFILE TO UPDATE (merge new observations, keep what is still relevant, update what has changed):\n' + learnerProfile + '\n' : ''}
+Keep the total profile under 300 words. Every line should contain specific, actionable information — no filler.`;
+
   fetch(PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1296,9 +1321,17 @@ function clearMessagesDisplay() {
 
 function showWelcomeMessage() {
   const chapter = CHAPTER_DETAILS[currentChapter];
-  const greeting = currentChapter === 'general'
-    ? `Hi ${studentProfile.name}! I'm your AI tutor for Differential Equations. I'm here to help you understand concepts, work through problems, and prepare for exams. What would you like to work on today?`
-    : `Hi ${studentProfile.name}! I see you're studying ${chapter.title}. What would you like to work on?`;
+  let greeting;
+  if (learnerProfile && learnerProfile.indexOf('Next Steps') > -1) {
+    // Returning student with profile — personalized welcome
+    greeting = currentChapter === 'general'
+      ? `Welcome back, ${studentProfile.name}! Great to see you again. I remember where we left off — ready to keep building on your progress? What would you like to work on today?`
+      : `Welcome back, ${studentProfile.name}! Ready to dive into ${chapter.title}? I'll pick up right where we left off. What would you like to tackle?`;
+  } else {
+    greeting = currentChapter === 'general'
+      ? `Hi ${studentProfile.name}! I'm your personal AI tutor for Differential Equations. I'm here to help you understand concepts, work through problems step by step, and prepare for exams. As we work together, I'll learn how you think and adapt my explanations to your style. What would you like to start with?`
+      : `Hi ${studentProfile.name}! I see you're studying **${chapter.title}**. I'll be your guide through this topic. Ask me anything — whether it's a concept you want explained, a problem you're stuck on, or just practice questions. What would you like to work on?`;
+  }
 
   const msg = {
     role: 'assistant',
@@ -1492,24 +1525,44 @@ function sendMessage() {
 }
 
 function buildSystemPrompt(chapter) {
-  let prompt = `You are a concise AI tutor for a Differential Equations course at Qatar University (Dr. Mohamed Mabrok). Student: ${studentProfile.name} (${studentProfile.major}).
-Topic: ${chapter.title} — ${chapter.topics}.
+  let prompt = `You are a warm, expert AI tutor for a Differential Equations course (MATH 222) at Qatar University, taught by Dr. Mohamed Mabrok.
 
-Rules:
-- Be concise. No filler or unnecessary repetition. Get to the math quickly.
-- Guide step-by-step with hints before full solutions.
-- Use $ for inline LaTeX, $$ for display math.
-- Use markdown: **bold**, headers (##), lists, code blocks.
-- Keep responses short unless the student asks for detailed explanation.
-- If a concept is simple, a 2-3 sentence answer is fine.`;
+You are tutoring ${studentProfile.name} (${studentProfile.major} major). Use their name naturally in your responses — greet them by name at the start of a conversation, and reference them by name when giving encouragement or feedback (e.g., "Great approach, ${studentProfile.name}!" or "That's a common confusion, ${studentProfile.name}, let me clarify...").
+
+Currently studying: ${chapter.title}
+Topics: ${chapter.topics}
+
+Teaching approach:
+- Be concise but thorough. Get to the math quickly, no filler.
+- When ${studentProfile.name} asks a question, first give a brief answer, then offer to elaborate.
+- Guide with hints before revealing full solutions — ask "${studentProfile.name}, what do you think the first step should be?" when appropriate.
+- When they get something right, be specific about what they did well (not just "good job").
+- When they make an error, be encouraging: explain why their approach was reasonable, then show the correct path.
+- If they seem stuck or frustrated, break the problem into smaller pieces and celebrate each step.
+- Use $ for inline LaTeX and $$ for display math. Use markdown for structure.
+- Connect concepts to real-world applications when possible, especially from ${studentProfile.major}.`;
 
   if (learnerProfile) {
     prompt += `
 
-Learner Profile (from previous sessions — use this to personalize your teaching):
+PERSONALIZED LEARNER PROFILE for ${studentProfile.name}:
 ${learnerProfile}
 
-Use this profile to: focus on their weak areas, avoid over-explaining topics they've mastered, use examples from their major (${studentProfile.major}), and adapt to their learning style. Don't mention the profile explicitly.`;
+How to use this profile:
+- If ${studentProfile.name} asks about a topic marked as "struggling", slow down and give extra examples.
+- If a topic is marked "solid", be concise — they don't need basics repeated.
+- Reference their specific conceptual gaps and address them proactively when relevant.
+- Follow the "What Helps Learn Best" section to match your explanation style.
+- When they make progress on a previously weak area, acknowledge it specifically.
+- Never mention the profile directly or say "according to your profile" — just naturally adapt.`;
+  } else {
+    prompt += `
+
+This is early in your tutoring relationship with ${studentProfile.name}. Pay attention to:
+- How they formulate questions (do they use precise math language or informal descriptions?)
+- Where they get stuck (conceptual understanding vs. algebraic execution vs. problem setup)
+- What kind of explanations they respond to (step-by-step vs. big picture first)
+Use these early observations to tailor your responses as the conversation progresses.`;
   }
 
   return prompt;
