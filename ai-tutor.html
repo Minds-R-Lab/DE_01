@@ -1036,39 +1036,211 @@ function inlineFormat(text) {
   return text;
 }
 
-// Chapter details for system prompts
+// Chapter details for system prompts — rich content from actual course pages
 const CHAPTER_DETAILS = {
   general: {
     title: 'General DE Questions',
-    topics: 'General differential equations concepts and problem-solving'
+    topics: 'General differential equations concepts and problem-solving',
+    content: ''
   },
   ch1: {
     title: 'Chapter 1: First-Order ODEs',
-    topics: 'Separable equations, linear equations, exact equations, Bernoulli equations, homogeneous equations, special methods'
+    topics: 'Separable, linear, exact, non-exact (integrating factors), Bernoulli, homogeneous equations',
+    content: `COURSE CONTENT — Chapter 1 covers 6 equation types forming a solution hierarchy:
+
+**1. Separable:** dy/dx = f(x)·g(y). Separate → integrate both sides. ALWAYS check equilibrium solutions where g(y)=0 (students often lose solutions when dividing by g(y)). Example: dy/dx = xy, y(0)=2.
+
+**2. Linear:** dy/dx + P(x)y = Q(x). Integrating factor μ(x) = e^{∫P(x)dx}. Must have coefficient of y' equal to 1 first. Solution: y = (1/μ)[∫μQ dx + C]. Common mistake: forgetting to divide by leading coefficient.
+
+**3. Exact:** M dx + N dy = 0. Test: ∂M/∂y = ∂N/∂x. Solve by integrating M w.r.t. x to get F(x,y) + g(y), then match ∂F/∂y = N to find g(y). Common mistake: forgetting the arbitrary function g(y).
+
+**4. Non-Exact (Integrating Factors):** When ∂M/∂y ≠ ∂N/∂x. Three cases:
+- μ(x): if (M_y - N_x)/N = h(x) only, then μ = e^{∫h dx}
+- μ(y): if (N_x - M_y)/M = k(y) only, then μ = e^{∫k dy}
+- μ = x^a·y^b: substitute and solve for a,b
+After multiplying by μ, verify exactness, then solve as exact.
+
+**5. Bernoulli:** dy/dx + P(x)y = Q(x)y^n (n≠0,1). Substitution v = y^{1-n} reduces to linear. Common cases: n=2 (v=1/y), n=3 (v=1/y²). ALWAYS note y=0 is a singular solution.
+
+**6. Homogeneous:** dy/dx = F(y/x). Test: f(tx,ty) = f(x,y). Substitution v=y/x, dy/dx = v + x·dv/dx → separable in v and x. Don't forget to back-substitute v=y/x.
+
+Classification strategy: Is it separable? → Linear? → Exact? → Can we find μ? → Bernoulli? → Homogeneous?`
   },
   ch2: {
     title: 'Chapter 2: Second-Order ODEs',
-    topics: 'Linear equations with constant coefficients, homogeneous and non-homogeneous equations, method of undetermined coefficients, variation of parameters, Cauchy-Euler equations'
+    topics: 'Characteristic equation, undetermined coefficients, variation of parameters, Cauchy-Euler, mass-spring systems',
+    content: `COURSE CONTENT — Chapter 2 covers constant-coefficient and variable-coefficient second-order DEs.
+
+**1. Characteristic Equation (ay'' + by' + cy = 0):** Replace y'' → r², y' → r. Solve ar² + br + c = 0.
+- Distinct real roots r₁,r₂: y = C₁e^{r₁x} + C₂e^{r₂x}
+- Repeated root r: y = (C₁ + C₂x)e^{rx} ← students forget the x factor!
+- Complex roots α±βi: y = e^{αx}(C₁cos(βx) + C₂sin(βx))
+
+**2. Undetermined Coefficients (ay'' + by' + cy = g(t)):**
+General solution y = y_c + y_p. Guess y_p based on g(t):
+- Polynomial → polynomial of same degree
+- e^{αt} → Ae^{αt}
+- cos(ωt) or sin(ωt) → Acos(ωt) + Bsin(ωt)
+**CRITICAL: Resonance check!** If trial form duplicates a term in y_c, multiply by t (or t² for double resonance). This is the #1 mistake students make.
+
+**3. Variation of Parameters (works for ANY g(t)):**
+Given y_c = C₁y₁ + C₂y₂, compute Wronskian W = y₁y₂' - y₂y₁'.
+y_p = u₁y₁ + u₂y₂ where u₁ = -∫(y₂g)/(aW)dt, u₂ = ∫(y₁g)/(aW)dt.
+Must convert to standard form (coefficient of y'' = 1) first!
+
+**4. Cauchy-Euler (ax²y'' + bxy' + cy = 0):**
+Trial y = x^r → indicial equation ar(r-1) + br + c = 0.
+- Distinct real roots: y = C₁x^{r₁} + C₂x^{r₂}
+- Repeated: y = x^r(C₁ + C₂ ln x) ← ln x appears!
+- Complex λ±ωi: y = x^λ[C₁cos(ω ln x) + C₂sin(ω ln x)]
+
+**5. Mass-Spring System (my'' + cy' + ky = F(t)):**
+Damping ratio ζ = c/(2√(mk)), natural frequency ω_n = √(k/m).
+- Overdamped (ζ>1): no oscillation
+- Critically damped (ζ=1): fastest non-oscillatory return
+- Underdamped (ζ<1): decaying oscillations`
   },
   ch3: {
     title: 'Chapter 3: Laplace Transforms',
-    topics: 'Definition and properties of Laplace transforms, inverse transforms, solving ODEs using Laplace transforms, convolution, step functions'
+    topics: 'Definition, properties, inverse transforms, solving IVPs, step functions, convolution',
+    content: `COURSE CONTENT — Chapter 3: Transform → Algebra → Inverse Transform.
+
+**1. Definition & Key Transforms:**
+L{f(t)} = ∫₀^∞ e^{-st}f(t)dt. Key table:
+L{1} = 1/s, L{t^n} = n!/s^{n+1}, L{e^{at}} = 1/(s-a),
+L{sin(bt)} = b/(s²+b²), L{cos(bt)} = s/(s²+b²).
+Linearity: L{c₁f + c₂g} = c₁F + c₂G.
+First shifting: L{e^{at}f(t)} = F(s-a).
+
+**2. Inverse Transform via Partial Fractions:**
+Factor denominator → decompose → invert each term.
+- Distinct real roots: A/(s-r₁) + B/(s-r₂) → Ae^{r₁t} + Be^{r₂t}
+- Repeated root: A/(s-r) + B/(s-r)² → Ae^{rt} + Bte^{rt}
+- Complex roots: complete the square, match to cos/sin forms.
+Heaviside cover-up: A_k = lim_{s→r_k} (s-r_k)F(s).
+
+**3. Solving IVPs:**
+L{y'} = sY - y(0), L{y''} = s²Y - sy(0) - y'(0).
+Steps: (1) Transform both sides (2) Substitute ICs (3) Solve for Y(s) (4) Partial fractions (5) Inverse transform.
+ICs are built in automatically! Common mistake: sign errors with y(0) terms.
+
+**4. Step Functions & Second Shifting:**
+u(t-τ) = 0 for t<τ, 1 for t≥τ. L{u(t-τ)} = e^{-τs}/s.
+Second shifting: L{f(t-τ)u(t-τ)} = e^{-τs}F(s).
+CRITICAL mistake: L{f(t)u(t-τ)} ≠ e^{-τs}F(s)! Must rewrite f(t) as f((t-τ)+τ) first.
+
+**5. Convolution:** (f*g)(t) = ∫₀^t f(τ)g(t-τ)dτ. Theorem: L{f*g} = F(s)G(s).`
   },
   ch4: {
     title: 'Chapter 4: Systems of ODEs',
-    topics: 'Systems of linear ODEs, matrices and eigenvalues, phase portraits, homogeneous and non-homogeneous systems, applications'
+    topics: 'Matrix algebra, eigenvalues/eigenvectors, homogeneous systems, phase portraits, non-homogeneous systems',
+    content: `COURSE CONTENT — Chapter 4: Systems via eigenvalue/eigenvector method.
+
+**1. Matrix Fundamentals:**
+2×2 determinant: det(A) = ad-bc. Inverse: A⁻¹ = (1/det)[d,-b;-c,a].
+Characteristic equation: det(A-λI) = 0 → eigenvalues λ.
+For each λ, solve (A-λI)v = 0 → eigenvector v.
+
+**2. Homogeneous Systems x' = Ax:**
+- Distinct real eigenvalues λ₁,λ₂: x(t) = C₁e^{λ₁t}v₁ + C₂e^{λ₂t}v₂
+- Complex eigenvalues α±βi with eigenvector a±bi:
+  x(t) = e^{αt}[C₁(a cos βt - b sin βt) + C₂(a sin βt + b cos βt)]
+- Repeated eigenvalue (defective): x(t) = e^{λt}[C₁v + C₂(tv + w)]
+  where (A-λI)w = v (generalized eigenvector).
+Common mistake: not checking if repeated eigenvalue has 2 independent eigenvectors before using generalized form.
+
+**3. Phase Portraits — Stability Classification:**
+- Both λ negative → stable node (trajectories → origin)
+- Both λ positive → unstable node (trajectories → ∞)
+- Mixed signs → saddle point (unstable)
+- Complex with α<0 → stable spiral
+- Complex with α>0 → unstable spiral
+- Pure imaginary → center (periodic orbits, not asymptotically stable)
+
+**4. Non-Homogeneous x' = Ax + g(t):**
+General solution: x(t) = x_c(t) + x_p(t).
+Methods: undetermined coefficients (for simple g(t)) or variation of parameters using fundamental matrix.
+
+**5. Converting Higher-Order to Systems:**
+y'' + by' + cy = 0 becomes x₁'=x₂, x₂'=-cx₁-bx₂ with companion matrix [0,1;-c,-b]. Eigenvalues of companion matrix = roots of characteristic equation.`
   },
   ch5: {
     title: 'Chapter 5: Series & Numerical Methods',
-    topics: 'Power series solutions, Frobenius method, Euler method, Runge-Kutta method, numerical approximations'
+    topics: 'Power series solutions, Frobenius method, Euler method, Runge-Kutta (RK4)',
+    content: `COURSE CONTENT — Chapter 5: Series solutions near singular points + numerical methods.
+
+**1. Power Series at Ordinary Points:**
+Assume y = Σ aₙ(x-x₀)ⁿ. Substitute into ODE, align powers via index shifting, extract recurrence relation. Radius of convergence R = distance to nearest singular point.
+Example: y''-y=0 gives a_{n+2} = aₙ/((n+2)(n+1)) → y = c₁cosh x + c₂sinh x.
+Special functions: Airy equation y''-xy=0, Legendre equation.
+
+**2. Frobenius Method (Regular Singular Points):**
+Assume y = x^r Σ aₙxⁿ. Indicial equation: r(r-1)+p₀r+q₀=0 where p₀=lim(x→x₀)(x-x₀)p(x), q₀=lim(x→x₀)(x-x₀)²q(x).
+Three cases based on roots r₁,r₂:
+- Case 1 (r₁-r₂ not integer): two Frobenius series
+- Case 2 (r₁=r₂): second solution has ln x term
+- Case 3 (integer difference): ln x may or may not appear
+Important: Bessel's equation x²y''+xy'+(x²-ν²)y=0 → Bessel functions J_ν, Y_ν.
+
+**3. Euler's Method:** y_{n+1} = yₙ + h·f(xₙ,yₙ). First-order accurate (global error O(h)). Halving h halves error.
+Improved Euler (Heun's): predictor-corrector, second-order accurate.
+
+**4. Runge-Kutta 4 (RK4) — the workhorse method:**
+k₁ = f(xₙ,yₙ), k₂ = f(xₙ+h/2, yₙ+hk₁/2),
+k₃ = f(xₙ+h/2, yₙ+hk₂/2), k₄ = f(xₙ+h, yₙ+hk₃).
+y_{n+1} = yₙ + (h/6)(k₁ + 2k₂ + 2k₃ + k₄).
+Fourth-order: halving h reduces error by factor 16. Far superior to Euler for same computational cost.`
   },
   ch6: {
     title: 'Chapter 6: Partial Differential Equations',
-    topics: 'Heat equation, wave equation, Laplace equation, separation of variables, boundary conditions, applications'
+    topics: 'Heat equation, wave equation, Laplace equation, separation of variables, Fourier series, boundary conditions',
+    content: `COURSE CONTENT — Chapter 6: Three classical PDEs solved by separation of variables.
+
+**1. Heat Equation u_t = Ku_{xx} (diffusion, smoothing):**
+Separation u=P(x)Q(t) → spatial BVP P''+λP=0 + temporal Q'+KλQ=0.
+Three-case analysis on λ:
+- λ<0: only trivial solution
+- λ=0: only trivial (for Dirichlet BCs)
+- λ>0: eigenvalues λₘ=(mπ/L)², eigenfunctions Pₘ=sin(mπx/L)
+Solution: u = Σ Cₘ sin(mπx/L) exp[-K(mπ/L)²t].
+Coefficients from IC: Cₘ = (2/L)∫₀ᴸ f(x)sin(mπx/L)dx (Fourier sine series).
+High frequencies decay faster! Solution smooths over time.
+
+**2. Boundary Condition Types:**
+- Dirichlet (P(0)=P(L)=0): sine modes only
+- Neumann (P'(0)=P'(L)=0, insulated): cosine modes + constant term (λ=0 gives non-trivial P₀=1!)
+  Solution: u = C₀/2 + Σ Cₘcos(mπx/L)e^{-Kλₘt}. Constant = spatial average (conserved).
+- Non-homogeneous Dirichlet: decompose u = V(x) + w(x,t), V=steady state (linear for no source), w=transient with homogeneous BCs.
+- With source p(x): steady state V satisfies KV''+p(x)=0.
+
+**3. Wave Equation u_{tt} = a²u_{xx} (oscillations, energy conserved):**
+Two ICs needed: u(x,0)=f(x) (displacement), u_t(x,0)=g(x) (velocity).
+Same spatial eigenvalues. Temporal ODE Q''+a²λQ=0 → oscillatory (no decay!):
+u = Σ[Aₘcos(ωₘt) + Bₘsin(ωₘt)]sin(mπx/L), where ωₘ=mπa/L.
+Aₘ from f(x), Bₘ = (2/(mπa))∫₀ᴸ g(x)sin(mπx/L)dx.
+Standing waves: superposition of modes.
+
+**4. Laplace Equation u_{xx}+u_{yy}=0 (steady-state, no time):**
+Separation u=X(x)Y(y). On rectangle [0,a]×[0,b]: eigenvalues from homogeneous BCs, sinh/cosh for the other direction. Solution satisfies maximum principle.`
   },
   exam: {
     title: 'Exam Preparation',
-    topics: 'Review of all chapters, practice problems, exam strategies, common mistakes, comprehensive problem-solving'
+    topics: 'Review of all chapters, practice problems, exam strategies, common mistakes',
+    content: `EXAM PREPARATION — Key problem-solving strategies:
+
+**Classification First:** Before solving, identify the equation type. First-order: separable? linear? exact? Bernoulli? homogeneous? Second-order: constant or variable coefficients? What method for y_p?
+
+**Common Exam Mistakes to Avoid:**
+1. Forgetting resonance check in undetermined coefficients
+2. Not converting to standard form before variation of parameters
+3. Missing equilibrium solutions in separable equations
+4. Sign errors in Laplace derivative rules
+5. Forgetting the x factor in repeated roots (both char. eq. and Euler)
+6. Not checking exactness after applying integrating factor
+7. Missing the constant term (λ=0) in Neumann BCs for heat equation
+8. Forgetting that wave equation needs TWO initial conditions
+
+**Speed Tips:** Know your Laplace table cold. Practice partial fractions until automatic. Recognize Euler equations by the x²y''+xy' pattern. For PDEs, the three-case analysis is the same every time — memorize it.`
   }
 };
 
@@ -1531,6 +1703,17 @@ You are tutoring ${studentProfile.name} (${studentProfile.major} major). Use the
 
 Currently studying: ${chapter.title}
 Topics: ${chapter.topics}
+${chapter.content ? `
+
+DETAILED COURSE CONTENT FOR THIS CHAPTER:
+${chapter.content}
+
+Use this content knowledge to:
+- Give accurate, specific answers grounded in the actual course material
+- Reference the exact formulas, theorems, and methods taught in class
+- Point out common mistakes students make (listed above) when you see them happening
+- Guide students through the specific solution steps taught in this course
+- Verify student work against the correct methods and formulas` : ''}
 
 Teaching approach:
 - Be concise but thorough. Get to the math quickly, no filler.
