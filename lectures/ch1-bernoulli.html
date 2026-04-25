@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Bernoulli Differential Equations | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 70px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Table styling for slide 3 */
+  .special-cases-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 18px;
+  }
+  .special-cases-table th, .special-cases-table td {
+    padding: 14px 16px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .special-cases-table th {
+    background: #1e293b;
+    color: #60a5fa;
+    font-weight: 600;
+  }
+  .special-cases-table td {
+    background: #0f172a;
+  }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 70px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch1-bernoulli.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Bernoulli Equations — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 1 · First-Order ODEs</div>
+  <h1 class="anim-item">Bernoulli Differential Equations</h1>
+  <div class="subtitle anim-item">Transforming Nonlinear to Linear</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: Definition -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">What is a Bernoulli Equation?</h2>
+  <div class="anim-item" style="font-size:20px; color:#94a3b8; margin-bottom:26px;">
+    A Bernoulli equation looks linear, but has a nonlinear term $y^n$. A clever substitution will transform it into a linear equation!
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-bottom:26px;">
+    <div class="box-label blue">Standard Form</div>
+    <div class="box-text">
+      A Bernoulli equation has the form:
+    </div>
+    <div class="math-block" style="margin-top:14px;">
+      $$\frac{dy}{dx} + P(x)y = Q(x)y^n \quad \text{where } n \neq 0, 1$$
+    </div>
+    <div class="box-text" style="margin-top:14px; font-size:18px;">
+      The $y^n$ term makes it <strong style="color:#60a5fa;">nonlinear</strong>. When $n=0$ or $n=1$, it's already linear and doesn't need the Bernoulli technique.
+    </div>
+  </div>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:14px; text-align:center;">
+    The magic: we will transform this nonlinear equation into a <strong style="color:#a78bfa;">linear</strong> equation using a substitution!
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: The Substitution -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">The Magic Substitution</h2>
+
+  <div class="anim-item" style="font-size:20px; color:#94a3b8; margin-bottom:20px;">
+    To transform a Bernoulli equation into a linear one, we use the substitution:
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom:24px;">
+    $$v = y^{1-n}$$
+  </div>
+
+  <div class="anim-item" style="font-size:18px; color:#cbd5e1; margin-bottom:16px;">
+    Then differentiate both sides with respect to $x$:
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:24px;">
+    $$\frac{dv}{dx} = (1-n)y^{-n} \frac{dy}{dx}$$
+  </div>
+
+  <div class="anim-item" style="font-size:18px; color:#cbd5e1; margin-bottom:16px;">
+    From the original equation, divide by $y^n$:
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:20px;">
+    $$y^{-n}\frac{dy}{dx} + P(x)y^{1-n} = Q(x)$$
+  </div>
+
+  <div class="anim-item" style="font-size:18px; color:#cbd5e1; margin-bottom:12px;">
+    Multiply by $(1-n)$ and substitute $v = y^{1-n}$:
+  </div>
+  <div class="math-block success anim-item glow">
+    $$\frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$$
+  </div>
+
+  <div class="anim-item" style="font-size:16px; color:#34d399; margin-top:16px; text-align:center; font-weight:600;">
+    This is now a first-order LINEAR equation in $v$!
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: Special Cases Table -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">Special Cases: Different Values of $n$</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    The substitution $v = y^{1-n}$ adapts to each value of $n$:
+  </div>
+
+  <div class="anim-item">
+    <table class="special-cases-table">
+      <thead>
+        <tr>
+          <th>Value of $n$</th>
+          <th>Substitution $v = y^{1-n}$</th>
+          <th>Example Form</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>$n = 2$</td>
+          <td>$v = y^{-1}$ (reciprocal)</td>
+          <td>$\dfrac{dv}{dx} - v = -1$</td>
+        </tr>
+        <tr>
+          <td>$n = 3$</td>
+          <td>$v = y^{-2}$</td>
+          <td>$\dfrac{dv}{dx} - 2P(x)v = -2Q(x)$</td>
+        </tr>
+        <tr>
+          <td>$n = -1$</td>
+          <td>$v = y^{2}$</td>
+          <td>$\dfrac{dv}{dx} + 2P(x)v = 2Q(x)$</td>
+        </tr>
+        <tr>
+          <td>$n = \frac{1}{2}$</td>
+          <td>$v = y^{1/2}$ (square root)</td>
+          <td>$\dfrac{dv}{dx} + \frac{1}{2}P(x)v = \frac{1}{2}Q(x)$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="anim-item" style="font-size:16px; color:#a78bfa; margin-top:20px; text-align:center; font-weight:600;">
+    Each case yields a linear equation in the new variable $v$.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: 4-Step Method -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-item">The 4-Step Solution Method</h2>
+
+  <div style="display:grid; grid-template-columns:1fr; gap:20px; margin-top:6px;">
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 1</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Identify $P(x)$, $Q(x)$, and $n$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Make sure to normalize first! Divide so the coefficient of $\dfrac{dy}{dx}$ is 1.</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 2</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Substitute $v = y^{1-n}$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Transform to: $\dfrac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 3</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Solve the linear equation</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Use integrating factor $\mu = e^{\int (1-n)P(x)\,dx}$ to solve for $v$.</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 4</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Back-substitute to find $y$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Since $v = y^{1-n}$, we have $y = v^{\frac{1}{1-n}}$. Also report $y=0$ as a singular solution.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Example 1 — n=2 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="section-label anim-item">Worked Example 1</div>
+  <h2 class="anim-item" style="margin-bottom:20px;">Solve: $\dfrac{dy}{dx} + y = y^2$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:20px;">Identify $P(x)$, $Q(x)$, $n$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:20px;">
+    $$P(x) = 1, \quad Q(x) = 1, \quad n = 2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:20px;">Substitute $v = y^{-1}$ (since $1-n = 1-2 = -1$)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$\frac{dv}{dx} - v = -1$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:20px;">Solve: $\mu = e^{-x}$, so $v = 1 + Ce^x$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:20px;">Back-substitute: $y = \dfrac{1}{v}$</span>
+  </div>
+  <div class="math-block final anim-item glow">
+    $$y = \frac{1}{1 + Ce^x}, \quad \text{plus singular solution } y = 0$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Example 2 — IVP -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="section-label anim-item">Worked Example 2</div>
+  <h2 class="anim-item" style="margin-bottom:20px;">Solve: $xy' + y = x^2 y^2$, &nbsp; $y(1) = 1$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:20px;">Normalize by dividing by $x$: $y' + \dfrac{y}{x} = xy^2$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:20px;">
+    $$P(x) = \frac{1}{x}, \quad Q(x) = x, \quad n = 2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:20px;">Substitute $v = y^{-1}$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$\frac{dv}{dx} - \frac{v}{x} = -x$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:20px;">$\mu = \dfrac{1}{x}$, solve to get $v = -x^2 + Cx$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">IC</span>
+    <span class="step-text" style="font-size:20px;">At $x=1$, $y=1$: $v(1) = 1 = -1 + C \Rightarrow C = 2$</span>
+  </div>
+
+  <div class="math-block final anim-item glow">
+    $$y = \frac{1}{x(2-x)}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Example 3 — n=3 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="section-label anim-item">Worked Example 3</div>
+  <h2 class="anim-item" style="margin-bottom:20px;">Solve: $\dfrac{dy}{dx} - \dfrac{2y}{x} = -x^2 y^3$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">ID</span>
+    <span class="step-text" style="font-size:20px;">$P(x) = -\dfrac{2}{x}$, $Q(x) = -x^2$, $n = 3$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">SUB</span>
+    <span class="step-text" style="font-size:20px;">$v = y^{-2}$ (since $1-n = -2$)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$\frac{dv}{dx} + \frac{4v}{x} = 2x^2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">SOLVE</span>
+    <span class="step-text" style="font-size:20px;">$\mu = x^4$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:20px;">
+    $$v = \frac{2x^3}{7} + \frac{C}{x^4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">BACK</span>
+    <span class="step-text" style="font-size:20px;">$y = v^{-1/2}$ since $\dfrac{1}{1-n} = \dfrac{1}{-2} = -\frac{1}{2}$</span>
+  </div>
+  <div class="math-block final anim-item glow">
+    $$y = \left(\frac{2x^3}{7} + \frac{C}{x^4}\right)^{-1/2}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Common Mistakes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <h2 class="anim-item">Common Pitfalls to Avoid</h2>
+
+  <div style="display:grid; grid-template-columns:1fr; gap:16px; margin-top:10px;">
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">Mistake 1: Forgetting to Normalize</div>
+      <div class="box-text">
+        The equation must be in the form $\dfrac{dy}{dx} + P(x)y = Q(x)y^n$. Divide by the coefficient of $\dfrac{dy}{dx}$ first!
+      </div>
+    </div>
+
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">Mistake 2: Using Wrong Substitution</div>
+      <div class="box-text">
+        The substitution is $v = y^{1-n}$, NOT $y^n$. For $n=2$, use $v = y^{-1}$, not $v = y^2$.
+      </div>
+    </div>
+
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">Mistake 3: Forgetting to Scale the Equation</div>
+      <div class="box-text">
+        After substituting $v = y^{1-n}$, <strong>both the coefficient of $v$ AND the RHS</strong> get multiplied by $(1-n)$.
+      </div>
+    </div>
+
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">Mistake 4: Missing the Singular Solution</div>
+      <div class="box-text">
+        Always verify that $y = 0$ is a solution to the original equation. It is a singular solution for all Bernoulli equations.
+      </div>
+    </div>
+
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">Mistake 5: Not Back-Substituting</div>
+      <div class="box-text">
+        After solving for $v$, always convert back to $y$ using $y = v^{\frac{1}{1-n}}$. Don't forget this final step!
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Key Takeaways -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <h2 class="anim-item">Key Takeaways</h2>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px;">
+    <div class="highlight-box definition anim-item">
+      <div style="font-size:28px; margin-bottom:10px;">&#x1F511;</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Key: $v = y^{1-n}$</strong><br>
+        This substitution is the magic that transforms the nonlinear Bernoulli equation into a linear one in $v$.
+      </div>
+    </div>
+
+    <div class="highlight-box theorem anim-item">
+      <div style="font-size:28px; margin-bottom:10px;">&#x2728;</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Solve the linear equation</strong><br>
+        Once you have $\dfrac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)$, use the integrating factor method.
+      </div>
+    </div>
+
+    <div class="highlight-box anim-item" style="border-color:#10b981;">
+      <div style="font-size:28px; margin-bottom:10px;">&#x267E;&#xFE0F;</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Always report $y=0$</strong><br>
+        The singular solution $y=0$ is always a solution and must be included in your final answer.
+      </div>
+    </div>
+
+    <div class="highlight-box anim-item" style="border-color:#f59e0b;">
+      <div style="font-size:28px; margin-bottom:10px;">&#x1F4A1;</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Applications everywhere</strong><br>
+        Population dynamics, fluid flow, control systems, and many physical phenomena use Bernoulli equations.
+      </div>
+    </div>
+  </div>
+
+  <div class="math-block final anim-item glow" style="margin-top:32px; font-size:22px;">
+    $$\text{Bernoulli} \;\Longrightarrow\; \text{Substitute } v=y^{1-n} \;\Longrightarrow\; \text{Linear Eq.} \;\Longrightarrow\; \text{Integrate} \;\Longrightarrow\; \text{Back-substitute}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1&times;</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch1-bernoulli';
+const TOTAL_SLIDES = 10;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>

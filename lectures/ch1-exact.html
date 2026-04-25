@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Exact Differential Equations | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 70px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 70px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch1-exact.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Exact Equations — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 1 · First-Order ODEs</div>
+  <h1 class="anim-item">Exact Differential Equations</h1>
+  <div class="subtitle anim-item">Finding Potential Functions</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: Definition -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">What is an Exact Equation?</h2>
+  <div class="anim-item" style="font-size:20px; color:#94a3b8; margin-bottom:26px;">
+    An exact equation is one where we can recognize it as the differential of a potential function.
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-bottom:26px;">
+    <div class="box-label blue">Standard Form</div>
+    <div class="box-text">
+      Consider the differential form:
+    </div>
+    <div class="math-block" style="margin-top:14px;">
+      $$M(x,y)\,dx + N(x,y)\,dy = 0$$
+    </div>
+  </div>
+
+  <div class="anim-item" style="font-size:20px; color:#94a3b8; margin-bottom:14px;">
+    This equation is <strong>exact</strong> if there exists a function $F(x,y)$ such that:
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$\frac{\partial F}{\partial x} = M \quad \text{and} \quad \frac{\partial F}{\partial y} = N$$
+  </div>
+  <div class="anim-item" style="font-size:18px; color:#60a5fa; text-align:center;">
+    Then the total differential is: $dF = M\,dx + N\,dy = 0$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Test for Exactness -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">Test for Exactness</h2>
+
+  <div class="highlight-box theorem anim-item" style="margin-bottom:26px;">
+    <div class="box-label purple">The Exactness Criterion</div>
+    <div class="box-text" style="margin-bottom:14px;">
+      $M(x,y)\,dx + N(x,y)\,dy = 0$ is exact if and only if:
+    </div>
+    <div class="math-block accent" style="margin-top:14px;">
+      $$\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$$
+    </div>
+  </div>
+
+  <div class="anim-item" style="font-size:20px; color:#94a3b8; margin-bottom:20px;">
+    <strong>Why?</strong> By Clairaut's Theorem (equality of mixed partials):
+  </div>
+
+  <div class="math-block anim-item" style="margin-bottom:14px;">
+    $$\frac{\partial^2 F}{\partial y \, \partial x} = \frac{\partial^2 F}{\partial x \, \partial y}$$
+  </div>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; text-align:center;">
+    If $\frac{\partial F}{\partial x} = M$, then $\frac{\partial^2 F}{\partial y \, \partial x} = \frac{\partial M}{\partial y}$<br>
+    If $\frac{\partial F}{\partial y} = N$, then $\frac{\partial^2 F}{\partial x \, \partial y} = \frac{\partial N}{\partial x}$<br>
+    By Clairaut: these must be equal!
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: 7-Step Method -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">7-Step Solution Method</h2>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px 40px; margin-top:6px;">
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 1</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Identify $M$ and $N$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">From $M\,dx + N\,dy = 0$</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 2</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Check exactness</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Verify $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 3</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Integrate $M$ w.r.t. $x$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">$F = \int M\,dx + g(y)$</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 4</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Differentiate $F$ w.r.t. $y$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Compare with $N$</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 5</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Find $g(y)$</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Solve for $g'(y)$ from Step 4</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item">
+      <span class="step-badge">STEP 6</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Write solution</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">$F(x,y) = C$ (implicit)</span>
+      </div>
+    </div>
+    <div class="highlight-box warning-box anim-item">
+      <span class="step-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706);">STEP 7</span>
+      <div class="step-text" style="font-size:18px; margin-top:8px;">
+        <strong>Apply initial conditions</strong><br>
+        <span style="color:#94a3b8; font-size:16px;">Use $y(x_0) = y_0$ to find $C$</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: Example Setup -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item" style="margin-bottom:20px;">Solve: $(2xy+3)\,dx + (x^2+4y)\,dy = 0$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:20px;">Identify $M$ and $N$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:20px;">
+    $$M(x,y) = 2xy + 3 \quad , \quad N(x,y) = x^2 + 4y$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:20px;">Check exactness</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$\frac{\partial M}{\partial y} = 2x \quad , \quad \frac{\partial N}{\partial x} = 2x \quad \checkmark$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:20px;">Integrate $M$ w.r.t. $x$</span>
+  </div>
+  <div class="math-block accent anim-item">
+    $$F = \int (2xy + 3)\,dx = x^2 y + 3x + g(y)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Example Solution -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="section-label anim-item">Worked Example (continued)</div>
+  <h2 class="anim-item" style="margin-bottom:20px;">Finding the Potential Function</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:20px;">Differentiate $F$ w.r.t. $y$ and match with $N$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:20px;">
+    $$\frac{\partial F}{\partial y} = x^2 + g'(y) = N = x^2 + 4y$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:20px;">Solve for $g'(y)$ and integrate</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$g'(y) = 4y \quad \Longrightarrow \quad g(y) = 2y^2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 6</span>
+    <span class="step-text" style="font-size:20px;">Write the implicit solution</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:32px; font-size:30px;">
+    $$\boxed{x^2 y + 3x + 2y^2 = C}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: IVP Example -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="section-label anim-item">IVP Example</div>
+  <h2 class="anim-item" style="margin-bottom:20px;">Solve: $(2x+y)\,dx + (x-3y^2)\,dy = 0$, $y(1)=2$</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:14px; text-align:center;">
+    <strong>Quick check:</strong> $\frac{\partial M}{\partial y} = 1$, $\frac{\partial N}{\partial x} = 1$ ✓
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:20px;">Integrate $M$ w.r.t. $x$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$F = \int (2x+y)\,dx = x^2 + xy + g(y)$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4-5</span>
+    <span class="step-text" style="font-size:20px;">Match with $N$ and find $g(y)$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$\frac{\partial F}{\partial y} = x + g'(y) = x - 3y^2 \quad \Rightarrow \quad g(y) = -y^3$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 6</span>
+    <span class="step-text" style="font-size:20px;">General solution</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:20px;">
+    $$x^2 + xy - y^3 = C$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 7</span>
+    <span class="step-text" style="font-size:20px;">Apply $y(1)=2$</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:26px;">
+    $$1 + 1(2) - 2^3 = C \quad \Rightarrow \quad C = -5 \quad \boxed{x^2 + xy - y^3 = -5}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Common Mistakes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <h2 class="anim-item">Common Pitfalls to Avoid</h2>
+
+  <div class="two-col" style="margin-top:10px;">
+    <div>
+      <div class="highlight-box warning-box anim-item" style="margin-bottom:20px;">
+        <div class="box-label amber">MISTAKE 1</div>
+        <div class="box-text" style="font-size:18px; margin-top:8px;">
+          <strong>Forgetting $g(y)$ is a function</strong><br>
+          When integrating $M$ w.r.t. $x$, the "constant" depends on $y$: $g(y)$ not $C$.
+        </div>
+      </div>
+      <div class="highlight-box warning-box anim-item">
+        <div class="box-label amber">MISTAKE 3</div>
+        <div class="box-text" style="font-size:18px; margin-top:8px;">
+          <strong>Swapping the partial derivatives</strong><br>
+          It's always: $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$<br>
+          Not the other way around!
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="highlight-box warning-box anim-item">
+        <div class="box-label amber">MISTAKE 2</div>
+        <div class="box-text" style="font-size:18px; margin-top:8px;">
+          <strong>Skipping the exactness check</strong><br>
+          Always verify $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$ before proceeding. Not exact equations require different methods!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Geometric Insight -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <h2 class="anim-item">Geometric Interpretation</h2>
+
+  <div class="anim-item" style="font-size:20px; color:#94a3b8; margin-bottom:26px;">
+    Exact equations connect to conservative vector fields and level curves.
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-bottom:26px;">
+    <div class="box-label blue">Level Curves</div>
+    <div class="box-text">
+      The solutions $F(x,y) = C$ are <strong>level curves</strong> of the potential function $F$. Each curve is a complete solution family member.
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-bottom:26px;">
+    <div class="box-label purple">Conservative Vector Fields</div>
+    <div class="box-text">
+      The vector field $(M, N) = \nabla F = \left(\frac{\partial F}{\partial x}, \frac{\partial F}{\partial y}\right)$ is <strong>conservative</strong> — it's the gradient of a scalar potential function.
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item">
+    <div class="box-label green">Key Observation</div>
+    <div class="box-text" style="font-size:18px;">
+      The gradient vector $\nabla F = (M, N)$ is <strong>always perpendicular to the level curves</strong> $F(x,y) = C$. This is why solutions are implicit relations, not explicit functions.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Key Takeaways -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <h2 class="anim-item">Key Takeaways</h2>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px;">
+    <div class="highlight-box definition anim-item">
+      <div class="box-label blue">TEST</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Exactness criterion</strong><br>
+        $\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}$<br>
+        <span style="color:#94a3b8; font-size:16px;">By Clairaut's theorem on mixed partials</span>
+      </div>
+    </div>
+    <div class="highlight-box theorem anim-item">
+      <div class="box-label purple">METHOD</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Solution steps</strong><br>
+        Integrate $M$ w.r.t. $x$, find $g(y)$ via $N$<br>
+        <span style="color:#94a3b8; font-size:16px;">Write $F(x,y) = C$ implicitly</span>
+      </div>
+    </div>
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">SOLUTIONS</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Always implicit</strong><br>
+        $F(x,y) = C$ — the potential function itself<br>
+        <span style="color:#94a3b8; font-size:16px;">Don't try to solve for $y$ explicitly</span>
+      </div>
+    </div>
+    <div class="highlight-box anim-item" style="border-color:#10b981;">
+      <div class="box-label green">FOUNDATION</div>
+      <div class="box-text" style="font-size:18px;">
+        <strong>Clairaut's Theorem</strong><br>
+        Equality of mixed partials underpins everything<br>
+        <span style="color:#94a3b8; font-size:16px;">It's the bridge between $(M,N)$ and $F$</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-block final anim-item glow" style="margin-top:32px; font-size:24px;">
+    $$\text{Check exactness} \;\Longrightarrow\; \text{Find } F \;\Longrightarrow\; \text{Level curves } F(x,y)=C \;\Longrightarrow\; \text{Apply IC}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1&times;</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch1-exact';
+const TOTAL_SLIDES = 10;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>
