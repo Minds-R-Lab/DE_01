@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Chapter 2 Exam Review | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 140px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CUSTOM STYLES FOR CH2 ─── */
+
+  /* Mind map */
+  .mind-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+
+  .mind-map-center {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 16px;
+    padding: 24px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  }
+
+  .mind-map-branch {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .mind-map-item {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s;
+  }
+
+  .mind-map-item.highlighted {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a3f2f);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .mind-map-item.branch-left { border-color: #8b5cf6; }
+  .mind-map-item.branch-right { border-color: #f59e0b; }
+  .mind-map-item.branch-bottom { border-color: #06b6d4; }
+
+  /* Case cards */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .case-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    transition: all 0.3s;
+  }
+
+  .case-card.distinct {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .case-card.repeated {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .case-card.complex {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .case-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .case-card.distinct h3 { color: #34d399; }
+  .case-card.repeated h3 { color: #fbbf24; }
+  .case-card.complex h3 { color: #c4b5fd; }
+
+  .case-card-condition {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .case-card-solution {
+    font-size: 18px;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+
+  /* Application cards */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .app-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s;
+  }
+
+  .app-card:nth-child(2) { border-left-color: #8b5cf6; }
+  .app-card:nth-child(3) { border-left-color: #f59e0b; }
+
+  .app-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .app-card h3 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .app-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .app-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 14px 18px;
+  }
+
+  /* Physical interpretation cards */
+  .physical-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .physical-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+  }
+
+  .physical-card.overdamped {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .physical-card.critically {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .physical-card.underdamped {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .physical-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .physical-card.overdamped h3 { color: #34d399; }
+  .physical-card.critically h3 { color: #fbbf24; }
+  .physical-card.underdamped h3 { color: #c4b5fd; }
+
+  .physical-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* Three case summary grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+  }
+
+  .summary-card h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .summary-card.s-distinct h4 { color: #34d399; }
+  .summary-card.s-repeated h4 { color: #fbbf24; }
+  .summary-card.s-complex h4 { color: #c4b5fd; }
+
+  .summary-card-content {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* Common mistakes box */
+  .mistakes-box {
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .mistakes-box h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mistakes-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mistakes-box li {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes-box li:before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 140px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+    .case-grid, .app-grid, .physical-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch2.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Ch2 Exam Review — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 16</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 0: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 2 · Second-Order ODEs</div>
+  <h1 class="anim-item">Chapter 2: Exam Review</h1>
+  <div class="subtitle anim-item">12 Exam-Style Problems — All Methods</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Method Selection Flowchart -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">Which Method Should I Use?</h2>
+
+  <div class="anim-item" style="margin: 20px 0;">
+    <div class="highlight-box definition anim-item" style="margin-bottom: 16px;">
+      <div class="box-label blue">Is it homogeneous? (g(t) = 0)</div>
+      <div class="box-text" style="font-size: 18px;">YES → Write characteristic equation, solve 3 cases (distinct, repeated, complex roots)</div>
+    </div>
+  </div>
+
+  <div class="anim-item" style="margin: 20px 0;">
+    <div class="highlight-box definition anim-item" style="margin-bottom: 16px;">
+      <div class="box-label blue">Is it non-homogeneous? (g(t) ≠ 0)</div>
+      <div class="box-text" style="font-size: 18px;">YES → Is g(t) polynomial/exponential/trig?</div>
+      <div style="margin-top: 12px; padding-left: 20px;">
+        <div style="font-size: 18px; color: #34d399; margin-bottom: 8px;">✓ YES → Undetermined Coefficients (check for resonance!)</div>
+        <div style="font-size: 18px; color: #f59e0b;">✗ NO (e.g., tan, ln) → Variation of Parameters</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anim-item" style="margin: 20px 0;">
+    <div class="highlight-box theorem anim-item" style="margin-bottom: 16px;">
+      <div class="box-label purple">Is it an Euler equation? (ax²y'' + bxy' + cy = 0)</div>
+      <div class="box-text" style="font-size: 18px;">YES → Use indicial equation, try y = x^r</div>
+    </div>
+  </div>
+
+  <div class="anim-item" style="margin: 20px 0;">
+    <div class="highlight-box warning-box anim-item">
+      <div class="box-label amber">Is one solution known?</div>
+      <div class="box-text" style="font-size: 18px;">YES → Reduction of Order: y = u·y₁</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: Problem 1 — Homogeneous, Distinct Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <div class="section-label anim-item">Problem 1</div>
+  <h2 class="anim-item">Homogeneous, Distinct Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' + y' - 6y = 0$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">WHY</span>
+    <span class="step-text" style="font-size:18px;">Homogeneous (g=0), constant coefficients → characteristic equation</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$r^2 + r - 6 = 0 \quad \Rightarrow \quad (r+3)(r-2) = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">ROOTS</span>
+    <span class="step-text">r₁ = 2, r₂ = -3 → Δ > 0, distinct real</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = C_1e^{2t} + C_2e^{-3t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Problem 2 — Homogeneous, Complex Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="section-label anim-item">Problem 2</div>
+  <h2 class="anim-item">Homogeneous, Complex Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' - 2y' + 5y = 0$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">DISCRIMINANT</span>
+    <span class="step-text">Δ = 4 - 20 = -16 < 0 → complex roots!</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$r = \frac{2 \pm \sqrt{-16}}{2} = \frac{2 \pm 4i}{2} = 1 \pm 2i$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">COEFFICIENTS</span>
+    <span class="step-text">α = 1, β = 2</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = e^{t}(C_1\cos(2t) + C_2\sin(2t))$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: Problem 3 — Homogeneous IVP, Repeated Root -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="section-label anim-item">Problem 3</div>
+  <h2 class="anim-item">Homogeneous IVP, Repeated Root</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 22px;">$$y'' + 6y' + 9y = 0, \quad y(0)=1, \quad y'(0)=4$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">CHARACTERISTIC</span>
+    <span class="step-text">(r+3)² = 0 → r = -3 (double root)</span>
+  </div>
+
+  <div class="math-block success anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$y = (C_1 + C_2t)e^{-3t}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">APPLY y(0)=1</span>
+    <span class="step-text">C₁ = 1</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">APPLY y'(0)=4</span>
+    <span class="step-text">y' = -3(C₁ + C₂t)e^{-3t} + C₂e^{-3t}, so -3C₁ + C₂ = 4 → C₂ = 7</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = (1 + 7t)e^{-3t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: Problem 4 — UC, Polynomial Forcing -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="section-label anim-item">Problem 4</div>
+  <h2 class="anim-item">UC: Polynomial Forcing</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' - 5y' + 6y = 2t$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">r² - 5r + 6 = 0 → (r-2)(r-3) = 0 → y_c = C₁e^{2t} + C₂e^{3t}</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">PARTICULAR</span>
+    <span class="step-text">Guess y_p = At + B (polynomial), no overlap ✓</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$y_p' = A, \quad y_p'' = 0 \Rightarrow 0 - 5A + 6(At+B) = 2t$$
+    $$6At + (-5A+6B) = 2t \Rightarrow A = 1/3, B = 5/18$$
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:22px;">
+    $$y = C_1e^{2t} + C_2e^{3t} + \frac{t}{3} + \frac{5}{18}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Problem 5 — UC, Exponential Resonance -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="section-label anim-item">Problem 5</div>
+  <h2 class="anim-item">UC: Exponential Resonance</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' - 7y' + 12y = 5e^{4t}$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">r² - 7r + 12 = 0 → r = 3, 4 → y_c = C₁e^{3t} + C₂e^{4t}</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">CHECK RESONANCE</span>
+    <span class="step-text">e^{4t} IS in y_c (r₂ = 4)! → RESONANCE detected!</span>
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin: 14px 0;">
+    <div class="box-label amber">Multiply by t</div>
+    <div class="box-text" style="font-size: 18px;">When resonance occurs, use y_p = Ate^{4t} instead of Ae^{4t}</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">SOLVE FOR A</span>
+    <span class="step-text">Substitute y_p = Ate^{4t}, compute derivatives, get A = 5</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = C_1e^{3t} + C_2e^{4t} + 5te^{4t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Problem 6 — UC, Double Resonance -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="section-label anim-item">Problem 6</div>
+  <h2 class="anim-item">UC: Double Resonance</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' - 8y' + 16y = 2e^{4t}$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">(r-4)² = 0 → r = 4 (double) → y_c = (C₁ + C₂t)e^{4t}</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">CHECK RESONANCE</span>
+    <span class="step-text">Both e^{4t} AND te^{4t} are in y_c! → DOUBLE RESONANCE</span>
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin: 14px 0;">
+    <div class="box-label amber">Multiply by t²</div>
+    <div class="box-text" style="font-size: 18px;">Double resonance → use y_p = At²e^{4t}</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">SOLVE FOR A</span>
+    <span class="step-text">After substitution: A = 1</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = (C_1 + C_2t + t^2)e^{4t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Problem 7 — UC, Trig Resonance -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="section-label anim-item">Problem 7</div>
+  <h2 class="anim-item">UC: Trig Resonance</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' + 4y = 8\cos(2t)$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">r² + 4 = 0 → r = ±2i → y_c = C₁cos(2t) + C₂sin(2t)</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">CHECK RESONANCE</span>
+    <span class="step-text">cos(2t) IS in y_c! → TRIG RESONANCE</span>
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin: 14px 0;">
+    <div class="box-label amber">Multiply by t</div>
+    <div class="box-text" style="font-size: 18px;">Use y_p = t[Acos(2t) + Bsin(2t)]</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">SOLVE</span>
+    <span class="step-text">After substitution: A = 0, B = 2</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = C_1\cos(2t) + C_2\sin(2t) + 2t\sin(2t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Problem 8 — Variation of Parameters -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="section-label anim-item">Problem 8</div>
+  <h2 class="anim-item">Variation of Parameters</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' + y = \tan(t)$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">WHY VP?</span>
+    <span class="step-text">tan(t) is not polynomial/exp/trig → UC doesn't work → use VP</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">y_c = C₁cos(t) + C₂sin(t), y₁ = cos(t), y₂ = sin(t), W = 1</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$u_1 = \sin(t) - \ln|\sec(t)+\tan(t)|$$
+    $$u_2 = -\cos(t)$$
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:22px;">
+    $$y_p = -\cos(t)\ln|\sec(t)+\tan(t)|$$
+    $$y = C_1\cos(t) + C_2\sin(t) - \cos(t)\ln|\sec(t)+\tan(t)|$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Problem 9 — VP with Repeated Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="section-label anim-item">Problem 9</div>
+  <h2 class="anim-item">VP with Repeated Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' + 2y' + y = t^2e^{-t}$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">(r+1)² = 0 → r = -1 → y_c = (C₁+C₂t)e^{-t}</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">WHY VP?</span>
+    <span class="step-text">t²e^{-t} overlaps with y_c (resonance) → UC would need t⁴, VP is cleaner</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">APPLY VP</span>
+    <span class="step-text">y₁ = e^{-t}, y₂ = te^{-t}, W = e^{-2t}</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 18px;">
+    $$u_1 = -\frac{t^4}{4}, \quad u_2 = \frac{t^3}{3}$$
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = (C_1+C_2t)e^{-t} + \frac{t^4}{12}e^{-t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: Problem 10 — Euler, Distinct Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="section-label anim-item">Problem 10</div>
+  <h2 class="anim-item">Euler Equation: Distinct Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$x^2y'' - xy' - 8y = 0$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">TRY y = x^r</span>
+    <span class="step-text">Compute y' and y'', substitute</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">INDICIAL</span>
+    <span class="step-text">r(r-1) - r - 8 = 0 → r² - 2r - 8 = 0</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$(r-4)(r+2) = 0 \Rightarrow r_1 = 4, r_2 = -2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">DISTINCT</span>
+    <span class="step-text">Two distinct real roots</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = C_1x^4 + \frac{C_2}{x^2}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12: Problem 11 — Euler, Complex Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="section-label anim-item">Problem 11</div>
+  <h2 class="anim-item">Euler Equation: Complex Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$x^2y'' + 3xy' + 2y = 0$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">INDICIAL</span>
+    <span class="step-text">r(r-1) + 3r + 2 = 0 → r² + 2r + 2 = 0</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 20px;">
+    $$r = \frac{-2 \pm \sqrt{4-8}}{2} = \frac{-2 \pm 2i}{2} = -1 \pm i$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">COMPLEX ROOTS</span>
+    <span class="step-text">α = -1, β = 1, use x^{α}[C₁cos(β ln x) + C₂sin(β ln x)]</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:24px;">
+    $$y = \frac{1}{x}\left[C_1\cos(\ln x) + C_2\sin(\ln x)\right]$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13: Problem 12 — Reduction of Order -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="section-label anim-item">Problem 12</div>
+  <h2 class="anim-item">Reduction of Order</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 22px;">$$x^2y'' - 3xy' + 3y = 0, \quad y_1 = x$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">SET y = ux</span>
+    <span class="step-text">where u is unknown, y₁ = x is known</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">SUBSTITUTE</span>
+    <span class="step-text">y' = u'x + u, y'' = u''x + 2u'</span>
+  </div>
+
+  <div class="math-block accent anim-item" style="margin-bottom: 14px; font-size: 18px;">
+    $$x^2(u''x + 2u') - 3x(u'x + u) + 3ux = 0$$
+    $$x^3u'' - x^2u' = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">LET z = u'</span>
+    <span class="step-text">x³z' - x²z = 0 → z' = z/x → z = Cx → u = Cx²/2</span>
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:22px;">
+    $$y_2 = x^3, \quad y = C_1x + C_2x^3$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14: Challenge Problem — Method Selection -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <div class="section-label anim-item">Challenge Problem</div>
+  <h2 class="anim-item">Which Method? — cosh Forcing</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="math-block" style="margin-top: 12px; font-size: 24px;">$$y'' + 4y' + 4y = \cosh(2t)$$</div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top: 20px;">
+    <span class="step-badge">IS IT HOMOGENEOUS?</span>
+    <span class="step-text">No! g(t) = cosh(2t) ≠ 0</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">IS g(t) STANDARD?</span>
+    <span class="step-text">cosh(2t) = (e^{2t} + e^{-2t})/2 = sum of exponentials → UC works!</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">HOMOGENEOUS</span>
+    <span class="step-text">(r+2)² = 0 → r = -2 → y_c = (C₁+C₂t)e^{-2t}</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">CHECK RESONANCE</span>
+    <span class="step-text">e^{2t}: not in y_c ✓  |  e^{-2t}: IN y_c (partial resonance!)</span>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin: 14px 0;">
+    <div class="box-label green">Strategy</div>
+    <div class="box-text" style="font-size: 18px;">
+      Split cosh: y_p = (Ae^{2t})/2 + (Bte^{-2t})/2. Solve each term separately for A and B.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 15: Key Exam Tips -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-15">
+  <h2 class="anim-item">Key Exam Tips</h2>
+
+  <div class="summary-grid anim-item">
+    <div class="summary-card s-distinct anim-item">
+      <h4>Tip 1: Classify First</h4>
+      <div class="summary-card-content">
+        Always ask: Is it homogeneous? Non-homogeneous? Euler? Known solution? This determines everything!
+      </div>
+    </div>
+
+    <div class="summary-card s-repeated anim-item">
+      <h4>Tip 2: Check for Resonance</h4>
+      <div class="summary-card-content">
+        For UC: ALWAYS compare g(t) with y_c. If overlap → multiply guess by t (or t² for double).
+      </div>
+    </div>
+
+    <div class="summary-card s-complex anim-item">
+      <h4>Tip 3: Know When VP is Needed</h4>
+      <div class="summary-card-content">
+        If g(t) is not polynomial/exp/trig (e.g., tan, ln, 1/t) → use Variation of Parameters.
+      </div>
+    </div>
+
+    <div class="summary-card s-distinct anim-item" style="grid-column: 1;">
+      <h4>Tip 4: Euler = Try x^r</h4>
+      <div class="summary-card-content">
+        For variable coefficient equations like x²y'' + ... → substitute y = x^r to get indicial equation.
+      </div>
+    </div>
+
+    <div class="summary-card s-repeated anim-item" style="grid-column: 2;">
+      <h4>Method Summary: Homogeneous</h4>
+      <div class="summary-card-content">
+        Always: characteristic equation. Compute Δ. If Δ > 0: two exponentials. If Δ = 0: one exponential with t factor. If Δ < 0: oscillation with envelope.
+      </div>
+    </div>
+
+    <div class="summary-card s-complex anim-item" style="grid-column: 3;">
+      <h4>Method Summary: Non-Homogeneous</h4>
+      <div class="summary-card-content">
+        Find y_c first. Then: UC (standard forcing) or VP (odd forcing). Add particular to complete solution.
+      </div>
+    </div>
+  </div>
+
+  <div class="mistakes-box anim-item" style="margin-top: 24px;">
+    <h3>Common Exam Pitfalls</h3>
+    <ul>
+      <li><strong>Forgetting to check resonance:</strong> Applying UC without checking if g(t) overlaps with y_c is the #1 error!</li>
+      <li><strong>Wrong multiplicity:</strong> Single resonance → multiply by t. Double resonance → multiply by t². Know the difference!</li>
+      <li><strong>Skipping the discriminant:</strong> Always compute Δ = b² - 4ac to determine which case you're in.</li>
+      <li><strong>Incorrect Euler setup:</strong> Remember the indicial equation is r(r-1) + br + c = 0 (not just r² + br + c = 0).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1×</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch2-exam-review';
+const TOTAL_SLIDES = 16;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Variation of Parameters | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 140px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CUSTOM STYLES FOR CH2 ─── */
+
+  /* Mind map */
+  .mind-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+
+  .mind-map-center {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 16px;
+    padding: 24px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  }
+
+  .mind-map-branch {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .mind-map-item {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s;
+  }
+
+  .mind-map-item.highlighted {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a3f2f);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .mind-map-item.branch-left { border-color: #8b5cf6; }
+  .mind-map-item.branch-right { border-color: #f59e0b; }
+  .mind-map-item.branch-bottom { border-color: #06b6d4; }
+
+  /* Case cards */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .case-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    transition: all 0.3s;
+  }
+
+  .case-card.distinct {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .case-card.repeated {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .case-card.complex {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .case-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .case-card.distinct h3 { color: #34d399; }
+  .case-card.repeated h3 { color: #fbbf24; }
+  .case-card.complex h3 { color: #c4b5fd; }
+
+  .case-card-condition {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .case-card-solution {
+    font-size: 18px;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+
+  /* Application cards */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .app-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s;
+  }
+
+  .app-card:nth-child(2) { border-left-color: #8b5cf6; }
+  .app-card:nth-child(3) { border-left-color: #f59e0b; }
+
+  .app-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .app-card h3 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .app-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .app-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 14px 18px;
+  }
+
+  /* Physical interpretation cards */
+  .physical-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .physical-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+  }
+
+  .physical-card.overdamped {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .physical-card.critically {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .physical-card.underdamped {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .physical-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .physical-card.overdamped h3 { color: #34d399; }
+  .physical-card.critically h3 { color: #fbbf24; }
+  .physical-card.underdamped h3 { color: #c4b5fd; }
+
+  .physical-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* Three case summary grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+  }
+
+  .summary-card h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .summary-card.s-distinct h4 { color: #34d399; }
+  .summary-card.s-repeated h4 { color: #fbbf24; }
+  .summary-card.s-complex h4 { color: #c4b5fd; }
+
+  .summary-card-content {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* Common mistakes box */
+  .mistakes-box {
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .mistakes-box h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mistakes-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mistakes-box li {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes-box li:before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+  }
+
+  /* Comparison table */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+  }
+
+  .comparison-table th {
+    background: rgba(59, 130, 246, 0.15);
+    font-weight: 600;
+    border-bottom: 2px solid #3b82f6;
+  }
+
+  .comparison-table tr:nth-child(even) {
+    background: rgba(30, 41, 59, 0.4);
+  }
+
+  /* Recipe card */
+  .recipe-card {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+
+  .recipe-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #f1f5f9;
+  }
+
+  .recipe-card ol {
+    margin-left: 24px;
+  }
+
+  .recipe-card li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #cbd5e1;
+    font-size: 16px;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 140px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+    .case-grid, .app-grid, .physical-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch2.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Ch2 Variation of Parameters — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 15</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 0: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 2 · Second-Order ODEs</div>
+  <h1 class="anim-item">Variation of Parameters</h1>
+  <div class="subtitle anim-item">The Universal Method for ANY Forcing Function</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Mind Map — UC vs VP -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">Why We Need Variation of Parameters</h2>
+
+  <div class="mind-map anim-item">
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-left anim-item">Undetermined Coefficients<br>(Limited)</div>
+      <div class="mind-map-item anim-item" style="font-size:14px;">Polynomials, exponentials, trig</div>
+    </div>
+
+    <div class="mind-map-center anim-item">
+      $ay'' + by' + cy = g(t)$
+    </div>
+
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-right highlighted anim-item">Variation of Parameters<br>(Universal!)</div>
+      <div class="mind-map-item branch-right anim-item" style="font-size:14px;">Works for ANY g(t)</div>
+    </div>
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin-top:24px;">
+    <div class="box-label amber">When UC Fails</div>
+    <div class="box-text">
+      Functions like $\tan(t)$, $\sec(t)$, $\ln(t)$, $1/t$, $e^t/t^2$, etc. require Variation of Parameters!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: The Brilliant Idea -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">The Brilliant Idea: Varying the Parameters</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Standard Homogeneous Solution</div>
+    <div class="math-block" style="margin-top:12px; font-size:24px;">
+      $$y_c = C_1 y_1(t) + C_2 y_2(t)$$
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">The Key Insight</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      What if the constants aren't constant?
+    </div>
+    <div class="math-block accent" style="margin-top:12px; font-size:20px;">
+      $$C_1 \to u_1(t), \quad C_2 \to u_2(t)$$
+    </div>
+  </div>
+
+  <div class="math-block success anim-item glow" style="font-size:22px; margin-top:12px;">
+    $$y_p = u_1(t)y_1(t) + u_2(t)y_2(t)$$
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:12px;">
+    <div class="box-label green">Why This Works</div>
+    <div class="box-text" style="font-size:18px;">
+      By letting $C_1$ and $C_2$ vary as functions, we gain enough flexibility to match ANY forcing function $g(t)$.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Deriving the Formulas -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">Deriving the Variation of Parameters Formulas</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Start with $y_p = u_1 y_1 + u_2 y_2$ and compute derivatives</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$y_p' = u_1' y_1 + u_1 y_1' + u_2' y_2 + u_2 y_2'$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Impose constraint: $u_1' y_1 + u_2' y_2 = 0$ (simplification)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$y_p' = u_1 y_1' + u_2 y_2'$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Compute $y_p''$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$y_p'' = u_1' y_1' + u_1 y_1'' + u_2' y_2' + u_2 y_2''$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Substitute into $ay'' + by' + cy = g(t)$ and simplify</span>
+  </div>
+  <div class="math-block success anim-item glow" style="margin-bottom:14px; font-size:20px;">
+    $$u_1' y_1' + u_2' y_2' = \frac{g(t)}{a}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: The Wronskian Determinant -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-item">The Wronskian Determinant</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    We now have a system of two equations:
+  </div>
+
+  <div class="math-block anim-item" style="margin-bottom:20px; font-size:20px;">
+    $$u_1' y_1 + u_2' y_2 = 0$$
+    $$u_1' y_1' + u_2' y_2' = \frac{g(t)}{a}$$
+  </div>
+
+  <div class="highlight-box theorem anim-item">
+    <div class="box-label purple">Apply Cramer's Rule</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Solving this system introduces a key determinant:
+    </div>
+    <div class="math-block success" style="margin-top:12px; font-size:22px;">
+      $$W(y_1, y_2) = \begin{vmatrix} y_1 & y_2 \\ y_1' & y_2' \end{vmatrix} = y_1 y_2' - y_2 y_1'$$
+    </div>
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-top:20px;">
+    <div class="box-label blue">Fundamental Property</div>
+    <div class="box-text" style="font-size:18px;">
+      If $W(y_1, y_2) \neq 0$, then $y_1$ and $y_2$ are linearly independent, and a unique particular solution exists!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: The VP Formulas -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <h2 class="anim-item">The Variation of Parameters Formulas</h2>
+
+  <div class="highlight-box success anim-item">
+    <div class="box-label green">The Complete Solution</div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$u_1(t) = -\int \frac{y_2(t) \cdot g(t)}{a \cdot W(t)} dt$$
+    </div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$u_2(t) = \int \frac{y_1(t) \cdot g(t)}{a \cdot W(t)} dt$$
+    </div>
+    <div class="math-block accent" style="margin-top:12px; font-size:20px;">
+      $$y_p = u_1(t)y_1(t) + u_2(t)y_2(t)$$
+    </div>
+    <div class="math-block final" style="margin-top:12px; font-size:22px; padding:20px;">
+      $$y = C_1 y_1 + C_2 y_2 + u_1 y_1 + u_2 y_2$$
+    </div>
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Important!</div>
+    <div class="box-text" style="font-size:18px;">
+      Don't forget the factor $1/a$ in the formulas! This is the coefficient of $y''$.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: The 5-Step Method -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <h2 class="anim-item">The 5-Step Method</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+    <span class="step-badge">1</span>
+    <span class="step-text" style="font-size:18px;">Solve the homogeneous equation to find $y_1(t)$ and $y_2(t)$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+    <span class="step-badge">2</span>
+    <span class="step-text" style="font-size:18px;">Compute the Wronskian: $W = y_1 y_2' - y_2 y_1'$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+    <span class="step-badge">3</span>
+    <span class="step-text" style="font-size:18px;">Find $u_1(t) = -\int \frac{y_2 g}{aW} dt$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+    <span class="step-badge">4</span>
+    <span class="step-text" style="font-size:18px;">Find $u_2(t) = \int \frac{y_1 g}{aW} dt$</span>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+    <span class="step-badge">5</span>
+    <span class="step-text" style="font-size:18px;">Assemble: $y = C_1 y_1 + C_2 y_2 + u_1 y_1 + u_2 y_2$</span>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label green">Pro Tip</div>
+    <div class="box-text" style="font-size:18px;">
+      Steps 3 and 4 (the integrations) are often the hardest part. Take your time with these!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Example 1 — y'' + y = tan(t) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Solve: $y'' + y = \tan(t)$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 1-2</span>
+    <span class="step-text" style="font-size:18px;">Homogeneous solution and Wronskian</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$r^2 + 1 = 0 \implies y_1 = \cos(t), \quad y_2 = \sin(t)$$
+    $$W = \cos^2(t) + \sin^2(t) = 1$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 3-4</span>
+    <span class="step-text" style="font-size:18px;">Find $u_1$ and $u_2$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$u_1 = -\int \sin(t) \tan(t) dt = \sin(t) - \ln|\sec(t) + \tan(t)|$$
+    $$u_2 = \int \cos(t) \tan(t) dt = -\cos(t)$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">General solution</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:20px; font-size:20px;">
+    $$y = C_1 \cos(t) + C_2 \sin(t) - \cos(t) \ln|\sec(t) + \tan(t)|$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Example 2 — y'' + 9y = 9sec²(3t) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Solve: $y'' + 9y = 9\sec^2(3t)$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 1-2</span>
+    <span class="step-text" style="font-size:18px;">Setup</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$r^2 + 9 = 0 \implies y_1 = \cos(3t), \quad y_2 = \sin(3t)$$
+    $$W = 3$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 3-4</span>
+    <span class="step-text" style="font-size:18px;">Integrate</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$u_1 = -\int \frac{\sin(3t) \cdot 9\sec^2(3t)}{3} dt = -\sec(3t)$$
+    $$u_2 = \int \frac{\cos(3t) \cdot 9\sec^2(3t)}{3} dt = \ln|\sec(3t) + \tan(3t)|$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Solution</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:20px; font-size:20px;">
+    $$y = C_1\cos(3t) + C_2\sin(3t) - 1 + \sin(3t)\ln|\sec(3t) + \tan(3t)|$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Example 3 — y'' - y = e^t sin(t) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Solve: $y'' - y = e^t \sin(t)$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 1-2</span>
+    <span class="step-text" style="font-size:18px;">Characteristic equation</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$r^2 - 1 = 0 \implies r = \pm 1$$
+    $$y_1 = e^t, \quad y_2 = e^{-t}, \quad W = -2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 3-4</span>
+    <span class="step-text" style="font-size:18px;">Integrals</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$u_1 = \frac{1}{2}\int \sin(t) dt = -\frac{1}{2}\cos(t)$$
+    $$u_2 = -\frac{1}{2}\int e^{2t}\sin(t) dt = -\frac{e^{2t}(2\sin(t) + \cos(t))}{10}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">General solution</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:20px; font-size:20px;">
+    $$y = C_1 e^t + C_2 e^{-t} - e^t\frac{2\cos(t) + \sin(t)}{5}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Example 4 — y'' + 2y' + y = t²e^{-t} -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Solve: $y'' + 2y' + y = t^2 e^{-t}$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 1-2</span>
+    <span class="step-text" style="font-size:18px;">Repeated roots</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$(r+1)^2 = 0 \implies y_1 = e^{-t}, \quad y_2 = t e^{-t}, \quad W = e^{-2t}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 3-4</span>
+    <span class="step-text" style="font-size:18px;">Find $u_1$ and $u_2$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$u_1 = -\int t^3 dt = -\frac{t^4}{4}$$
+    $$u_2 = \int t^2 dt = \frac{t^3}{3}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Particular solution</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:20px; font-size:20px;">
+    $$y = C_1 e^{-t} + C_2 t e^{-t} + \frac{t^4 e^{-t}}{12}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: UC vs VP Comparison Table -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <h2 class="anim-item">Comparison: Undetermined Coefficients vs Variation of Parameters</h2>
+
+  <div class="anim-item" style="margin-top:24px; overflow-x:auto;">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Undetermined Coefficients</th>
+          <th>Variation of Parameters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Works for which g(t)?</strong></td>
+          <td>Polynomials, exponentials, sin/cos</td>
+          <td>ANY function</td>
+        </tr>
+        <tr>
+          <td><strong>Method Complexity</strong></td>
+          <td>Easy (guess & match)</td>
+          <td>Requires integration</td>
+        </tr>
+        <tr>
+          <td><strong>Resonance</strong></td>
+          <td>Needs modification</td>
+          <td>Handles naturally</td>
+        </tr>
+        <tr>
+          <td><strong>Integration</strong></td>
+          <td>No</td>
+          <td>Yes (often hard)</td>
+        </tr>
+        <tr>
+          <td><strong>Wronskian Needed</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-col anim-item" style="margin-top:24px;">
+    <div class="highlight-box warning-box">
+      <div class="box-label amber">Use UC When...</div>
+      <div class="box-text" style="font-size:16px;">
+        $g(t)$ is polynomial, exponential, or trig. UC is faster when applicable!
+      </div>
+    </div>
+    <div class="highlight-box definition">
+      <div class="box-label blue">Use VP When...</div>
+      <div class="box-text" style="font-size:16px;">
+        $g(t)$ is exotic ($\tan$, $\sec$, $\ln$, $1/t$, etc.) or UC doesn't apply.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12: Example 5 — y'' - 2y' + y = e^t/t² -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Solve: $y'' - 2y' + y = \frac{e^t}{t^2}$</h2>
+
+  <div class="anim-item" style="color:#ef4444; font-size:16px; margin-bottom:16px;">
+    UC cannot handle $1/t^2$. VP is the only method!
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 1-2</span>
+    <span class="step-text" style="font-size:18px;">Homogeneous solution</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$(r-1)^2 = 0 \implies y_1 = e^t, \quad y_2 = t e^t, \quad W = e^{2t}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEPS 3-4</span>
+    <span class="step-text" style="font-size:18px;">Integration</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$u_1 = -\int \frac{1}{t} dt = -\ln|t|$$
+    $$u_2 = \int \frac{1}{t^2} dt = -\frac{1}{t}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Solution</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:20px; font-size:20px;">
+    $$y = C_1 e^t + C_2 t e^t - e^t(\ln|t| + 1)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13: Common Mistakes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <h2 class="anim-item">Common Mistakes to Avoid</h2>
+
+  <div class="mistakes-box anim-item">
+    <h3>⚠️ Typical Errors</h3>
+    <ul>
+      <li><strong>Forgetting the factor $1/a$:</strong> Always divide $g(t)$ by the leading coefficient!</li>
+      <li><strong>Wronskian computation:</strong> Watch for sign errors in $y_1 y_2' - y_2 y_1'$.</li>
+      <li><strong>Missing the negative sign:</strong> Remember $u_1 = -\int \frac{y_2 g}{aW} dt$ (with minus!).</li>
+      <li><strong>Not simplifying $y_p$:</strong> Terms often cancel after algebra — always expand and simplify.</li>
+      <li><strong>Using VP unnecessarily:</strong> If UC works, use it — VP is a last resort for exotic functions.</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-top:24px;">
+    <div class="box-label blue">Key Verification</div>
+    <div class="box-text" style="font-size:18px;">
+      Always verify $W \neq 0$ before proceeding. If $W = 0$, your solution functions are linearly dependent!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14: Key Takeaways -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <h2 class="anim-item">Key Takeaways & Summary</h2>
+
+  <div class="recipe-card anim-item">
+    <h4>The Variation of Parameters Method</h4>
+    <ol>
+      <li><strong>The Core Idea:</strong> Replace constants $C_1, C_2$ with functions $u_1(t), u_2(t)$.</li>
+      <li><strong>The Constraint:</strong> Impose $u_1' y_1 + u_2' y_2 = 0$ to simplify the algebra.</li>
+      <li><strong>The Wronskian:</strong> Compute $W = y_1 y_2' - y_2 y_1'$ — this is essential!</li>
+      <li><strong>The Formulas:</strong> Use $u_1 = -\int \frac{y_2 g}{aW} dt$ and $u_2 = \int \frac{y_1 g}{aW} dt$.</li>
+      <li><strong>Universal Power:</strong> VP works for ANY $g(t)$ — this is your ultimate weapon!</li>
+    </ol>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:24px;">
+    <div class="box-label green">Next Topic</div>
+    <div class="box-text" style="font-size:18px;">
+      Coming up: <strong>Euler Equations</strong> — how to handle ODEs with variable coefficients, not just constants.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1×</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch2-variation';
+const TOTAL_SLIDES = 15;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>
