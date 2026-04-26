@@ -59,7 +59,7 @@ const LECTURES = {
 
     // Slide 9: Takeaways
     `Let's recap the key takeaways. First: recognize separable form. The right-hand side must factor as a function of x, times a function of y. Second: separate, then integrate. Move all y's to one side, all x's to the other, and integrate. Don't forget the plus C! Third: never lose equilibrium solutions. When dividing by g of y, always check g of y equals zero separately. These constant solutions are easy to miss. And finally: always verify your answer by substituting back into the original equation. The complete workflow is: identify it's separable, separate, integrate, solve, and verify.`
-  ]
+  ],
 
   // ─── CH1-LINEAR: First-Order Linear Differential Equations ───
   'ch1-linear': [
