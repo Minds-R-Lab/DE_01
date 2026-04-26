@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Inverse Laplace Transform | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 140px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CUSTOM STYLES FOR CH3 ─── */
+
+  /* Mind map */
+  .mind-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+
+  .mind-map-center {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 16px;
+    padding: 24px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  }
+
+  .mind-map-branch {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .mind-map-item {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s;
+  }
+
+  .mind-map-item.highlighted {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a3f2f);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .mind-map-item.branch-left { border-color: #8b5cf6; }
+  .mind-map-item.branch-right { border-color: #f59e0b; }
+  .mind-map-item.branch-bottom { border-color: #06b6d4; }
+
+  /* Case cards */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .case-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    transition: all 0.3s;
+  }
+
+  .case-card.distinct {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .case-card.repeated {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .case-card.complex {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .case-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .case-card.distinct h3 { color: #34d399; }
+  .case-card.repeated h3 { color: #fbbf24; }
+  .case-card.complex h3 { color: #c4b5fd; }
+
+  .case-card-condition {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .case-card-solution {
+    font-size: 18px;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+
+  /* Application cards */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .app-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s;
+  }
+
+  .app-card:nth-child(2) { border-left-color: #8b5cf6; }
+  .app-card:nth-child(3) { border-left-color: #f59e0b; }
+
+  .app-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .app-card h3 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .app-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .app-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 14px 18px;
+  }
+
+  /* Reference table */
+  .reference-table {
+    width: 100%;
+    background: #1e293b;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 1px solid #334155;
+  }
+
+  .reference-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .reference-table th {
+    background: #0f172a;
+    color: #a78bfa;
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #334155;
+  }
+
+  .reference-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #334155;
+    color: #cbd5e1;
+    font-size: 16px;
+  }
+
+  .reference-table tr:last-child td { border-bottom: none; }
+
+  .reference-table .math-cell {
+    font-size: 18px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* Common mistakes box */
+  .mistakes-box {
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .mistakes-box h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mistakes-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mistakes-box li {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes-box li:before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+  }
+
+  /* Summary grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+  }
+
+  .summary-card h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .summary-card.s-distinct h4 { color: #34d399; }
+  .summary-card.s-repeated h4 { color: #fbbf24; }
+  .summary-card.s-complex h4 { color: #c4b5fd; }
+
+  .summary-card-content {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 140px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+    .case-grid, .app-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch3.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Ch3 Inverse Laplace Transform — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 17</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 0: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 3 · Laplace Transforms</div>
+  <h1 class="anim-item">Inverse Laplace Transform</h1>
+  <div class="subtitle anim-item">From s-Domain Back to Time Domain</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Mind Map — Chapter 3 Roadmap -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">The Big Picture: Laplace Transform Journey</h2>
+
+  <div class="mind-map anim-item">
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-left anim-item">Definition<br>(Direct)<span class="tag yes">Done ✓</span></div>
+    </div>
+
+    <div class="mind-map-center anim-item">
+      Laplace Transform
+    </div>
+
+    <div class="mind-map-branch">
+      <div class="mind-map-item highlighted anim-item">Inverse Transform<br>(This Lecture!)</div>
+    </div>
+
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-right anim-item">Solving ODEs<br>Step Functions</div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:40px;">
+    <div class="box-label green">Return Journey</div>
+    <div class="box-text" style="font-size:18px;">
+      We've learned to go from $f(t) \to F(s)$. Now we learn the inverse route: $F(s) \to f(t)$. This is the key to solving differential equations!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: The Inverse Transform Definition -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">Definition: Inverse Laplace Transform</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Notation & Definition</div>
+    <div class="math-block" style="margin-top:12px; font-size:24px;">
+      $$\mathcal{L}^{-1}\{F(s)\} = f(t)$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      The inverse Laplace transform "undoes" the forward transform. If $\mathcal{L}\{f(t)\} = F(s)$, then $\mathcal{L}^{-1}\{F(s)\} = f(t)$.
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Linearity Property</div>
+    <div class="math-block accent" style="margin-top:12px; font-size:22px;">
+      $$\mathcal{L}^{-1}\{aF(s) + bG(s)\} = af(t) + bg(t)$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      The inverse transform is linear: we can split sums and pull out constants.
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Key Strategy</div>
+    <div class="box-text" style="font-size:18px;">
+      Use the transform table "in reverse"! Match the s-domain function $F(s)$ to known forms, then read off the corresponding time-domain function $f(t)$.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Standard Inverse Transform Table -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">Essential Inverse Transform Pairs</h2>
+
+  <div class="reference-table anim-item">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:45%;">$F(s)$ (s-domain)</th>
+          <th style="width:45%;">$f(t) = \mathcal{L}^{-1}\{F(s)\}$ (time-domain)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="math-cell">$\frac{1}{s}$</td>
+          <td class="math-cell">$1$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{1}{s^2}$</td>
+          <td class="math-cell">$t$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{n!}{s^{n+1}}$</td>
+          <td class="math-cell">$t^n$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{1}{s-a}$</td>
+          <td class="math-cell">$e^{at}$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{b}{s^2+b^2}$</td>
+          <td class="math-cell">$\sin(bt)$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{s}{s^2+b^2}$</td>
+          <td class="math-cell">$\cos(bt)$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{b}{(s-a)^2+b^2}$</td>
+          <td class="math-cell">$e^{at}\sin(bt)$</td>
+        </tr>
+        <tr>
+          <td class="math-cell">$\frac{s-a}{(s-a)^2+b^2}$</td>
+          <td class="math-cell">$e^{at}\cos(bt)$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label blue">Memorize These!</div>
+    <div class="box-text" style="font-size:18px;">
+      These are the fundamental building blocks. You'll use them constantly to solve more complex problems through decomposition.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: Strategy Overview — Three Techniques -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-item">Three Key Techniques for Finding Inverse Transforms</h2>
+
+  <div class="case-grid anim-item">
+    <div class="case-card distinct anim-item">
+      <h3>Direct Lookup</h3>
+      <div class="case-card-condition">Simple cases</div>
+      <div class="case-card-solution">
+        Match $F(s)$ directly to the standard table and read off $f(t)$. Fast but only works for recognizable forms.
+      </div>
+    </div>
+
+    <div class="case-card repeated anim-item">
+      <h3>Partial Fractions</h3>
+      <div class="case-card-condition">Rational functions</div>
+      <div class="case-card-solution">
+        Break $F(s) = \frac{P(s)}{Q(s)}$ into simpler pieces, each matching the table. Three cases: distinct roots, repeated roots, complex roots.
+      </div>
+    </div>
+
+    <div class="case-card complex anim-item">
+      <h3>Completing the Square</h3>
+      <div class="case-card-condition">Irreducible quadratics</div>
+      <div class="case-card-solution">
+        For denominators like $(s-a)^2+b^2$, complete the square to match exponential-oscillation forms.
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label amber">Decision Tree</div>
+    <div class="box-text" style="font-size:18px;">
+      1) Look for direct table match. 2) If rational function, use partial fractions. 3) If irreducible quadratic, complete the square.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: Partial Fractions Case 1 — Distinct Real Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="section-label anim-item">Partial Fractions Case 1</div>
+  <h2 class="anim-item">Distinct Real Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Decomposition Form</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$\frac{P(s)}{(s-a)(s-b)(s-c)\cdots} = \frac{A}{s-a} + \frac{B}{s-b} + \frac{C}{s-c} + \cdots$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Each distinct linear factor becomes its own fraction with a constant numerator.
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Worked Example</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Find $\mathcal{L}^{-1}\left\{\frac{5s+3}{(s+1)(s-2)}\right\}$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$\frac{5s+3}{(s+1)(s-2)} = \frac{A}{s+1} + \frac{B}{s-2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find A and B (cover-up method)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$A = \frac{5(-1)+3}{(-1)-2} = \frac{-2}{-3} = \frac{2}{3}$$
+    $$B = \frac{5(2)+3}{(2)+1} = \frac{13}{3}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert each term using the table</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:22px;">
+    $$\mathcal{L}^{-1}\left\{\frac{2/3}{s+1} + \frac{13/3}{s-2}\right\} = \frac{2}{3}e^{-t} + \frac{13}{3}e^{2t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Partial Fractions Case 2 — Repeated Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="section-label anim-item">Partial Fractions Case 2</div>
+  <h2 class="anim-item">Repeated Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Decomposition Form</div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$\frac{P(s)}{(s-a)^n} = \frac{A_1}{s-a} + \frac{A_2}{(s-a)^2} + \cdots + \frac{A_n}{(s-a)^n}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Repeated roots generate multiple terms with increasing powers in the denominator.
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Worked Example</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Find $\mathcal{L}^{-1}\left\{\frac{2s+1}{(s-1)^3}\right\}$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose with powers</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\frac{2s+1}{(s-1)^3} = \frac{A}{s-1} + \frac{B}{(s-1)^2} + \frac{C}{(s-1)^3}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find coefficients (multiply by $(s-1)^3$ and equate)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$2s+1 = A(s-1)^2 + B(s-1) + C$$
+    $$\text{At } s=1: \quad 3 = C \quad \text{; At } s=0: \quad 1 = A - B + C$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert using $\mathcal{L}^{-1}\{n!/(s-a)^{n+1}\} = t^n e^{at}$</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:20px;">
+    $$f(t) = 2e^t + 3te^t + \frac{3}{2}t^2e^t$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Partial Fractions Case 3 — Complex Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="section-label anim-item">Partial Fractions Case 3</div>
+  <h2 class="anim-item">Complex/Irreducible Quadratic Roots</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Complex Denominator</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$\frac{P(s)}{(s^2+bs+c)} = \frac{As+B}{s^2+bs+c}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Complex roots (irreducible quadratic) require a linear numerator $As+B$.
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Worked Example</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Find $\mathcal{L}^{-1}\left\{\frac{3s+7}{s^2+4s+13}\right\}$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Complete the square in denominator</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$s^2+4s+13 = (s+2)^2+9$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Rewrite numerator in terms of $(s+2)$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$3s+7 = 3(s+2)+1 = 3(s+2) + 1$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Split and match to table forms</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$= 3 \cdot \frac{s+2}{(s+2)^2+9} + \frac{1}{3} \cdot \frac{3}{(s+2)^2+9}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Invert using exponential-oscillation forms</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:20px;">
+    $$f(t) = 3e^{-2t}\cos(3t) + \frac{1}{3}e^{-2t}\sin(3t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Heaviside Cover-Up Method -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <h2 class="anim-item">Quick Shortcut: The Heaviside Cover-Up Method</h2>
+
+  <div class="highlight-box theorem anim-item">
+    <div class="box-label purple">The Technique</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      For distinct linear factors in $\frac{P(s)}{(s-a_1)(s-a_2)\cdots}$:
+    </div>
+    <div class="math-block accent" style="margin-top:12px; font-size:20px;">
+      $$\text{To find } A_k: \text{ Cover up } (s-a_k) \text{ and evaluate at } s=a_k$$
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Worked Example</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Find $\mathcal{L}^{-1}\left\{\frac{s+5}{(s+1)(s+3)}\right\}$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">For A: Cover $(s+1)$, substitute $s=-1$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$A = \left.\frac{s+5}{s+3}\right|_{s=-1} = \frac{-1+5}{-1+3} = \frac{4}{2} = 2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">For B: Cover $(s+3)$, substitute $s=-3$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$B = \left.\frac{s+5}{s+1}\right|_{s=-3} = \frac{-3+5}{-3+1} = \frac{2}{-2} = -1$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:20px;">
+    $$f(t) = 2e^{-t} - e^{-3t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Completing the Square Detailed -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <h2 class="anim-item">Completing the Square: Systematic Approach</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Method</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      When denominator has an irreducible quadratic $(s^2+bs+c)$ or $(s-a)^2+b^2$:
+    </div>
+    <div class="box-text" style="font-size:17px; line-height:1.8;">
+      1) Complete the square in the denominator<br>
+      2) Rewrite the numerator in matching terms<br>
+      3) Split into cosine and sine parts<br>
+      4) Apply exponential-oscillation inverse formulas
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Worked Example</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Find $\mathcal{L}^{-1}\left\{\frac{2s-3}{s^2-6s+25}\right\}$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Complete the square</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$s^2-6s+25 = (s-3)^2 - 9 + 25 = (s-3)^2+16$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Rewrite numerator: $2s-3 = 2(s-3) + 3$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\frac{2(s-3)+3}{(s-3)^2+16} = \frac{2(s-3)}{(s-3)^2+16} + \frac{3}{(s-3)^2+16}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Scale sine term and invert</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$= 2\cdot\frac{s-3}{(s-3)^2+16} + \frac{3}{4}\cdot\frac{4}{(s-3)^2+16}$$
+  </div>
+
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:20px;">
+    $$f(t) = 2e^{3t}\cos(4t) + \frac{3}{4}e^{3t}\sin(4t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Worked Example — Three Distinct Real Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="section-label anim-item">Full Worked Example</div>
+  <h2 class="anim-item">Three Distinct Real Roots</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    Find $\mathcal{L}^{-1}\left\{\frac{s^2+6s+2}{(s-1)(s+2)(s+3)}\right\}$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\frac{s^2+6s+2}{(s-1)(s+2)(s+3)} = \frac{A}{s-1} + \frac{B}{s+2} + \frac{C}{s+3}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find A, B, C using cover-up</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:16px;">
+    $$A = \frac{1+6+2}{(1+2)(1+3)} = \frac{9}{12} = \frac{3}{4}$$
+    $$B = \frac{4-12+2}{(-2-1)(-2+3)} = \frac{-6}{-3} = 2$$
+    $$C = \frac{9-18+2}{(-3-1)(-3+2)} = \frac{-7}{4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert each term</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:18px;">
+    $$f(t) = \frac{3}{4}e^t + 2e^{-2t} - \frac{7}{4}e^{-3t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: Worked Example — Mixed Real & Repeated -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="section-label anim-item">Full Worked Example</div>
+  <h2 class="anim-item">Mixed Real & Repeated Roots</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    Find $\mathcal{L}^{-1}\left\{\frac{4s+5}{(s+1)^2(s-2)}\right\}$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose with repeat factor</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\frac{4s+5}{(s+1)^2(s-2)} = \frac{A}{s+1} + \frac{B}{(s+1)^2} + \frac{C}{s-2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find coefficients</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:16px;">
+    $$\text{At } s=-1: \quad B = \frac{-4+5}{-1-2} = -\frac{1}{3}$$
+    $$\text{At } s=2: \quad C = \frac{8+5}{(2+1)^2} = \frac{13}{9}$$
+    $$\text{Equating coeff of } s: \quad A + C = 0 \Rightarrow A = -\frac{13}{9}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert using $\mathcal{L}^{-1}\{1/(s-a)^2\} = te^{at}$</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:18px;">
+    $$f(t) = -\frac{13}{9}e^{-t} - \frac{1}{3}te^{-t} + \frac{13}{9}e^{2t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12: Worked Example — Mixed Real & Complex -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="section-label anim-item">Full Worked Example</div>
+  <h2 class="anim-item">Mixed Real & Complex Roots</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    Find $\mathcal{L}^{-1}\left\{\frac{s+3}{(s+1)(s^2+4)}\right\}$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose with linear and quadratic</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\frac{s+3}{(s+1)(s^2+4)} = \frac{A}{s+1} + \frac{Bs+C}{s^2+4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find A, B, C</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:16px;">
+    $$A = \frac{-1+3}{(-1)^2+4} = \frac{2}{5}$$
+    $$s+3 = A(s^2+4) + (Bs+C)(s+1)$$
+    $$\text{Coeff of } s^2: 0 = A + B \Rightarrow B = -\frac{2}{5}$$
+    $$\text{Coeff of } s^0: 3 = 4A + C \Rightarrow C = 3 - \frac{8}{5} = \frac{7}{5}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert each part</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:18px;">
+    $$f(t) = \frac{2}{5}e^{-t} - \frac{2}{5}\cos(2t) + \frac{7}{10}\sin(2t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13: Worked Example — Pure Complex Conjugates -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="section-label anim-item">Full Worked Example</div>
+  <h2 class="anim-item">Pure Complex Conjugate Pairs</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    Find $\mathcal{L}^{-1}\left\{\frac{5s}{(s^2+1)(s^2+9)}\right\}$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose with two quadratic factors</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\frac{5s}{(s^2+1)(s^2+9)} = \frac{As+B}{s^2+1} + \frac{Cs+D}{s^2+9}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find A, B, C, D by substitution and comparison</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:16px;">
+    $$5s = (As+B)(s^2+9) + (Cs+D)(s^2+1)$$
+    $$\text{Coeff of } s^3: 0 = A + C$$
+    $$\text{Coeff of } s: 5 = 9A + C \Rightarrow A = \frac{5}{8}, C = -\frac{5}{8}$$
+    $$B = D = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:18px;">
+    $$f(t) = \frac{5}{8}\cos(t) - \frac{5}{8}\cos(3t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14: Worked Example — Higher Order -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <div class="section-label anim-item">Full Worked Example</div>
+  <h2 class="anim-item">Higher-Order with Multiple Poles</h2>
+
+  <div class="anim-item" style="font-size:18px; color:#94a3b8; margin-bottom:20px;">
+    Find $\mathcal{L}^{-1}\left\{\frac{3}{s^4(s+2)}\right\}$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Decompose with powers of s and simple pole</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:16px;">
+    $$\frac{3}{s^4(s+2)} = \frac{A}{s} + \frac{B}{s^2} + \frac{C}{s^3} + \frac{D}{s^4} + \frac{E}{s+2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find coefficients</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:16px;">
+    $$\text{At } s=-2: \quad E = \frac{3}{(-2)^4} = \frac{3}{16}$$
+    $$3 = A(s+2)s^3 + B(s+2)s^2 + C(s+2)s + D(s+2) + Es^4$$
+    $$\text{Equating by powers: } A = -\frac{3}{32}, B = \frac{3}{16}, C = -\frac{3}{8}, D = \frac{3}{4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Invert using table formulas</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:16px;">
+    $$f(t) = -\frac{3}{32} + \frac{3}{16}t - \frac{3}{16}t^2 + \frac{1}{4}t^3 + \frac{3}{16}e^{-2t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 15: Common Pitfalls & Mistakes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-15">
+  <h2 class="anim-item">Common Pitfalls to Avoid</h2>
+
+  <div class="mistakes-box anim-item">
+    <h3>⚠️ Critical Errors</h3>
+    <ul>
+      <li><strong>Numerator degree ≥ denominator degree:</strong> Always do polynomial long division first! Otherwise partial fractions fails.</li>
+      <li><strong>Wrong partial fraction form for repeated roots:</strong> Repeated root $r$ of multiplicity $n$ needs ALL powers: $\frac{A_1}{s-r} + \frac{A_2}{(s-r)^2} + \cdots + \frac{A_n}{(s-r)^n}$</li>
+      <li><strong>Forgetting to complete the square:</strong> For irreducible quadratics, completing the square is essential to match the table forms!</li>
+      <li><strong>Sign errors in numerator rewriting:</strong> When rewriting $As + B$ after completing the square, double-check: $s + 3 = (s-(-3))$, not $(s+3)$.</li>
+      <li><strong>Confusing the constant in cover-up:</strong> For $\frac{P(s)}{(s-a)Q(s)}$, the residue at $s=a$ is $\frac{P(a)}{Q(a)}$, not $\frac{P(a)}{(a-a)Q(a)}$!</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label blue">Sanity Check</div>
+    <div class="box-text" style="font-size:18px;">
+      Always verify your answer: take the Laplace transform of $f(t)$ and check that you get back $F(s)$. This catches errors immediately!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 16: Summary & Key Takeaways -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-16">
+  <h2 class="anim-item">Key Takeaways & Summary</h2>
+
+  <div class="summary-grid anim-item">
+    <div class="summary-card s-distinct anim-item">
+      <h4>Direct Lookup</h4>
+      <div class="summary-card-content">
+        Memorize table of 8 basic pairs. Use for simple forms that match directly.
+      </div>
+    </div>
+
+    <div class="summary-card s-repeated anim-item">
+      <h4>Partial Fractions</h4>
+      <div class="summary-card-content">
+        Three cases: distinct real roots, repeated roots, and complex/irreducible quadratics.
+      </div>
+    </div>
+
+    <div class="summary-card s-complex anim-item">
+      <h4>Completing Square</h4>
+      <div class="summary-card-content">
+        Essential for exponential-oscillation forms. Match denominator to $(s-a)^2+b^2$.
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label green">Workflow</div>
+    <div class="box-text" style="font-size:18px; line-height:1.8;">
+      1) Check degree (numerator < denominator?)<br>
+      2) Try direct table lookup<br>
+      3) If rational function: use partial fractions<br>
+      4) For quadratic factors: complete the square<br>
+      5) Invert each piece using the table<br>
+      6) Combine and verify
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Next Up</div>
+    <div class="box-text" style="font-size:18px;">
+      Now that we can invert Laplace transforms, we can solve differential equations! The method: Take $\mathcal{L}$ of the ODE, solve in s-domain (algebra!), then use $\mathcal{L}^{-1}$ to get the solution in t-domain.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1×</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch3-inverse';
+const TOTAL_SLIDES = 17;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>

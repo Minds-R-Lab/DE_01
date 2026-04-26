@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math 4: Step Functions, Shifting & Convolution | Dr. Mohamed Mabrok</title>
@@ -17,23 +9,173 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<link rel="stylesheet" href="styles.css">
 
     <style>
-/* Page-specific styles */
-/* CSS Variables */
+        /* CSS Variables */
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --accent: #7c3aed;
+            --accent-light: #ede9fe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
 
-/* Navigation */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Container */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
 
-/* Sections */
+        /* Navigation */
+        nav {
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
 
-/* Headings */
+        nav > div:first-child {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
 
-/* Boxes */
+        .logo {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
 
-.quote-box {
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        nav a.active {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Sections */
+        section {
+            margin: 3rem 0;
+            scroll-margin-top: 80px;
+        }
+
+        section h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-light);
+        }
+
+        section h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        /* Headings */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        p {
+            margin: 1rem 0;
+            line-height: 1.8;
+        }
+
+        /* Boxes */
+        .definition-box, .theorem-box, .tip-box, .warning-box, .quote-box {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            border-left: 5px solid;
+        }
+
+        .definition-box {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--text);
+        }
+
+        .theorem-box {
+            background-color: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .tip-box {
+            background-color: var(--success-light);
+            border-color: var(--success);
+            color: var(--text);
+        }
+
+        .warning-box {
+            background-color: var(--warning-light);
+            border-color: var(--warning);
+            color: var(--text);
+        }
+
+        .quote-box {
             background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
             border-color: var(--warning);
             color: var(--text);
@@ -41,26 +183,45 @@
             font-size: 1.05rem;
         }
 
-.quote-box.islamic {
+        .quote-box.islamic {
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             border-color: var(--success);
             text-align: center;
             line-height: 2;
         }
 
-.quote-attribution {
+        .quote-attribution {
             margin-top: 0.75rem;
             font-size: 0.95rem;
             opacity: 0.9;
         }
 
-/* Math Display */
+        /* Math Display */
+        .math-display {
+            background-color: var(--card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
 
-/* Step List */
+        /* Step List */
+        .step-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
 
-/* Controls & Sliders */
+        .step-list li {
+            padding: 1rem;
+            margin: 0.75rem 0;
+            background-color: var(--card);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius);
+        }
 
-.controls {
+        /* Controls & Sliders */
+        .controls {
             background-color: var(--card);
             padding: 1.5rem;
             border-radius: var(--radius);
@@ -68,18 +229,18 @@
             margin: 1.5rem 0;
         }
 
-.slider-group {
+        .slider-group {
             margin: 1rem 0;
             display: grid;
             gap: 0.75rem;
         }
 
-.slider-group label {
+        .slider-group label {
             font-weight: 500;
             color: var(--text);
         }
 
-input[type="range"] {
+        input[type="range"] {
             width: 100%;
             height: 6px;
             border-radius: 3px;
@@ -88,7 +249,7 @@ input[type="range"] {
             -webkit-appearance: none;
         }
 
-input[type="range"]::-webkit-slider-thumb {
+        input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 18px;
@@ -99,11 +260,11 @@ input[type="range"]::-webkit-slider-thumb {
             transition: background 0.3s;
         }
 
-input[type="range"]::-webkit-slider-thumb:hover {
+        input[type="range"]::-webkit-slider-thumb:hover {
             background: var(--accent);
         }
 
-input[type="range"]::-moz-range-thumb {
+        input[type="range"]::-moz-range-thumb {
             width: 18px;
             height: 18px;
             border-radius: 50%;
@@ -112,9 +273,8 @@ input[type="range"]::-moz-range-thumb {
             border: none;
         }
 
-/* Buttons */
-
-button {
+        /* Buttons */
+        button {
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: var(--radius);
@@ -126,23 +286,53 @@ button {
             font-size: 1rem;
         }
 
-button:hover {
+        button:hover {
             background-color: var(--accent);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-button.secondary {
+        button.secondary {
             background-color: var(--text-muted);
         }
 
-button.secondary:hover {
+        button.secondary:hover {
             background-color: var(--text);
         }
 
-/* Collapsible */
+        /* Collapsible */
+        .collapsible {
+            background-color: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin: 0.75rem 0;
+            text-align: left;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
 
-.content {
+        .collapsible:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .collapsible::after {
+            content: "▶";
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active::after {
+            transform: rotate(90deg);
+        }
+
+        .content {
             display: none;
             padding: 1.5rem;
             background-color: var(--bg);
@@ -152,17 +342,16 @@ button.secondary:hover {
             margin-bottom: 0.75rem;
         }
 
-.content.active {
+        .content.active {
             display: block;
         }
 
-.content p {
+        .content p {
             margin: 0.75rem 0;
         }
 
-/* Quiz */
-
-.quiz {
+        /* Quiz */
+        .quiz {
             background-color: var(--card);
             padding: 1.5rem;
             border-radius: var(--radius);
@@ -170,30 +359,151 @@ button.secondary:hover {
             margin: 1.5rem 0;
         }
 
-/* Plot Container */
+        .quiz-question {
+            margin: 1.5rem 0;
+        }
 
-.plot-title {
+        .quiz-question h4 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .quiz-options {
+            list-style: none;
+            margin: 0.75rem 0;
+        }
+
+        .quiz-options li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background-color: var(--bg);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--border);
+        }
+
+        .quiz-options li:hover {
+            background-color: var(--primary-light);
+            border-left-color: var(--primary);
+        }
+
+        .quiz-options li.selected {
+            background-color: var(--success-light);
+            border-left-color: var(--success);
+            font-weight: 500;
+        }
+
+        .quiz-options li.incorrect {
+            background-color: var(--danger-light);
+            border-left-color: var(--danger);
+        }
+
+        .quiz-feedback {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .quiz-feedback.correct {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background-color: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .progress-bar {
+            background-color: var(--border);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.75rem 0;
+        }
+
+        .progress-fill {
+            background-color: var(--success);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Plot Container */
+        .plot-container {
+            background-color: var(--card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .plot-title {
             font-weight: 600;
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
 
-/* Responsive */
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
 
-/* Misc */
+            nav {
+                padding: 0.75rem 1rem;
+            }
 
-.property-list {
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            nav a {
+                padding: 0.4rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            section h3 {
+                font-size: 1.25rem;
+            }
+
+            .math-display {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Misc */
+        .example-box {
+            background-color: var(--primary-light);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin: 0.75rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .property-list {
             list-style-position: inside;
             margin: 1rem 0;
         }
 
-.property-list li {
+        .property-list li {
             margin: 0.5rem 0;
             padding-left: 0.5rem;
         }
 
-code {
+        code {
             background-color: var(--bg);
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
@@ -201,29 +511,40 @@ code {
             color: var(--accent);
         }
 
-/* Practice problem toggle */
-</style>
-<script src="course.js"></script>
+        footer {
+            background-color: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+  /* Practice problem toggle */
+  .example-content { display: none; padding: 0; }
+  .example-content.active { display: block; padding: 1.5rem; }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="ch3-overview.html">3.0 Overview</a>
-            <a href="ch3-definition.html">3.1 Definition &amp; Properties</a>
-            <a href="ch3-inverse.html">3.2 Inverse Transform</a>
-            <a href="ch3-solving-odes.html">3.3 Solving IVPs</a>
-            <a href="ch3-step-convolution.html" class="active">3.4 Step &amp; Convolution</a>
-            <span style="color:var(--border);margin:0 0.25rem;">|</span>
-            <a href="#intro">Intro</a>
-            <a href="#step">Step Functions</a>
-            <a href="#shifting">Second Shifting</a>
-            <a href="#convolution">Convolution</a>
-            <a href="#examples">Examples</a>
-            <a href="#visualizer">Visualizer</a>
-            <a href="#practice">Practice</a>
+        <div>
+            <div class="logo"><a href="index.html" style="text-decoration:none;color:var(--primary);">DE Course</a></div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="ch3-overview.html">3.0 Overview</a>
+                <a href="ch3-definition.html">3.1 Definition &amp; Properties</a>
+                <a href="ch3-inverse.html">3.2 Inverse Transform</a>
+                <a href="ch3-solving-odes.html">3.3 Solving IVPs</a>
+                <a href="ch3-step-convolution.html" class="active">3.4 Step &amp; Convolution</a>
+                <span style="color:var(--border);margin:0 0.25rem;">|</span>
+                <a href="#intro">Intro</a>
+                <a href="#step">Step Functions</a>
+                <a href="#shifting">Second Shifting</a>
+                <a href="#convolution">Convolution</a>
+                <a href="#examples">Examples</a>
+                <a href="#visualizer">Visualizer</a>
+                <a href="#practice">Practice</a>
+            </div>
         </div>
     </nav>
 
@@ -233,6 +554,8 @@ code {
         <section id="intro">
             <h1>Step Functions, Second Shifting &amp; Convolution</h1>
             <p class="subtitle">Handling Real-World Signals and System Responses</p>
+
+            <a href="lectures/ch3-step-convolution.html" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#2563eb,#7c3aed); color:#fff; padding:0.7rem 1.4rem; border-radius:10px; text-decoration:none; font-weight:600; font-size:0.95rem; margin-bottom:1.2rem; box-shadow:0 4px 12px rgba(37,99,235,0.3); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(37,99,235,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 12px rgba(37,99,235,0.3)'">&#x25B6;&#xFE0F; Watch Video Lecture</a>
 
             <div class="definition-box">
                 <strong>Learning Objectives:</strong>
@@ -539,7 +862,7 @@ code {
             <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 1: Find $\mathcal{L}^{-1}\left\{\dfrac{3e^{-2s}}{s^2+9}\right\}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -556,7 +879,7 @@ code {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 2: Find $\mathcal{L}^{-1}\left\{\dfrac{se^{-\pi s}}{s^2+2s+5}\right\}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -578,7 +901,7 @@ code {
             </div>
 
             <div class="example-item">
-                <div class="example-header" onclick="togglePractice(this)">
+                <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                     <span>Practice 3: Use convolution to find $\mathcal{L}^{-1}\left\{\dfrac{1}{s^2(s^2+1)}\right\}$</span>
                     <span class="toggle-icon">▼</span>
                 </div>
@@ -742,7 +1065,16 @@ code {
 
     <script>
         // KaTeX rendering
-
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+        });
 
         // Collapsible functionality
         function setupCollapsibles() {
@@ -765,12 +1097,12 @@ code {
             if (correctness === 'correct') {
                 element.classList.add('selected');
                 const feedbackDiv = document.getElementById(questionId + '-feedback');
-                feedbackDiv.className = 'quiz-feedback show correct';
+                feedbackDiv.className = 'quiz-feedback correct';
                 feedbackDiv.textContent = '✓ Correct!';
             } else {
                 element.classList.add('incorrect');
                 const feedbackDiv = document.getElementById(questionId + '-feedback');
-                feedbackDiv.className = 'quiz-feedback show incorrect';
+                feedbackDiv.className = 'quiz-feedback incorrect';
                 feedbackDiv.textContent = '✗ Incorrect. Try again!';
             }
         }
@@ -885,8 +1217,32 @@ code {
         });
     </script>
 <script>
+function toggleCollapsible(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        if (icon) icon.textContent = '▼';
+    } else {
+        content.classList.add('active');
+        if (icon) icon.textContent = '▲';
+    }
+}
 </script>
     <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.classList.add('active');
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
     </script>
 </body>
 </html>

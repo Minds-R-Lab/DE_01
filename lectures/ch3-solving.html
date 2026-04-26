@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Solving ODEs with Laplace Transforms | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 140px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CUSTOM STYLES FOR CH3 ─── */
+
+  /* Mind map */
+  .mind-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+
+  .mind-map-center {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 16px;
+    padding: 24px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  }
+
+  .mind-map-branch {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .mind-map-item {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s;
+  }
+
+  .mind-map-item.highlighted {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a3f2f);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .mind-map-item.branch-left { border-color: #8b5cf6; }
+  .mind-map-item.branch-right { border-color: #f59e0b; }
+  .mind-map-item.branch-center { border-color: #10b981; }
+
+  /* Workflow steps */
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .workflow-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+    text-align: center;
+  }
+
+  .workflow-card h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #60a5fa;
+  }
+
+  .workflow-card-step {
+    font-size: 48px;
+    color: #3b82f6;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .workflow-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .workflow-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 12px 16px;
+  }
+
+  /* Example cards */
+  .example-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .example-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #10b981;
+  }
+
+  .example-card h3 {
+    font-size: 20px;
+    color: #34d399;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .example-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .example-card .math-block {
+    font-size: 20px;
+    margin: 12px 0;
+    padding: 16px 20px;
+  }
+
+  /* Application grid */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .app-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s;
+  }
+
+  .app-card:nth-child(2) { border-left-color: #8b5cf6; }
+
+  .app-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .app-card h3 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .app-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .app-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 14px 18px;
+  }
+
+  /* Common mistakes box */
+  .mistakes-box {
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .mistakes-box h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mistakes-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mistakes-box li {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes-box li:before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+  }
+
+  /* Summary grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+  }
+
+  .summary-card h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #60a5fa;
+  }
+
+  .summary-card-content {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 140px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+    .workflow-grid, .app-grid, .example-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch3.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Ch3 Solving ODEs with Laplace — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 17</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 0: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 3 · Laplace Transforms</div>
+  <h1 class="anim-item">Solving ODEs with Laplace Transforms</h1>
+  <div class="subtitle anim-item">Transform, Solve Algebraically, Invert</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Mind Map — Chapter 3 Roadmap -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">The Big Picture: Laplace Transform in Context</h2>
+
+  <div class="mind-map anim-item">
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-left anim-item">Definition & Properties ✓</div>
+      <div class="mind-map-item branch-left anim-item">Inverse Laplace ✓</div>
+    </div>
+
+    <div class="mind-map-center anim-item">
+      Laplace Transform
+    </div>
+
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-center highlighted anim-item">Solving ODEs — THIS LECTURE!</div>
+    </div>
+  </div>
+
+  <div class="mind-map anim-item" style="margin-top:40px;">
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-right anim-item">Step Functions & Discontinuities</div>
+      <div class="mind-map-item branch-right anim-item" style="font-size:15px;">Convolution Theorem</div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label green">The Payoff</div>
+    <div class="box-text" style="font-size:18px;">
+      Solve any linear constant-coefficient ODE with initial conditions in just 3 steps. No guessing!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: The Big Idea — Transform Method -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">The 3-Step Method: The Big Idea</h2>
+
+  <div class="workflow-grid anim-item">
+    <div class="workflow-card anim-item">
+      <div class="workflow-card-step">1</div>
+      <h3>Transform</h3>
+      <div class="workflow-card-text">
+        Apply Laplace transform to both sides of the ODE
+      </div>
+      <div class="math-block accent" style="font-size:16px; margin-top:12px;">
+        $$\mathcal{L}\{f(t)\} = F(s)$$
+      </div>
+    </div>
+
+    <div class="workflow-card anim-item">
+      <div class="workflow-card-step">2</div>
+      <h3>Solve</h3>
+      <div class="workflow-card-text">
+        Solve for $Y(s)$ algebraically (it's now an algebra problem!)
+      </div>
+      <div class="math-block accent" style="font-size:16px; margin-top:12px;">
+        $$Y(s) = \frac{\text{algebraic expression}}{s}$$
+      </div>
+    </div>
+
+    <div class="workflow-card anim-item">
+      <div class="workflow-card-step">3</div>
+      <h3>Invert</h3>
+      <div class="workflow-card-text">
+        Apply inverse Laplace to get $y(t)$
+      </div>
+      <div class="math-block accent" style="font-size:16px; margin-top:12px;">
+        $$y(t) = \mathcal{L}^{-1}\{Y(s)\}$$
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:24px;">
+    <div class="box-label green">The Magic!</div>
+    <div class="box-text" style="font-size:18px;">
+      <strong>Derivatives become polynomials in $s$!</strong> Initial conditions are automatically built in. No homogeneous/particular solution dance — just algebra.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Transform of Derivatives (Review) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">Key Formulas: Transform of Derivatives</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">First-Order Derivative</div>
+    <div class="math-block" style="margin-top:12px; font-size:24px;">
+      $$\mathcal{L}\{y'\} = sY(s) - y(0)$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      The initial condition $y(0)$ is automatically included!
+    </div>
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-top:20px;">
+    <div class="box-label blue">Second-Order Derivative</div>
+    <div class="math-block" style="margin-top:12px; font-size:24px;">
+      $$\mathcal{L}\{y''\} = s^2Y(s) - sy(0) - y'(0)$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Both initial conditions $y(0)$ and $y'(0)$ appear automatically!
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Why This Matters</div>
+    <div class="box-text" style="font-size:18px;">
+      In classical methods, you find the general solution first, then apply ICs at the end. With Laplace, initial conditions are <strong>baked in from the start</strong>. This is a HUGE advantage!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: The 6-Step Solution Method -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-item">The Complete 6-Step Method</h2>
+
+  <div class="anim-item">
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+      <span class="step-badge">STEP 1</span>
+      <span class="step-text" style="font-size:20px;">Take $\mathcal{L}\{\}$ of both sides of the ODE</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top:16px;">
+      <span class="step-badge">STEP 2</span>
+      <span class="step-text" style="font-size:20px;">Use derivative transform formulas to substitute</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top:16px;">
+      <span class="step-badge">STEP 3</span>
+      <span class="step-text" style="font-size:20px;">Plug in known initial conditions</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top:16px;">
+      <span class="step-badge">STEP 4</span>
+      <span class="step-text" style="font-size:20px;">Collect all terms with $Y(s)$ on one side</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px; margin-top:16px;">
+      <span class="step-badge">STEP 5</span>
+      <span class="step-text" style="font-size:20px;">Solve for $Y(s)$ — pure algebra!</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px; margin-top:16px;">
+      <span class="step-badge">STEP 6</span>
+      <span class="step-text" style="font-size:20px;">Apply $\mathcal{L}^{-1}\{\}$ to find $y(t)$</span>
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:24px;">
+    <div class="box-label green">Result</div>
+    <div class="box-text" style="font-size:18px;">
+      You get the <strong>complete solution</strong> satisfying both the ODE and all initial conditions in one go!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: Transfer Function -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <h2 class="anim-item">The Transfer Function: System Characterization</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Transfer Function Definition</div>
+    <div class="math-block" style="margin-top:12px; font-size:24px;">
+      $$G(s) = \frac{1}{as^2 + bs + c}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      For a general linear ODE: $ay'' + by' + cy = f(t)$, the transfer function $G(s)$ captures the system's response characteristics. It depends <strong>only on the ODE itself</strong>, not on the forcing function or initial conditions.
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Complete Solution Structure</div>
+    <div class="math-block accent" style="margin-top:12px; font-size:20px;">
+      $$Y(s) = G(s) \cdot [F(s) + \text{IC terms}]$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      The total response combines the <strong>forced response</strong> (from $F(s)$) and the <strong>natural response</strong> (from initial conditions).
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label blue">Key Insight</div>
+    <div class="box-text" style="font-size:18px;">
+      Once you know $G(s)$, you understand how the system responds to <strong>any</strong> input. This is why transfer functions are central to control theory and system analysis!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Example 1 — First-Order IVP -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="section-label anim-item">Worked Example 1</div>
+  <h2 class="anim-item">First-Order IVP: $y' + 2y = 6$, $y(0) = 1$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace of both sides</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$\mathcal{L}\{y'\} + 2\mathcal{L}\{y\} = \mathcal{L}\{6\}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Apply derivative formula and IC</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$sY - 1 + 2Y = \frac{6}{s}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Collect $Y(s)$ terms and solve</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$(s + 2)Y = \frac{6}{s} + 1 = \frac{s + 6}{s}$$
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{s + 6}{s(s + 2)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Partial fractions</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{3}{s} - \frac{2}{s + 2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Invert using tables</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:24px;">
+    $$y(t) = 3 - 2e^{-2t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Example 2 — Second-Order Homogeneous -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="section-label anim-item">Worked Example 2</div>
+  <h2 class="anim-item">Second-Order Homogeneous: $y'' + 4y = 0$, $y(0) = 3$, $y'(0) = -2$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace and apply formulas</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$s^2Y - 3s + 2 + 4Y = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Solve for $Y(s)$</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$(s^2 + 4)Y = 3s - 2$$
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{3s}{s^2+4} - \frac{2}{s^2+4} = 3\frac{s}{s^2+4} - \frac{1}{2}\frac{2}{s^2+4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:24px;">
+    $$y(t) = 3\cos(2t) - \sin(2t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Example 3 — Driven Second-Order -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="section-label anim-item">Worked Example 3</div>
+  <h2 class="anim-item">Driven System: $y'' + y = \sin(2t)$, $y(0) = 0$, $y'(0) = 0$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace and apply</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$s^2Y + Y = \frac{2}{s^2+4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Solve for $Y(s)$</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{2}{(s^2+1)(s^2+4)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Partial fractions with two quadratics</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$Y = \frac{2/3}{s^2+1} - \frac{2/3}{s^2+4}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:22px;">
+    $$y(t) = \frac{2}{3}\sin(t) - \frac{1}{3}\sin(2t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Example 4 — Damped System -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="section-label anim-item">Worked Example 4</div>
+  <h2 class="anim-item">Damped Oscillator: $y'' + 4y' + 3y = 0$, $y(0) = 1$, $y'(0) = 0$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace and apply</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$s^2Y - s + 4(sY - 1) + 3Y = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Solve for $Y(s)$</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$(s^2 + 4s + 3)Y = s + 4$$
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{s + 4}{(s+1)(s+3)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Partial fractions</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{3/2}{s+1} - \frac{1/2}{s+3}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:24px;">
+    $$y(t) = \frac{3}{2}e^{-t} - \frac{1}{2}e^{-3t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Example 5 — Exponential Forcing -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="section-label anim-item">Worked Example 5</div>
+  <h2 class="anim-item">Exponential Forcing: $y'' - y = e^{2t}$, $y(0) = 0$, $y'(0) = 1$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace and apply</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$s^2Y - 1 - Y = \frac{1}{s-2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Solve for $Y(s)$</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$(s^2 - 1)Y = 1 + \frac{1}{s-2} = \frac{s-1}{s-2}$$
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{s-1}{(s-1)(s+1)(s-2)} = \frac{1}{(s+1)(s-2)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Partial fractions</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = -\frac{1/3}{s+1} + \frac{1/3}{s-2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:24px;">
+    $$y(t) = -\frac{1}{3}e^{-t} + \frac{1}{3}e^{2t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: Example 6 — Repeated Roots -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="section-label anim-item">Worked Example 6</div>
+  <h2 class="anim-item">Repeated Roots: $y'' - 2y' + y = 0$, $y(0) = 1$, $y'(0) = 3$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace and apply</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$s^2Y - s - 3 - 2(sY - 1) + Y = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Solve for $Y(s)$</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$(s^2 - 2s + 1)Y = s + 1$$
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{s+1}{(s-1)^2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Partial fractions (repeated root)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{(s-1)+2}{(s-1)^2} = \frac{1}{s-1} + \frac{2}{(s-1)^2}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Invert (use $\mathcal{L}^{-1}\{\frac{1}{(s-a)^2}\} = te^{at}$)</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:24px;">
+    $$y(t) = e^{t} + 2te^{t} = (1+2t)e^{t}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12: Example 7 — Complex Roots with Forcing -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="section-label anim-item">Worked Example 7</div>
+  <h2 class="anim-item">Complex Roots + Constant Forcing: $y'' + 2y' + 5y = 10$, $y(0) = 0$, $y'(0) = 0$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Take Laplace and apply</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$s^2Y + 2sY + 5Y = \frac{10}{s}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Solve for $Y(s)$</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$Y = \frac{10}{s(s^2+2s+5)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Partial fractions: $\frac{A}{s} + \frac{Bs+C}{s^2+2s+5}$ where $s^2+2s+5 = (s+1)^2+4$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$A = 2, \quad B = -2, \quad C = -4$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Invert</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:20px;">
+    $$y(t) = 2 - 2e^{-t}\cos(2t) - e^{-t}\sin(2t)$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13: Example 8 — RLC Circuit Application -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="section-label anim-item">Real-World Application</div>
+  <h2 class="anim-item">RLC Circuit with Constant Voltage</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">RLC Circuit Equation</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$LQ'' + RQ' + \frac{Q}{C} = V(t)$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:16px;">
+      where $Q(t)$ is charge, $L$ is inductance, $R$ is resistance, $C$ is capacitance, $V(t)$ is applied voltage.
+    </div>
+  </div>
+
+  <div class="example-card anim-item">
+    <h3>Numerical Example</h3>
+    <div class="example-card-text">
+      Given: $L=1$ H, $R=4$ Ω, $C=1/3$ F, $V=10$ V (constant), $Q(0)=0$, $Q'(0)=0$
+    </div>
+    <div class="math-block accent" style="font-size:18px; margin-top:12px;">
+      $$Q'' + 4Q' + 3Q = 10$$
+    </div>
+    <div class="example-card-text" style="margin-top:14px;">
+      Laplace transform gives:
+    </div>
+    <div class="math-block accent" style="font-size:18px;">
+      $$Y = \frac{10}{s(s^2+4s+3)} = \frac{10}{s(s+1)(s+3)}$$
+    </div>
+    <div class="example-card-text" style="margin-top:14px;">
+      After partial fractions and inversion:
+    </div>
+    <div class="math-block final" style="font-size:20px;">
+      $$Q(t) = \frac{10}{3} - 5e^{-t} + \frac{5}{3}e^{-3t}$$
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item">
+    <div class="box-label green">Physical Interpretation</div>
+    <div class="box-text" style="font-size:16px;">
+      The charge exponentially approaches $10/3$ coulombs (steady state) from below, with the transient decaying as two exponential terms.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14: Laplace vs Classical Methods -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <h2 class="anim-item">Laplace Transform vs Classical Methods</h2>
+
+  <div class="two-col anim-item">
+    <div class="anim-item">
+      <div class="highlight-box warning-box">
+        <div class="box-label amber">Classical Method</div>
+        <div class="box-text" style="font-size:16px; margin-top:12px;">
+          1. Guess solution form<br>
+          2. Solve auxiliary/characteristic equation<br>
+          3. Find homogeneous solution<br>
+          4. Find particular solution (undetermined coefficients, variation of parameters)<br>
+          5. Apply initial conditions at the end to find constants
+        </div>
+      </div>
+    </div>
+
+    <div class="anim-item">
+      <div class="highlight-box success">
+        <div class="box-label green">Laplace Method</div>
+        <div class="box-text" style="font-size:16px; margin-top:12px;">
+          1. Transform both sides<br>
+          2. Solve algebraically for $Y(s)$ (ICs built in!)<br>
+          3. Use partial fractions<br>
+          4. Invert to get $y(t)$<br>
+          <br>
+          Done! The complete solution with all ICs satisfied.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label blue">When to Use Each</div>
+    <div class="box-text" style="font-size:16px;">
+      <strong>Classical:</strong> Fast for simple equations, good for gaining intuition.<br>
+      <strong>Laplace:</strong> Preferred for systems with ICs, discontinuous forcing (step functions), convolution, and complex systems. Works for <strong>all</strong> linear constant-coefficient ODEs.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 15: Common Pitfalls -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-15">
+  <h2 class="anim-item">Common Pitfalls & Mistakes</h2>
+
+  <div class="mistakes-box anim-item">
+    <h3>⚠️ Mistakes to Avoid</h3>
+    <ul>
+      <li><strong>Forgetting IC terms in derivative transforms:</strong> $\mathcal{L}\{y''\}$ MUST include both $y(0)$ and $y'(0)$ terms. Don't skip them!</li>
+      <li><strong>Algebra errors solving for $Y(s)$:</strong> Keep track of signs carefully. It's easy to drop a minus sign and get the wrong answer.</li>
+      <li><strong>Wrong partial fraction form:</strong> For quadratic denominators like $(s^2+1)$, use $\frac{As+B}{s^2+1}$, not $\frac{A}{s^2+1}$.</li>
+      <li><strong>Not simplifying before inversion:</strong> Always cancel common factors and simplify $Y(s)$ completely before inverting.</li>
+      <li><strong>Mixing up the inverse transforms:</strong> Memorize: $\mathcal{L}^{-1}\{\frac{1}{s-a}\} = e^{at}$ and $\mathcal{L}^{-1}\{\frac{1}{(s-a)^2}\} = te^{at}$, etc.</li>
+      <li><strong>Forgetting to check your answer:</strong> If time permits, verify: does $y(t)$ satisfy the ODE? Do the ICs check out?</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 16: Key Takeaways & Summary -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-16">
+  <h2 class="anim-item">Key Takeaways & Summary</h2>
+
+  <div class="summary-grid anim-item">
+    <div class="summary-card anim-item">
+      <h4>The 3-Step Workflow</h4>
+      <div class="summary-card-content">
+        <strong>1. Transform</strong> both sides of the ODE<br>
+        <strong>2. Solve</strong> for $Y(s)$ algebraically<br>
+        <strong>3. Invert</strong> to get $y(t)$
+      </div>
+    </div>
+
+    <div class="summary-card anim-item">
+      <h4>Derivative Formulas</h4>
+      <div class="summary-card-content">
+        $\mathcal{L}\{y'\} = sY(s) - y(0)$<br>
+        $\mathcal{L}\{y''\} = s^2Y(s) - sy(0) - y'(0)$<br>
+        ICs are built in!
+      </div>
+    </div>
+
+    <div class="summary-card anim-item">
+      <h4>Transfer Function</h4>
+      <div class="summary-card-content">
+        $G(s) = \frac{1}{\text{characteristic polynomial}}$<br>
+        Captures system response independently of input/ICs
+      </div>
+    </div>
+
+    <div class="summary-card anim-item">
+      <h4>Works for All Linear Constant-Coeff ODEs</h4>
+      <div class="summary-card-content">
+        First-order, second-order, higher-order<br>
+        Homogeneous, non-homogeneous<br>
+        Any forcing function
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label blue">Next Up</div>
+    <div class="box-text" style="font-size:18px;">
+      <strong>Step Functions & Convolution!</strong> What happens when the forcing function is discontinuous (switches on/off)? Laplace handles this elegantly using the Heaviside step function and convolution theorem.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1×</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch3-solving';
+const TOTAL_SLIDES = 17;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>

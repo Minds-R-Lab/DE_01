@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P9F00LPZD5');
-</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Math 4: Laplace Transform — Definition & Properties | Dr. Mohamed Mabrok</title>
@@ -17,41 +9,469 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
-<link rel="stylesheet" href="styles.css">
 
   <style>
-/* Page-specific styles */
-/* Navigation */
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+    }
 
-/* Container */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* Sections */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+    }
 
-/* Boxes */
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-/* Math Display */
+    nav .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
 
-/* Quote Styles */
+    nav .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
-/* Lists */
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
 
-/* Collapsible */
+    nav a:hover {
+      color: var(--primary);
+    }
 
-/* Table Styles */
+    nav a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
 
-/* Quiz Styles */
+    /* Container */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 6rem 2rem 2rem;
+    }
 
-/* Visualizer */
+    /* Sections */
+    section {
+      margin: 3rem 0;
+      scroll-margin-top: 5rem;
+    }
 
-/* Responsive */
+    section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
 
-/* Highlights */
+    section h2 {
+      font-size: 1.75rem;
+      margin: 2rem 0 1rem;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent-light);
+      padding-bottom: 0.5rem;
+    }
 
-/* Footer */
+    section h3 {
+      font-size: 1.35rem;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--text);
+    }
 
-/* Practice problem toggle */
-</style>
-<script src="course.js"></script>
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Boxes */
+    .definition-box, .theorem-box, .example-box, .warning-box, .tip-box {
+      border-left: 5px solid;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: var(--radius);
+      background: var(--card);
+    }
+
+    .definition-box {
+      border-left-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .theorem-box {
+      border-left-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .example-box {
+      border-left-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .warning-box {
+      border-left-color: var(--warning);
+      background: var(--warning-light);
+    }
+
+    .tip-box {
+      border-left-color: var(--success);
+      background: var(--success-light);
+    }
+
+    .definition-box h3, .theorem-box h3, .example-box h3, .warning-box h3, .tip-box h3 {
+      margin-top: 0;
+    }
+
+    /* Math Display */
+    .math-display {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .katex-display {
+      margin: 1.5rem 0 !important;
+    }
+
+    /* Quote Styles */
+    .historical-quote {
+      border-left: 5px solid var(--warning);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #fef3c7, #fcd34d);
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    .islamic-verse {
+      border-left: 5px solid var(--success);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      text-align: right;
+      font-size: 1.05rem;
+    }
+
+    .islamic-verse .arabic {
+      font-size: 1.3rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .islamic-verse .translation {
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Lists */
+    ol, ul {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Collapsible */
+    .collapsible {
+      margin: 1rem 0;
+    }
+
+    .collapsible-toggle {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary-light);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+
+    .collapsible-toggle:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .arrow {
+      display: inline-block;
+      transition: transform 0.3s;
+      font-size: 1.2rem;
+    }
+
+    .collapsible-toggle.active .arrow {
+      transform: rotate(90deg);
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+
+    .collapsible-content.active {
+      max-height: 2000px;
+      padding: 1.5rem;
+    }
+
+    .solution-step {
+      margin: 1rem 0;
+      padding: 0.75rem;
+      background: rgba(37, 99, 235, 0.05);
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    thead {
+      background: var(--primary);
+      color: white;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(37, 99, 235, 0.03);
+    }
+
+    tbody tr:hover {
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    /* Quiz Styles */
+    .quiz-question {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .choice-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      text-align: left;
+      background: var(--primary-light);
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .choice-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .choice-btn.correct {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .choice-btn.incorrect {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--success-light);
+      color: var(--text);
+      border-left: 4px solid var(--success);
+    }
+
+    .quiz-feedback.incorrect {
+      background: var(--danger-light);
+      color: var(--text);
+      border-left: 4px solid var(--danger);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      margin: 1rem 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      transition: width 0.3s;
+    }
+
+    /* Visualizer */
+    .visualizer-controls {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .control-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .control-group select,
+    .control-group input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .plot-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .plot-container {
+        grid-template-columns: 1fr;
+      }
+      nav .nav-links {
+        gap: 1rem;
+      }
+      nav {
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      section h1 {
+        font-size: 2rem;
+      }
+      section h2 {
+        font-size: 1.35rem;
+      }
+      .container {
+        padding: 5rem 1rem 2rem;
+      }
+    }
+
+    /* Highlights */
+    .highlight {
+      background: #fef08a;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+  /* Practice problem toggle */
+  .example-content { display: none; padding: 0; }
+  .example-content.active { display: block; padding: 1.5rem; }
+  </style>
 </head>
 <body>
 
@@ -81,6 +501,8 @@
   <section id="intro">
     <h1>The Laplace Transform: Definition &amp; Properties</h1>
     <p class="subtitle">Converting Calculus to Algebra</p>
+
+    <a href="lectures/ch3-definition.html" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg,#2563eb,#7c3aed); color:#fff; padding:0.7rem 1.4rem; border-radius:10px; text-decoration:none; font-weight:600; font-size:0.95rem; margin-bottom:1.2rem; box-shadow:0 4px 12px rgba(37,99,235,0.3); transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(37,99,235,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 12px rgba(37,99,235,0.3)'">&#x25B6;&#xFE0F; Watch Video Lecture</a>
 
     <div class="definition-box">
       <h3>Learning Objectives</h3>
@@ -518,7 +940,7 @@
     <p style="color: #64748b; margin-bottom: 1.5rem;">These problems are similar in style and difficulty to past exam questions. Click each problem to reveal the step-by-step solution.</p>
 
     <div class="example-item">
-      <div class="example-header" onclick="togglePractice(this)">
+      <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
         <span>Practice 1: Compute $\mathcal{L}\{t^3 e^{-2t}\}$</span>
         <span class="toggle-icon">▼</span>
       </div>
@@ -535,7 +957,7 @@
     </div>
 
     <div class="example-item">
-      <div class="example-header" onclick="togglePractice(this)">
+      <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
         <span>Practice 2: Compute $\mathcal{L}\{e^{3t}\cos(4t)\}$</span>
         <span class="toggle-icon">▼</span>
       </div>
@@ -554,7 +976,7 @@
     </div>
 
     <div class="example-item">
-      <div class="example-header" onclick="togglePractice(this)">
+      <div class="example-header" onclick="togglePractice(this)" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
         <span>Practice 3: Compute $\mathcal{L}\{f(t)\}$ for a piecewise function</span>
         <span class="toggle-icon">▼</span>
       </div>
@@ -607,9 +1029,9 @@
       </div>
     </div>
 
-    <div class="plots-grid">
-      <div id="plot-time" class="plot-container"></div>
-      <div id="plot-s" class="plot-container"></div>
+    <div class="plot-container">
+      <div id="plot-time"></div>
+      <div id="plot-s"></div>
     </div>
 
     <div class="tip-box">
@@ -714,6 +1136,13 @@
   document.getElementById('param-b').addEventListener('input', function() {
     document.getElementById('b-value').textContent = this.value;
   });
+
+  // Collapsible sections
+  function toggleCollapsible(button) {
+    button.classList.toggle('active');
+    const content = button.nextElementSibling;
+    content.classList.toggle('active');
+  }
 
   // Visualizer
   function updateVisualizer() {
@@ -820,19 +1249,16 @@
       el.classList.remove('show', 'correct', 'incorrect');
     });
 
-    // Update button styles — find buttons via feedback's parent quiz-question
-    const questionEl = feedback.closest('.quiz-question');
-    if (questionEl) {
-      questionEl.querySelectorAll('.choice-btn').forEach((btn, idx) => {
-        btn.classList.remove('correct', 'incorrect');
-        const btnChoice = ['A', 'B', 'C', 'D'][idx];
-        if (btnChoice === correctAnswers[questionNum]) {
-          btn.classList.add('correct');
-        } else if (btnChoice === choice && !isCorrect) {
-          btn.classList.add('incorrect');
-        }
-      });
-    }
+    // Update button styles
+    document.querySelectorAll(`.quiz-question:nth-child(${questionNum + 6}) .choice-btn`).forEach((btn, idx) => {
+      btn.classList.remove('correct', 'incorrect');
+      const btnChoice = ['A', 'B', 'C', 'D'][idx];
+      if (btnChoice === correctAnswers[questionNum]) {
+        btn.classList.add('correct');
+      } else if (btnChoice === choice && !isCorrect) {
+        btn.classList.add('incorrect');
+      }
+    });
 
     if (isCorrect) {
       feedback.classList.add('show', 'correct');
@@ -856,11 +1282,32 @@
 
   // Initialize visualizer on page load
   document.addEventListener('DOMContentLoaded', function() {
-updateVisualizer();
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '$', right: '$', display: false },
+      ],
+      throwOnError: false
+    });
+    updateVisualizer();
   });
 </script>
 
     <script>
+        // Toggle for Practice Problems
+        function togglePractice(header) {
+            var content = header.nextElementSibling;
+            var icon = header.querySelector('.toggle-icon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                if (icon) icon.textContent = '▼';
+            } else {
+                content.classList.add('active');
+                if (icon) icon.textContent = '▲';
+            }
+        }
+
     </script>
 </body>
 </html>
