@@ -477,6 +477,44 @@
     animation-delay: 0.4s;
   }
 
+  /* Math verification badge */
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--success);
+    background: var(--success-light);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .corrected-badge {
+    color: #7c3aed;
+    background: var(--accent-light);
+  }
+  .verifying-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding: 0.3rem 0;
+  }
+  .verify-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
   @keyframes bounce {
     0%, 80%, 100% { transform: translateY(0); }
     40% { transform: translateY(-10px); }
@@ -1562,7 +1600,7 @@ function renderMessages() {
   area.scrollTop = area.scrollHeight;
 }
 
-function addMessageToDisplay(role, content) {
+function addMessageToDisplay(role, content, options) {
   const area = document.getElementById('messagesArea');
 
   // Clear welcome message if first user message
@@ -1587,10 +1625,21 @@ function addMessageToDisplay(role, content) {
 
   let displayContent = renderMarkdown(content);
 
+  // Build verification badge HTML if applicable
+  let verifyBadge = '';
+  if (role === 'assistant' && options && options.verified) {
+    if (options.corrected) {
+      verifyBadge = '<div class="verified-badge corrected-badge">&#x1F527; Auto-corrected &amp; verified</div>';
+    } else {
+      verifyBadge = '<div class="verified-badge">&#x2713; Math verified</div>';
+    }
+  }
+
   div.innerHTML = `
     <div class="message-icon">${role === 'assistant' ? '🤖' : '👤'}</div>
     <div>
       <div class="message-content">${displayContent}</div>
+      ${verifyBadge}
       <div class="message-time">${new Date(msg.time).toLocaleTimeString()}</div>
     </div>
   `;
@@ -1723,7 +1772,32 @@ Teaching approach:
 - When they make an error, be encouraging: explain why their approach was reasonable, then show the correct path.
 - If they seem stuck or frustrated, break the problem into smaller pieces and celebrate each step.
 - Use $ for inline LaTeX and $$ for display math. Use markdown for structure.
-- Connect concepts to real-world applications when possible, especially from ${studentProfile.major}.`;
+- Connect concepts to real-world applications when possible, especially from ${studentProfile.major}.
+
+MATHEMATICAL ACCURACY — MANDATORY VERIFICATION RULES:
+You are tutoring real students whose grades depend on correctness. Follow these rules rigorously:
+
+1. **ONLY use methods and formulas from the COURSE CONTENT above.** Do not invent alternative approaches. If the course content doesn't cover a method, say so rather than guessing.
+
+2. **ALWAYS verify your final answer** before presenting it:
+   - For ODEs: substitute your solution y(t) back into the original equation and confirm both sides match. Show this check explicitly.
+   - For Laplace transforms: verify by checking against the standard transform table provided in the course content.
+   - For IVPs: after finding the solution, plug in the initial conditions and confirm they are satisfied.
+   - For partial fractions: multiply your decomposition back together and verify it equals the original fraction.
+
+3. **Show your work step by step.** Never skip algebraic steps — this is where errors hide. If a step involves "it can be shown that" or "after simplification," actually do the simplification.
+
+4. **Double-check signs and coefficients.** The most common errors in differential equations are sign errors, especially in:
+   - Laplace derivative formulas: L{y''} = s^2Y - sy(0) - y'(0) (note the MINUS signs)
+   - Partial fraction coefficients (always verify by plugging back in)
+   - Integration by parts
+   - Characteristic equation roots
+
+5. **If you are unsure about any step**, say so explicitly. Use phrases like "Let me verify this..." or "Let me double-check by substituting back..." It is far better to express uncertainty than to present a wrong answer confidently.
+
+6. **When checking student work**, re-solve the problem independently from scratch rather than just following their steps. This catches cases where their setup was wrong but arithmetic happened to look plausible.
+
+7. **Never fabricate a numerical answer.** If the algebra gets complex, work through it carefully. If you cannot complete a calculation reliably, say "Let me work through this step by step" and show each step explicitly.`;
 
   if (learnerProfile) {
     prompt += `
@@ -1779,7 +1853,10 @@ function sendToAPI(systemPrompt, messages) {
   .then(data => {
     removeTypingIndicator();
     if (data.content) {
-      addMessageToDisplay('assistant', data.content);
+      addMessageToDisplay('assistant', data.content, {
+        verified: data.verified || false,
+        corrected: data.corrected || false
+      });
       currentConversation.updated = Date.now();
       saveChatHistory();
 
