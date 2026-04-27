@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Matrix Algebra, Eigenvalues & Eigenvectors | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 140px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── CUSTOM STYLES FOR CH4 ─── */
+
+  /* Mind map */
+  .mind-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+
+  .mind-map-center {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 16px;
+    padding: 24px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  }
+
+  .mind-map-branch {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .mind-map-item {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s;
+  }
+
+  .mind-map-item.highlighted {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a3f2f);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .mind-map-item.branch-left { border-color: #8b5cf6; }
+  .mind-map-item.branch-right { border-color: #f59e0b; }
+  .mind-map-item.branch-bottom { border-color: #06b6d4; }
+
+  /* Case cards */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .case-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    transition: all 0.3s;
+  }
+
+  .case-card.distinct {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .case-card.repeated {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .case-card.complex {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .case-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .case-card.distinct h3 { color: #34d399; }
+  .case-card.repeated h3 { color: #fbbf24; }
+  .case-card.complex h3 { color: #c4b5fd; }
+
+  .case-card-condition {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .case-card-solution {
+    font-size: 18px;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+
+  /* Application cards */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .app-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s;
+  }
+
+  .app-card:nth-child(2) { border-left-color: #8b5cf6; }
+  .app-card:nth-child(3) { border-left-color: #f59e0b; }
+
+  .app-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .app-card h3 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .app-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .app-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 14px 18px;
+  }
+
+  /* Summary grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+  }
+
+  .summary-card h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .summary-card.s-distinct h4 { color: #34d399; }
+  .summary-card.s-repeated h4 { color: #fbbf24; }
+  .summary-card.s-complex h4 { color: #c4b5fd; }
+
+  .summary-card-content {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* Common mistakes box */
+  .mistakes-box {
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .mistakes-box h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mistakes-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mistakes-box li {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes-box li:before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 140px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+    .case-grid, .app-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch4.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Ch4 Matrices & Eigenvalues — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 17</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 0: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 4 · Systems of DEs</div>
+  <h1 class="anim-item">Matrix Algebra, Eigenvalues & Eigenvectors</h1>
+  <div class="subtitle anim-item">The Foundation for Systems of Differential Equations</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Big Picture — Systems of DEs -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">The Big Picture: Why Matrices Matter</h2>
+
+  <div class="mind-map anim-item">
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-left anim-item">Coupled ODEs<br>Coupled Dynamics</div>
+      <div class="mind-map-item highlighted anim-item">Need Matrices!</div>
+    </div>
+
+    <div class="mind-map-center anim-item">
+      $$\mathbf{x}' = A\mathbf{x}$$
+    </div>
+
+    <div class="mind-map-branch">
+      <div class="mind-map-item branch-right anim-item">Eigenvalues<br>Determine Behavior</div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="mind-map-item branch-right anim-item" style="font-size:15px;">Growth / Decay</div>
+        <div class="mind-map-item branch-right anim-item" style="font-size:15px;">Oscillation</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:40px;">
+    <div class="box-label blue">Key Framework</div>
+    <div class="box-text" style="font-size:18px;">
+      Systems of DEs → Matrix form → Find eigenvalues → Solve explicitly. This lecture covers step 3, the heart of the method.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: Applications — Why We Need Matrices -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">Applications: Where Systems Arise</h2>
+
+  <div class="app-grid anim-item">
+    <div class="app-card anim-item">
+      <div class="app-card-icon">🌀</div>
+      <h3>Coupled Springs</h3>
+      <div class="app-card-text">
+        Two masses connected by springs — forces on each mass depend on positions of both.
+      </div>
+      <div class="math-block" style="font-size:16px; margin-top:12px;">
+        $$m_1x_1'' = -k_1x_1 + k(x_2 - x_1)$$
+      </div>
+    </div>
+
+    <div class="app-card anim-item">
+      <div class="app-card-icon">⚡</div>
+      <h3>Electrical Circuits</h3>
+      <div class="app-card-text">
+        Multiple loops and meshes — currents and voltages are coupled via inductances and resistances.
+      </div>
+      <div class="math-block" style="font-size:16px; margin-top:12px;">
+        $$LI_1'' + RI_1' = \ldots$$
+      </div>
+    </div>
+
+    <div class="app-card anim-item">
+      <div class="app-card-icon">🦌</div>
+      <h3>Predator-Prey</h3>
+      <div class="app-card-text">
+        Population dynamics — growth of prey depends on predators, and vice versa.
+      </div>
+      <div class="math-block" style="font-size:16px; margin-top:12px;">
+        $$\frac{dx}{dt} = ax - bxy$$
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label green">The Common Thread</div>
+    <div class="box-text" style="font-size:18px;">
+      In all these systems, the rates of change depend on multiple variables. Eigenvalues of the coefficient matrix determine stability and long-term behavior.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Matrix Operations Review -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">Matrix Operations: Quick Review</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Basic Operations</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Matrix addition: add corresponding entries. Scalar multiplication: multiply all entries by the scalar.
+    </div>
+    <div class="math-block accent" style="margin-top:12px; font-size:20px;">
+      $$A + B = \begin{pmatrix} a_{11}+b_{11} & a_{12}+b_{12} \\ a_{21}+b_{21} & a_{22}+b_{22} \end{pmatrix}, \quad cA = \begin{pmatrix} ca_{11} & ca_{12} \\ ca_{21} & ca_{22} \end{pmatrix}$$
+    </div>
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Matrix Multiplication is NOT Commutative!</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      In general, $AB \neq BA$. The order matters! This is crucial when working with linear transformations.
+    </div>
+    <div class="math-block warning" style="margin-top:12px; font-size:18px;">
+      $$AB \text{ is generally different from } BA$$
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: Matrix Multiplication & Interpretation -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-item">Matrix Multiplication: Step-by-Step</h2>
+
+  <div class="highlight-box theorem anim-item">
+    <div class="box-label purple">The Rule: (Row) × (Column)</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      The $(i,j)$ entry of $AB$ is the dot product of row $i$ of $A$ with column $j$ of $B$.
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin:20px 0;">
+    <span class="step-badge">EXAMPLE</span>
+    <span class="step-text" style="font-size:18px;">2×2 matrices</span>
+  </div>
+
+  <div class="math-block anim-item" style="font-size:18px; margin-bottom:14px;">
+    $$A = \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix}, \quad B = \begin{pmatrix} 1 & 0 \\ 2 & 3 \end{pmatrix}$$
+  </div>
+
+  <div class="math-block accent anim-item" style="font-size:18px; margin-bottom:14px;">
+    $$AB = \begin{pmatrix} 2(1)+1(2) & 2(0)+1(3) \\ 3(1)+4(2) & 3(0)+4(3) \end{pmatrix} = \begin{pmatrix} 4 & 3 \\ 11 & 12 \end{pmatrix}$$
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Geometric Meaning</div>
+    <div class="box-text" style="font-size:18px;">
+      The columns of $A$ show where the standard basis vectors get mapped by the linear transformation. Multiplying $A\mathbf{x}$ applies this transformation to vector $\mathbf{x}$.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: Determinants -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <h2 class="anim-item">Determinants: A Critical Scalar</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">2×2 Determinant</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$\det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc$$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin:20px 0;">
+    <span class="step-badge">EXAMPLE</span>
+  </div>
+  <div class="math-block accent anim-item" style="font-size:20px; margin-bottom:14px;">
+    $$\det\begin{pmatrix} 2 & 3 \\ 1 & 4 \end{pmatrix} = 2(4) - 3(1) = 8 - 3 = 5$$
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Key Properties</div>
+    <div class="box-text" style="font-size:18px;">
+      $\det(AB) = \det(A)\det(B)$, $\det(A^T) = \det(A)$, swapping rows flips sign, $\det(A) = 0$ iff $A$ is singular (non-invertible).
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">3×3 Determinant: Cofactor Expansion</div>
+    <div class="math-block" style="margin-top:12px; font-size:18px;">
+      $$\det(A) = a_{11}(a_{22}a_{33} - a_{23}a_{32}) - a_{12}(a_{21}a_{33} - a_{23}a_{31}) + \ldots$$
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Matrix Inverse -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <h2 class="anim-item">Matrix Inverse: When It Exists</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Invertibility Condition</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      A square matrix $A$ is invertible (has an inverse $A^{-1}$) if and only if $\det(A) \neq 0$.
+    </div>
+    <div class="math-block accent" style="margin-top:12px; font-size:20px;">
+      $$AA^{-1} = A^{-1}A = I$$
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label purple">2×2 Inverse Formula</div>
+    <div class="math-block" style="margin-top:12px; font-size:18px;">
+      $$A^{-1} = \frac{1{\det(A)}} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      where $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$.
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin:20px 0;">
+    <span class="step-badge">EXAMPLE</span>
+  </div>
+  <div class="math-block success anim-item" style="font-size:18px; margin-bottom:14px;">
+    $$A = \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}, \quad \det(A) = 6 - 1 = 5, \quad A^{-1} = \frac{1}{5}\begin{pmatrix} 3 & -1 \\ -1 & 2 \end{pmatrix}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Eigenvalue Definition -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <h2 class="anim-item">Eigenvalues: The Key Equation</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Eigenvalue & Eigenvector</div>
+    <div class="math-block" style="margin-top:12px; font-size:24px;">
+      $$A\mathbf{v} = \lambda \mathbf{v}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      $\lambda$ is an eigenvalue and $\mathbf{v}$ is the corresponding eigenvector (nonzero). The matrix only scales $\mathbf{v}$, no rotation!
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Geometric Meaning</div>
+    <div class="box-text" style="font-size:18px;">
+      Eigenvectors are special directions. When $A$ acts on an eigenvector, it just stretches or compresses along that direction. No rotation, no change in direction.
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin:20px 0;">
+    <span class="step-badge">INTERPRETATION</span>
+  </div>
+  <div class="math-block accent anim-item" style="font-size:18px; margin-bottom:14px;">
+    $$\lambda > 1: \text{stretch}, \quad 0 < \lambda < 1: \text{compress}, \quad \lambda < 0: \text{reverse}, \quad \text{complex: rotate}$$
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">For x' = Ax</div>
+    <div class="box-text" style="font-size:18px;">
+      If $\mathbf{x}(0) = \mathbf{v}$ (an eigenvector), then $\mathbf{x}(t) = e^{\lambda t}\mathbf{v}$ is the solution!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Finding Eigenvalues -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <h2 class="anim-item">Finding Eigenvalues: The Characteristic Equation</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">DERIVATION</span>
+  </div>
+
+  <div class="math-block anim-item" style="margin-bottom:14px; font-size:20px;">
+    $$A\mathbf{v} = \lambda \mathbf{v} \quad \Rightarrow \quad (A - \lambda I)\mathbf{v} = \mathbf{0}$$
+  </div>
+
+  <div class="box-text anim-item" style="font-size:18px; margin-bottom:14px;">
+    For a nonzero solution $\mathbf{v}$ to exist, the matrix $(A - \lambda I)$ must be singular:
+  </div>
+
+  <div class="math-block success anim-item glow" style="font-size:24px; margin-bottom:14px;">
+    $$\det(A - \lambda I) = 0$$
+  </div>
+
+  <div class="highlight-box theorem anim-item">
+    <div class="box-label purple">The Characteristic Equation</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      This equation defines the characteristic polynomial. Its roots are the eigenvalues!
+    </div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$\det(A - \lambda I) = 0$$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin:20px 0;">
+    <span class="step-badge">2×2 CASE</span>
+  </div>
+  <div class="math-block accent anim-item" style="font-size:20px;">
+    $$\det\begin{pmatrix} a-\lambda & b \\ c & d-\lambda \end{pmatrix} = \lambda^2 - \text{tr}(A)\lambda + \det(A) = 0$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Three Cases of Eigenvalues -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <h2 class="anim-item">Three Cases: Eigenvalue Types</h2>
+
+  <div class="case-grid anim-item">
+    <div class="case-card distinct anim-item">
+      <h3>Case 1: Distinct Real</h3>
+      <div class="case-card-condition">Discriminant > 0</div>
+      <div class="case-card-solution">
+        Two different real eigenvalues $\lambda_1 \neq \lambda_2$
+      </div>
+      <div class="math-block accent" style="font-size:18px; margin-top:12px;">
+        $$\text{Exponential growth/decay}$$
+      </div>
+    </div>
+
+    <div class="case-card repeated anim-item">
+      <h3>Case 2: Repeated</h3>
+      <div class="case-card-condition">Discriminant = 0</div>
+      <div class="case-card-solution">
+        Double root $\lambda$ (may need generalized eigenvector)
+      </div>
+      <div class="math-block accent" style="font-size:18px; margin-top:12px;">
+        $$\text{May involve polynomial factors}$$
+      </div>
+    </div>
+
+    <div class="case-card complex anim-item">
+      <h3>Case 3: Complex</h3>
+      <div class="case-card-condition">Discriminant < 0</div>
+      <div class="case-card-solution">
+        $\lambda = \alpha \pm \beta i$ (conjugate pair)
+      </div>
+      <div class="math-block accent" style="font-size:18px; margin-top:12px;">
+        $$\text{Oscillation with growth/decay}$$
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label blue">Physical Significance</div>
+    <div class="box-text" style="font-size:18px;">
+      Real parts determine stability (decay if negative, grow if positive), imaginary parts determine oscillation frequency.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: Example 1 — Distinct Real -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Find Eigenvalues & Eigenvectors of $A = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:20px;">Form $A - \lambda I$</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px;">
+    $$A - \lambda I = \begin{pmatrix} 4-\lambda & 1 \\ 2 & 3-\lambda \end{pmatrix}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:20px;">Compute characteristic polynomial</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px;">
+    $$\det(A-\lambda I) = (4-\lambda)(3-\lambda) - 2 = \lambda^2 - 7\lambda + 10 = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:20px;">Factor & solve</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px;">
+    $$(\lambda - 5)(\lambda - 2) = 0 \quad \Rightarrow \quad \lambda_1 = 5, \quad \lambda_2 = 2$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4a</span>
+    <span class="step-text" style="font-size:20px;">For $\lambda_1 = 5$: solve $(A - 5I)\mathbf{v} = \mathbf{0}$</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\begin{pmatrix} -1 & 1 \\ 2 & -2 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \quad \Rightarrow \quad v_1 = v_2 \quad \Rightarrow \quad \mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4b</span>
+    <span class="step-text" style="font-size:20px;">For $\lambda_2 = 2$: solve $(A - 2I)\mathbf{v} = \mathbf{0}$</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:18px;">
+    $$\begin{pmatrix} 2 & 1 \\ 2 & 1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \quad \Rightarrow \quad 2v_1 + v_2 = 0 \quad \Rightarrow \quad \mathbf{v}_2 = \begin{pmatrix} 1 \\ -2 \end{pmatrix}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: Example 2 — Repeated Eigenvalue -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Find Eigenvalues of $A = \begin{pmatrix} 2 & -1 \\ 1 & 0 \end{pmatrix}$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Characteristic polynomial</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px;">
+    $$\det(A-\lambda I) = (2-\lambda)(0-\lambda) + 1 = \lambda^2 - 2\lambda + 1 = (\lambda - 1)^2 = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvalues</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px;">
+    $$\lambda = 1 \text{ (double root)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvectors</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\begin{pmatrix} 1 & -1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \mathbf{0} \quad \Rightarrow \quad v_1 = v_2 \quad \Rightarrow \quad \mathbf{v} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">Note: Single Eigenvector!</div>
+    <div class="box-text" style="font-size:18px;">
+      Double eigenvalue but only one eigenvector. Need generalized eigenvector for complete solution to the system.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12: Example 3 — Complex Eigenvalues -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item">Find Eigenvalues of $A = \begin{pmatrix} 1 & -2 \\ 1 & 3 \end{pmatrix}$</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1-2</span>
+    <span class="step-text" style="font-size:18px;">Characteristic polynomial</span>
+  </div>
+  <div class="math-block anim-item" style="margin-bottom:14px;">
+    $$\det(A-\lambda I) = (1-\lambda)(3-\lambda) + 2 = \lambda^2 - 4\lambda + 5 = 0$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Quadratic formula</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\lambda = \frac{4 \pm \sqrt{16-20}}{2} = \frac{4 \pm \sqrt{-4}}{2} = \frac{4 \pm 2i}{2} = 2 \pm i$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">RESULT</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:28px; font-size:18px;">
+    $$\lambda = 2 \pm i \quad \text{where} \quad \alpha = 2, \quad \beta = 1$$
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Physical Meaning</div>
+    <div class="box-text" style="font-size:18px;">
+      Solutions involve $e^{2t}(\cos(t) + i\sin(t))$ — exponential growth combined with oscillation at frequency 1 rad/s.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13: Eigenvalues Determine Behavior -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <h2 class="anim-item">How Eigenvalues Control System Behavior</h2>
+
+  <div class="two-col anim-item">
+    <div class="anim-item">
+      <div class="box-label blue">Eigenvalue Type</div>
+      <div class="math-block accent" style="font-size:18px; margin-top:12px; margin-bottom:12px;">
+        $$\lambda \text{ real, } \lambda > 0$$
+      </div>
+      <div class="box-text" style="font-size:18px;">
+        Exponential growth. Solution grows without bound.
+      </div>
+
+      <div class="math-block accent" style="font-size:18px; margin-top:20px; margin-bottom:12px;">
+        $$\lambda \text{ real, } \lambda < 0$$
+      </div>
+      <div class="box-text" style="font-size:18px;">
+        Exponential decay. Solution → 0 (stable).
+      </div>
+
+      <div class="math-block accent" style="font-size:18px; margin-top:20px; margin-bottom:12px;">
+        $$\lambda = \alpha + \beta i, \alpha < 0$$
+      </div>
+      <div class="box-text" style="font-size:18px;">
+        Damped oscillation (stable spiral).
+      </div>
+
+      <div class="math-block accent" style="font-size:18px; margin-top:20px; margin-bottom:12px;">
+        $$\lambda = \alpha + \beta i, \alpha > 0$$
+      </div>
+      <div class="box-text" style="font-size:18px;">
+        Growing oscillation (unstable spiral).
+      </div>
+
+      <div class="math-block accent" style="font-size:18px; margin-top:20px; margin-bottom:12px;">
+        $$\lambda = \beta i \text{ (purely imaginary)}$$
+      </div>
+      <div class="box-text" style="font-size:18px;">
+        Sustained oscillation (center).
+      </div>
+    </div>
+
+    <div class="anim-item">
+      <div class="box-label purple">Differential Equation Link</div>
+      <div class="box-text" style="font-size:18px; margin-bottom:20px;">
+        If $A\mathbf{v} = \lambda \mathbf{v}$ and we start with $\mathbf{x}(0) = c\mathbf{v}$, then:
+      </div>
+      <div class="math-block success" style="font-size:18px; margin-bottom:20px;">
+        $$\mathbf{x}(t) = ce^{\lambda t}\mathbf{v}$$
+      </div>
+      <div class="box-text" style="font-size:18px; margin-bottom:24px;">
+        For complex $\lambda = \alpha + \beta i$:
+      </div>
+      <div class="math-block success" style="font-size:18px; margin-bottom:20px;">
+        $$\mathbf{x}(t) = e^{\alpha t}(c_1\cos(\beta t) + c_2\sin(\beta t))\mathbf{v}$$
+      </div>
+      <div class="box-text" style="font-size:16px; color:#cbd5e1;">
+        Real part controls growth/decay, imaginary part controls rotation/oscillation frequency.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14: Step-by-Step Method Summary -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <h2 class="anim-item">4-Step Method to Find Eigenvalues & Eigenvectors</h2>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:20px;">Compute $A - \lambda I$ (subtract $\lambda$ from diagonal)</span>
+  </div>
+  <div class="box-text anim-item" style="font-size:17px; margin-bottom:20px; padding-left:20px; color:#cbd5e1;">
+    This gives a matrix that depends on the parameter $\lambda$.
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:20px;">Compute $\det(A - \lambda I)$ and set it equal to zero</span>
+  </div>
+  <div class="box-text anim-item" style="font-size:17px; margin-bottom:20px; padding-left:20px; color:#cbd5e1;">
+    The characteristic polynomial. Solve this to find the eigenvalues.
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:20px;">Solve for $\lambda$ from the characteristic equation</span>
+  </div>
+  <div class="box-text anim-item" style="font-size:17px; margin-bottom:20px; padding-left:20px; color:#cbd5e1;">
+    Use factoring, quadratic formula, etc. Each eigenvalue is a root.
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 4</span>
+    <span class="step-text" style="font-size:20px;">For each $\lambda$, solve $(A - \lambda I)\mathbf{v} = \mathbf{0}$ for eigenvectors</span>
+  </div>
+  <div class="box-text anim-item" style="font-size:17px; margin-bottom:20px; padding-left:20px; color:#cbd5e1;">
+    Nonzero solutions form the eigenspace. Any nonzero vector in it is an eigenvector.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 15: Common Mistakes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-15">
+  <h2 class="anim-item">Common Mistakes to Avoid</h2>
+
+  <div class="mistakes-box anim-item">
+    <h3>⚠️ Frequent Errors</h3>
+    <ul>
+      <li><strong>Forgetting the identity matrix:</strong> Write $A - \lambda I$, not just $A - \lambda$. The $I$ is crucial!</li>
+      <li><strong>Arithmetic errors in the determinant:</strong> Compute $\det(A - \lambda I) = 0$ carefully. One mistake cascades!</li>
+      <li><strong>Confusing eigenvalues with eigenvectors:</strong> $\lambda$ is a scalar (the eigenvalue). $\mathbf{v}$ is a vector (the eigenvector).</li>
+      <li><strong>Forgetting eigenvectors are not unique:</strong> Any scalar multiple of an eigenvector is also an eigenvector. Choose simple ones (integers).</li>
+      <li><strong>For complex eigenvalues, forgetting the conjugate pair:</strong> If $\lambda = \alpha + \beta i$ is an eigenvalue of a real matrix, so is $\bar{\lambda} = \alpha - \beta i$.</li>
+      <li><strong>Not verifying the answer:</strong> Always check: $A\mathbf{v} = \lambda \mathbf{v}$. This catches mistakes!</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label green">Pro Tip</div>
+    <div class="box-text" style="font-size:18px;">
+      Verify your eigenvalues satisfy $\lambda_1 + \lambda_2 = \text{tr}(A)$ and $\lambda_1 \lambda_2 = \det(A)$ for 2×2 matrices. Quick sanity check!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 16: Summary & Next Steps -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-16">
+  <h2 class="anim-item">Summary & What Comes Next</h2>
+
+  <div class="summary-grid anim-item">
+    <div class="summary-card s-distinct anim-item">
+      <h4>Distinct Real</h4>
+      <div class="summary-card-content">
+        $\lambda_1 \neq \lambda_2$<br><br>
+        Pure exponential growth or decay<br><br>
+        Eigenvectors determine natural directions
+      </div>
+    </div>
+
+    <div class="summary-card s-repeated anim-item">
+      <h4>Repeated</h4>
+      <div class="summary-card-content">
+        $\lambda_1 = \lambda_2 = \lambda$<br><br>
+        May need generalized eigenvectors<br><br>
+        Solutions involve $t \cdot e^{\lambda t}$ terms
+      </div>
+    </div>
+
+    <div class="summary-card s-complex anim-item">
+      <h4>Complex Conjugates</h4>
+      <div class="summary-card-content">
+        $\lambda = \alpha \pm \beta i$<br><br>
+        Oscillation with exponential envelope<br><br>
+        Frequency = $\beta$, decay/growth = $\alpha$
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label blue">The Bridge to Solving Systems</div>
+    <div class="box-text" style="font-size:18px;">
+      Now that we can find eigenvalues and eigenvectors, we'll use them to solve systems of differential equations: $\mathbf{x}' = A\mathbf{x}$. The complete solution will be a linear combination of these special exponential modes, one for each eigenvalue!
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:20px;">
+    <div class="box-label green">Real-World Payoff</div>
+    <div class="box-text" style="font-size:18px;">
+      Engineers use eigenvalues to predict stability of control systems, vibration modes of structures, and dominant long-term behaviors of complex coupled systems.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1×</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch4-matrices';
+const TOTAL_SLIDES = 17;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>

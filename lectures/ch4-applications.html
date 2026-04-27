@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9F00LPZD5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P9F00LPZD5');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Lecture: Applications - Two-Tank Systems & Engineering | Dr. Mohamed Mabrok</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ─── SITE NAV BAR ─── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e293b;
+    z-index: 200;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 44px;
+    font-size: 13px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav a:hover { color: #e2e8f0; }
+  .site-nav .brand { font-weight: 800; color: #3b82f6; font-size: 14px; }
+  .site-nav .sep { color: #334155; }
+  .site-nav .current { color: #a78bfa; font-weight: 600; }
+
+  /* ─── SLIDE CONTAINER ─── */
+  .slide {
+    position: absolute;
+    top: 44px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px 140px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .top-bar {
+    position: fixed;
+    top: 44px; left: 0; right: 0;
+    height: 4px;
+    background: #1e293b;
+    z-index: 150;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 56px;
+    right: 30px;
+    font-size: 13px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 36px;
+  }
+  .subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    font-weight: 300;
+  }
+
+  /* ─── ANIMATED ELEMENTS ─── */
+  .anim-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .anim-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Math blocks */
+  .math-block {
+    background: #1e293b;
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin: 16px 0;
+    font-size: 26px;
+    text-align: center;
+  }
+  .math-block.accent { border-left-color: #8b5cf6; }
+  .math-block.success { border-left-color: #10b981; }
+  .math-block.warning { border-left-color: #f59e0b; }
+  .math-block.final {
+    border-left-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 14px 0;
+  }
+  .highlight-box.definition {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #0f1d3a, #1e293b);
+  }
+  .highlight-box.theorem {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #1a0f3a, #1e293b);
+  }
+  .highlight-box.warning-box {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1e293b);
+  }
+
+  .box-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .box-label.blue { color: #60a5fa; }
+  .box-label.purple { color: #a78bfa; }
+  .box-label.amber { color: #fbbf24; }
+  .box-label.green { color: #34d399; }
+
+  .box-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  /* Step badge */
+  .step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .step-text {
+    font-size: 22px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .tag.yes { background: #064e3b; color: #34d399; }
+  .tag.no  { background: #450a0a; color: #fca5a5; }
+
+  .eq-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    font-size: 22px;
+  }
+
+  /* Glow */
+  .glow { animation: glow-pulse 2s ease infinite; }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+  }
+
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #3b82f6;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .title-slide .meta {
+    font-size: 18px;
+    color: #64748b;
+  }
+
+  /* ─── APPLICATION CARDS ─── */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .app-card {
+    border-radius: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s;
+  }
+
+  .app-card:nth-child(2) { border-left-color: #8b5cf6; }
+  .app-card:nth-child(3) { border-left-color: #f59e0b; }
+
+  .app-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .app-card h3 {
+    font-size: 18px;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .app-card-text {
+    font-size: 16px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  .app-card .math-block {
+    font-size: 18px;
+    margin: 12px 0;
+    padding: 14px 18px;
+  }
+
+  /* Case cards */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .case-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    transition: all 0.3s;
+  }
+
+  .case-card.distinct {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #0f2a1e, #1a2e3a);
+  }
+
+  .case-card.repeated {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+  }
+
+  .case-card.complex {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, #1a0f3a, #1a2e3a);
+  }
+
+  .case-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .case-card.distinct h3 { color: #34d399; }
+  .case-card.repeated h3 { color: #fbbf24; }
+  .case-card.complex h3 { color: #c4b5fd; }
+
+  .case-card-condition {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .case-card-solution {
+    font-size: 18px;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+
+  /* Summary cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(135deg, #1e293b, #1a2540);
+    border: 1px solid #334155;
+  }
+
+  .summary-card h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .summary-card.s-distinct h4 { color: #34d399; }
+  .summary-card.s-repeated h4 { color: #fbbf24; }
+  .summary-card.s-complex h4 { color: #c4b5fd; }
+
+  .summary-card-content {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* Common mistakes box */
+  .mistakes-box {
+    background: linear-gradient(135deg, #2a1f0f, #1a2e3a);
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .mistakes-box h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mistakes-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .mistakes-box li {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .mistakes-box li:before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 200;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+  }
+  .controls button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .controls button:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+  .controls button.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+  .controls button.primary:hover { background: #2563eb; }
+  .controls .play-pause {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; font-size: 18px;
+  }
+  .controls .speed {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Voice toggle */
+  .voice-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .voice-toggle:hover { background: #1e293b; }
+  .voice-toggle .icon { font-size: 16px; }
+  .voice-toggle.active { color: #60a5fa; }
+  .voice-toggle.unavailable { opacity: 0.4; cursor: default; }
+
+  /* Audio waveform */
+  .audio-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 22px;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .audio-indicator.playing { opacity: 1; }
+  .audio-indicator .bar {
+    width: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .audio-indicator .bar:nth-child(1) { animation-delay: 0s; height: 7px; }
+  .audio-indicator .bar:nth-child(2) { animation-delay: 0.1s; height: 14px; }
+  .audio-indicator .bar:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+  .audio-indicator .bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+  .audio-indicator .bar:nth-child(5) { animation-delay: 0.15s; height: 9px; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.2); }
+  }
+
+  /* Audio loading */
+  .audio-status {
+    position: fixed;
+    top: 56px;
+    left: 30px;
+    font-size: 12px;
+    color: #64748b;
+    z-index: 150;
+  }
+
+  /* KaTeX */
+  .katex { font-size: 1.1em; }
+  .math-block .katex { font-size: 1.25em; }
+
+  /* Responsive - scale down for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px 140px; }
+    h1 { font-size: 42px; }
+    h2 { font-size: 34px; }
+    .case-grid, .app-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE NAVIGATION ═══ -->
+<div class="site-nav">
+  <a href="../index.html" class="brand">DE Course</a>
+  <span class="sep">|</span>
+  <a href="../index.html">Home</a>
+  <a href="../videos.html">Videos</a>
+  <a href="../ch4.html">Chapter Page</a>
+  <span class="sep">|</span>
+  <span class="current">Ch4 Applications — Video Lecture</span>
+</div>
+
+<!-- Progress Bar -->
+<div class="top-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 17</div>
+<div class="audio-status" id="audioStatus"></div>
+
+<!-- Audio waveform -->
+<div class="audio-indicator" id="audioIndicator">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 0: Title -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide title-slide" id="slide-0">
+  <div class="section-label anim-item">Chapter 4 · Systems of DEs</div>
+  <h1 class="anim-item">Applications: Two-Tank Systems & Engineering</h1>
+  <div class="subtitle anim-item">Where Systems of DEs Meet the Real World</div>
+  <div class="meta anim-item">Dr. Mohamed Mabrok · Qatar University</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: Why Applications Matter -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <h2 class="anim-item">Why Applications Matter</h2>
+
+  <div class="app-grid anim-item">
+    <div class="app-card anim-item">
+      <div class="app-card-icon">🧪</div>
+      <h3>Chemical Engineering</h3>
+      <div class="app-card-text">
+        Mixing tanks, concentration dynamics, and chemical reactions governed by conservation laws.
+      </div>
+      <div class="math-block" style="font-size:16px; margin-top:12px;">
+        $$\frac{dh_i}{dt} = \text{inflow} - \text{outflow}$$
+      </div>
+    </div>
+
+    <div class="app-card anim-item">
+      <div class="app-card-icon">⚙️</div>
+      <h3>Mechanical Engineering</h3>
+      <div class="app-card-text">
+        Coupled springs, vibrations, and oscillatory systems with energy transfer.
+      </div>
+      <div class="math-block" style="font-size:16px; margin-top:12px;">
+        $$m_ix_i'' + \text{forces} = 0$$
+      </div>
+    </div>
+
+    <div class="app-card anim-item">
+      <div class="app-card-icon">⚡</div>
+      <h3>Electrical Engineering</h3>
+      <div class="app-card-text">
+        Multi-loop circuits, coupled inductors, and resonance phenomena.
+      </div>
+      <div class="math-block" style="font-size:16px; margin-top:12px;">
+        $$\sum V = 0 \text{ (Kirchhoff)}$$
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:24px;">
+    <div class="box-label green">The Common Thread</div>
+    <div class="box-text" style="font-size:18px;">
+      All governed by: $\mathbf{x}' = A\mathbf{x} + \mathbf{b}(t)$ — systems of first-order linear DEs!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: The Two-Tank System Physical -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <h2 class="anim-item">The Two-Tank System</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Physical Setup</div>
+    <div class="box-text" style="font-size:18px; margin-top:12px;">
+      <strong>Tank 1:</strong> Gets external inflow $Q_{\text{in}}$, drains to Tank 2 at rate proportional to height ($k_1 h_1$)
+    </div>
+    <div class="box-text" style="font-size:18px; margin-top:8px;">
+      <strong>Tank 2:</strong> Receives flow from Tank 1, drains out at rate proportional to its height ($k_2 h_2$)
+    </div>
+    <div class="box-text" style="font-size:18px; margin-top:8px;">
+      <strong>The Coupling:</strong> The outflow from Tank 1 is the inflow to Tank 2 — $k_1 h_1$ appears in BOTH equations!
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Key Insight</div>
+    <div class="box-text" style="font-size:18px;">
+      This is not two independent ODEs. The system is <strong>coupled</strong> — what happens in Tank 1 directly affects Tank 2.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: Two-Tank Governing Equations -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <h2 class="anim-item">Governing Equations (Derivation)</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Conservation of Mass</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$A_1 \frac{dh_1}{dt} = Q_{\text{in}} - k_1 h_1$$
+    </div>
+    <div class="math-block" style="margin-top:8px; font-size:22px;">
+      $$A_2 \frac{dh_2}{dt} = k_1 h_1 - k_2 h_2$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      where $A_i$ = tank area, $k_i$ = valve coefficients, $h_i$ = height, $Q_{\text{in}}$ = external inflow rate
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:20px;">
+    <div class="box-label green">Matrix Form</div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$\frac{d}{dt}\begin{pmatrix} h_1 \\ h_2 \end{pmatrix} = \begin{pmatrix} -k_1/A_1 & 0 \\ k_1/A_2 & -k_2/A_2 \end{pmatrix} \begin{pmatrix} h_1 \\ h_2 \end{pmatrix} + \begin{pmatrix} Q_{\text{in}}/A_1 \\ 0 \end{pmatrix}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Lower-triangular matrix: Tank 1 is independent, Tank 2 depends on Tank 1.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: Two-Tank Eigenvalue Analysis -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <h2 class="anim-item">Eigenvalue Analysis: Stability & Steady State</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Eigenvalues (Lower Triangular)</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$\lambda_1 = -\frac{k_1}{A_1}, \quad \lambda_2 = -\frac{k_2}{A_2}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Both ALWAYS NEGATIVE because $k_i, A_i > 0$. <strong>The system is always STABLE!</strong>
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Steady State</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$h_1^* = \frac{Q_{\text{in}}}{k_1}, \quad h_2^* = \frac{Q_{\text{in}}}{k_2}$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      Steady state depends on <strong>valve coefficients</strong>, NOT tank areas. Areas only affect how <strong>fast</strong> we reach it.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: Example 1 — Fill from Empty -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item" style="font-size:36px;">Example 1: Fill from Empty</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Parameters</div>
+    <div class="box-text" style="font-size:18px;">
+      $A_1 = A_2 = 2$ m², $k_1 = k_2 = 0.5$ m²/s, $Q_{\text{in}} = 1$ m³/s, $h_1(0) = h_2(0) = 0$
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-top:20px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvalues</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px;">
+    $$\lambda_1 = \lambda_2 = -0.25 \text{ (repeated!)}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Tank 1 is independent</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px;">
+    $$h_1(t) = 2(1 - e^{-0.25t})$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Tank 2 with input from Tank 1</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:20px;">
+    $$h_2(t) = 2 - 2e^{-0.25t} - 0.5te^{-0.25t}$$
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Physical Insight</div>
+    <div class="box-text" style="font-size:17px;">
+      Tank 1 reaches steady state ($h_1^* = 2$ m) first. Tank 2 lags behind, approaching the same steady state as Tank 1 fills it faster than it drains.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: Example 2 — Drain (Fascinating Behavior) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item" style="font-size:36px;">Example 2: Drainage</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Parameters</div>
+    <div class="box-text" style="font-size:18px;">
+      $Q_{\text{in}} = 0$ (no external input), $h_1(0) = 4$ m, $h_2(0) = 3$ m, same tank parameters as before.
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-top:20px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Tank 1 simple decay</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px;">
+    $$h_1(t) = 4e^{-0.25t}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Tank 2 — surprising result!</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:20px;">
+    $$h_2(t) = (3 + t)e^{-0.25t}$$
+  </div>
+
+  <div class="highlight-box warning-box anim-item" style="margin-top:20px;">
+    <div class="box-label amber">The Fascinating Behavior</div>
+    <div class="box-text" style="font-size:17px;">
+      Tank 2 <strong>initially rises</strong> before draining! The term $te^{-0.25t}$ creates a "bump." Initially, inflow from Tank 1 exceeds Tank 2's outflow, so it fills momentarily. Then, as Tank 1 empties faster, Tank 2 starts draining.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: Example 3 — Different Valve Coefficients -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="section-label anim-item">Worked Example</div>
+  <h2 class="anim-item" style="font-size:36px;">Example 3: Separation of Timescales</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Parameters</div>
+    <div class="box-text" style="font-size:18px;">
+      $k_1 = 1$, $k_2 = 0.25$, $A_1 = A_2 = 2$, $Q_{\text{in}} = 1$. Distinct valve coefficients!
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-top:20px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvalues</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px;">
+    $$\lambda_1 = -0.5, \quad \lambda_2 = -0.125$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Timescale ratio</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px;">
+    $$\frac{\lambda_1}{\lambda_2} = 4 \text{ — Tank 1 responds 4 times faster!}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Steady states</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:24px; font-size:20px;">
+    $$h_1^* = 1 \text{ m}, \quad h_2^* = 4 \text{ m}$$
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Insight</div>
+    <div class="box-text" style="font-size:17px;">
+      Small drain valve in Tank 2 allows it to fill much higher. Tank 1 reaches equilibrium quickly, then Tank 2 slowly fills to its steady state.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: Coupled Spring-Mass System -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <h2 class="anim-item">Coupled Spring-Mass System</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Physical Setup</div>
+    <div class="box-text" style="font-size:18px; margin-top:12px;">
+      Two masses connected by three springs: left wall — $k_1$ — mass 1 — $k_2$ — mass 2 — $k_3$ — right wall
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Force Balance</div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$m_1 x_1'' = -k_1 x_1 + k_2(x_2 - x_1) = -(k_1+k_2)x_1 + k_2 x_2$$
+    </div>
+    <div class="math-block" style="margin-top:8px; font-size:20px;">
+      $$m_2 x_2'' = -k_2(x_2 - x_1) - k_3 x_2 = k_2 x_1 - (k_2+k_3)x_2$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      The middle spring $k_2$ couples the two equations — it creates the coupling term!
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:20px;">
+    <div class="box-label green">Convert to First-Order System</div>
+    <div class="box-text" style="font-size:18px;">
+      Let $x_1, v_1 = x_1', x_2, v_2 = x_2'$ (4 variables). The system becomes $\mathbf{x}' = A\mathbf{x}$ with $A \in \mathbb{R}^{4 \times 4}$. Eigenvalues from $A$ determine if motion is oscillatory or decays.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: Spring-Mass Normal Modes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <h2 class="anim-item">Normal Modes of Vibration</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Simplified Case</div>
+    <div class="box-text" style="font-size:18px; margin-top:12px;">
+      $m_1 = m_2 = 1$, $k_1 = k_3 = 2$, $k_2 = 1$. Analyze the 2×2 displacement system.
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-top:20px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">System matrix</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px;">
+    $$A = \begin{pmatrix} -3 & 1 \\ 1 & -3 \end{pmatrix}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvalues</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px;">
+    $$\lambda_1 = -2, \quad \lambda_2 = -4$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3</span>
+    <span class="step-text" style="font-size:18px;">Eigenvectors (normal modes)</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix} \text{ (in-phase)}, \quad \mathbf{v}_2 = \begin{pmatrix} 1 \\ -1 \end{pmatrix} \text{ (out-of-phase)}$$
+  </div>
+
+  <div class="highlight-box anim-item" style="margin-top:20px;">
+    <div class="box-label green">Physical Interpretation</div>
+    <div class="box-text" style="font-size:17px;">
+      <strong>In-phase mode:</strong> Both masses move together (lower frequency). <strong>Out-of-phase mode:</strong> Masses move opposite (higher frequency). These are the two independent ways the system can vibrate!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: RLC Circuit Systems -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <h2 class="anim-item">RLC Circuit Systems</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Multi-Loop Circuits</div>
+    <div class="box-text" style="font-size:18px; margin-top:12px;">
+      Apply Kirchhoff's voltage law ($\sum V = 0$) to each loop. Shared components (resistors, inductors) couple the equations.
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">For Two-Loop Circuits</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      Let $i_1, i_2$ be the loop currents. Kirchhoff gives:
+    </div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$L_1 i_1' + R_1 i_1 + M i_2' = V_1(t)$$
+    </div>
+    <div class="math-block" style="margin-top:8px; font-size:20px;">
+      $$L_2 i_2' + R_2 i_2 + M i_1' = V_2(t)$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      The mutual inductance $M$ couples the loops. The system matrix encodes the circuit topology.
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:20px;">
+    <div class="box-label green">Eigenvalues Determine Behavior</div>
+    <div class="box-text" style="font-size:18px;">
+      Real eigenvalues → exponential decay (overdamped). Complex eigenvalues → oscillation (underdamped). The real part determines if energy grows or decays.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: Population Dynamics (Lotka-Volterra) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <h2 class="anim-item">Population Dynamics: Predator-Prey</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Lotka-Volterra Equations</div>
+    <div class="math-block" style="margin-top:12px; font-size:22px;">
+      $$\frac{dx}{dt} = \alpha x - \beta xy$$
+    </div>
+    <div class="math-block" style="margin-top:8px; font-size:22px;">
+      $$\frac{dy}{dt} = \delta xy - \gamma y$$
+    </div>
+    <div class="box-text" style="margin-top:12px; font-size:18px;">
+      $x$ = prey population, $y$ = predator population. Products $xy$ couple the equations.
+    </div>
+  </div>
+
+  <div class="highlight-box theorem anim-item" style="margin-top:20px;">
+    <div class="box-label purple">Near Equilibrium (Linearization)</div>
+    <div class="box-text" style="font-size:18px; margin-bottom:12px;">
+      At equilibrium $x^* = \gamma/\delta, y^* = \alpha/\beta$, linearize to get:
+    </div>
+    <div class="math-block" style="margin-top:12px; font-size:20px;">
+      $$\frac{d}{dt}\begin{pmatrix} x - x^* \\ y - y^* \end{pmatrix} = \begin{pmatrix} 0 & -\beta x^* \\ \delta y^* & 0 \end{pmatrix} \begin{pmatrix} x - x^* \\ y - y^* \end{pmatrix}$$
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:20px;">
+    <div class="box-label green">Eigenvalues</div>
+    <div class="box-text" style="font-size:18px;">
+      Purely imaginary eigenvalues! This means populations <strong>cycle</strong> — they don't approach equilibrium. This is the famous predator-prey oscillation.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 12: How to Model Any Application -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <h2 class="anim-item">Modeling Strategy: From Physics to Matrix Form</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Five-Step Process</div>
+    <div class="box-text" style="font-size:18px; margin-top:12px;">
+      <strong>Step 1: Identify state variables.</strong> What changes over time? (heights, positions, currents, populations...)
+    </div>
+    <div class="box-text" style="font-size:18px; margin-top:8px;">
+      <strong>Step 2: Write conservation/balance laws.</strong> Apply physical principles (mass balance, force, voltage, etc.) to each variable.
+    </div>
+    <div class="box-text" style="font-size:18px; margin-top:8px;">
+      <strong>Step 3: Identify couplings.</strong> Which variables affect each other? These create off-diagonal entries.
+    </div>
+    <div class="box-text" style="font-size:18px; margin-top:8px;">
+      <strong>Step 4: Write $\mathbf{x}' = A\mathbf{x} + \mathbf{b}$.</strong> Convert to matrix form with constant coefficient matrix $A$.
+    </div>
+    <div class="box-text" style="font-size:18px; margin-top:8px;">
+      <strong>Step 5: Compute eigenvalues & eigenvectors.</strong> Predict long-term behavior: stable? oscillatory? growing?
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 13: Full Worked Example: Tank IVP -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="section-label anim-item">Complete Worked Example</div>
+  <h2 class="anim-item" style="font-size:36px;">Two-Tank System with ICs</h2>
+
+  <div class="highlight-box definition anim-item">
+    <div class="box-label blue">Problem</div>
+    <div class="box-text" style="font-size:17px;">
+      $A_1 = 1$, $A_2 = 3$, $k_1 = 2$, $k_2 = 1$, $Q_{\text{in}} = 0$ (no external input), $h_1(0) = 6$ m, $h_2(0) = 2$ m. Solve the system.
+    </div>
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-top:20px; margin-bottom:10px;">
+    <span class="step-badge">STEP 1</span>
+    <span class="step-text" style="font-size:18px;">Write the system</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$A = \begin{pmatrix} -2 & 0 \\ 2/3 & -1/3 \end{pmatrix}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 2</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvalues</span>
+  </div>
+  <div class="math-block success anim-item" style="margin-bottom:14px;">
+    $$\lambda_1 = -2, \quad \lambda_2 = -1/3$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 3-4</span>
+    <span class="step-text" style="font-size:18px;">Find eigenvectors & build general solution</span>
+  </div>
+  <div class="math-block accent anim-item" style="margin-bottom:14px; font-size:18px;">
+    $$\mathbf{x}(t) = C_1 e^{-2t} \begin{pmatrix} 1 \\ 1 \end{pmatrix} + C_2 e^{-t/3} \begin{pmatrix} 0 \\ 1 \end{pmatrix}$$
+  </div>
+
+  <div class="anim-item" style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <span class="step-badge">STEP 5</span>
+    <span class="step-text" style="font-size:18px;">Apply initial conditions</span>
+  </div>
+  <div class="math-block final anim-item glow" style="padding:20px; font-size:18px;">
+    $$h_1(t) = 6e^{-2t}, \quad h_2(t) = 6e^{-2t} + (2 - 6)e^{-t/3} = 6e^{-2t} - 4e^{-t/3}$$
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 14: Physical Interpretation of Solutions -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <h2 class="anim-item">Connecting Math to Physics</h2>
+
+  <div class="two-col anim-item">
+    <div class="anim-item">
+      <div class="highlight-box definition">
+        <div class="box-label blue">Mathematical Features</div>
+        <div class="box-text" style="font-size:17px;">
+          <strong>Negative eigenvalues:</strong> System returns to equilibrium (stable)
+        </div>
+        <div class="box-text" style="font-size:17px; margin-top:8px;">
+          <strong>Eigenvalue magnitudes:</strong> Rate of decay. Larger magnitude = faster decay
+        </div>
+        <div class="box-text" style="font-size:17px; margin-top:8px;">
+          <strong>Eigenvectors:</strong> Independent modes of behavior. Show how state variables move together
+        </div>
+        <div class="box-text" style="font-size:17px; margin-top:8px;">
+          <strong>Complex eigenvalues:</strong> System oscillates while decaying or growing
+        </div>
+      </div>
+    </div>
+
+    <div class="anim-item">
+      <div class="highlight-box theorem">
+        <div class="box-label purple">Engineering Implications</div>
+        <div class="box-text" style="font-size:17px;">
+          <strong>Valve sizing:</strong> Choose $k_i$ to control response speed
+        </div>
+        <div class="box-text" style="font-size:17px; margin-top:8px;">
+          <strong>Avoid resonance:</strong> In mechanical systems, keep driving frequency away from natural frequencies
+        </div>
+        <div class="box-text" style="font-size:17px; margin-top:8px;">
+          <strong>Stability design:</strong> Ensure all eigenvalues have negative real parts (BIBO stable)
+        </div>
+        <div class="box-text" style="font-size:17px; margin-top:8px;">
+          <strong>Time constants:</strong> $\tau = -1/\lambda$ tells you settling time
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 15: Common Mistakes -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-15">
+  <h2 class="anim-item">Common Modeling Mistakes</h2>
+
+  <div class="mistakes-box anim-item">
+    <h3>Watch Out For...</h3>
+    <ul>
+      <li><strong>Forgetting units:</strong> Tank example uses m³/s and m². Mixing units leads to wildly incorrect coefficients.</li>
+      <li><strong>Sign errors in coupling:</strong> Outflow from Tank 1 is INFLOW to Tank 2. Get the sign right or your equations are backwards.</li>
+      <li><strong>Ignoring physical reasonableness:</strong> If you solve for negative concentration or height, check your work! Physical variables must stay positive.</li>
+      <li><strong>Confusing steady state with initial condition:</strong> $\mathbf{x}^*$ (equilibrium) is where the system goes, not where it starts.</li>
+      <li><strong>Forgetting second-order → first-order conversion:</strong> Spring systems need both position and velocity as state variables, doubling the system size.</li>
+      <li><strong>Eigenvalues don't tell the full story:</strong> You need eigenvectors too! The eigenvalues give rates, eigenvectors give directions.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 16: Summary & Takeaways -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-16">
+  <h2 class="anim-item">Key Takeaways</h2>
+
+  <div class="summary-grid anim-item">
+    <div class="summary-card s-distinct anim-item">
+      <h4>Two-Tank Systems</h4>
+      <div class="summary-card-content">
+        One-way coupling (lower-triangular). Always stable (negative eigenvalues). Steady state depends on valve sizes, not tank areas.
+      </div>
+    </div>
+
+    <div class="summary-card s-repeated anim-item">
+      <h4>Spring-Mass & Circuits</h4>
+      <div class="summary-card-content">
+        Coupling through shared components. Normal modes from eigenvectors. Frequency from eigenvalues. Can oscillate or decay.
+      </div>
+    </div>
+
+    <div class="summary-card s-complex anim-item">
+      <h4>Universal Method</h4>
+      <div class="summary-card-content">
+        Model → Matrix $A$ → Eigenvalues/vectors → Predict behavior. Works for any coupled system!
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box success anim-item" style="margin-top:24px;">
+    <div class="box-label green">The Big Picture</div>
+    <div class="box-text" style="font-size:18px;">
+      Systems of DEs are everywhere in engineering: tanks, springs, circuits, populations, chemical reactions, and more. The eigenvalue method is your universal tool for understanding how ANY coupled system behaves. Learn this, and you can analyze almost any real-world phenomenon!
+    </div>
+  </div>
+
+  <div class="highlight-box definition anim-item" style="margin-top:20px;">
+    <div class="box-label blue">Next Up</div>
+    <div class="box-text" style="font-size:18px;">
+      Exam Review — bringing everything together across all of Chapter 4. You now know how to model, solve, and interpret systems of DEs in context!
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTROLS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="controls">
+  <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+  <button class="play-pause" onclick="togglePlay()" id="playBtn">&#9208;</button>
+  <button class="primary" onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+  <div class="voice-toggle" id="voiceToggle" onclick="toggleVoice()" title="Toggle voiceover">
+    <span class="icon" id="voiceIcon">&#x1F50A;</span>
+    <span id="voiceLabel">Voice</span>
+  </div>
+  <div class="speed" id="speedLabel">1×</div>
+  <button onclick="cycleSpeed()">Speed</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// MATH RENDERING
+// ═══════════════════════════════════════════
+function renderAllMath() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false }
+    ],
+    throwOnError: false
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAllMath();
+  loadAudioFiles();
+  initLecture();
+});
+
+// ═══════════════════════════════════════════
+// AUDIO — pre-generated files
+// ═══════════════════════════════════════════
+const LECTURE_PREFIX = 'ch4-applications';
+const TOTAL_SLIDES = 17;
+let audioFiles = {};   // slideIndex → Audio element
+let audioLoaded = 0;
+let audioAvailable = false;
+let voiceEnabled = true;
+let currentAudio = null;
+
+function loadAudioFiles() {
+  const statusEl = document.getElementById('audioStatus');
+  statusEl.textContent = 'Loading audio...';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = `audio/${LECTURE_PREFIX}-${i}.mp3`;
+
+    audio.addEventListener('canplaythrough', () => {
+      audioFiles[i] = audio;
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      } else {
+        statusEl.textContent = `Loading audio... ${audioLoaded}/${TOTAL_SLIDES}`;
+      }
+    }, { once: true });
+
+    audio.addEventListener('error', () => {
+      audioLoaded++;
+      if (audioLoaded === TOTAL_SLIDES && Object.keys(audioFiles).length === 0) {
+        // No audio files found at all
+        statusEl.textContent = 'No voiceover audio found';
+        voiceEnabled = false;
+        updateVoiceToggle();
+        setTimeout(() => { statusEl.textContent = ''; }, 3000);
+      } else if (audioLoaded === TOTAL_SLIDES) {
+        audioAvailable = true;
+        statusEl.textContent = '';
+        updateVoiceToggle();
+      }
+    }, { once: true });
+  }
+}
+
+function playSlideAudio(index) {
+  stopCurrentAudio();
+  const audio = audioFiles[index];
+  if (!audio || !voiceEnabled) {
+    // No audio, use timer-based advance
+    if (isPlaying) scheduleAutoAdvance();
+    return;
+  }
+
+  currentAudio = audio;
+  audio.currentTime = 0;
+  document.getElementById('audioIndicator').classList.add('playing');
+
+  audio.play().catch(err => {
+    console.warn('Audio play blocked (click page first):', err);
+    if (isPlaying) scheduleAutoAdvance();
+  });
+
+  audio.onended = () => {
+    document.getElementById('audioIndicator').classList.remove('playing');
+    currentAudio = null;
+    if (isPlaying && voiceEnabled) {
+      slideTimer = setTimeout(() => {
+        if (isPlaying) nextSlide();
+      }, 800);
+    }
+  };
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  document.getElementById('audioIndicator').classList.remove('playing');
+}
+
+function toggleVoice() {
+  if (!audioAvailable) return;
+  voiceEnabled = !voiceEnabled;
+  updateVoiceToggle();
+  if (!voiceEnabled) {
+    stopCurrentAudio();
+    if (isPlaying) scheduleAutoAdvance();
+  } else if (isPlaying) {
+    clearTimeout(slideTimer);
+    playSlideAudio(currentSlide);
+  }
+}
+
+function updateVoiceToggle() {
+  const el = document.getElementById('voiceToggle');
+  const icon = document.getElementById('voiceIcon');
+  const label = document.getElementById('voiceLabel');
+
+  if (!audioAvailable) {
+    el.classList.add('unavailable');
+    el.classList.remove('active');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'No audio';
+  } else if (voiceEnabled) {
+    el.classList.add('active');
+    el.classList.remove('unavailable');
+    icon.innerHTML = '&#x1F50A;';
+    label.textContent = 'Voice on';
+  } else {
+    el.classList.remove('active', 'unavailable');
+    icon.innerHTML = '&#x1F507;';
+    label.textContent = 'Voice off';
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLIDE ENGINE
+// ═══════════════════════════════════════════
+let currentSlide = 0;
+let isPlaying = true;
+let animTimers = [];
+let slideTimer = null;
+let speedMultiplier = 1;
+const speeds = [1, 1.5, 2, 0.5];
+let speedIndex = 0;
+
+function initLecture() {
+  // Start paused so user clicks to begin (enables audio)
+  isPlaying = false;
+  updatePlayBtn();
+  showSlide(0);
+}
+
+function showSlide(index) {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+  clearTimeout(slideTimer);
+  stopCurrentAudio();
+
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('exit');
+  });
+
+  const slide = document.getElementById(`slide-${index}`);
+  const items = slide.querySelectorAll('.anim-item');
+  items.forEach(item => item.classList.remove('visible'));
+
+  setTimeout(() => {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('exit'));
+    slide.classList.add('active');
+
+    items.forEach((item, i) => {
+      const delay = 300 + i * (400 / speedMultiplier);
+      const t = setTimeout(() => item.classList.add('visible'), delay);
+      animTimers.push(t);
+    });
+
+    // Play voiceover
+    if (isPlaying && voiceEnabled && audioAvailable) {
+      const voiceDelay = 500;
+      const t = setTimeout(() => playSlideAudio(index), voiceDelay);
+      animTimers.push(t);
+    } else if (isPlaying) {
+      scheduleAutoAdvance();
+    }
+  }, 100);
+
+  document.getElementById('progressFill').style.width = `${((index + 1) / TOTAL_SLIDES) * 100}%`;
+  document.getElementById('slideCounter').textContent = `${index + 1} / ${TOTAL_SLIDES}`;
+  currentSlide = index;
+}
+
+function nextSlide() {
+  if (currentSlide < TOTAL_SLIDES - 1) {
+    showSlide(currentSlide + 1);
+  } else {
+    isPlaying = false;
+    updatePlayBtn();
+    stopCurrentAudio();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    showSlide(currentSlide - 1);
+  }
+}
+
+function scheduleAutoAdvance() {
+  clearTimeout(slideTimer);
+  if (!isPlaying) return;
+
+  const slide = document.getElementById(`slide-${currentSlide}`);
+  const items = slide.querySelectorAll('.anim-item').length;
+  const baseTime = 4000 + items * 1200;
+  const time = baseTime / speedMultiplier;
+
+  slideTimer = setTimeout(() => {
+    if (isPlaying) nextSlide();
+  }, time);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  updatePlayBtn();
+  if (isPlaying) {
+    if (voiceEnabled && audioAvailable) {
+      playSlideAudio(currentSlide);
+    } else {
+      scheduleAutoAdvance();
+    }
+  } else {
+    clearTimeout(slideTimer);
+    stopCurrentAudio();
+  }
+}
+
+function updatePlayBtn() {
+  document.getElementById('playBtn').innerHTML = isPlaying ? '&#9208;' : '&#9654;';
+}
+
+function cycleSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  speedMultiplier = speeds[speedIndex];
+  document.getElementById('speedLabel').textContent = `${speedMultiplier}×`;
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'p') togglePlay();
+  if (e.key === 'v') toggleVoice();
+});
+</script>
+</body>
+</html>
